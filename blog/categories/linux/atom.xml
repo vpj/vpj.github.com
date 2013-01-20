@@ -4,7 +4,7 @@
   <title><![CDATA[Category: linux | vpj's diary]]></title>
   <link href="http://vpj.github.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://vpj.github.com/"/>
-  <updated>2013-01-20T12:25:00+05:30</updated>
+  <updated>2013-01-20T12:35:52+05:30</updated>
   <id>http://vpj.github.com/</id>
   <author>
     <name><![CDATA[Varuna Jayasiri]]></name>
@@ -62,45 +62,41 @@
 <span class='line-number'>33</span>
 <span class='line-number'>34</span>
 <span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="kt">int</span> <span class="n">create_server</span><span class="p">()</span> <span class="p">{</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="kt">int</span> <span class="n">create_server</span><span class="p">()</span> <span class="p">{</span>
 </span><span class='line'> <span class="k">struct</span> <span class="n">sockaddr_un</span> <span class="n">addr</span><span class="p">;</span>
-</span><span class='line'> <span class="kt">int</span> <span class="n">fd</span><span class="p">;</span>
+</span><span class='line'> <span class="kt">int</span> <span class="n">fd</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'> <span class="k">if</span> <span class="p">((</span><span class="n">fd</span> <span class="o">=</span> <span class="n">socket</span><span class="p">(</span><span class="n">AF_LOCAL</span><span class="p">,</span> <span class="n">SOCK_STREAM</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="k">if</span> <span class="p">((</span><span class="n">fd</span> <span class="o">=</span> <span class="n">socket</span><span class="p">(</span><span class="n">AF_LOCAL</span><span class="p">,</span> <span class="n">SOCK_STREAM</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>  <span class="n">log_error</span><span class="p">(</span><span class="s">&quot;Failed to create server socket&quot;</span><span class="p">);</span>
 </span><span class='line'>  <span class="k">return</span> <span class="n">fd</span><span class="p">;</span>
-</span><span class='line'> <span class="p">}</span>
+</span><span class='line'> <span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'> <span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">addr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">addr</span><span class="p">));</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">addr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">addr</span><span class="p">));</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'> <span class="n">addr</span><span class="p">.</span><span class="n">sun_family</span> <span class="o">=</span> <span class="n">AF_LOCAL</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="n">addr</span><span class="p">.</span><span class="n">sun_family</span> <span class="o">=</span> <span class="n">AF_LOCAL</span><span class="p">;</span>
 </span><span class='line'> <span class="n">unlink</span><span class="p">(</span><span class="n">SOCKET_PATH</span><span class="p">);</span>
-</span><span class='line'> <span class="n">strcpy</span><span class="p">(</span><span class="n">addr</span><span class="p">.</span><span class="n">sun_path</span><span class="p">,</span> <span class="n">SOCKET_PATH</span><span class="p">);</span>
+</span><span class='line'> <span class="n">strcpy</span><span class="p">(</span><span class="n">addr</span><span class="p">.</span><span class="n">sun_path</span><span class="p">,</span> <span class="n">SOCKET_PATH</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'> <span class="k">if</span> <span class="p">(</span><span class="n">bind</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="p">(</span><span class="k">struct</span> <span class="n">sockaddr</span> <span class="o">*</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;(</span><span class="n">addr</span><span class="p">),</span>
-</span><span class='line'>                              <span class="k">sizeof</span><span class="p">(</span><span class="n">addr</span><span class="p">))</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="n">log_error</span><span class="p">(</span><span class="s">&quot;Failed to bind server socket&quot;</span><span class="p">);</span>
-</span><span class='line'>  <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-</span><span class='line'> <span class="p">}</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="k">if</span> <span class="p">(</span><span class="n">bind</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="p">(</span><span class="k">struct</span> <span class="n">sockaddr</span> <span class="o">*</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;(</span><span class="n">addr</span><span class="p">),</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'> <span class="k">if</span> <span class="p">(</span><span class="n">listen</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">MAX_PENDING</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="n">log_error</span><span class="p">(</span><span class="s">&quot;Failed to listen on server socket&quot;</span><span class="p">);</span>
-</span><span class='line'>  <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-</span><span class='line'> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'> <span class="n">setnonblocking</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'> <span class="cm">/* Add handler to handle events on fd */</span>
-</span><span class='line'>
-</span><span class='line'> <span class="k">return</span> <span class="n">fd</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>                          <span class="k">sizeof</span><span class="p">(</span><span class="n">addr</span><span class="p">))</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="n">log_error</span><span class="p">(</span><span class="s">&quot;Failed to bind server socket&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'> <span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="k">if</span> <span class="p">(</span><span class="n">listen</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">MAX_PENDING</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">log_error</span><span class="p">(</span><span class="s">&quot;Failed to listen on server socket&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'> <span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="n">setnonblocking</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">Add</span> <span class="n">handler</span> <span class="n">to</span> <span class="n">handle</span> <span class="n">events</span> <span class="n">on</span> <span class="n">fd</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="k">return</span> <span class="n">fd</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>I used epoll for handling events, so adding a handler was something like this.</p>
@@ -115,25 +111,15 @@
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">hash_set</span><span class="p">(</span><span class="n">ioloop</span><span class="o">-&gt;</span><span class="n">handlers</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">handler</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">hash_set</span><span class="p">(</span><span class="n">ioloop</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">handlers</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">handler</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">e</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span> <span class="o">=</span> <span class="n">fd</span><span class="p">;</span>
+</span><span class='line'><span class="n">e</span><span class="p">.</span><span class="n">events</span> <span class="o">=</span> <span class="n">EPOLLIN</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">e</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span> <span class="o">=</span> <span class="n">fd</span><span class="p">;</span>
-</span><span class='line'><span class="n">e</span><span class="p">.</span><span class="n">events</span> <span class="o">=</span> <span class="n">EPOLLIN</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">if</span><span class="p">(</span><span class="n">epoll_ctl</span><span class="p">(</span><span class="n">ioloop</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">epfd</span><span class="p">,</span> <span class="n">EPOLL_CTL_ADD</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">e</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">if</span><span class="p">(</span><span class="n">epoll_ctl</span><span class="p">(</span><span class="n">ioloop</span><span class="o">-&gt;</span><span class="n">epfd</span><span class="p">,</span> <span class="n">EPOLL_CTL_ADD</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">e</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'> <span class="n">log_error</span><span class="p">(</span><span class="s">&quot;Failed to insert handler to epoll&quot;</span><span class="p">);</span>
 </span><span class='line'> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Connections to the server should be accepted with accept() similar to TCP sockets.</p>
@@ -171,40 +157,36 @@
 <span class='line-number'>28</span>
 <span class='line-number'>29</span>
 <span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="kt">int</span> <span class="n">connect_server</span><span class="p">()</span> <span class="p">{</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="kt">int</span> <span class="n">connect_server</span><span class="p">()</span> <span class="p">{</span>
 </span><span class='line'> <span class="k">struct</span> <span class="n">sockaddr_un</span> <span class="n">addr</span><span class="p">;</span>
-</span><span class='line'> <span class="kt">int</span> <span class="n">fd</span><span class="p">;</span>
+</span><span class='line'> <span class="kt">int</span> <span class="n">fd</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'> <span class="k">if</span> <span class="p">((</span><span class="n">fd</span> <span class="o">=</span> <span class="n">socket</span><span class="p">(</span><span class="n">AF_LOCAL</span><span class="p">,</span> <span class="n">SOCK_STREAM</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="k">if</span> <span class="p">((</span><span class="n">fd</span> <span class="o">=</span> <span class="n">socket</span><span class="p">(</span><span class="n">AF_LOCAL</span><span class="p">,</span> <span class="n">SOCK_STREAM</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>  <span class="n">log_error</span><span class="p">(</span><span class="s">&quot;Failed to create client socket&quot;</span><span class="p">);</span>
 </span><span class='line'>  <span class="k">return</span> <span class="n">fd</span><span class="p">;</span>
-</span><span class='line'> <span class="p">}</span>
+</span><span class='line'> <span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'> <span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">addr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">addr</span><span class="p">));</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">addr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">addr</span><span class="p">));</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'> <span class="n">addr</span><span class="p">.</span><span class="n">sun_family</span> <span class="o">=</span> <span class="n">AF_LOCAL</span><span class="p">;</span>
-</span><span class='line'> <span class="n">strcpy</span><span class="p">(</span><span class="n">addr</span><span class="p">.</span><span class="n">sun_path</span><span class="p">,</span> <span class="n">SOCKET_PATH</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="n">addr</span><span class="p">.</span><span class="n">sun_family</span> <span class="o">=</span> <span class="n">AF_LOCAL</span><span class="p">;</span>
+</span><span class='line'> <span class="n">strcpy</span><span class="p">(</span><span class="n">addr</span><span class="p">.</span><span class="n">sun_path</span><span class="p">,</span> <span class="n">SOCKET_PATH</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'> <span class="k">if</span> <span class="p">(</span><span class="n">connect</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span>
-</span><span class='line'>             <span class="p">(</span><span class="k">struct</span> <span class="n">sockaddr</span> <span class="o">*</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;(</span><span class="n">addr</span><span class="p">),</span>
-</span><span class='line'>             <span class="k">sizeof</span><span class="p">(</span><span class="n">addr</span><span class="p">))</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="n">log_error</span><span class="p">(</span><span class="s">&quot;Failed to connect to server&quot;</span><span class="p">);</span>
-</span><span class='line'>  <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-</span><span class='line'> <span class="p">}</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="k">if</span> <span class="p">(</span><span class="n">connect</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'> <span class="n">setnonblocking</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'> <span class="cm">/* Add handler to handle events */</span>
-</span><span class='line'>
-</span><span class='line'> <span class="k">return</span> <span class="n">fd</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>         <span class="p">(</span><span class="k">struct</span> <span class="n">sockaddr</span> <span class="o">*</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;(</span><span class="n">addr</span><span class="p">),</span>
+</span><span class='line'>         <span class="k">sizeof</span><span class="p">(</span><span class="n">addr</span><span class="p">))</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="n">log_error</span><span class="p">(</span><span class="s">&quot;Failed to connect to server&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'> <span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="n">setnonblocking</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">Add</span> <span class="n">handler</span> <span class="n">to</span> <span class="n">handle</span> <span class="n">events</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="k">return</span> <span class="n">fd</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>I was adding <code>EPOLLOUT</code> listener to the socket whenever there were file descriptors to be passed to the other process.</p>
@@ -261,11 +243,10 @@
 <span class='line-number'>47</span>
 <span class='line-number'>48</span>
 <span class='line-number'>49</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">static</span> <span class="kt">int</span>
+<span class='line-number'>50</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">static</span> <span class="kt">int</span>
 </span><span class='line'><span class="n">recv_file_descriptor</span><span class="p">(</span>
-</span><span class='line'>  <span class="kt">int</span> <span class="n">socket</span><span class="p">)</span> <span class="cm">/* Socket from which the file descriptor is read */</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">socket</span><span class="p">)</span> <span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">Socket</span> <span class="n">from</span> <span class="n">which</span> <span class="n">the</span> <span class="n">file</span> <span class="n">descriptor</span> <span class="n">is</span> <span class="n">read</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span>
 </span><span class='line'><span class="p">{</span>
 </span><span class='line'> <span class="kt">int</span> <span class="n">sent_fd</span><span class="p">;</span>
 </span><span class='line'> <span class="k">struct</span> <span class="n">msghdr</span> <span class="n">message</span><span class="p">;</span>
@@ -273,43 +254,46 @@
 </span><span class='line'> <span class="k">struct</span> <span class="n">cmsghdr</span> <span class="o">*</span><span class="n">control_message</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
 </span><span class='line'> <span class="kt">char</span> <span class="n">ctrl_buf</span><span class="p">[</span><span class="n">CMSG_SPACE</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">))];</span>
 </span><span class='line'> <span class="kt">char</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-</span><span class='line'> <span class="kt">int</span> <span class="n">res</span><span class="p">;</span>
+</span><span class='line'> <span class="kt">int</span> <span class="n">res</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'> <span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">message</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">msghdr</span><span class="p">));</span>
-</span><span class='line'> <span class="n">memset</span><span class="p">(</span><span class="n">ctrl_buf</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">CMSG_SPACE</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)));</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">message</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">msghdr</span><span class="p">));</span>
+</span><span class='line'> <span class="n">memset</span><span class="p">(</span><span class="n">ctrl_buf</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">CMSG_SPACE</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)));</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'> <span class="cm">/* For the dummy data */</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">For</span> <span class="n">the</span> <span class="n">dummy</span> <span class="n">data</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span>
 </span><span class='line'> <span class="n">iov</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">iov_base</span> <span class="o">=</span> <span class="n">data</span><span class="p">;</span>
-</span><span class='line'> <span class="n">iov</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">iov_len</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
+</span><span class='line'> <span class="n">iov</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">iov_len</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">data</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'> <span class="n">message</span><span class="p">.</span><span class="n">msg_name</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="n">message</span><span class="p">.</span><span class="n">msg_name</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
 </span><span class='line'> <span class="n">message</span><span class="p">.</span><span class="n">msg_namelen</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 </span><span class='line'> <span class="n">message</span><span class="p">.</span><span class="n">msg_control</span> <span class="o">=</span> <span class="n">ctrl_buf</span><span class="p">;</span>
 </span><span class='line'> <span class="n">message</span><span class="p">.</span><span class="n">msg_controllen</span> <span class="o">=</span> <span class="n">CMSG_SPACE</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
 </span><span class='line'> <span class="n">message</span><span class="p">.</span><span class="n">msg_iov</span> <span class="o">=</span> <span class="n">iov</span><span class="p">;</span>
-</span><span class='line'> <span class="n">message</span><span class="p">.</span><span class="n">msg_iovlen</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'> <span class="n">message</span><span class="p">.</span><span class="n">msg_iovlen</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'> <span class="k">if</span><span class="p">((</span><span class="n">res</span> <span class="o">=</span> <span class="n">recvmsg</span><span class="p">(</span><span class="n">socket</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">message</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="k">if</span><span class="p">((</span><span class="n">res</span> <span class="o">=</span> <span class="n">recvmsg</span><span class="p">(</span><span class="n">socket</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">message</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">res</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'> <span class="cm">/* Iterate through header to find if there is a file descriptor */</span>
-</span><span class='line'> <span class="k">for</span><span class="p">(</span><span class="n">control_message</span> <span class="o">=</span> <span class="n">CMSG_FIRSTHDR</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">message</span><span class="p">);</span>
-</span><span class='line'>     <span class="n">control_message</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">;</span>
-</span><span class='line'>     <span class="n">control_message</span> <span class="o">=</span> <span class="n">CMSG_NXTHDR</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">message</span><span class="p">,</span>
-</span><span class='line'>                                   <span class="n">control_message</span><span class="p">))</span>
-</span><span class='line'> <span class="p">{</span>
-</span><span class='line'>  <span class="k">if</span><span class="p">(</span> <span class="p">(</span><span class="n">control_message</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">cmsg_level</span> <span class="o">==</span> <span class="n">SOL_SOCKET</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span>
-</span><span class='line'>      <span class="p">(</span><span class="n">control_message</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">cmsg_type</span> <span class="o">==</span> <span class="n">SCM_RIGHTS</span><span class="p">)</span> <span class="p">)</span>
-</span><span class='line'>  <span class="p">{</span>
-</span><span class='line'>   <span class="k">return</span> <span class="o">*</span><span class="p">((</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span> <span class="n">CMSG_DATA</span><span class="p">(</span><span class="n">control_message</span><span class="p">));</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'> <span class="p">}</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">Iterate</span> <span class="n">through</span> <span class="n">header</span> <span class="n">to</span> <span class="n">find</span> <span class="k">if</span> <span class="n">there</span> <span class="n">is</span> <span class="n">a</span> <span class="n">file</span> <span class="n">descriptor</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span>
+</span><span class='line'> <span class="k">for</span><span class="p">(</span><span class="n">control_message</span> <span class="o">=</span> <span class="n">CMSG_FIRSTHDR</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">message</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span> <span class="n">control_message</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'> <span class="n">control_message</span> <span class="o">=</span> <span class="n">CMSG_NXTHDR</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">message</span><span class="p">,</span>
+</span><span class='line'>                               <span class="n">control_message</span><span class="p">))</span>
 </span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span> <span class="p">(</span><span class="n">control_message</span><span class="o">-&gt;</span><span class="n">cmsg_level</span> <span class="o">==</span> <span class="n">SOL_SOCKET</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>  <span class="p">(</span><span class="n">control_message</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">cmsg_type</span> <span class="o">==</span> <span class="n">SCM_RIGHTS</span><span class="p">)</span> <span class="p">)</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="p">{</span>
+</span><span class='line'>   <span class="k">return</span> <span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="p">((</span><span class="kt">int</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="p">)</span> <span class="n">CMSG_DATA</span><span class="p">(</span><span class="n">control_message</span><span class="p">));</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'> <span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <h2>Sending a file descriptor</h2>
@@ -350,51 +334,41 @@
 <span class='line-number'>33</span>
 <span class='line-number'>34</span>
 <span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">static</span> <span class="kt">int</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">static</span> <span class="kt">int</span>
 </span><span class='line'><span class="n">send_file_descriptor</span><span class="p">(</span>
-</span><span class='line'>  <span class="kt">int</span> <span class="n">socket</span><span class="p">,</span> <span class="cm">/* Socket through which the file descriptor is passed */</span>
-</span><span class='line'>  <span class="kt">int</span> <span class="n">fd_to_send</span><span class="p">)</span> <span class="cm">/* File descriptor to be passed, could be another socket */</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">socket</span><span class="p">,</span> <span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">Socket</span> <span class="n">through</span> <span class="n">which</span> <span class="n">the</span> <span class="n">file</span> <span class="n">descriptor</span> <span class="n">is</span> <span class="n">passed</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">fd_to_send</span><span class="p">)</span> <span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">File</span> <span class="n">descriptor</span> <span class="n">to</span> <span class="n">be</span> <span class="n">passed</span><span class="p">,</span> <span class="n">could</span> <span class="n">be</span> <span class="n">another</span> <span class="n">socket</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span>
 </span><span class='line'><span class="p">{</span>
 </span><span class='line'> <span class="k">struct</span> <span class="n">msghdr</span> <span class="n">message</span><span class="p">;</span>
 </span><span class='line'> <span class="k">struct</span> <span class="n">iovec</span> <span class="n">iov</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
 </span><span class='line'> <span class="k">struct</span> <span class="n">cmsghdr</span> <span class="o">*</span><span class="n">control_message</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
 </span><span class='line'> <span class="kt">char</span> <span class="n">ctrl_buf</span><span class="p">[</span><span class="n">CMSG_SPACE</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">))];</span>
-</span><span class='line'> <span class="kt">char</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+</span><span class='line'> <span class="kt">char</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'> <span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">message</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">msghdr</span><span class="p">));</span>
-</span><span class='line'> <span class="n">memset</span><span class="p">(</span><span class="n">ctrl_buf</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">CMSG_SPACE</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)));</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">message</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">msghdr</span><span class="p">));</span>
+</span><span class='line'> <span class="n">memset</span><span class="p">(</span><span class="n">ctrl_buf</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">CMSG_SPACE</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)));</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'> <span class="cm">/* We are passing at least one byte of data so that recvmsg() will not return 0 */</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">We</span> <span class="n">are</span> <span class="n">passing</span> <span class="n">at</span> <span class="n">least</span> <span class="n">one</span> <span class="n">byte</span> <span class="n">of</span> <span class="n">data</span> <span class="n">so</span> <span class="n">that</span> <span class="n">recvmsg</span><span class="p">()</span> <span class="n">will</span> <span class="n">not</span> <span class="k">return</span> <span class="mi">0</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span>
 </span><span class='line'> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
 </span><span class='line'> <span class="n">iov</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">iov_base</span> <span class="o">=</span> <span class="n">data</span><span class="p">;</span>
-</span><span class='line'> <span class="n">iov</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">iov_len</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
+</span><span class='line'> <span class="n">iov</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">iov_len</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">data</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'> <span class="n">message</span><span class="p">.</span><span class="n">msg_name</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="n">message</span><span class="p">.</span><span class="n">msg_name</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
 </span><span class='line'> <span class="n">message</span><span class="p">.</span><span class="n">msg_namelen</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 </span><span class='line'> <span class="n">message</span><span class="p">.</span><span class="n">msg_iov</span> <span class="o">=</span> <span class="n">iov</span><span class="p">;</span>
 </span><span class='line'> <span class="n">message</span><span class="p">.</span><span class="n">msg_iovlen</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 </span><span class='line'> <span class="n">message</span><span class="p">.</span><span class="n">msg_controllen</span> <span class="o">=</span>  <span class="n">CMSG_SPACE</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
-</span><span class='line'> <span class="n">message</span><span class="p">.</span><span class="n">msg_control</span> <span class="o">=</span> <span class="n">ctrl_buf</span><span class="p">;</span>
+</span><span class='line'> <span class="n">message</span><span class="p">.</span><span class="n">msg_control</span> <span class="o">=</span> <span class="n">ctrl_buf</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'> <span class="n">control_message</span> <span class="o">=</span> <span class="n">CMSG_FIRSTHDR</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">message</span><span class="p">);</span>
-</span><span class='line'> <span class="n">control_message</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">cmsg_level</span> <span class="o">=</span> <span class="n">SOL_SOCKET</span><span class="p">;</span>
-</span><span class='line'> <span class="n">control_message</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">cmsg_type</span> <span class="o">=</span> <span class="n">SCM_RIGHTS</span><span class="p">;</span>
-</span><span class='line'> <span class="n">control_message</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">cmsg_len</span> <span class="o">=</span> <span class="n">CMSG_LEN</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="n">control_message</span> <span class="o">=</span> <span class="n">CMSG_FIRSTHDR</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">message</span><span class="p">);</span>
+</span><span class='line'> <span class="n">control_message</span><span class="o">-&gt;</span><span class="n">cmsg_level</span> <span class="o">=</span> <span class="n">SOL_SOCKET</span><span class="p">;</span>
+</span><span class='line'> <span class="n">control_message</span><span class="o">-&gt;</span><span class="n">cmsg_type</span> <span class="o">=</span> <span class="n">SCM_RIGHTS</span><span class="p">;</span>
+</span><span class='line'> <span class="n">control_message</span><span class="o">-&gt;</span><span class="n">cmsg_len</span> <span class="o">=</span> <span class="n">CMSG_LEN</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'> <span class="o">*</span><span class="p">((</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span> <span class="n">CMSG_DATA</span><span class="p">(</span><span class="n">control_message</span><span class="p">))</span> <span class="o">=</span> <span class="n">fd_to_send</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="p">((</span><span class="kt">int</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="p">)</span> <span class="n">CMSG_DATA</span><span class="p">(</span><span class="n">control_message</span><span class="p">))</span> <span class="o">=</span> <span class="n">fd_to_send</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'> <span class="k">return</span> <span class="n">sendmsg</span><span class="p">(</span><span class="n">socket</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">message</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="k">return</span> <span class="n">sendmsg</span><span class="p">(</span><span class="n">socket</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">message</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
 </span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 ]]></content>
   </entry>
@@ -456,54 +430,50 @@ In epoll unlike poll all events that need to be monitored are not passed everyti
 <span class='line-number'>42</span>
 <span class='line-number'>43</span>
 <span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">class</span> <span class="nc">IOLoop</span> <span class="p">{</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">class</span> <span class="nc">IOLoop</span> <span class="p">{</span>
 </span><span class='line'><span class="p">...</span>
-</span><span class='line'> <span class="k">static</span> <span class="n">IOLoop</span> <span class="o">*</span> <span class="n">getInstance</span><span class="p">();</span>
+</span><span class='line'> <span class="k">static</span> <span class="n">IOLoop</span> <span class="o">*</span> <span class="n">getInstance</span><span class="p">();</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'> <span class="n">IOLoop</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">this</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">epfd</span> <span class="o">=</span> <span class="n">epoll_create</span><span class="p">(</span><span class="k">this</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">EPOLL_EVENTS</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="n">IOLoop</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">this</span><span class="o">-&gt;</span><span class="n">epfd</span> <span class="o">=</span> <span class="n">epoll_create</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">EPOLL_EVENTS</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">epfd</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">epfd</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>   <span class="n">log_error</span><span class="p">(</span><span class="s">&quot;Failed to create epoll&quot;</span><span class="p">);</span>
 </span><span class='line'>   <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
 </span><span class='line'>  <span class="p">}</span>
 </span><span class='line'><span class="p">...</span>
-</span><span class='line'> <span class="p">}</span>
+</span><span class='line'> <span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'> <span class="kt">void</span> <span class="n">start</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="kt">void</span> <span class="n">start</span><span class="p">()</span> <span class="p">{</span>
 </span><span class='line'>  <span class="k">for</span><span class="p">(;;)</span> <span class="p">{</span>
-</span><span class='line'>   <span class="kt">int</span> <span class="n">nfds</span> <span class="o">=</span> <span class="n">epoll_wait</span><span class="p">(</span><span class="k">this</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">epfd</span><span class="p">,</span> <span class="k">this</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">events</span><span class="p">,</span> <span class="k">this</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">MAX_EVENTS</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span> <span class="cm">/* Timeout */</span><span class="p">);</span>
+</span><span class='line'>   <span class="kt">int</span> <span class="n">nfds</span> <span class="o">=</span> <span class="n">epoll_wait</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">epfd</span><span class="p">,</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">events</span><span class="p">,</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">MAX_EVENTS</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span> <span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">Timeout</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>   <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">nfds</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="k">this</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">events</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">Handler</span> <span class="o">*</span><span class="n">h</span> <span class="o">=</span> <span class="n">handlers</span><span class="p">[</span><span class="n">fd</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">h</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">handle</span><span class="p">(</span><span class="k">this</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">events</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-</span><span class='line'>   <span class="p">}</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>   <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">nfds</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="k">this</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">events</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span><span class="p">;</span>
+</span><span class='line'><span class="n">Handler</span> <span class="o">*</span><span class="n">h</span> <span class="o">=</span> <span class="n">handlers</span><span class="p">[</span><span class="n">fd</span><span class="p">];</span>
+</span><span class='line'><span class="n">h</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">handle</span><span class="p">(</span><span class="k">this</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">events</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>   <span class="p">}</span>
 </span><span class='line'>  <span class="p">}</span>
-</span><span class='line'> <span class="p">}</span>
+</span><span class='line'> <span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'> <span class="kt">void</span> <span class="n">addHandler</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="n">Handler</span> <span class="o">*</span><span class="n">handler</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">events</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="kt">void</span> <span class="n">addHandler</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="n">Handler</span> <span class="o">*</span><span class="n">handler</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">events</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>  <span class="n">handlers</span><span class="p">[</span><span class="n">fd</span><span class="p">]</span> <span class="o">=</span> <span class="n">handler</span><span class="p">;</span>
 </span><span class='line'>  <span class="n">epoll_event</span> <span class="n">e</span><span class="p">;</span>
 </span><span class='line'>  <span class="n">e</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span> <span class="o">=</span> <span class="n">fd</span><span class="p">;</span>
-</span><span class='line'>  <span class="n">e</span><span class="p">.</span><span class="n">events</span> <span class="o">=</span> <span class="n">events</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">e</span><span class="p">.</span><span class="n">events</span> <span class="o">=</span> <span class="n">events</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="n">epoll_ctl</span><span class="p">(</span><span class="k">this</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">epfd</span><span class="p">,</span> <span class="n">EPOLL_CTL_ADD</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">e</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="k">if</span><span class="p">(</span><span class="n">epoll_ctl</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">epfd</span><span class="p">,</span> <span class="n">EPOLL_CTL_ADD</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">e</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>   <span class="n">log_error</span><span class="p">(</span><span class="s">&quot;Failed to insert handler to epoll&quot;</span><span class="p">);</span>
 </span><span class='line'>  <span class="p">}</span>
-</span><span class='line'> <span class="p">}</span>
+</span><span class='line'> <span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'> <span class="kt">void</span> <span class="n">modifyHandler</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">events</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="kt">void</span> <span class="n">modifyHandler</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">events</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'> <span class="kt">void</span> <span class="n">removeHandler</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="kt">void</span> <span class="n">removeHandler</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">);</span>
 </span><span class='line'><span class="p">};</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Handlers used in this example are ServerHandler and EchoHandler which derive from class Handler. Handlers have a member function handle which handles the event occurred.</p>
@@ -565,58 +535,58 @@ In epoll unlike poll all events that need to be monitored are not passed everyti
 <span class='line-number'>50</span>
 <span class='line-number'>51</span>
 <span class='line-number'>52</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">class</span> <span class="nc">ServerHandler</span> <span class="o">:</span> <span class="n">Handler</span> <span class="p">{</span>
+</span><span class='line'><span class="p">...</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">class</span> <span class="nc">ServerHandler</span> <span class="o">:</span> <span class="n">Handler</span> <span class="p">{</span>
-</span><span class='line'><span class="p">...</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="n">ServerHandler</span><span class="p">(</span><span class="kt">int</span> <span class="n">port</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">addr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">addr</span><span class="p">));</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'> <span class="n">ServerHandler</span><span class="p">(</span><span class="kt">int</span> <span class="n">port</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">addr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">addr</span><span class="p">));</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">if</span> <span class="p">((</span><span class="n">fd</span> <span class="o">=</span> <span class="n">socket</span><span class="p">(</span><span class="n">PF_INET</span><span class="p">,</span> <span class="n">SOCK_STREAM</span><span class="p">,</span> <span class="n">IPPROTO_TCP</span><span class="p">))</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="k">if</span> <span class="p">((</span><span class="n">fd</span> <span class="o">=</span> <span class="n">socket</span><span class="p">(</span><span class="n">PF_INET</span><span class="p">,</span> <span class="n">SOCK_STREAM</span><span class="p">,</span> <span class="n">IPPROTO_TCP</span><span class="p">))</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>   <span class="n">log_error</span><span class="p">(</span><span class="s">&quot;Failed to create server socket&quot;</span><span class="p">);</span>
 </span><span class='line'>   <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>  <span class="n">addr</span><span class="p">.</span><span class="n">sin_family</span> <span class="o">=</span> <span class="n">AF_INET</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="n">addr</span><span class="p">.</span><span class="n">sin_family</span> <span class="o">=</span> <span class="n">AF_INET</span><span class="p">;</span>
 </span><span class='line'>  <span class="n">addr</span><span class="p">.</span><span class="n">sin_addr</span><span class="p">.</span><span class="n">s_addr</span> <span class="o">=</span> <span class="n">htonl</span><span class="p">(</span><span class="n">INADDR_ANY</span><span class="p">);</span>
-</span><span class='line'>  <span class="n">addr</span><span class="p">.</span><span class="n">sin_port</span> <span class="o">=</span> <span class="n">htons</span><span class="p">(</span><span class="n">port</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">addr</span><span class="p">.</span><span class="n">sin_port</span> <span class="o">=</span> <span class="n">htons</span><span class="p">(</span><span class="n">port</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">bind</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="p">(</span><span class="k">struct</span> <span class="n">sockaddr</span> <span class="o">*</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">addr</span><span class="p">,</span>
-</span><span class='line'>                               <span class="k">sizeof</span><span class="p">(</span><span class="n">addr</span><span class="p">))</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>   <span class="n">log_error</span><span class="p">(</span><span class="s">&quot;Failed to bind server socket&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="k">if</span> <span class="p">(</span><span class="n">bind</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="p">(</span><span class="k">struct</span> <span class="n">sockaddr</span> <span class="o">*</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">addr</span><span class="p">,</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>                           <span class="k">sizeof</span><span class="p">(</span><span class="n">addr</span><span class="p">))</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>   <span class="n">log_error</span><span class="p">(</span><span class="s">&quot;Failed to bind server socket&quot;</span><span class="p">);</span>
 </span><span class='line'>   <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">listen</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">MAX_PENDING</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="k">if</span> <span class="p">(</span><span class="n">listen</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">MAX_PENDING</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>   <span class="n">log_error</span><span class="p">(</span><span class="s">&quot;Failed to listen on server socket&quot;</span><span class="p">);</span>
 </span><span class='line'>   <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
 </span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="n">setnonblocking</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">setnonblocking</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>  <span class="n">IOLoop</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">addHandler</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="k">this</span><span class="p">,</span> <span class="n">EPOLLIN</span><span class="p">);</span>
-</span><span class='line'> <span class="p">}</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="n">IOLoop</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">addHandler</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="k">this</span><span class="p">,</span> <span class="n">EPOLLIN</span><span class="p">);</span>
+</span><span class='line'> <span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'> <span class="k">virtual</span> <span class="kt">int</span> <span class="n">handle</span><span class="p">(</span><span class="n">epoll_event</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="k">virtual</span> <span class="kt">int</span> <span class="n">handle</span><span class="p">(</span><span class="n">epoll_event</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>  <span class="n">sockaddr_in</span> <span class="n">client_addr</span><span class="p">;</span>
-</span><span class='line'>  <span class="n">socklen_t</span> <span class="n">ca_len</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">client_addr</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">socklen_t</span> <span class="n">ca_len</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">client_addr</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>  <span class="kt">int</span> <span class="n">client</span> <span class="o">=</span> <span class="n">accept</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="p">(</span><span class="k">struct</span> <span class="n">sockaddr</span> <span class="o">*</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">client_addr</span><span class="p">,</span>
-</span><span class='line'>                  <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">ca_len</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="kt">int</span> <span class="n">client</span> <span class="o">=</span> <span class="n">accept</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="p">(</span><span class="k">struct</span> <span class="n">sockaddr</span> <span class="o">*</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">client_addr</span><span class="p">,</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="n">client</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>              <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">ca_len</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="k">if</span><span class="p">(</span><span class="n">client</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>   <span class="n">log_error</span><span class="p">(</span><span class="s">&quot;Error accepting connection&quot;</span><span class="p">);</span>
 </span><span class='line'>   <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>  <span class="n">cout</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="s">&quot;Client connected: &quot;</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">inet_ntoa</span><span class="p">(</span><span class="n">client_addr</span><span class="p">.</span><span class="n">sin_addr</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">endl</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="n">cout</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="s">&quot;Client connected: &quot;</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">inet_ntoa</span><span class="p">(</span><span class="n">client_addr</span><span class="p">.</span><span class="n">sin_addr</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">endl</span><span class="p">;</span>
 </span><span class='line'>  <span class="k">new</span> <span class="n">EchoHandler</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">client_addr</span><span class="p">);</span>
 </span><span class='line'>  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span><span class='line'> <span class="p">}</span>
 </span><span class='line'><span class="p">};</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <h2>Set Non-blocking</h2>
@@ -626,18 +596,8 @@ In epoll unlike poll all events that need to be monitored are not passed everyti
 <p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Set Non-blocking  </span></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">flags</span> <span class="o">=</span> <span class="n">fcntl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">F_GETFL</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">flags</span> <span class="o">=</span> <span class="n">fcntl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">F_GETFL</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
 </span><span class='line'><span class="n">fcntl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">F_SETFL</span><span class="p">,</span> <span class="n">flags</span> <span class="o">|</span> <span class="n">O_NONBLOCK</span><span class="p">);</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <h2>EchoHandler:handle</h2>
@@ -686,51 +646,47 @@ In epoll unlike poll all events that need to be monitored are not passed everyti
 <span class='line-number'>39</span>
 <span class='line-number'>40</span>
 <span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">virtual</span> <span class="kt">int</span> <span class="n">handle</span><span class="p">(</span><span class="n">epoll_event</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">virtual</span> <span class="kt">int</span> <span class="n">handle</span><span class="p">(</span><span class="n">epoll_event</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'> <span class="k">if</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">events</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">EPOLLHUP</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="n">IOLoop</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">removeHandler</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">IOLoop</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">removeHandler</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
 </span><span class='line'>  <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-</span><span class='line'> <span class="p">}</span>
+</span><span class='line'> <span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'> <span class="k">if</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">events</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">EPOLLERR</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="k">if</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">events</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">EPOLLERR</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>  <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-</span><span class='line'> <span class="p">}</span>
+</span><span class='line'> <span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'> <span class="k">if</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">events</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">EPOLLOUT</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="n">received</span> <span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="k">if</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">events</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">EPOLLOUT</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="n">received</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>   <span class="n">cout</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="s">&quot;Writing: &quot;</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">buffer</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">endl</span><span class="p">;</span>
-</span><span class='line'>   <span class="k">if</span> <span class="p">(</span><span class="n">send</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">received</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">!=</span> <span class="n">received</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">log_error</span><span class="p">(</span><span class="s">&quot;Error writing to socket&quot;</span><span class="p">);</span>
-</span><span class='line'>   <span class="p">}</span>
-</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>   <span class="k">if</span> <span class="p">(</span><span class="n">send</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">received</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">!=</span> <span class="n">received</span><span class="p">)</span> <span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>  <span class="n">IOLoop</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">modifyHandler</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">EPOLLIN</span><span class="p">);</span>
-</span><span class='line'> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'> <span class="k">if</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">events</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">EPOLLIN</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">((</span><span class="n">received</span> <span class="o">=</span> <span class="n">recv</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">BUFFER_SIZE</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>   <span class="n">log_error</span><span class="p">(</span><span class="s">&quot;Error reading from socket&quot;</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">received</span> <span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>   <span class="n">buffer</span><span class="p">[</span><span class="n">received</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>   <span class="n">cout</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="s">&quot;Reading: &quot;</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">buffer</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">endl</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="n">received</span> <span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>   <span class="n">IOLoop</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">modifyHandler</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">EPOLLOUT</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>   <span class="n">IOLoop</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">removeHandler</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">log_error</span><span class="p">(</span><span class="s">&quot;Error writing to socket&quot;</span><span class="p">);</span>
 </span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>   <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="n">IOLoop</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">modifyHandler</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">EPOLLIN</span><span class="p">);</span>
+</span><span class='line'> <span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="k">if</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">events</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">EPOLLIN</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">((</span><span class="n">received</span> <span class="o">=</span> <span class="n">recv</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">BUFFER_SIZE</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>   <span class="n">log_error</span><span class="p">(</span><span class="s">&quot;Error reading from socket&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">received</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>   <span class="n">buffer</span><span class="p">[</span><span class="n">received</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>   <span class="n">cout</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="s">&quot;Reading: &quot;</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">buffer</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">endl</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="k">if</span><span class="p">(</span><span class="n">received</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>   <span class="n">IOLoop</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">modifyHandler</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">EPOLLOUT</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>   <span class="n">IOLoop</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">removeHandler</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'> <span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>To test this you can use the client implemented in this site: . You can test out this server with multiple clients connecting at the same time to see how it works.</p>
