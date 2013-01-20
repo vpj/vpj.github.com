@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: python | My Octopress Blog]]></title>
+  <title><![CDATA[Category: python | vpj's diary]]></title>
   <link href="http://vpj.github.com/blog/categories/python/atom.xml" rel="self"/>
   <link href="http://vpj.github.com/"/>
-  <updated>2013-01-20T11:08:27+05:30</updated>
+  <updated>2013-01-20T11:34:39+05:30</updated>
   <id>http://vpj.github.com/</id>
   <author>
-    <name><![CDATA[Your Name]]></name>
+    <name><![CDATA[Varuna Jayasiri]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
