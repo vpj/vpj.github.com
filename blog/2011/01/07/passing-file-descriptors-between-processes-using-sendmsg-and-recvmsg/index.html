@@ -5,12 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>My Octopress Blog</title>
+  <title>Passing file descriptors between processes using sendmsg() and recvmsg() - My Octopress Blog</title>
   <meta name="author" content="Your Name">
 
   
-  <meta name="description" content="nearby.lk is business search engine, currently operating only within Sri Lanka.
-It has been growing rapidly in-terms of visitors, business listings &hellip;">
+  <meta name="description" content="Using this technique you can pass file descriptors between processes using sendmsg() and recvmsg() functions using UNIX Domain Protocol. Any &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +18,7 @@ It has been growing rapidly in-terms of visitors, business listings &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://vpj.github.com/">
+  <link rel="canonical" href="http://vpj.github.com/blog/2011/01/07/passing-file-descriptors-between-processes-using-sendmsg-and-recvmsg/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -63,76 +62,12 @@ It has been growing rapidly in-terms of visitors, business listings &hellip;">
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2012/09/02/nearby-dot-lk-technology-stack/">nearby.lk Technology Stack</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-09-02T11:02:00+05:30" pubdate data-updated="true">Sep 2<span>nd</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://nearby.lk">nearby.lk</a> is business search engine, currently operating only within Sri Lanka.
-It has been growing rapidly in-terms of visitors, business listings as well as features and performance of the system, since the launch in February 2012.</p>
-
-<h2>Server</h2>
-
-<p><a href="http://nearby.lk">nearby.lk</a> runs on <strong>Google App Engine (GAE)</strong>. It was pretty easy to get things started on GAE - no need to setup servers, databases, etc. This was the main reason for picking GAE at first. We wanted something up and running as soon as possible. However, sometimes you feel like you dont have enough customizability.</p>
-
-<p>App Engine gives a lot of services such as Google authentication, datastore, memcache, load balancing, image manipulation, a search API, email, relatime channels, xmpp, backends, etc. GAE documentation is also pretty good.</p>
-
-<p>We started using Google authentication and Facebook authentication and later decided to drop google authentication as not many users were using that. We continue to use google authentication for admin section.</p>
-
-<p>Load balancing seems to be a bit over doing, which causes new instances to be created unecessarily sometimes. In our app, this actually causes some low response times, becuase our program has a slow startup. Startup times were reduced significantly by caching all precomputations in memcache, which is common to all instances.</p>
-
-<p>Images API was quite handy for image resizing. We also used search API for some parts of the search since recently.</p>
-
-<p>GAE backends are quite useful for apps like ours where there is a lot of centralised processing (seaching). We will probably use it in the near future.</p>
-
-<h2>Client</h2>
-
-<p>We use <strong>jQuery</strong> for DOM manipulation, <strong>backbone.js</strong> for model-view architecture, and <strong>underscore.js</strong> for rendering with templates.</p>
-
-<p>Backbone.js helps a lot to keep the javascript clean and structured. We also use backbone.js router for ajax navigation, which is pretty neat since it falls back to hash links if history API is not available.</p>
-
-<p>Templating with underscore.js was quite handy, but we faced a small problem as backend rendering was done with django templates - we had to maintain two sets of templates. We are planning to use mustache templates, which is supported by underscore.js and has python implementations.</p>
-
-<p><strong>Twitter Bootstrap</strong>, default theme with a bunch of customizations, is used in the web version and <strong>jQuery Mobile</strong> is used for mobile version of the app. We launched the mobile version recently and it still has some small glitches with the jQuery Mobile implementation. We used responsive features of Bootstrap with some tweaks because the mobile specific version was introduced.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/01/07/passing-file-descriptors-between-processes-using-sendmsg-and-recvmsg/">Passing File Descriptors Between Processes Using Sendmsg() and Recvmsg()</a></h1>
+      <h1 class="entry-title">Passing File Descriptors Between Processes Using Sendmsg() and Recvmsg()</h1>
     
     
       <p class="meta">
@@ -155,7 +90,7 @@ It has been growing rapidly in-terms of visitors, business listings as well as f
   </header>
 
 
-  <div class="entry-content"><p>Using this technique you can pass file descriptors between processes using <code>sendmsg()</code> and <code>recvmsg()</code> functions using UNIX Domain Protocol. Any descriptor can be passed using this method not just a file descriptor.</p>
+<div class="entry-content"><p>Using this technique you can pass file descriptors between processes using <code>sendmsg()</code> and <code>recvmsg()</code> functions using UNIX Domain Protocol. Any descriptor can be passed using this method not just a file descriptor.</p>
 
 <p>This is quite useful when you want to balance load in a multi-core system. Other way of passing file descriptors is by forking the process, but in this case you can pass file descriptors between different processes at anytime.</p>
 
@@ -491,22 +426,16 @@ It has been growing rapidly in-terms of visitors, business listings as well as f
 
 
 </div>
-  
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/01/02/tcp-echo-server-example-in-c-plus-plus-using-epoll/">TCP Echo Server Example in C++ Using Epoll</a></h1>
-    
-    
-      <p class="meta">
-        
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Your Name</span></span>
+
+      
 
 
 
@@ -518,322 +447,40 @@ It has been growing rapidly in-terms of visitors, business listings as well as f
   
 
 
-<time datetime="2011-01-02T10:39:00+05:30" pubdate data-updated="true">Jan 2<span>nd</span>, 2011</time>
-        
-      </p>
+<time datetime="2011-01-07T10:53:00+05:30" pubdate data-updated="true">Jan 7<span>th</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/unix-domain-protocol/'>Unix Domain Protocol</a>, <a class='category' href='/blog/categories/epoll/'>epoll</a>, <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/recvmsg/'>recvmsg</a>, <a class='category' href='/blog/categories/sendmsg/'>sendmsg</a>, <a class='category' href='/blog/categories/socket/'>socket</a>
+  
+</span>
+
+
+    </p>
     
-  </header>
-
-
-  <div class="entry-content"><p>This example is a simple server which accepts connections and echos whatever data sent to the server. This example also demonstrates the use of <strong>epoll</strong>, which is efficient than <strong>poll</strong>.
-In epoll unlike poll all events that need to be monitored are not passed everytime the wait call is made. Epoll uses event registration where events to be watched can be added, modified or removed. This makes it efficient when there are a large number of events to be watched.</p>
-
-<h2>IOLoop</h2>
-
-<p>In this example the class IOLoop will deal with epoll interface and it will invoke relevant handlers based on events occurred.</p>
-
-<figure class='code'><figcaption><span>IOLoop  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'>    <span class="k">class</span> <span class="nc">IOLoop</span> <span class="p">{</span>
-</span><span class='line'>    <span class="p">...</span>
-</span><span class='line'>     <span class="k">static</span> <span class="n">IOLoop</span> <span class="o">*</span> <span class="n">getInstance</span><span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'>     <span class="n">IOLoop</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">this</span><span class="o">-&gt;</span><span class="n">epfd</span> <span class="o">=</span> <span class="n">epoll_create</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">EPOLL_EVENTS</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">epfd</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>       <span class="n">log_error</span><span class="p">(</span><span class="s">&quot;Failed to create epoll&quot;</span><span class="p">);</span>
-</span><span class='line'>       <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>    <span class="p">...</span>
-</span><span class='line'>     <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>     <span class="kt">void</span> <span class="n">start</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">for</span><span class="p">(;;)</span> <span class="p">{</span>
-</span><span class='line'>       <span class="kt">int</span> <span class="n">nfds</span> <span class="o">=</span> <span class="n">epoll_wait</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">epfd</span><span class="p">,</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">events</span><span class="p">,</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">MAX_EVENTS</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span> <span class="cm">/* Timeout */</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>       <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nfds</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">events</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span><span class="p">;</span>
-</span><span class='line'>        <span class="n">Handler</span> <span class="o">*</span><span class="n">h</span> <span class="o">=</span> <span class="n">handlers</span><span class="p">[</span><span class="n">fd</span><span class="p">];</span>
-</span><span class='line'>        <span class="n">h</span><span class="o">-&gt;</span><span class="n">handle</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">events</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-</span><span class='line'>       <span class="p">}</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>     <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>     <span class="kt">void</span> <span class="n">addHandler</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="n">Handler</span> <span class="o">*</span><span class="n">handler</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">events</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="n">handlers</span><span class="p">[</span><span class="n">fd</span><span class="p">]</span> <span class="o">=</span> <span class="n">handler</span><span class="p">;</span>
-</span><span class='line'>      <span class="n">epoll_event</span> <span class="n">e</span><span class="p">;</span>
-</span><span class='line'>      <span class="n">e</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span> <span class="o">=</span> <span class="n">fd</span><span class="p">;</span>
-</span><span class='line'>      <span class="n">e</span><span class="p">.</span><span class="n">events</span> <span class="o">=</span> <span class="n">events</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="k">if</span><span class="p">(</span><span class="n">epoll_ctl</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">epfd</span><span class="p">,</span> <span class="n">EPOLL_CTL_ADD</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">e</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>       <span class="n">log_error</span><span class="p">(</span><span class="s">&quot;Failed to insert handler to epoll&quot;</span><span class="p">);</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>     <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>     <span class="kt">void</span> <span class="n">modifyHandler</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">events</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>     <span class="kt">void</span> <span class="n">removeHandler</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Handlers used in this example are ServerHandler and EchoHandler which derive from class Handler. Handlers have a member function handle which handles the event occurred.</p>
-
-<h2>ServerHandler</h2>
-
-<p>ServerHandler will create a server socket and handle in coming connections</p>
-
-<figure class='code'><figcaption><span>ServerHandler  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'>    <span class="k">class</span> <span class="nc">ServerHandler</span> <span class="o">:</span> <span class="n">Handler</span> <span class="p">{</span>
-</span><span class='line'>    <span class="p">...</span>
-</span><span class='line'>
-</span><span class='line'>     <span class="n">ServerHandler</span><span class="p">(</span><span class="kt">int</span> <span class="n">port</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">addr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">addr</span><span class="p">));</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="k">if</span> <span class="p">((</span><span class="n">fd</span> <span class="o">=</span> <span class="n">socket</span><span class="p">(</span><span class="n">PF_INET</span><span class="p">,</span> <span class="n">SOCK_STREAM</span><span class="p">,</span> <span class="n">IPPROTO_TCP</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>       <span class="n">log_error</span><span class="p">(</span><span class="s">&quot;Failed to create server socket&quot;</span><span class="p">);</span>
-</span><span class='line'>       <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="n">addr</span><span class="p">.</span><span class="n">sin_family</span> <span class="o">=</span> <span class="n">AF_INET</span><span class="p">;</span>
-</span><span class='line'>      <span class="n">addr</span><span class="p">.</span><span class="n">sin_addr</span><span class="p">.</span><span class="n">s_addr</span> <span class="o">=</span> <span class="n">htonl</span><span class="p">(</span><span class="n">INADDR_ANY</span><span class="p">);</span>
-</span><span class='line'>      <span class="n">addr</span><span class="p">.</span><span class="n">sin_port</span> <span class="o">=</span> <span class="n">htons</span><span class="p">(</span><span class="n">port</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="n">bind</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="p">(</span><span class="k">struct</span> <span class="n">sockaddr</span> <span class="o">*</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">addr</span><span class="p">,</span>
-</span><span class='line'>                                   <span class="k">sizeof</span><span class="p">(</span><span class="n">addr</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>       <span class="n">log_error</span><span class="p">(</span><span class="s">&quot;Failed to bind server socket&quot;</span><span class="p">);</span>
-</span><span class='line'>       <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="n">listen</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">MAX_PENDING</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>       <span class="n">log_error</span><span class="p">(</span><span class="s">&quot;Failed to listen on server socket&quot;</span><span class="p">);</span>
-</span><span class='line'>       <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>      <span class="n">setnonblocking</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="n">IOLoop</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">addHandler</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="k">this</span><span class="p">,</span> <span class="n">EPOLLIN</span><span class="p">);</span>
-</span><span class='line'>     <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>     <span class="k">virtual</span> <span class="kt">int</span> <span class="n">handle</span><span class="p">(</span><span class="n">epoll_event</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="n">sockaddr_in</span> <span class="n">client_addr</span><span class="p">;</span>
-</span><span class='line'>      <span class="n">socklen_t</span> <span class="n">ca_len</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">client_addr</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="kt">int</span> <span class="n">client</span> <span class="o">=</span> <span class="n">accept</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="p">(</span><span class="k">struct</span> <span class="n">sockaddr</span> <span class="o">*</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">client_addr</span><span class="p">,</span>
-</span><span class='line'>                      <span class="o">&amp;</span><span class="n">ca_len</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="k">if</span><span class="p">(</span><span class="n">client</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>       <span class="n">log_error</span><span class="p">(</span><span class="s">&quot;Error accepting connection&quot;</span><span class="p">);</span>
-</span><span class='line'>       <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Client connected: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">inet_ntoa</span><span class="p">(</span><span class="n">client_addr</span><span class="p">.</span><span class="n">sin_addr</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span><span class='line'>      <span class="k">new</span> <span class="n">EchoHandler</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">client_addr</span><span class="p">);</span>
-</span><span class='line'>      <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>     <span class="p">}</span>
-</span><span class='line'>    <span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Set Non-blocking</h2>
-
-<p>Function setnonblocking sets the file descriptor setting to non-clocking.</p>
-
-<figure class='code'><figcaption><span>Set Non-blocking  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'>    <span class="n">flags</span> <span class="o">=</span> <span class="n">fcntl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">F_GETFL</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-</span><span class='line'>    <span class="n">fcntl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">F_SETFL</span><span class="p">,</span> <span class="n">flags</span> <span class="o">|</span> <span class="n">O_NONBLOCK</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>EchoHandler:handle</h2>
-
-<p>EchoHandler will write whatever it reads from the socket</p>
-
-<figure class='code'><figcaption><span>Handler  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'>    <span class="k">virtual</span> <span class="kt">int</span> <span class="n">handle</span><span class="p">(</span><span class="n">epoll_event</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>     <span class="k">if</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">events</span> <span class="o">&amp;</span> <span class="n">EPOLLHUP</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="n">IOLoop</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">removeHandler</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
-</span><span class='line'>      <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-</span><span class='line'>     <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>     <span class="k">if</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">events</span> <span class="o">&amp;</span> <span class="n">EPOLLERR</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-</span><span class='line'>     <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>     <span class="k">if</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">events</span> <span class="o">&amp;</span> <span class="n">EPOLLOUT</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">if</span><span class="p">(</span><span class="n">received</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>       <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Writing: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">buffer</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span><span class='line'>       <span class="k">if</span> <span class="p">(</span><span class="n">send</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">received</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">!=</span> <span class="n">received</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="n">log_error</span><span class="p">(</span><span class="s">&quot;Error writing to socket&quot;</span><span class="p">);</span>
-</span><span class='line'>       <span class="p">}</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="n">IOLoop</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">modifyHandler</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">EPOLLIN</span><span class="p">);</span>
-</span><span class='line'>     <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>     <span class="k">if</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">events</span> <span class="o">&amp;</span> <span class="n">EPOLLIN</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">if</span> <span class="p">((</span><span class="n">received</span> <span class="o">=</span> <span class="n">recv</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">BUFFER_SIZE</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>       <span class="n">log_error</span><span class="p">(</span><span class="s">&quot;Error reading from socket&quot;</span><span class="p">);</span>
-</span><span class='line'>      <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">received</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>       <span class="n">buffer</span><span class="p">[</span><span class="n">received</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>       <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Reading: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">buffer</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="k">if</span><span class="p">(</span><span class="n">received</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>       <span class="n">IOLoop</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">modifyHandler</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">EPOLLOUT</span><span class="p">);</span>
-</span><span class='line'>      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>       <span class="n">IOLoop</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">removeHandler</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>     <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>To test this you can use the client implemented in this site: . You can test out this server with multiple clients connecting at the same time to see how it works.</p>
-
-<p>Error checking in this code is minimal so it will probably fail unexpectedly in certain scenarios which I have not come across yet. And please leave a comment if you do find any errors or if there are things that could be improved.</p>
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://vpj.github.com/blog/2011/01/07/passing-file-descriptors-between-processes-using-sendmsg-and-recvmsg/" data-via="" data-counturl="http://vpj.github.com/blog/2011/01/07/passing-file-descriptors-between-processes-using-sendmsg-and-recvmsg/" >Tweet</a>
+  
+  
+  
 </div>
-  
-  
 
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2011/01/02/tcp-echo-server-example-in-c-plus-plus-using-epoll/" title="Previous Post: TCP echo server example in C++ using epoll">&laquo; TCP echo server example in C++ using epoll</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/09/02/nearby-dot-lk-technology-stack/" title="Next Post: nearby.lk Technology Stack">nearby.lk Technology Stack &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
 
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
 </div>
+
 <aside class="sidebar">
   
     <section>
@@ -862,6 +509,7 @@ In epoll unlike poll all events that need to be monitored are not passed everyti
 
   
 </aside>
+
 
     </div>
   </div>

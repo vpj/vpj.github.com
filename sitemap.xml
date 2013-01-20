@@ -4,11 +4,21 @@
         <loc>
             http://vpj.github.com/blog/2011/01/02/tcp-echo-server-example-in-c-plus-plus-using-epoll/
         </loc>
-        <lastmod>2013-01-20T10:48:21+05:30</lastmod>
+        <lastmod>2013-01-20T11:01:37+05:30</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://vpj.github.com/blog/2011/01/07/passing-file-descriptors-between-processes-using-sendmsg-and-recvmsg/
+        </loc>
+        <lastmod>2013-01-20T11:02:01+05:30</lastmod>
+    </url>
+    <url>
+        <loc>http://vpj.github.com/blog/2012/09/02/nearby-dot-lk-technology-stack/</loc>
+        <lastmod>2013-01-20T11:08:18+05:30</lastmod>
     </url>
     <url>
         <loc>http://vpj.github.com/</loc>
-        <lastmod>2013-01-20T10:48:21+05:30</lastmod>
+        <lastmod>2013-01-20T11:08:18+05:30</lastmod>
     </url>
     <url>
         <loc>http://vpj.github.com/robots.txt</loc>
@@ -16,6 +26,6 @@
     </url>
     <url>
         <loc>http://vpj.github.com/blog/archives/</loc>
-        <lastmod>2013-01-20T10:48:21+05:30</lastmod>
+        <lastmod>2013-01-20T11:08:18+05:30</lastmod>
     </url>
 </urlset>

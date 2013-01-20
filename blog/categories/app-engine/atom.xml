@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: App Engine | My Octopress Blog]]></title>
+  <link href="http://vpj.github.com/blog/categories/app-engine/atom.xml" rel="self"/>
+  <link href="http://vpj.github.com/"/>
+  <updated>2013-01-20T11:08:27+05:30</updated>
+  <id>http://vpj.github.com/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[nearby.lk Technology Stack]]></title>
+    <link href="http://vpj.github.com/blog/2012/09/02/nearby-dot-lk-technology-stack/"/>
+    <updated>2012-09-02T11:02:00+05:30</updated>
+    <id>http://vpj.github.com/blog/2012/09/02/nearby-dot-lk-technology-stack</id>
+    <content type="html"><![CDATA[<p><a href="http://nearby.lk">nearby.lk</a> is business search engine, currently operating only within Sri Lanka.
+It has been growing rapidly in-terms of visitors, business listings as well as features and performance of the system, since the launch in February 2012.</p>
+
+<h2>Server</h2>
+
+<p><a href="http://nearby.lk">nearby.lk</a> runs on <strong>Google App Engine (GAE)</strong>. It was pretty easy to get things started on GAE - no need to setup servers, databases, etc. This was the main reason for picking GAE at first. We wanted something up and running as soon as possible. However, sometimes you feel like you dont have enough customizability.</p>
+
+<p>App Engine gives a lot of services such as Google authentication, datastore, memcache, load balancing, image manipulation, a search API, email, relatime channels, xmpp, backends, etc. GAE documentation is also pretty good.</p>
+
+<p>We started using Google authentication and Facebook authentication and later decided to drop google authentication as not many users were using that. We continue to use google authentication for admin section.</p>
+
+<p>Load balancing seems to be a bit over doing, which causes new instances to be created unecessarily sometimes. In our app, this actually causes some low response times, becuase our program has a slow startup. Startup times were reduced significantly by caching all precomputations in memcache, which is common to all instances.</p>
+
+<p>Images API was quite handy for image resizing. We also used search API for some parts of the search since recently.</p>
+
+<p>GAE backends are quite useful for apps like ours where there is a lot of centralised processing (seaching). We will probably use it in the near future.</p>
+
+<h2>Client</h2>
+
+<p>We use <strong>jQuery</strong> for DOM manipulation, <strong>backbone.js</strong> for model-view architecture, and <strong>underscore.js</strong> for rendering with templates.</p>
+
+<p>Backbone.js helps a lot to keep the javascript clean and structured. We also use backbone.js router for ajax navigation, which is pretty neat since it falls back to hash links if history API is not available.</p>
+
+<p>Templating with underscore.js was quite handy, but we faced a small problem as backend rendering was done with django templates - we had to maintain two sets of templates. We are planning to use mustache templates, which is supported by underscore.js and has python implementations.</p>
+
+<p><strong>Twitter Bootstrap</strong>, default theme with a bunch of customizations, is used in the web version and <strong>jQuery Mobile</strong> is used for mobile version of the app. We launched the mobile version recently and it still has some small glitches with the jQuery Mobile implementation. We used responsive features of Bootstrap with some tweaks because the mobile specific version was introduced.</p>
+]]></content>
+  </entry>
+  
+</feed>
