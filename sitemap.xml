@@ -1,8 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
+        <loc>
+            http://vpj.github.com/blog/2011/01/02/tcp-echo-server-example-in-c-plus-plus-using-epoll/
+        </loc>
+        <lastmod>2013-01-20T10:48:21+05:30</lastmod>
+    </url>
+    <url>
         <loc>http://vpj.github.com/</loc>
-        <lastmod>2013-01-20T10:20:08+05:30</lastmod>
+        <lastmod>2013-01-20T10:48:21+05:30</lastmod>
     </url>
     <url>
         <loc>http://vpj.github.com/robots.txt</loc>
@@ -10,6 +16,6 @@
     </url>
     <url>
         <loc>http://vpj.github.com/blog/archives/</loc>
-        <lastmod>2013-01-20T10:20:08+05:30</lastmod>
+        <lastmod>2013-01-20T10:48:21+05:30</lastmod>
     </url>
 </urlset>
