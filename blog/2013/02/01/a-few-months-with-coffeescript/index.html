@@ -5,12 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>nearby.lk Technology Stack - vpj's diary</title>
+  <title>A few months with Coffeescript - vpj's diary</title>
   <meta name="author" content="Varuna Jayasiri">
 
   
-  <meta name="description" content="nearby.lk is business search engine, currently operating only within Sri Lanka.
-It has been growing rapidly in-terms of visitors, business listings &hellip;">
+  <meta name="description" content="We moved to coffeescript about 3 months back and
+Rewrote all the javascript code in coffescript in active projects.
+So far things have been very &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +20,7 @@ It has been growing rapidly in-terms of visitors, business listings &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://vpj.github.com/blog/2012/09/02/nearby-dot-lk-technology-stack/">
+  <link rel="canonical" href="http://vpj.github.com/blog/2013/02/01/a-few-months-with-coffeescript/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -80,7 +81,7 @@ It has been growing rapidly in-terms of visitors, business listings &hellip;">
   
   <header>
     
-      <h1 class="entry-title">nearby.lk Technology Stack</h1>
+      <h1 class="entry-title">A Few Months With Coffeescript</h1>
     
     
       <p class="meta">
@@ -96,7 +97,7 @@ It has been growing rapidly in-terms of visitors, business listings &hellip;">
   
 
 
-<time datetime="2012-09-02T11:02:00+05:30" pubdate data-updated="true">Sep 2<span>nd</span>, 2012</time>
+<time datetime="2013-02-01T21:42:00+05:30" pubdate data-updated="true">Feb 1<span>st</span>, 2013</time>
         
          | <a href="#disqus_thread">Comments</a>
         
@@ -105,32 +106,59 @@ It has been growing rapidly in-terms of visitors, business listings &hellip;">
   </header>
 
 
-<div class="entry-content"><p><a href="http://nearby.lk">nearby.lk</a> is business search engine, currently operating only within Sri Lanka.
-It has been growing rapidly in-terms of visitors, business listings as well as features and performance of the system, since the launch in February 2012.</p>
+<div class="entry-content"><p>We moved to <a href="http://coffeescript.org">coffeescript</a> about 3 months back and
+Rewrote all the javascript code in coffescript in active projects.
+So far things have been very smooth and we are really happy about the move.</p>
 
-<h2>Server</h2>
+<p><span class='pullquote-right' data-pullquote='easy to learn.'>
+Coffeescript is well documented and was quite easy to learn.
+It only took a few hours to skim through the documentation and start coding.
+Some features of coffeescript was not used at first because of our previous coding patterns.
+</span></p>
 
-<p><a href="http://nearby.lk">nearby.lk</a> runs on <strong>Google App Engine (GAE)</strong>. It was pretty easy to get things started on GAE - no need to setup servers, databases, etc. This was the main reason for picking GAE at first. We wanted something up and running as soon as possible. However, sometimes you feel like you dont have enough customizability.</p>
+<p><span class='pullquote-right' data-pullquote='more readable'>
+Coffeescript is defenitely more readable than javascript. Almost all operators are replaced with words.
+Although this increases the length of the code, it becomes much easier to read.
+</span></p>
 
-<p>App Engine gives a lot of services such as Google authentication, datastore, memcache, load balancing, image manipulation, a search API, email, relatime channels, xmpp, backends, etc. GAE documentation is also pretty good.</p>
+<p>For example, <code>if, then, else</code> is used instead of conditional statements <code>?:</code>.</p>
 
-<p>We started using Google authentication and Facebook authentication and later decided to drop google authentication as not many users were using that. We continue to use google authentication for admin section.</p>
+<figure class='code'><figcaption><span>Conditional statement  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='coffeescript'><span class='line'><span class="nv">workingHours = </span><span class="k">if</span> <span class="nx">sunday</span> <span class="k">then</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">8</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>Load balancing seems to be a bit over doing, which causes new instances to be created unecessarily sometimes. In our app, this actually causes some low response times, becuase our program has a slow startup. Startup times were reduced significantly by caching all precomputations in memcache, which is common to all instances.</p>
 
-<p>Images API was quite handy for image resizing. We also used search API for some parts of the search since recently.</p>
 
-<p>GAE backends are quite useful for apps like ours where there is a lot of centralised processing (seaching). We will probably use it in the near future.</p>
 
-<h2>Client</h2>
+<!--
+Coffescript doesn't use semicolan and block expressions are delimeted by indentation.
+Using `@property` instead of `this.property` improves readability while reducing the number of keystrokes.
+-->
 
-<p>We use <strong>jQuery</strong> for DOM manipulation, <strong>backbone.js</strong> for model-view architecture, and <strong>underscore.js</strong> for rendering with templates.</p>
 
-<p>Backbone.js helps a lot to keep the javascript clean and structured. We also use backbone.js router for ajax navigation, which is pretty neat since it falls back to hash links if history API is not available.</p>
+<p><span class='pullquote-right' data-pullquote='fewer lines code'>
+Code written is coffeescript consists of fewer lines code, and sometimes fewer character in each line.
+No curly brackets <code>{, }</code>, simpler function declerations, no variable declerations, etc.
+are a few reasons for this. I believe coffeescript reduced the number of lines of our code by 15% to 40%.
+</span></p>
 
-<p>Templating with underscore.js was quite handy, but we faced a small problem as backend rendering was done with django templates - we had to maintain two sets of templates. We are planning to use mustache templates, which is supported by underscore.js and has python implementations.</p>
+<p>Also, Coffeescript has some cool features such as existance operator,
+default values for function arguments, looping through arrays and objects, array slicing,
+destructuring assignements, string interpolation, etc. to solve some of
+the frequently occuring difficulties in javascript.</p>
 
-<p><strong>Twitter Bootstrap</strong>, default theme with a bunch of customizations, is used in the web version and <strong>jQuery Mobile</strong> is used for mobile version of the app. We launched the mobile version recently and it still has some small glitches with the jQuery Mobile implementation. We used responsive features of Bootstrap with some tweaks because the mobile specific version was introduced.</p>
+<p>For instance, with string interpolation, instead of having to code
+<code>"&lt;h1&gt;" + heading + "&lt;/h1&gt;&lt;p&gt;" + description + "&lt;/p&gt;</code>,
+you could just write <code>"&lt;h1&gt;#{heading}&lt;/h1&gt;&lt;p&gt;#{description}&lt;/p&gt;"</code>.</p>
+
+<h2>One language to rule them all</h2>
+
+<p>We are using <a href="https://github.com/gradus/coffeecup">coffeecup</a> instead of HTML. So this takes of the need to maintain templates separately,
+with different template engines for backend and frontend. Coffeecup templates are stored
+in separate coffeescript files which are used by both the browser code (frontend)
+and node js (backend) - we need backend rendering for indexing bots. And you can avoid repetitive
+HTML sections by implementing helpers which can be reused.</p>
 </div>
 
 
@@ -153,12 +181,12 @@ It has been growing rapidly in-terms of visitors, business listings as well as f
   
 
 
-<time datetime="2012-09-02T11:02:00+05:30" pubdate data-updated="true">Sep 2<span>nd</span>, 2012</time>
+<time datetime="2013-02-01T21:42:00+05:30" pubdate data-updated="true">Feb 1<span>st</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/app-engine/'>App Engine</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/nearby-lk/'>nearby.lk</a>, <a class='category' href='/blog/categories/python/'>python</a>
+    <a class='category' href='/blog/categories/coffeecup/'>coffeecup</a>, <a class='category' href='/blog/categories/coffeekup/'>coffeekup</a>, <a class='category' href='/blog/categories/coffeescript/'>coffeescript</a>, <a class='category' href='/blog/categories/html/'>html</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/nodejs/'>nodejs</a>
   
 </span>
 
@@ -167,7 +195,7 @@ It has been growing rapidly in-terms of visitors, business listings as well as f
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://vpj.github.com/blog/2012/09/02/nearby-dot-lk-technology-stack/" data-via="" data-counturl="http://vpj.github.com/blog/2012/09/02/nearby-dot-lk-technology-stack/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://vpj.github.com/blog/2013/02/01/a-few-months-with-coffeescript/" data-via="" data-counturl="http://vpj.github.com/blog/2013/02/01/a-few-months-with-coffeescript/" >Tweet</a>
   
   
   
@@ -178,10 +206,8 @@ It has been growing rapidly in-terms of visitors, business listings as well as f
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2011/01/07/passing-file-descriptors-between-processes-using-sendmsg-and-recvmsg/" title="Previous Post: Passing file descriptors between processes using sendmsg() and recvmsg()">&laquo; Passing file descriptors between processes using sendmsg() and recvmsg()</a>
+        <a class="basic-alignment left" href="/blog/2012/09/02/nearby-dot-lk-technology-stack/" title="Previous Post: nearby.lk Technology Stack">&laquo; nearby.lk Technology Stack</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/02/01/a-few-months-with-coffeescript/" title="Next Post: A few months with Coffeescript">A few months with Coffeescript &raquo;</a>
       
     </p>
   </footer>
@@ -273,8 +299,8 @@ It has been growing rapidly in-terms of visitors, business listings as well as f
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://vpj.github.com/blog/2012/09/02/nearby-dot-lk-technology-stack/';
-        var disqus_url = 'http://vpj.github.com/blog/2012/09/02/nearby-dot-lk-technology-stack/';
+        var disqus_identifier = 'http://vpj.github.com/blog/2013/02/01/a-few-months-with-coffeescript/';
+        var disqus_url = 'http://vpj.github.com/blog/2013/02/01/a-few-months-with-coffeescript/';
         var disqus_script = 'embed.js';
       
     (function () {
