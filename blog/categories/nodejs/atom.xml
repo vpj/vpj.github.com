@@ -4,7 +4,7 @@
   <title><![CDATA[Category: nodejs | vpj's diary]]></title>
   <link href="http://vpj.github.com/blog/categories/nodejs/atom.xml" rel="self"/>
   <link href="http://vpj.github.com/"/>
-  <updated>2013-02-01T21:45:48+05:30</updated>
+  <updated>2013-02-01T21:51:35+05:30</updated>
   <id>http://vpj.github.com/</id>
   <author>
     <name><![CDATA[Varuna Jayasiri]]></name>
@@ -29,7 +29,7 @@ Some features of coffeescript was not used at first because of our previous codi
 </span></p>
 
 <p><span class='pullquote-right' data-pullquote='more readable'>
-Coffeescript is defenitely more readable than javascript. Almost all operators are replaced with words.
+Coffeescript is definitely more readable than javascript. Almost all operators are replaced with words.
 Although this increases the length of the code, it becomes much easier to read.
 </span></p>
 
@@ -48,14 +48,14 @@ Using `@property` instead of `this.property` improves readability while reducing
 
 <p><span class='pullquote-right' data-pullquote='fewer lines code'>
 Code written is coffeescript consists of fewer lines code, and sometimes fewer character in each line.
-No curly brackets <code>{, }</code>, simpler function declerations, no variable declerations, etc.
+No curly brackets <code>{, }</code>, simpler function declarations, no variable declarations, etc.
 are a few reasons for this. I believe coffeescript reduced the number of lines of our code by 15% to 40%.
 </span></p>
 
-<p>Also, Coffeescript has some cool features such as existance operator,
+<p>Also, Coffeescript has some cool features such as existence operator,
 default values for function arguments, looping through arrays and objects, array slicing,
-destructuring assignements, string interpolation, etc. to solve some of
-the frequently occuring difficulties in javascript.</p>
+destructuring assignments, string interpolation, etc. to solve some of
+the frequently occurring difficulties in javascript.</p>
 
 <p>For instance, with string interpolation, instead of having to code
 <code>"&lt;h1&gt;" + heading + "&lt;/h1&gt;&lt;p&gt;" + description + "&lt;/p&gt;</code>,
