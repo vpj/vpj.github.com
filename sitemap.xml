@@ -21,8 +21,18 @@
         <lastmod>2013-02-01T21:51:20+05:30</lastmod>
     </url>
     <url>
+        <loc>http://vpj.github.com/blog/2013/02/15/designing-with-data/</loc>
+        <lastmod>2013-02-15T15:28:22+05:30</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://vpj.github.com/blog/2013/02/15/designing-with-data-some-stuff-i-have-been-working-on/
+        </loc>
+        <lastmod>2013-02-15T15:30:44+05:30</lastmod>
+    </url>
+    <url>
         <loc>http://vpj.github.com/</loc>
-        <lastmod>2013-02-01T21:51:20+05:30</lastmod>
+        <lastmod>2013-02-15T15:30:44+05:30</lastmod>
     </url>
     <url>
         <loc>http://vpj.github.com/robots.txt</loc>
@@ -30,6 +40,6 @@
     </url>
     <url>
         <loc>http://vpj.github.com/blog/archives/</loc>
-        <lastmod>2013-02-01T21:51:20+05:30</lastmod>
+        <lastmod>2013-02-15T15:30:44+05:30</lastmod>
     </url>
 </urlset>

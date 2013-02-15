@@ -4,7 +4,7 @@
   <title><![CDATA[vpj's diary]]></title>
   <link href="http://vpj.github.com/atom.xml" rel="self"/>
   <link href="http://vpj.github.com/"/>
-  <updated>2013-02-01T21:51:35+05:30</updated>
+  <updated>2013-02-15T15:31:07+05:30</updated>
   <id>http://vpj.github.com/</id>
   <author>
     <name><![CDATA[Varuna Jayasiri]]></name>
@@ -12,6 +12,46 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Designing with data]]></title>
+    <link href="http://vpj.github.com/blog/2013/02/15/designing-with-data-some-stuff-i-have-been-working-on/"/>
+    <updated>2013-02-15T15:03:00+05:30</updated>
+    <id>http://vpj.github.com/blog/2013/02/15/designing-with-data-some-stuff-i-have-been-working-on</id>
+    <content type="html"><![CDATA[<p><img class="right" src="http://vpj.github.com/images/posts/charts1.png">
+I&#8217;ve been working with charts and graphs lately. Had to read a lot about visualizing data.</p>
+
+<p>Studies of [Edward Tufte][http://en.wikipedia.org/wiki/Edward_Tufte] is quite valuable to anyone working in presentation of informational graphics. One of the most useful concepts was the data-to-ink ratio.</p>
+
+<blockquote><p>A large share of ink on a graphic should present data-information, the ink changing as the data change. Data-ink is the non-erasable core of a graphic, the non-redundant ink arranged in response to variation in the numbers represented.</p><footer><strong>Tufte</strong> <cite>1983</cite></footer></blockquote>
+
+
+<p><img class="left" src="http://vpj.github.com/images/posts/charts2.png">
+Tufte is also the inventor of [sparklines][http://en.wikipedia.org/wiki/Sparkline]. I also came across the book [A Practical Guide to Designing with Data][http://www.amazon.com/Practical-Guide-Designing-Data/dp/0956174086] which was quite useful in designing visualizations. It covers the fundamentals of presentation of graphics, common mistakes and various chart types.</p>
+
+<p><img src="http://vpj.github.com/images/posts/charts3.png"></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Designing with data]]></title>
+    <link href="http://vpj.github.com/blog/2013/02/15/designing-with-data/"/>
+    <updated>2013-02-15T15:03:00+05:30</updated>
+    <id>http://vpj.github.com/blog/2013/02/15/designing-with-data</id>
+    <content type="html"><![CDATA[<p><img class="right" src="http://vpj.github.com/images/posts/chart1.png">
+I&#8217;ve been working with charts and graphs lately. Had to read a lot about visualizing data.</p>
+
+<p>Studies of [Edward Tufte][http://en.wikipedia.org/wiki/Edward_Tufte] is quite valuable to anyone working in presentation of informational graphics. One of the most useful concepts was the data-to-ink ratio.</p>
+
+<blockquote><p>A large share of ink on a graphic should present data-information, the ink changing as the data change. Data-ink is the non-erasable core of a graphic, the non-redundant ink arranged in response to variation in the numbers represented.</p><footer><strong>Tufte</strong> <cite>1983</cite></footer></blockquote>
+
+
+<p><img class="left" src="http://vpj.github.com/images/posts/chart2.png">
+Tufte is also the inventor of [sparklines][http://en.wikipedia.org/wiki/Sparkline]. I also came across the book [A Practical Guide to Designing with Data][http://www.amazon.com/Practical-Guide-Designing-Data/dp/0956174086] which was quite useful in designing visualizations. It covers the fundamentals of presentation of graphics, common mistakes and various chart types.</p>
+
+<p><img src="http://vpj.github.com/images/posts/chart3.png"></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[A few months with Coffeescript]]></title>

@@ -5,12 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>nearby.lk Technology Stack - vpj's diary</title>
+  <title>Designing with data - vpj's diary</title>
   <meta name="author" content="Varuna Jayasiri">
 
   
-  <meta name="description" content="nearby.lk is business search engine, currently operating only within Sri Lanka.
-It has been growing rapidly in-terms of visitors, business listings &hellip;">
+  <meta name="description" content="I&#8217;ve been working with charts and graphs lately. Had to read a lot about visualizing data. Studies of [Edward Tufte][http://en.wikipedia.org/ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +18,7 @@ It has been growing rapidly in-terms of visitors, business listings &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://vpj.github.com/blog/2012/09/02/nearby-dot-lk-technology-stack/">
+  <link rel="canonical" href="http://vpj.github.com/blog/2013/02/15/designing-with-data/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -80,7 +79,7 @@ It has been growing rapidly in-terms of visitors, business listings &hellip;">
   
   <header>
     
-      <h1 class="entry-title">nearby.lk Technology Stack</h1>
+      <h1 class="entry-title">Designing With Data</h1>
     
     
       <p class="meta">
@@ -96,7 +95,7 @@ It has been growing rapidly in-terms of visitors, business listings &hellip;">
   
 
 
-<time datetime="2012-09-02T11:02:00+05:30" pubdate data-updated="true">Sep 2<span>nd</span>, 2012</time>
+<time datetime="2013-02-15T15:03:00+05:30" pubdate data-updated="true">Feb 15<span>th</span>, 2013</time>
         
          | <a href="#disqus_thread">Comments</a>
         
@@ -105,32 +104,18 @@ It has been growing rapidly in-terms of visitors, business listings &hellip;">
   </header>
 
 
-<div class="entry-content"><p><a href="http://nearby.lk">nearby.lk</a> is business search engine, currently operating only within Sri Lanka.
-It has been growing rapidly in-terms of visitors, business listings as well as features and performance of the system, since the launch in February 2012.</p>
+<div class="entry-content"><p><img class="right" src="http://vpj.github.com/images/posts/chart1.png">
+I&#8217;ve been working with charts and graphs lately. Had to read a lot about visualizing data.</p>
 
-<h2>Server</h2>
+<p>Studies of [Edward Tufte][http://en.wikipedia.org/wiki/Edward_Tufte] is quite valuable to anyone working in presentation of informational graphics. One of the most useful concepts was the data-to-ink ratio.</p>
 
-<p><a href="http://nearby.lk">nearby.lk</a> runs on <strong>Google App Engine (GAE)</strong>. It was pretty easy to get things started on GAE - no need to setup servers, databases, etc. This was the main reason for picking GAE at first. We wanted something up and running as soon as possible. However, sometimes you feel like you dont have enough customizability.</p>
+<blockquote><p>A large share of ink on a graphic should present data-information, the ink changing as the data change. Data-ink is the non-erasable core of a graphic, the non-redundant ink arranged in response to variation in the numbers represented.</p><footer><strong>Tufte</strong> <cite>1983</cite></footer></blockquote>
 
-<p>App Engine gives a lot of services such as Google authentication, datastore, memcache, load balancing, image manipulation, a search API, email, relatime channels, xmpp, backends, etc. GAE documentation is also pretty good.</p>
 
-<p>We started using Google authentication and Facebook authentication and later decided to drop google authentication as not many users were using that. We continue to use google authentication for admin section.</p>
+<p><img class="left" src="http://vpj.github.com/images/posts/chart2.png">
+Tufte is also the inventor of [sparklines][http://en.wikipedia.org/wiki/Sparkline]. I also came across the book [A Practical Guide to Designing with Data][http://www.amazon.com/Practical-Guide-Designing-Data/dp/0956174086] which was quite useful in designing visualizations. It covers the fundamentals of presentation of graphics, common mistakes and various chart types.</p>
 
-<p>Load balancing seems to be a bit over doing, which causes new instances to be created unecessarily sometimes. In our app, this actually causes some low response times, becuase our program has a slow startup. Startup times were reduced significantly by caching all precomputations in memcache, which is common to all instances.</p>
-
-<p>Images API was quite handy for image resizing. We also used search API for some parts of the search since recently.</p>
-
-<p>GAE backends are quite useful for apps like ours where there is a lot of centralised processing (seaching). We will probably use it in the near future.</p>
-
-<h2>Client</h2>
-
-<p>We use <strong>jQuery</strong> for DOM manipulation, <strong>backbone.js</strong> for model-view architecture, and <strong>underscore.js</strong> for rendering with templates.</p>
-
-<p>Backbone.js helps a lot to keep the javascript clean and structured. We also use backbone.js router for ajax navigation, which is pretty neat since it falls back to hash links if history API is not available.</p>
-
-<p>Templating with underscore.js was quite handy, but we faced a small problem as backend rendering was done with django templates - we had to maintain two sets of templates. We are planning to use mustache templates, which is supported by underscore.js and has python implementations.</p>
-
-<p><strong>Twitter Bootstrap</strong>, default theme with a bunch of customizations, is used in the web version and <strong>jQuery Mobile</strong> is used for mobile version of the app. We launched the mobile version recently and it still has some small glitches with the jQuery Mobile implementation. We used responsive features of Bootstrap with some tweaks because the mobile specific version was introduced.</p>
+<p><img src="http://vpj.github.com/images/posts/chart3.png"></p>
 </div>
 
 
@@ -153,12 +138,12 @@ It has been growing rapidly in-terms of visitors, business listings as well as f
   
 
 
-<time datetime="2012-09-02T11:02:00+05:30" pubdate data-updated="true">Sep 2<span>nd</span>, 2012</time>
+<time datetime="2013-02-15T15:03:00+05:30" pubdate data-updated="true">Feb 15<span>th</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/app-engine/'>app engine</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/nearby-lk/'>nearby.lk</a>, <a class='category' href='/blog/categories/python/'>python</a>
+    <a class='category' href='/blog/categories/charts/'>charts</a>, <a class='category' href='/blog/categories/visualization/'>visualization</a>
   
 </span>
 
@@ -167,7 +152,7 @@ It has been growing rapidly in-terms of visitors, business listings as well as f
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://vpj.github.com/blog/2012/09/02/nearby-dot-lk-technology-stack/" data-via="" data-counturl="http://vpj.github.com/blog/2012/09/02/nearby-dot-lk-technology-stack/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://vpj.github.com/blog/2013/02/15/designing-with-data/" data-via="" data-counturl="http://vpj.github.com/blog/2013/02/15/designing-with-data/" >Tweet</a>
   
   
   
@@ -178,10 +163,10 @@ It has been growing rapidly in-terms of visitors, business listings as well as f
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2011/01/07/passing-file-descriptors-between-processes-using-sendmsg-and-recvmsg/" title="Previous Post: Passing file descriptors between processes using sendmsg() and recvmsg()">&laquo; Passing file descriptors between processes using sendmsg() and recvmsg()</a>
+        <a class="basic-alignment left" href="/blog/2013/02/01/a-few-months-with-coffeescript/" title="Previous Post: A few months with Coffeescript">&laquo; A few months with Coffeescript</a>
       
       
-        <a class="basic-alignment right" href="/blog/2013/02/01/a-few-months-with-coffeescript/" title="Next Post: A few months with Coffeescript">A few months with Coffeescript &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2013/02/15/designing-with-data-some-stuff-i-have-been-working-on/" title="Next Post: Designing with data">Designing with data &raquo;</a>
       
     </p>
   </footer>
@@ -277,8 +262,8 @@ It has been growing rapidly in-terms of visitors, business listings as well as f
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://vpj.github.com/blog/2012/09/02/nearby-dot-lk-technology-stack/';
-        var disqus_url = 'http://vpj.github.com/blog/2012/09/02/nearby-dot-lk-technology-stack/';
+        var disqus_identifier = 'http://vpj.github.com/blog/2013/02/15/designing-with-data/';
+        var disqus_url = 'http://vpj.github.com/blog/2013/02/15/designing-with-data/';
         var disqus_script = 'embed.js';
       
     (function () {

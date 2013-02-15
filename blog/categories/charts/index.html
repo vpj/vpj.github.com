@@ -5,12 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>nearby.lk Technology Stack - vpj's diary</title>
+  <title>Category: charts - vpj's diary</title>
   <meta name="author" content="Varuna Jayasiri">
 
   
-  <meta name="description" content="nearby.lk is business search engine, currently operating only within Sri Lanka.
-It has been growing rapidly in-terms of visitors, business listings &hellip;">
+  <meta name="description" content="Category: charts">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +18,7 @@ It has been growing rapidly in-terms of visitors, business listings &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://vpj.github.com/blog/2012/09/02/nearby-dot-lk-technology-stack/">
+  <link rel="canonical" href="http://vpj.github.comblog/categories/charts/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -76,122 +75,50 @@ It has been growing rapidly in-terms of visitors, business listings &hellip;">
   <div id="main">
     <div id="content">
       <div>
-<article class="hentry" role="article">
+<article role="article">
   
   <header>
-    
-      <h1 class="entry-title">nearby.lk Technology Stack</h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-09-02T11:02:00+05:30" pubdate data-updated="true">Sep 2<span>nd</span>, 2012</time>
-        
-         | <a href="#disqus_thread">Comments</a>
-        
-      </p>
+    <h1 class="entry-title">Category: Charts</h1>
     
   </header>
-
-
-<div class="entry-content"><p><a href="http://nearby.lk">nearby.lk</a> is business search engine, currently operating only within Sri Lanka.
-It has been growing rapidly in-terms of visitors, business listings as well as features and performance of the system, since the launch in February 2012.</p>
-
-<h2>Server</h2>
-
-<p><a href="http://nearby.lk">nearby.lk</a> runs on <strong>Google App Engine (GAE)</strong>. It was pretty easy to get things started on GAE - no need to setup servers, databases, etc. This was the main reason for picking GAE at first. We wanted something up and running as soon as possible. However, sometimes you feel like you dont have enough customizability.</p>
-
-<p>App Engine gives a lot of services such as Google authentication, datastore, memcache, load balancing, image manipulation, a search API, email, relatime channels, xmpp, backends, etc. GAE documentation is also pretty good.</p>
-
-<p>We started using Google authentication and Facebook authentication and later decided to drop google authentication as not many users were using that. We continue to use google authentication for admin section.</p>
-
-<p>Load balancing seems to be a bit over doing, which causes new instances to be created unecessarily sometimes. In our app, this actually causes some low response times, becuase our program has a slow startup. Startup times were reduced significantly by caching all precomputations in memcache, which is common to all instances.</p>
-
-<p>Images API was quite handy for image resizing. We also used search API for some parts of the search since recently.</p>
-
-<p>GAE backends are quite useful for apps like ours where there is a lot of centralised processing (seaching). We will probably use it in the near future.</p>
-
-<h2>Client</h2>
-
-<p>We use <strong>jQuery</strong> for DOM manipulation, <strong>backbone.js</strong> for model-view architecture, and <strong>underscore.js</strong> for rendering with templates.</p>
-
-<p>Backbone.js helps a lot to keep the javascript clean and structured. We also use backbone.js router for ajax navigation, which is pretty neat since it falls back to hash links if history API is not available.</p>
-
-<p>Templating with underscore.js was quite handy, but we faced a small problem as backend rendering was done with django templates - we had to maintain two sets of templates. We are planning to use mustache templates, which is supported by underscore.js and has python implementations.</p>
-
-<p><strong>Twitter Bootstrap</strong>, default theme with a bunch of customizations, is used in the web version and <strong>jQuery Mobile</strong> is used for mobile version of the app. We launched the mobile version recently and it still has some small glitches with the jQuery Mobile implementation. We used responsive features of Bootstrap with some tweaks because the mobile specific version was introduced.</p>
-</div>
-
-
-  <footer>
-    <p class="meta">
-      
   
-
-<span class="byline author vcard">Posted by <span class="fn">Varuna Jayasiri</span></span>
-
-      
-
-
-
-
-
+  <div id="blog-archives" class="category">
 
 
 
   
+  <h2>2013</h2>
+
+<article>
+  
+<h1><a href="/blog/2013/02/15/designing-with-data-some-stuff-i-have-been-working-on/">Designing with data</a></h1>
+<time datetime="2013-02-15T15:03:00+05:30" pubdate><span class='month'>Feb</span> <span class='day'>15</span> <span class='year'>2013</span></time>
+
+<footer>
+  <span class="categories">posted in <a class='category' href='/blog/categories/charts/'>charts</a>, <a class='category' href='/blog/categories/visualization/'>visualization</a></span>
+</footer>
 
 
-<time datetime="2012-09-02T11:02:00+05:30" pubdate data-updated="true">Sep 2<span>nd</span>, 2012</time>
-      
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/app-engine/'>app engine</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/nearby-lk/'>nearby.lk</a>, <a class='category' href='/blog/categories/python/'>python</a>
-  
-</span>
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://vpj.github.com/blog/2012/09/02/nearby-dot-lk-technology-stack/" data-via="" data-counturl="http://vpj.github.com/blog/2012/09/02/nearby-dot-lk-technology-stack/" >Tweet</a>
-  
-  
-  
-    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
-  
-</div>
-
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2011/01/07/passing-file-descriptors-between-processes-using-sendmsg-and-recvmsg/" title="Previous Post: Passing file descriptors between processes using sendmsg() and recvmsg()">&laquo; Passing file descriptors between processes using sendmsg() and recvmsg()</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2013/02/01/a-few-months-with-coffeescript/" title="Next Post: A few months with Coffeescript">A few months with Coffeescript &raquo;</a>
-      
-    </p>
-  </footer>
 </article>
 
-  <section>
-    <h1>Comments</h1>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<article>
+  
+<h1><a href="/blog/2013/02/15/designing-with-data/">Designing with data</a></h1>
+<time datetime="2013-02-15T15:03:00+05:30" pubdate><span class='month'>Feb</span> <span class='day'>15</span> <span class='year'>2013</span></time>
+
+<footer>
+  <span class="categories">posted in <a class='category' href='/blog/categories/charts/'>charts</a>, <a class='category' href='/blog/categories/visualization/'>visualization</a></span>
+</footer>
+
+
+</article>
+
 </div>
-  </section>
+
+  
+</article>
 
 </div>
 
@@ -276,10 +203,7 @@ It has been growing rapidly in-terms of visitors, business listings as well as f
       var disqus_shortname = 'vpj';
       
         
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://vpj.github.com/blog/2012/09/02/nearby-dot-lk-technology-stack/';
-        var disqus_url = 'http://vpj.github.com/blog/2012/09/02/nearby-dot-lk-technology-stack/';
-        var disqus_script = 'embed.js';
+        var disqus_script = 'count.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
