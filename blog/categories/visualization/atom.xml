@@ -4,7 +4,7 @@
   <title><![CDATA[Category: visualization | vpj's diary]]></title>
   <link href="http://vpj.github.com/blog/categories/visualization/atom.xml" rel="self"/>
   <link href="http://vpj.github.com/"/>
-  <updated>2013-02-15T15:33:47+05:30</updated>
+  <updated>2013-02-15T15:34:41+05:30</updated>
   <id>http://vpj.github.com/</id>
   <author>
     <name><![CDATA[Varuna Jayasiri]]></name>
@@ -18,16 +18,16 @@
     <link href="http://vpj.github.com/blog/2013/02/15/designing-with-data/"/>
     <updated>2013-02-15T15:03:00+05:30</updated>
     <id>http://vpj.github.com/blog/2013/02/15/designing-with-data</id>
-    <content type="html"><![CDATA[<p><img class="right" src="http://vpj.github.com/images/posts/chart1.png">
+    <content type="html"><![CDATA[<p><img class="right" src="http://vpj.github.com/images/posts/charts1.png">
 I've been working with charts and graphs lately. Had to read a lot about visualizing data.</p>
 
 <p>Studies of <a href="http://en.wikipedia.org/wiki/Edward_Tufte">Edward Tufte</a> is quite valuable to anyone working in presentation of informational graphics. One of the most useful concepts was the data-to-ink ratio.
 <blockquote><p>A large share of ink on a graphic should present data-information, the ink changing as the data change. Data-ink is the non-erasable core of a graphic, the non-redundant ink arranged in response to variation in the numbers represented.</p><footer><strong>Tufte</strong> <cite>1983</cite></footer></blockquote></p>
 
-<p><img class="left" src="http://vpj.github.com/images/posts/chart2.png">
+<p><img class="left" src="http://vpj.github.com/images/posts/charts2.png">
 Tufte is also the inventor of <a href="http://en.wikipedia.org/wiki/Sparkline">sparklines</a>. I also came across the book <a href="http://www.amazon.com/Practical-Guide-Designing-Data/dp/0956174086">A Practical Guide to Designing with Data</a> by Brian Suda, which was quite useful. It covers the fundamentals of presentation of graphics, common mistakes and various chart types.</p>
 
-<p><img src="http://vpj.github.com/images/posts/chart3.png"></p>
+<p><img src="http://vpj.github.com/images/posts/charts3.png"></p>
 ]]></content>
   </entry>
   
