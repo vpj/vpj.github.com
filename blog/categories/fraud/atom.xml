@@ -4,7 +4,7 @@
   <title><![CDATA[Category: fraud | vpj's diary]]></title>
   <link href="http://vpj.github.com/blog/categories/fraud/atom.xml" rel="self"/>
   <link href="http://vpj.github.com/"/>
-  <updated>2013-08-26T14:44:49+05:30</updated>
+  <updated>2013-08-26T15:07:45+05:30</updated>
   <id>http://vpj.github.com/</id>
   <author>
     <name><![CDATA[Varuna Jayasiri]]></name>
@@ -14,18 +14,18 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Is Benford's Law Summation Test Easier to Comprehend]]></title>
+    <title type="html"><![CDATA[Is Benford's Law Summation Test Easier to Comprehend?]]></title>
     <link href="http://vpj.github.com/blog/2013/08/26/benfords-law-summation/"/>
     <updated>2013-08-26T15:03:00+05:30</updated>
     <id>http://vpj.github.com/blog/2013/08/26/benfords-law-summation</id>
-    <content type="html"><![CDATA[<p><img src="http://vpj.github.com/images/posts/ftd-mantissa1.png">
+    <content type="html"><![CDATA[<p><img src="/images/posts/ftd-mantissa1.png">
 At <a href="http://www.forestpin.com">Forestpin</a> we've been analysing financial data from various companies, and Benford's Law analysis was one of the techniques used by our software to find irregularities and fraud in financial data.</p>
 
 <p>If you are new to Benford's Law, <a href="http://www.datagenetics.com/blog/march52012/index.html">this article</a> gives a nice introduction. And the book <a href="http://amzn.com/1118152859">Benford's Law: Applications for Forensic Accounting, Auditing, and Fraud Detection</a> by <a href="http://www.nigrini.com/">Dr. Mark Nigrini</a> is a great resource to learn about Benford's Law and it's applications in financial data analysis.</p>
 
 <p>However, one of the things that is not much discussed and used in applying Benford's law is the <strong>sum invariance</strong>. This characteristic was first observed by Nigrini in 1992.</p>
 
-<p><img src="http://vpj.github.com/images/posts/ftd-distribution.png">
+<p><img class="right" src="/images/posts/ftd-distribution.png" title="First Two Digit Distribution" >
 The basic use of Benford's law is to take the first digit distribution or first two digit distribution and compare it with the expected logarithmic curve. An example first two digit distribution of invoices at a company in Sri Lanka, is illustrated in the chart to the right.</p>
 
 <h2>Sum Invariance</h2>
@@ -36,13 +36,13 @@ The basic use of Benford's law is to take the first digit distribution or first 
 
 <h3><a href="http://en.wikipedia.org/wiki/Significand">Mantissa</a></h3>
 
-<p>The mantissa is the significand of a number in scientific notation. For example, the mantissa of 437,000 = *4.37 * 10<sup>5*</sup> is 4.37. That is, the mantissae of 5123, 51.23 and 5123,000 are equal to 5.123.</p>
+<p>The mantissa is the significand of a number in scientific notation. For example, the mantissa of <strong>437,000</strong> = 4.37 * 10<sup>5</sup> is <strong>4.37</strong>. That is, the mantissae of 5123, 51.23 and 5123,000 are all equal to 5.123.</p>
 
-<p><img src="http://vpj.github.com/images/posts/ftd-mantissa2.png">
+<p><img src="/images/posts/ftd-mantissa2.png" title="First Two Digit Distribution and Sum of Mantissa" >
 The above chart shows the first two digit distribution (bars on top) and first two digit summation of mantissae (bars on bottom), and you can observe that the summation chart gives a visualization that is easier to comprehend.</p>
 
 <p>Sometimes the summation is used without calculating the mantissa (just calculating the total of values), but in that case the chart could get largly influenced by a few large values, and therefore not recommended. The chart below shows the summation by first two digits instead of the summation of mantissae, for the same data set.
-<img src="http://vpj.github.com/images/posts/ftd-sum.png"></p>
+<img src="/images/posts/ftd-sum.png" title="First Two Digit Distribution and Summation" ></p>
 ]]></content>
   </entry>
   

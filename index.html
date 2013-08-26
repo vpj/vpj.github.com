@@ -82,7 +82,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/08/26/benfords-law-summation/">Is Benford&#8217;s Law Summation Test Easier to Comprehend</a></h1>
+      <h1 class="entry-title"><a href="/blog/2013/08/26/benfords-law-summation/">Is Benford&#8217;s Law Summation Test Easier to Comprehend?</a></h1>
     
     
       <p class="meta">
@@ -107,14 +107,14 @@
   </header>
 
 
-  <div class="entry-content"><p><img src="http://vpj.github.com/images/posts/ftd-mantissa1.png">
+  <div class="entry-content"><p><img src="/images/posts/ftd-mantissa1.png">
 At <a href="http://www.forestpin.com">Forestpin</a> we&#8217;ve been analysing financial data from various companies, and Benford&#8217;s Law analysis was one of the techniques used by our software to find irregularities and fraud in financial data.</p>
 
 <p>If you are new to Benford&#8217;s Law, <a href="http://www.datagenetics.com/blog/march52012/index.html">this article</a> gives a nice introduction. And the book <a href="http://amzn.com/1118152859">Benford&#8217;s Law: Applications for Forensic Accounting, Auditing, and Fraud Detection</a> by <a href="http://www.nigrini.com/">Dr. Mark Nigrini</a> is a great resource to learn about Benford&#8217;s Law and it&#8217;s applications in financial data analysis.</p>
 
 <p>However, one of the things that is not much discussed and used in applying Benford&#8217;s law is the <strong>sum invariance</strong>. This characteristic was first observed by Nigrini in 1992.</p>
 
-<p><img src="http://vpj.github.com/images/posts/ftd-distribution.png">
+<p><img class="right" src="/images/posts/ftd-distribution.png" title="First Two Digit Distribution" >
 The basic use of Benford&#8217;s law is to take the first digit distribution or first two digit distribution and compare it with the expected logarithmic curve. An example first two digit distribution of invoices at a company in Sri Lanka, is illustrated in the chart to the right.</p>
 
 <h2>Sum Invariance</h2>
@@ -126,13 +126,13 @@ The basic use of Benford&#8217;s law is to take the first digit distribution or 
 
 <h3><a href="http://en.wikipedia.org/wiki/Significand">Mantissa</a></h3>
 
-<p>The mantissa is the significand of a number in scientific notation. For example, the mantissa of 437,000 = *4.37 * 10<sup>5*</sup> is 4.37. That is, the mantissae of 5123, 51.23 and 5123,000 are equal to 5.123.</p>
+<p>The mantissa is the significand of a number in scientific notation. For example, the mantissa of <strong>437,000</strong> = 4.37 * 10<sup>5</sup> is <strong>4.37</strong>. That is, the mantissae of 5123, 51.23 and 5123,000 are all equal to 5.123.</p>
 
-<p><img src="http://vpj.github.com/images/posts/ftd-mantissa2.png">
+<p><img src="/images/posts/ftd-mantissa2.png" title="First Two Digit Distribution and Sum of Mantissa" >
 The above chart shows the first two digit distribution (bars on top) and first two digit summation of mantissae (bars on bottom), and you can observe that the summation chart gives a visualization that is easier to comprehend.</p>
 
 <p>Sometimes the summation is used without calculating the mantissa (just calculating the total of values), but in that case the chart could get largly influenced by a few large values, and therefore not recommended. The chart below shows the summation by first two digits instead of the summation of mantissae, for the same data set.
-<img src="http://vpj.github.com/images/posts/ftd-sum.png"></p>
+<img src="/images/posts/ftd-sum.png" title="First Two Digit Distribution and Summation" ></p>
 </div>
   
   
@@ -170,7 +170,7 @@ The above chart shows the first two digit distribution (bars on top) and first t
   </header>
 
 
-  <div class="entry-content"><p><img class="right" src="http://vpj.github.com/images/posts/charts1.png">
+  <div class="entry-content"><p><img class="right" src="/images/posts/charts1.png">
 I&#8217;ve been working with charts and graphs lately. Had to read a lot about visualizing data.</p>
 
 <p>Studies of <a href="http://en.wikipedia.org/wiki/Edward_Tufte">Edward Tufte</a> is quite valuable to anyone working in presentation of informational graphics. One of the most useful concepts was the data-to-ink ratio.</p>
@@ -178,10 +178,10 @@ I&#8217;ve been working with charts and graphs lately. Had to read a lot about v
 <blockquote><p>A large share of ink on a graphic should present data-information, the ink changing as the data change. Data-ink is the non-erasable core of a graphic, the non-redundant ink arranged in response to variation in the numbers represented.</p><footer><strong>Tufte</strong> <cite>1983</cite></footer></blockquote>
 
 
-<p><img class="left" src="http://vpj.github.com/images/posts/charts2.png">
+<p><img class="left" src="/images/posts/charts2.png">
 Tufte is also the inventor of <a href="http://en.wikipedia.org/wiki/Sparkline">sparklines</a>. I also came across the book <a href="http://www.amazon.com/Practical-Guide-Designing-Data/dp/0956174086">A Practical Guide to Designing with Data</a> by Brian Suda, which was quite useful. It covers the fundamentals of presentation of graphics, common mistakes and various chart types.</p>
 
-<p><img src="http://vpj.github.com/images/posts/charts3.png"></p>
+<p><img src="/images/posts/charts3.png"></p>
 </div>
   
   
@@ -1060,7 +1060,7 @@ In epoll unlike poll all events that need to be monitored are not passed everyti
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2013/08/26/benfords-law-summation/">Is Benford&#8217;s Law Summation Test Easier to Comprehend</a>
+        <a href="/blog/2013/08/26/benfords-law-summation/">Is Benford&#8217;s Law Summation Test Easier to Comprehend?</a>
       </li>
     
       <li class="post">
