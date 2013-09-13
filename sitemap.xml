@@ -29,15 +29,21 @@
         <lastmod>2013-08-26T15:21:11+05:30</lastmod>
     </url>
     <url>
+        <loc>
+            http://vpj.github.com/blog/2013/09/13/moving-from-appengine-to-amazon-with-nodejs/
+        </loc>
+        <lastmod>2013-09-13T15:03:19+05:30</lastmod>
+    </url>
+    <url>
         <loc>http://vpj.github.com/robots.txt</loc>
         <lastmod>2013-01-20T12:34:45+05:30</lastmod>
     </url>
     <url>
         <loc>http://vpj.github.com/</loc>
-        <lastmod>2013-08-26T15:21:11+05:30</lastmod>
+        <lastmod>2013-09-13T15:03:19+05:30</lastmod>
     </url>
     <url>
         <loc>http://vpj.github.com/blog/archives/</loc>
-        <lastmod>2013-08-26T15:21:11+05:30</lastmod>
+        <lastmod>2013-09-13T15:03:19+05:30</lastmod>
     </url>
 </urlset>

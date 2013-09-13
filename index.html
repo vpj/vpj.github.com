@@ -9,7 +9,7 @@
   <meta name="author" content="Varuna Jayasiri">
 
   
-  <meta name="description" content="At Forestpin we&#8217;ve been analysing financial data from various companies, and Benford&#8217;s Law analysis was one of the techniques used by &hellip;">
+  <meta name="description" content="nearby.lk moved their servers from Google Appengine to Amazon EC2 last month, and the backend is now built with nodejs with mongodb as the database. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -76,6 +76,120 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/13/moving-from-appengine-to-amazon-with-nodejs/">Moving From Google Appengine to NodeJS on Amazon EC2</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-13T11:02:00+05:30" pubdate data-updated="true">Sep 13<span>th</span>, 2013</time>
+        
+         | <a href="/blog/2013/09/13/moving-from-appengine-to-amazon-with-nodejs/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://nearby.lk">nearby.lk</a> moved their servers from Google Appengine to Amazon EC2 last month, and the backend is now built with nodejs with mongodb as the database.</p>
+
+<p>Most of our backend does a lot of pre-computations and caching which gives slower startup times and faster response times. Our migration decision was based on a number of factors such as ease of development, performance and cost. There were a bunch of disadvantages of using the appengine, a several benefits of using NodeJS and some things we miss after the migration.</p>
+
+<h2>Appengine: the bad</h2>
+
+<h3>Datastore operations are slow</h3>
+
+<p>We didn&#8217;t have many datastore rights. Almost none on most days as we were uploading data in bulks. Still the datastore reads were significantly slow. To improve performance we started keeping most of the data in memory, which worked great until the web traffic and database size was small.</p>
+
+<h3>Too many multiple instances</h3>
+
+<p>Appengine does the load balancing for you. So when it feels like a single server cannot handle the load it creates multiple instances and balances the load. Although this sounds awesome it wasn&#8217;t for us. Since we were doing a lot of pre-computations the newly created instances were busy and it seemed like appengine was creating more and more instances to handle this. The problem was that multiple instances weren&#8217;t actually required to handle the load, but Appengine had a few instances running all the time, which was costing us a lot.</p>
+
+<p>We tried using warmup requests to keep an extra instance running, to solve the slow startup issue, but it was not of much use.</p>
+
+<h3>Request Timeouts</h3>
+
+<p>Startup pre-computations took more than the request time limit. This made us break down the startup process into smaller chunks and run each part on different requests. That is, and instance would only be ready after a couple of requests were sent to it. Breaking the startup process was a horrible experience, and the worst part is that the startup is taking most of it&#8217;s time reading the datastore - the system would startup in a couple of seconds on my computer with appengine development server.</p>
+
+<h3>Memcache</h3>
+
+<p>Memcache helped solve the startup issue a bit, but it had a stupid 1MB size limit per entry which made things really hard for the developers. Large object had to be broken down into pieces smaller than 1MB and if one of them was removed from memcache, everything had to be recomputed.</p>
+
+<h3>Uploading and downloading data</h3>
+
+<p>This was literally a nightmare. bulk data uploads and downloads had to be broken down into tiny chunks because of the request time limits, and there was no way to access the datastore without writing code to do it.</p>
+
+<h3>Search API</h3>
+
+<p>We HAD to use the search API for the last few months because we couldn&#8217;t keep our indexes in memory, because of the startup time (discussed earlier). You might expect the search API to be super awesome because it&#8217;s Google but it was so slow. May be we didn&#8217;t use the proper design, but it was the best we could find with the documentation available.</p>
+
+<h2>NodeJS: the good</h2>
+
+<h3>One language</h3>
+
+<p>Now the server and user interface are both in javascript, which makes it a lot easier for the developers to switch between the two.</p>
+
+<h3>Server-side rendering</h3>
+
+<p>We don&#8217;t have to maintain different code to do server side rendering since we can use the same templates on both the server and client. We could have actually done this even with appengine but most template engines such as handlebars were too simple for our purposes - we wanted templates to do certain computations by themselves. Overall what we now have is so easy to work on.</p>
+
+<h3>Portable</h3>
+
+<p>We can now host our servers anywhere. We are not stuck with any commercial platform, as we were with the app engine, where we had no choice to pay more if they were to change pricing. We are currently hosted on amazon and it is running smoothly. We might switch to a larger server on amazon soon.</p>
+
+<h3>Speed</h3>
+
+<p>The startup time is much faster and requests are handled within a couple of milliseconds. We are using nginx for all static content so nodejs only needs to handle dynamic content.</p>
+
+<h2>What we miss</h2>
+
+<h3>Management Console</h3>
+
+<p>Appengine had a nice management console where we could look at logs, system status etc. Now we have to do it through ssh with unix commands. Although this is not a big issue for the developers, now we can&#8217;t ask someone else to check or restart the servers if needed.</p>
+
+<h3>Ease of deployment</h3>
+
+<p>With appeengine, all you have to do deploy is just to run a command. But now we need to run about 5 commands. OK, this is not something that we really miss.</p>
+
+<h3>Trying out new stuff</h3>
+
+<p>With appengine you can easily create a new account or a new version without interfering with the main system, and do beta testing or A/B testing. Now we have to run two servers on amazon or run two NodeJS instances on the same server to do this.</p>
+
+<p><strong>So far we are so glad that we moved away from appengine and we regret that we didn&#8217;t do it sooner. Development got so much easier and now we are working on stuff that actually adds value to users than hacking the system to work deal with all the constraints such as memcache limits, slow datastore reads, etc. Although we loved Appengine when we started, now it feels like you just got out after being locked inside a tiny cage for an year and a half.</strong></p>
+
+<h2>Found these posts which also discuss problems with Appengine</h2>
+
+<p>I wish I read one of these an year ago.</p>
+
+<ul>
+<li><a href="http://www.carlosble.com/2010/11/goodbye-google-app-engine-gae/">Good Bye Google App Engine</a></li>
+<li><a href="http://www-cs-students.stanford.edu/~silver/gae.html">The Unofficial Guide to Migrating Off of Google App Engine</a></li>
+<li><a href="http://reliablesoftwares.com/blog/2012/02/12/moving-away-from-google-app-engine/">Moving away from Google App Engine</a></li>
+<li><a href="http://www.war-worlds.com/blog/2013/06/switched-away-from-app-engine-couldnt-be-happier">Switched away from App Engine, couldn&#8217;t be happier</a></li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1060,6 +1174,10 @@ In epoll unlike poll all events that need to be monitored are not passed everyti
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/09/13/moving-from-appengine-to-amazon-with-nodejs/">Moving from Google Appengine to NodeJS on Amazon EC2</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/08/26/benfords-law-summation/">Is Benford&#8217;s Law Summation Test Easier to Comprehend?</a>
       </li>
     
@@ -1073,10 +1191,6 @@ In epoll unlike poll all events that need to be monitored are not passed everyti
     
       <li class="post">
         <a href="/blog/2012/09/02/nearby-dot-lk-technology-stack/">nearby.lk Technology Stack</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2011/01/07/passing-file-descriptors-between-processes-using-sendmsg-and-recvmsg/">Passing file descriptors between processes using sendmsg() and recvmsg()</a>
       </li>
     
   </ul>
