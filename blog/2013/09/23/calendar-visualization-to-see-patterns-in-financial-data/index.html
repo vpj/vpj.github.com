@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: python - vpj's diary</title>
+  <title>Using calendar view to see patterns in financial data - vpj's diary</title>
   <meta name="author" content="Varuna Jayasiri">
 
   
-  <meta name="description" content="Category: python">
+  <meta name="description" content="We first released a calendar view with Forestpin Lite early this year, where we visualized daily transaction volume. This was a simple analysis - &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://vpj.github.comblog/categories/python/">
+  <link rel="canonical" href="http://vpj.github.com/blog/2013/09/23/calendar-visualization-to-see-patterns-in-financial-data/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -75,53 +75,118 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Python</h1>
+    
+      <h1 class="entry-title">Using Calendar View to See Patterns in Financial Data</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-23T11:02:00+05:30" pubdate data-updated="true">Sep 23<span>rd</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>We first released a calendar view with <a href="http://www.forestpin.com/lite">Forestpin Lite</a> early this year, where we visualized daily transaction volume. This was a simple analysis - simple to develop as well as understand.</p>
 
-  
-  <h2>2013</h2>
+<p>Calendar view was something we neglected first, but it&#8217;s usefulness was realized as we we saw different financial data sets visualized in calendar view. When you see a lot of information, covering the entire data set in a single view, you start seeing patterns that you could not see previously.</p>
 
-<article>
-  
-<h1><a href="/blog/2013/09/13/moving-from-appengine-to-amazon-with-nodejs/">Moving from Google Appengine to NodeJS on Amazon EC2</a></h1>
-<time datetime="2013-09-13T11:02:00+05:30" pubdate><span class='month'>Sep</span> <span class='day'>13</span> <span class='year'>2013</span></time>
+<p><img src="/images/posts/calendar.png" alt="Calendar view without annotations" />
+The image above shows two years of transactions visualized in a calendar view, and the image below shows the same with annotations.
+<img src="/images/posts/calendar-annot.png" alt="Calendar view with annotations" /></p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/amazon/'>amazon</a>, <a class='category' href='/blog/categories/app-engine/'>app engine</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/nodejs/'>nodejs</a>, <a class='category' href='/blog/categories/python/'>python</a></span>
-</footer>
+<p>A few things you can notice,</p>
 
-
-</article>
-
-
-
-  
-  <h2>2012</h2>
-
-<article>
-  
-<h1><a href="/blog/2012/09/02/nearby-dot-lk-technology-stack/">nearby.lk Technology Stack</a></h1>
-<time datetime="2012-09-02T11:02:00+05:30" pubdate><span class='month'>Sep</span> <span class='day'>02</span> <span class='year'>2012</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/app-engine/'>app engine</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/nearby-lk/'>nearby.lk</a>, <a class='category' href='/blog/categories/python/'>python</a></span>
-</footer>
+<ol>
+<li>This inactive period is festival season, most companies don&#8217;t work for about a week.</li>
+<li>An unusually high number of transactions for a Sunday, last day of September 2008.</li>
+<li>The day with most number of transactions, last day of February 2009.</li>
+<li>Another Sunday!, first day of September 2008.</li>
+<li>Saturday and Sunday both were busy.</li>
+</ol>
 
 
-</article>
+<p>We used it to find irregularities and fraud, so busy weekends at the end of the month suggested some sort of manipulation (invoice settlements we analysed were expected to be spread evenly throughout the month).</p>
 
+<p>This visualization could be improved to show more information. But purely throwing information at the user is not the best idea. Couple of suggestions would be to indicate special holidays and working days - holidays on weekdays and working days on weekends - and may be to split each cell and indicate both the number of transactions and average transaction transaction value in gradients of two different colors.</p>
+
+<p>This is a great example of assisting users to make decisions vs. making decisions for them. It is true that there are software that does a good job at the later, but undermining the ability of users to recognize patterns is a mistake that most software designers do. Presenting more information well is often better than trying to select the most important bit of information. For instance, if the software was to calculate and present which days look most suspicious (in this case holidays or weekends with a high transaction volume), the user would be losing a lot of information, and the software will be trying to do something the user can do way better.</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Varuna Jayasiri</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-23T11:02:00+05:30" pubdate data-updated="true">Sep 23<span>rd</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/finance/'>finance</a>, <a class='category' href='/blog/categories/fraud/'>fraud</a>, <a class='category' href='/blog/categories/irregularities/'>irregularities</a>, <a class='category' href='/blog/categories/visualization/'>visualization</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://vpj.github.com/blog/2013/09/23/calendar-visualization-to-see-patterns-in-financial-data/" data-via="" data-counturl="http://vpj.github.com/blog/2013/09/23/calendar-visualization-to-see-patterns-in-financial-data/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/09/13/moving-from-appengine-to-amazon-with-nodejs/" title="Previous Post: Moving from Google Appengine to NodeJS on Amazon EC2">&laquo; Moving from Google Appengine to NodeJS on Amazon EC2</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -206,7 +271,10 @@
       var disqus_shortname = 'vpj';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://vpj.github.com/blog/2013/09/23/calendar-visualization-to-see-patterns-in-financial-data/';
+        var disqus_url = 'http://vpj.github.com/blog/2013/09/23/calendar-visualization-to-see-patterns-in-financial-data/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

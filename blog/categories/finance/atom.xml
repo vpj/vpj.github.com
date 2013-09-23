@@ -4,7 +4,7 @@
   <title><![CDATA[Category: finance | vpj's diary]]></title>
   <link href="http://vpj.github.com/blog/categories/finance/atom.xml" rel="self"/>
   <link href="http://vpj.github.com/"/>
-  <updated>2013-09-13T15:04:19+05:30</updated>
+  <updated>2013-09-23T14:48:27+05:30</updated>
   <id>http://vpj.github.com/</id>
   <author>
     <name><![CDATA[Varuna Jayasiri]]></name>
@@ -14,11 +14,43 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Using calendar view to see patterns in financial data]]></title>
+    <link href="http://vpj.github.com/blog/2013/09/23/calendar-visualization-to-see-patterns-in-financial-data/"/>
+    <updated>2013-09-23T11:02:00+05:30</updated>
+    <id>http://vpj.github.com/blog/2013/09/23/calendar-visualization-to-see-patterns-in-financial-data</id>
+    <content type="html"><![CDATA[<p>We first released a calendar view with <a href="http://www.forestpin.com/lite">Forestpin Lite</a> early this year, where we visualized daily transaction volume. This was a simple analysis - simple to develop as well as understand.</p>
+
+<p>Calendar view was something we neglected first, but it's usefulness was realized as we we saw different financial data sets visualized in calendar view. When you see a lot of information, covering the entire data set in a single view, you start seeing patterns that you could not see previously.</p>
+
+<p><img src="/images/posts/calendar.png" alt="Calendar view without annotations" />
+The image above shows two years of transactions visualized in a calendar view, and the image below shows the same with annotations.
+<img src="/images/posts/calendar-annot.png" alt="Calendar view with annotations" /></p>
+
+<p>A few things you can notice,</p>
+
+<ol>
+<li>This inactive period is festival season, most companies don't work for about a week.</li>
+<li>An unusually high number of transactions for a Sunday, last day of September 2008.</li>
+<li>The day with most number of transactions, last day of February 2009.</li>
+<li>Another Sunday!, first day of September 2008.</li>
+<li>Saturday and Sunday both were busy.</li>
+</ol>
+
+
+<p>We used it to find irregularities and fraud, so busy weekends at the end of the month suggested some sort of manipulation (invoice settlements we analysed were expected to be spread evenly throughout the month).</p>
+
+<p>This visualization could be improved to show more information. But purely throwing information at the user is not the best idea. Couple of suggestions would be to indicate special holidays and working days - holidays on weekdays and working days on weekends - and may be to split each cell and indicate both the number of transactions and average transaction transaction value in gradients of two different colors.</p>
+
+<p>This is a great example of assisting users to make decisions vs. making decisions for them. It is true that there are software that does a good job at the later, but undermining the ability of users to recognize patterns is a mistake that most software designers do. Presenting more information well is often better than trying to select the most important bit of information. For instance, if the software was to calculate and present which days look most suspicious (in this case holidays or weekends with a high transaction volume), the user would be losing a lot of information, and the software will be trying to do something the user can do way better.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Is Benford's Law Summation Test Easier to Comprehend?]]></title>
     <link href="http://vpj.github.com/blog/2013/08/26/benfords-law-summation/"/>
     <updated>2013-08-26T15:03:00+05:30</updated>
     <id>http://vpj.github.com/blog/2013/08/26/benfords-law-summation</id>
-    <content type="html"><![CDATA[<p><img src="/images/posts/ftd-mantissa1.png">
+    <content type="html"><![CDATA[<p><img src="//vpj.github.io/images/posts/ftd-mantissa1.png" alt="Mantissa" />
 At <a href="http://www.forestpin.com">Forestpin</a> we've been analysing financial data from various companies, and Benford's Law analysis was one of the techniques used by our software to find irregularities and fraud in financial data.</p>
 
 <p>If you are new to Benford's Law, <a href="http://www.datagenetics.com/blog/march52012/index.html">this article</a> gives a nice introduction. And the book <a href="http://amzn.com/1118152859">Benford's Law: Applications for Forensic Accounting, Auditing, and Fraud Detection</a> by <a href="http://www.nigrini.com/">Dr. Mark Nigrini</a> is a great resource to learn about Benford's Law and it's applications in financial data analysis.</p>
@@ -30,7 +62,9 @@ The basic use of Benford's law is to take the first digit distribution or first 
 
 <h2>Sum Invariance</h2>
 
-<p><blockquote><p>The sum of all entries with leading digit d is constant for various d.</p><footer><strong>Mark Nigrini</strong></footer></blockquote></p>
+<blockquote><p>The sum of all entries with leading digit d is constant for various d.</p>
+
+<p><strong>- Mark Nigrini</strong></p></blockquote>
 
 <p>This states that for each first digit <strong>d</strong>, the the sum of mantissae of all numbers starting from <strong>d</strong> is equal if the dataset conforms to Benford's Law. Therefore, by plotting a chart of sum of mantiassae against first digit, the irregularities could be identified. This chart would be simpler and easier to understand since the human eye can compare heights against a constant level effortlessly, whereas you would be comparing heights of bars against a logarithmic curve in a normal first digit chart with frequency.</p>
 
