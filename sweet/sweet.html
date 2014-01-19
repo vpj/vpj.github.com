@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Sweet.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          
+          <h1 id="sweet-js">Sweet.js</h1>
+<h2 id="sweet-base">Sweet.Base</h2>
+<p>Introduces class level function initialize and include. This class is the base class of all other classes in Sweet.JS</p>
+
+          
+            <div class='highlight'><pre><span class="class"><span class="keyword">class</span> <span class="title">Base</span></span>
+ <span class="attribute">constructor</span>:<span class="function"> -&gt;</span>
+  <span class="property">@_init</span>.apply @, arguments
+
+ <span class="attribute">_initFuncs</span>: []</pre></div>
+          
+        
+
+        
+      </div>
+
+      
+        
+        <h4 id="register-initialize-functions-">Register initialize functions.</h4>
+<p>All initializer funcitons in subclasses  will be called with the constructor arguments.</p>
+
+        
+          <div class='highlight'><pre> <span class="property">@initialize</span>: <span class="function"><span class="params">(func)</span> -&gt;</span>
+  @::_initFuncs = _.clone @::_initFuncs
+  @::_initFuncs.push func
+
+ <span class="attribute">_init</span>:<span class="function"> -&gt;</span>
+  <span class="keyword">for</span> init <span class="keyword">in</span> <span class="property">@_initFuncs</span>
+   init.apply @, arguments</pre></div>
+        
+      
+        
+        <h4 id="include-objects-">Include objects.</h4>
+<p>You can include objects by registering them with @include. This tries to solve the problem of single inheritence.</p>
+
+        
+          <div class='highlight'><pre> <span class="property">@include</span>: <span class="function"><span class="params">(obj)</span> -&gt;</span>
+  <span class="keyword">for</span> k, v <span class="keyword">of</span> obj <span class="keyword">when</span> <span class="keyword">not</span> @::[k]?
+   @::[k] = v</pre></div>
+        
+      
+        
+        <h2 id="sweet-model">Sweet.Model</h2>
+<p>Model lets you set default key value set, and it will extend the object parsed to it in the same structure as defaults</p>
+
+        
+          <div class='highlight'><pre><span class="class"><span class="keyword">class</span> <span class="title">Model</span> <span class="keyword">extends</span> <span class="title">Base</span></span>
+ <span class="attribute">_defaults</span>: {}</pre></div>
+        
+      
+        
+        <h4 id="register-default-key-value-set-">Register default key value set.</h4>
+<p>Subclasses will include and can override default key-values of parent classes</p>
+
+        
+          <div class='highlight'><pre> <span class="property">@defaults</span>: <span class="function"><span class="params">(defaults)</span> -&gt;</span>
+  @::_defaults = _.clone @::_defaults
+  <span class="keyword">for</span> k, v <span class="keyword">of</span> defaults
+   @::_defaults[k] = v</pre></div>
+        
+      
+        
+        <p>Build a model with the structure of defaults.</p>
+
+        
+          <div class='highlight'><pre> <span class="property">@initialize</span> <span class="function"><span class="params">(options)</span> -&gt;</span>
+  <span class="property">@values</span> = {}
+  <span class="keyword">for</span> k, v <span class="keyword">of</span> <span class="property">@_defaults</span>
+   <span class="keyword">if</span> options[k]?
+    <span class="property">@values</span>[k] = options[k]
+   <span class="keyword">else</span>
+    <span class="property">@values</span>[k] = v</pre></div>
+        
+      
+        
+        <h4 id="returns-key-value-set">Returns key value set</h4>
+
+        
+          <div class='highlight'><pre> <span class="attribute">toJSON</span>:<span class="function"> -&gt;</span>
+  <span class="keyword">return</span> _.clone <span class="property">@values</span></pre></div>
+        
+      
+        
+        <h4 id="get-value-of-a-given-key">Get value of a given key</h4>
+
+        
+          <div class='highlight'><pre> <span class="attribute">get</span>: <span class="function"><span class="params">(key)</span> -&gt;</span> <span class="property">@values</span>[key]</pre></div>
+        
+      
+        
+        <h4 id="set-a-key-value-combination">Set a key value combination</h4>
+
+        
+          <div class='highlight'><pre> <span class="attribute">set</span>: <span class="function"><span class="params">(key, value)</span> -&gt;</span> <span class="property">@value</span>[key] = value <span class="keyword">if</span> <span class="property">@_defaults</span>[key]?</pre></div>
+        
+      
+        
+        <h2 id="sweet-view">Sweet.View</h2>
+<p>Wraps around a dom element, to handle events, rendering, attributes, etc</p>
+
+        
+          <div class='highlight'><pre><span class="class"><span class="keyword">class</span> <span class="title">View</span> <span class="keyword">extends</span> <span class="title">Base</span></span>
+ <span class="attribute">delegateEventSplitter</span>: <span class="regexp">/^(\S+)\s*(.*)$/</span>
+
+ <span class="property">@initialize</span><span class="function"> -&gt;</span>
+  <span class="property">@_viewId</span> = _.uniqueId <span class="string">'view'</span>
+  <span class="property">@_setupElement</span>()
+
+ <span class="attribute">_events</span>: {}
+ <span class="attribute">_attrs</span>: {}</pre></div>
+        
+      
+        
+        <h4 id="register-events">Register events</h4>
+<p><code>&quot;click .btn&quot;: &quot;open&quot;</code>
+This will call <code>@open</code> on <code>click</code> event occurs for <code>.btn</code>.
+You can add or override events in subclasses.</p>
+
+        
+          <div class='highlight'><pre> <span class="property">@events</span>: <span class="function"><span class="params">(events)</span> -&gt;</span>
+  @::_events = _.clone @::_events
+  <span class="keyword">for</span> k, v <span class="keyword">of</span> events
+   @::_events[k] = v</pre></div>
+        
+      
+        
+        <h4 id="register-attributes">Register attributes</h4>
+<p>This will set attributes of the com element</p>
+
+        
+          <div class='highlight'><pre> <span class="property">@attributes</span>: <span class="function"><span class="params">(attributes)</span> -&gt;</span>
+  @::_attrs = _.clone @::_attrs
+  <span class="keyword">for</span> k, v <span class="keyword">of</span> attributes
+   @::_attrs[k] = v</pre></div>
+        
+      
+        
+        <h4 id="tag-of-the-dom-element">Tag of the dom element</h4>
+
+        
+          <div class='highlight'><pre> <span class="attribute">tagName</span>: <span class="string">'div'</span></pre></div>
+        
+      
+        
+        <h4 id="jquery-selector-on-dom-element">Jquery selector on dom element</h4>
+
+        
+          <div class='highlight'><pre> <span class="attribute">$</span>: <span class="function"><span class="params">(selector)</span> -&gt;</span> <span class="property">@$el</span>.find selector</pre></div>
+        
+      
+        
+        <h4 id="render">Render</h4>
+
+        
+          <div class='highlight'><pre> <span class="attribute">render</span>:<span class="function"> -&gt;</span> <span class="literal">null</span></pre></div>
+        
+      
+        
+        <h4 id="sets-the-dom-element">Sets the dom element</h4>
+<p>You can specify a dom element using @el</p>
+
+        
+          <div class='highlight'><pre> <span class="attribute">setElement</span>: <span class="function"><span class="params">(element, delegate)</span> -&gt;</span>
+  <span class="property">@undelegateEvents</span>() <span class="keyword">if</span> <span class="property">@$el</span>?
+  <span class="property">@$el</span> = $ element
+  <span class="property">@el</span> = <span class="property">@$el</span>[<span class="number">0</span>]
+
+  <span class="property">@delegateEvents</span>() <span class="keyword">unless</span> delegate <span class="keyword">is</span> <span class="literal">off</span></pre></div>
+        
+      
+        
+        <h4 id="setup-events">Setup events</h4>
+
+        
+          <div class='highlight'><pre> <span class="attribute">delegateEvents</span>:<span class="function"> -&gt;</span>
+  <span class="property">@undelegateEvents</span>()
+
+  <span class="keyword">for</span> key, method <span class="keyword">of</span> <span class="property">@_events</span>
+   [key, eventName, selector] = key.match <span class="property">@delegateEventSplitter</span>
+   method = _.bind <span class="keyword">this</span>[method], <span class="keyword">this</span>
+   eventName += <span class="string">'.delegateEvents'</span> + <span class="property">@_viewId</span>
+   <span class="keyword">if</span> selector <span class="keyword">is</span> <span class="string">""</span>
+    <span class="property">@$el</span>.<span class="literal">on</span> eventName, method
+   <span class="keyword">else</span>
+    <span class="property">@$el</span>.<span class="literal">on</span> eventName, selector, method</pre></div>
+        
+      
+        
+        <h4 id="remove-events">Remove events</h4>
+
+        
+          <div class='highlight'><pre> <span class="attribute">undelegateEvents</span>:<span class="function"> -&gt;</span>
+  <span class="property">@$el</span>.<span class="literal">off</span> <span class="string">'.delegateEvents'</span> + <span class="property">@_viewId</span></pre></div>
+        
+      
+        
+        <h4 id="initilize-dom-element">Initilize dom element</h4>
+
+        
+          <div class='highlight'><pre> <span class="attribute">_setupElement</span>:<span class="function"> -&gt;</span>
+  <span class="keyword">if</span> <span class="keyword">not</span> <span class="property">@el</span>
+   attrs = _.clone <span class="property">@_attrs</span>
+   attrs.id = <span class="property">@id</span> <span class="keyword">if</span> <span class="property">@id</span>?
+   attrs.<span class="class"><span class="keyword">class</span> = @<span class="title">className</span> <span class="title">if</span> @<span class="title">className</span></span>
+
+   $el = ($ <span class="string">"&lt;<span class="subst">#{<span class="property">@tagName</span>}</span>&gt;"</span>).attr attrs
+   <span class="property">@setElement</span> $el
+  <span class="keyword">else</span>
+   <span class="property">@setElement</span> <span class="property">@el</span></pre></div>
+        
+      
+        
+        <h2 id="sweet-router">Sweet.Router</h2>
+<p>Routing with hash tags or pushState</p>
+
+        
+          <div class='highlight'><pre><span class="class"><span class="keyword">class</span> <span class="title">Router</span> <span class="keyword">extends</span> <span class="title">Base</span></span>
+ <span class="attribute">optionalParam</span>: <span class="regexp">/\((.*?)\)/g</span>
+ <span class="attribute">namedParam</span>: <span class="regexp">/(\(\?)?:\w+/g</span>
+ <span class="attribute">splatParam</span>: <span class="regexp">/\*\w+/g</span>
+ <span class="attribute">escapeRegExp</span>: <span class="regexp">/[\-{}\[\]+?.,\\\^$|#\s]/g</span>
+
+ <span class="property">@initialize</span><span class="function"> -&gt;</span>
+  <span class="property">@_bindRoutes</span>()
+  <span class="property">@_event</span> = <span class="literal">null</span>
+  <span class="property">@_history</span> = []
+
+ <span class="attribute">_routes</span>: {}</pre></div>
+        
+      
+        
+        <h4 id="register-router">Register router</h4>
+<p><code>&#39;analyse/:analysis&#39;: &#39;onAnalyse&#39;</code>
+<code>dashboard&#39;: [&#39;auth&#39;, &#39;dashboard&#39;]</code>
+This will match urls of the form <code>analyse/\*</code> and call method @onAnalyse with the parameter.
+Second route will first call @auth and and call @dashboard only if it returns true
+The most specific route should be at bottom
+Routers can added or overridden in subclasses</p>
+
+        
+          <div class='highlight'><pre> <span class="property">@routes</span>: <span class="function"><span class="params">(routes)</span> -&gt;</span>
+  @::_routes = _.clone @::_routes
+  <span class="keyword">for</span> k, v <span class="keyword">of</span> routes
+   @::_routes[k] = v</pre></div>
+        
+      
+        
+        <h4 id="starts-routing">Starts routing</h4>
+<p>Option silent will not trigger an event for the current url</p>
+
+        
+          <div class='highlight'><pre> <span class="attribute">start</span>: <span class="function"><span class="params">(options)</span> -&gt;</span>
+  Sweet.history.start options
+  fragment = Sweet.history.getFragment()
+
+  <span class="keyword">if</span> options?.silent <span class="keyword">is</span> <span class="literal">on</span>
+   <span class="property">@_history</span>.push <span class="attribute">fragment</span>: fragment, <span class="attribute">title</span>: document.title</pre></div>
+        
+      
+        
+        <h4 id="goes-to-previous-page-if-exists">Goes to previous page if exists</h4>
+
+        
+          <div class='highlight'><pre> <span class="attribute">back</span>:<span class="function"> -&gt;</span>
+  <span class="keyword">if</span> <span class="property">@_history</span>.length &gt; <span class="number">1</span>
+   Sweet.history.back()</pre></div>
+        
+      
+        
+        <h4 id="whether-it-is-possible-to-go-to-previous-page">Whether it is possible to go to previous page</h4>
+
+        
+          <div class='highlight'><pre> <span class="attribute">canBack</span>:<span class="function"> -&gt;</span>
+  <span class="keyword">if</span> <span class="property">@_history</span>.length &gt; <span class="number">1</span> <span class="keyword">and</span> Sweet.history.canBack()
+   <span class="keyword">return</span> <span class="literal">true</span>
+  <span class="keyword">else</span>
+   <span class="keyword">return</span> <span class="literal">false</span></pre></div>
+        
+      
+        
+        <h4 id="registers-a-route">Registers a route</h4>
+
+        
+          <div class='highlight'><pre> <span class="attribute">route</span>: <span class="function"><span class="params">(route, name)</span> -&gt;</span>
+  (route = <span class="property">@_routeToRegExp</span> route) <span class="keyword">if</span> <span class="keyword">not</span> _.isRegExp route</pre></div>
+        
+      
+        
+        <p>Registers the route with Sweet.history</p>
+
+        
+          <div class='highlight'><pre>  Sweet.history.route route, <span class="function"><span class="params">(fragment, event)</span> =&gt;</span>
+   args = <span class="property">@_extractParameters</span> route, fragment
+   <span class="property">@_event</span> = event</pre></div>
+        
+      
+        
+        <p>Handle state</p>
+
+        
+          <div class='highlight'><pre>   <span class="keyword">if</span> <span class="property">@_event</span>?.type <span class="keyword">is</span> <span class="string">"popstate"</span>
+    <span class="property">@_history</span>.pop()
+    <span class="keyword">if</span> <span class="property">@_history</span>.length <span class="keyword">is</span> <span class="number">0</span>
+     <span class="property">@_history</span>.push <span class="attribute">fragment</span>: fragment, <span class="attribute">title</span>: document.title, <span class="attribute">state</span>: <span class="property">@getState</span>()
+   <span class="keyword">else</span>
+    <span class="property">@_history</span>.push <span class="attribute">fragment</span>: fragment, <span class="attribute">title</span>: document.title, <span class="attribute">state</span>: <span class="property">@getState</span>()</pre></div>
+        
+      
+        
+        <p>Calls callbacks in order</p>
+
+        
+          <div class='highlight'><pre>   callbacks = name
+   callbacks = [callbacks] <span class="keyword">if</span> <span class="keyword">not</span> Array.isArray callbacks
+
+   <span class="keyword">for</span> callback <span class="keyword">in</span> callbacks
+    callback = @[callback]
+    <span class="keyword">break</span> <span class="keyword">unless</span> callback.apply <span class="keyword">this</span>, args</pre></div>
+        
+      
+        
+        <h4 id="gets-the-current-html5-history-state">Gets the current HTML5 History state</h4>
+
+        
+          <div class='highlight'><pre> <span class="attribute">getState</span>:<span class="function"> -&gt;</span>
+  <span class="keyword">if</span> <span class="property">@_event</span>?.originalEvent?.state?
+   <span class="keyword">return</span> <span class="property">@_event</span>.originalEvent.state
+  <span class="keyword">else</span>
+   <span class="keyword">return</span> <span class="literal">null</span></pre></div>
+        
+      
+        
+        <h4 id="navigate-to-a-new-url-while-setting-html5-history-state">Navigate to a new URL, while setting HTML5 History state</h4>
+
+        
+          <div class='highlight'><pre> <span class="attribute">navigate</span>: <span class="function"><span class="params">(fragment, options)</span> -&gt;</span>
+  options = {} <span class="keyword">unless</span> options
+  <span class="keyword">if</span> options.replace
+   <span class="property">@_history</span>.pop()
+  <span class="keyword">if</span> <span class="keyword">not</span> options.trigger
+   <span class="property">@_history</span>.push <span class="attribute">fragment</span>: fragment, <span class="attribute">title</span>: options.title, <span class="attribute">state</span>: options.state
+
+  Sweet.history.navigate fragment, options</pre></div>
+        
+      
+        
+        <p>Bind routes</p>
+
+        
+          <div class='highlight'><pre> <span class="attribute">_bindRoutes</span>:<span class="function"> -&gt;</span>
+  <span class="keyword">for</span> route, name <span class="keyword">of</span> <span class="property">@_routes</span>
+   <span class="property">@route</span> route, name</pre></div>
+        
+      
+        
+        <p>Convert a route string into a regular expression, suitable for matching</p>
+
+        
+          <div class='highlight'><pre> <span class="attribute">_routeToRegExp</span>: <span class="function"><span class="params">(route)</span> -&gt;</span>
+  route = route.replace(<span class="property">@escapeRegExp</span>, <span class="string">'\\$&amp;'</span>)
+               .replace(<span class="property">@noptionalParam</span>, <span class="string">'(?:$1)?'</span>)
+               .replace<span class="function"><span class="params">(<span class="property">@namedParam</span>, (match, optional) -&gt;
+                 <span class="keyword">if</span> optional <span class="keyword">then</span> match <span class="keyword">else</span> <span class="string">'([^\/]+)'</span>
+               )</span>
+               .<span class="title">replace</span><span class="params">(<span class="property">@splatParam</span>, <span class="string">'(.*?)'</span>)</span>
+
+   <span class="title">return</span> <span class="title">new</span> <span class="title">RegExp</span> "^#{<span class="title">route</span>}<span class="title">$</span>"
+
+</span></pre></div>
+        
+      
+        
+        <p>Extract parameters from a route regex and URL</p>
+
+        
+          <div class='highlight'><pre> <span class="attribute">_extractParameters</span>: <span class="function"><span class="params">(route, fragment)</span> -&gt;</span>
+  params = route.exec(fragment).slice(<span class="number">1</span>)
+  <span class="keyword">return</span> _.map params, <span class="function"><span class="params">(param)</span> -&gt;</span>
+   <span class="keyword">if</span> param <span class="keyword">then</span> decodeURIComponent(param) <span class="keyword">else</span> <span class="literal">null</span>
+
+
+<span class="class"><span class="keyword">class</span> <span class="title">History</span> <span class="keyword">extends</span> <span class="title">Base</span></span></pre></div>
+        
+      
+        
+        <p>Strip leading hash/slash and trailing space</p>
+
+        
+          <div class='highlight'><pre> <span class="attribute">routeStripper</span>: <span class="regexp">/^[#\/]|\s+$/g</span></pre></div>
+        
+      
+        
+        <p>Strip leading and trailing slashes</p>
+
+        
+          <div class='highlight'><pre> <span class="attribute">rootStripper</span>: <span class="regexp">/^\/+|\/+$/g</span></pre></div>
+        
+      
+        
+        <p>Remove trailing slash</p>
+
+        
+          <div class='highlight'><pre> <span class="attribute">trailingSlash</span>: <span class="regexp">/\/</span>$/</pre></div>
+        
+      
+        
+        <p>Strip urls of hash and query</p>
+
+        
+          <div class='highlight'><pre> <span class="attribute">pathStripper</span>: <span class="regexp">/[?#].*$/</span>
+
+ <span class="property">@initialize</span><span class="function"> -&gt;</span>
+  <span class="property">@handlers</span> = []
+  _.bindAll <span class="keyword">this</span>, <span class="string">'checkUrl'</span>
+  <span class="property">@history</span> = window.history
+  <span class="property">@location</span> = window.location</pre></div>
+        
+      
+        
+        <p>Hash check interval</p>
+
+        
+          <div class='highlight'><pre> <span class="attribute">interval</span>: <span class="number">50</span></pre></div>
+        
+      
+        
+        <p>Get hash value</p>
+
+        
+          <div class='highlight'><pre> <span class="attribute">getHash</span>:<span class="function"> -&gt;</span>
+  match = <span class="property">@location</span>.href.match <span class="regexp">/#(.*)$/</span>
+  <span class="keyword">return</span> (<span class="keyword">if</span> match? <span class="keyword">then</span> match[<span class="number">1</span>] <span class="keyword">else</span> <span class="string">''</span>)</pre></div>
+        
+      
+        
+        <p>Get the URL fragment</p>
+
+        
+          <div class='highlight'><pre> <span class="attribute">getFragment</span>: <span class="function"><span class="params">(fragment, forcePushState)</span> -&gt;</span>
+  <span class="keyword">if</span> <span class="keyword">not</span> fragment?
+   <span class="keyword">if</span> <span class="property">@_hasPushState</span> <span class="keyword">or</span> <span class="keyword">not</span> <span class="property">@_wantsHashChange</span> <span class="keyword">or</span> forcePushState
+    fragment = <span class="property">@location</span>.pathname
+    root = <span class="property">@root</span>.replace <span class="property">@trailingSlash</span>, <span class="string">''</span>
+    <span class="keyword">if</span> <span class="keyword">not</span> fragment.indexOf root
+     fragment = fragment.slice root.length
+   <span class="keyword">else</span>
+    fragment = <span class="property">@getHash</span>()
+
+  <span class="keyword">return</span> fragment.replace <span class="property">@routeStripper</span>, <span class="string">''</span></pre></div>
+        
+      
+        
+        <h4 id="goto-the-previous-page">Goto the previous page</h4>
+
+        
+          <div class='highlight'><pre> <span class="attribute">back</span>:<span class="function"> -&gt;</span>
+  <span class="property">@history</span>?.back?()</pre></div>
+        
+      
+        
+        <h4 id="can-back-">Can back?</h4>
+
+        
+          <div class='highlight'><pre> <span class="attribute">canBack</span>:<span class="function"> -&gt;</span> <span class="property">@history</span>?.back?</pre></div>
+        
+      
+        
+        <h4 id="start-listening-to-events">Start listening to events</h4>
+
+        
+          <div class='highlight'><pre> <span class="attribute">start</span>: <span class="function"><span class="params">(options)</span> -&gt;</span>
+  History.started = <span class="literal">true</span>
+
+  <span class="property">@options</span> = _.extend {<span class="attribute">root</span>: <span class="string">'/'</span>}, <span class="property">@options</span>, options
+  <span class="property">@root</span> = <span class="property">@options</span>.root
+  <span class="property">@_wantsHashChange</span> = <span class="property">@options</span>.hashChange <span class="keyword">isnt</span> <span class="literal">off</span>
+  <span class="property">@_wantsPushState</span> = <span class="property">@options</span>.pushState <span class="keyword">is</span> <span class="literal">on</span>
+  <span class="property">@_hasPushState</span> = <span class="property">@options</span>.pushState <span class="keyword">is</span> <span class="literal">on</span> <span class="keyword">and</span> <span class="property">@history</span>?.pushState?
+
+  <span class="property">@fragment</span> = <span class="property">@getFragment</span>()</pre></div>
+        
+      
+        
+        <p>Normalize root to always include a leading and trailing slash.</p>
+
+        
+          <div class='highlight'><pre>  <span class="property">@root</span> = <span class="string">"/<span class="subst">#{<span class="property">@root</span>}</span>/"</span>.replace <span class="property">@rootStripper</span>, <span class="string">'/'</span></pre></div>
+        
+      
+        
+        <p>Depending on whether we&#39;re using pushState or hashes, and whether
+&#39;onhashchange&#39; is supported, determine how we check the URL state.</p>
+
+        
+          <div class='highlight'><pre>  <span class="keyword">if</span> <span class="property">@_hasPushState</span>
+   $(<span class="built_in">window</span>).<span class="literal">on</span> <span class="string">'popstate'</span>, <span class="property">@checkUrl</span>
+  <span class="keyword">else</span> <span class="keyword">if</span> <span class="property">@_wantsHashChange</span> <span class="keyword">and</span> window.onhashchange?
+   @(<span class="built_in">window</span>).<span class="literal">on</span> <span class="string">'hashchange'</span>, <span class="property">@checkUrl</span>
+  <span class="keyword">else</span> <span class="keyword">if</span> <span class="property">@_wantsHashChange</span>
+   <span class="property">@_checkUrlInterval</span> = setInterval <span class="property">@checkUrl</span>, <span class="property">@interval</span>
+
+  <span class="keyword">if</span> <span class="keyword">not</span> <span class="property">@options</span>.silent
+   <span class="property">@loadUrl</span> <span class="literal">null</span>, <span class="literal">null</span></pre></div>
+        
+      
+        
+        <h4 id="add-a-listener-to-a-router">Add a listener to a router</h4>
+
+        
+          <div class='highlight'><pre> <span class="attribute">route</span>: <span class="function"><span class="params">(route, callback)</span> -&gt;</span>
+  <span class="property">@handlers</span>.unshift <span class="attribute">route</span>: route, <span class="attribute">callback</span>: callback</pre></div>
+        
+      
+        
+        <p>Check current url for changes</p>
+
+        
+          <div class='highlight'><pre> <span class="attribute">checkUrl</span>: <span class="function"><span class="params">(e)</span> -&gt;</span>
+  fragment = <span class="property">@getFragment</span>()
+  <span class="keyword">return</span> <span class="keyword">if</span> fragment <span class="keyword">is</span> <span class="property">@fragment</span>
+  <span class="property">@loadUrl</span> fragment, e</pre></div>
+        
+      
+        
+        <p>Call callbacks of matching route</p>
+
+        
+          <div class='highlight'><pre> <span class="attribute">loadUrl</span>: <span class="function"><span class="params">(fragment, e)</span> -&gt;</span>
+  fragment = <span class="property">@fragment</span> = <span class="property">@getFragment</span> fragment
+  <span class="keyword">return</span> _.any this.handlers, <span class="function"><span class="params">(handler)</span> -&gt;</span>
+   <span class="keyword">if</span> handler.route.test fragment
+    handler.callback fragment, e
+    <span class="keyword">return</span> <span class="literal">true</span>
+   <span class="keyword">else</span>
+    <span class="keyword">return</span> <span class="literal">false</span></pre></div>
+        
+      
+        
+        <h4 id="navigate-to-a-url">Navigate to a URL</h4>
+<p>Triggers a route is option trigger is on
+Replaces the url is option replace is on
+Sets state and title</p>
+
+        
+          <div class='highlight'><pre> <span class="attribute">navigate</span>: <span class="function"><span class="params">(fragment, options)</span> -&gt;</span>
+  <span class="keyword">return</span> <span class="literal">false</span> <span class="keyword">if</span> <span class="keyword">not</span> History.started
+
+  fragment = <span class="property">@getFragment</span>(fragment <span class="keyword">or</span> <span class="string">''</span>)
+  url = <span class="property">@root</span> + fragment</pre></div>
+        
+      
+        
+        <p>Strip the fragment of the query and hash for matching.</p>
+
+        
+          <div class='highlight'><pre>  fragment = fragment.replace <span class="property">@pathStripper</span>, <span class="string">''</span>
+
+  <span class="keyword">return</span> <span class="keyword">if</span> <span class="property">@fragment</span> <span class="keyword">is</span> fragment
+  <span class="property">@fragment</span> = fragment</pre></div>
+        
+      
+        
+        <p>Don&#39;t include a trailing slash on the root.</p>
+
+        
+          <div class='highlight'><pre>  <span class="keyword">if</span> fragment <span class="keyword">is</span> <span class="string">''</span> <span class="keyword">and</span> url <span class="keyword">isnt</span> <span class="string">'/'</span>
+   url = url.slice <span class="number">0</span>, -<span class="number">1</span></pre></div>
+        
+      
+        
+        <p>If pushState is available, we use it to set the fragment as a real URL.</p>
+
+        
+          <div class='highlight'><pre>  <span class="keyword">if</span> <span class="property">@_hasPushState</span>
+   method = <span class="keyword">if</span> options.replace <span class="keyword">then</span> <span class="string">'replaceState'</span> <span class="keyword">else</span> <span class="string">'pushState'</span>
+   state = {}
+   state = options.state <span class="keyword">if</span> options.state?
+   title = <span class="string">''</span>
+   title = options.title <span class="keyword">if</span> options.title?
+   <span class="property">@history</span>[method] state, title, url</pre></div>
+        
+      
+        
+        <p>If hash changes haven&#39;t been explicitly disabled, update the hash
+fragment to store history.</p>
+
+        
+          <div class='highlight'><pre>  <span class="keyword">else</span> <span class="keyword">if</span> <span class="property">@_wantsHashChange</span>
+   <span class="property">@_updateHash</span> <span class="property">@location</span>, fragment, options.replace</pre></div>
+        
+      
+        
+        <p>If you&#39;ve told us that you explicitly don&#39;t want fallback hashchange-
+based history, then <code>navigate</code> becomes a page refresh.</p>
+
+        
+          <div class='highlight'><pre>  <span class="keyword">else</span>
+   <span class="keyword">return</span> <span class="property">@location</span>.assign url
+  <span class="keyword">if</span> options.trigger
+   <span class="keyword">return</span> <span class="property">@loadUrl</span> fragment, <span class="literal">null</span></pre></div>
+        
+      
+        
+        <p>Update the hash</p>
+
+        
+          <div class='highlight'><pre> <span class="attribute">_updateHash</span>: <span class="function"><span class="params">(location, fragment, replace)</span> -&gt;</span>
+  <span class="keyword">if</span> replace
+   href = location.href.replace <span class="regexp">/(javascript:|#).*$/</span>, <span class="string">''</span>
+   location.replace <span class="string">"<span class="subst">#{href}</span>#<span class="subst">#{fragment}</span>"</span>
+  <span class="keyword">else</span>
+   location.hash = <span class="string">"#<span class="subst">#{fragment}</span>"</span>
+
+window.Sweet = Sweet =
+ <span class="attribute">View</span>: View
+ <span class="attribute">Router</span>: Router
+ <span class="attribute">Model</span>: Model
+ <span class="attribute">Base</span>: Base
+
+Sweet.history = <span class="keyword">new</span> History</pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>
