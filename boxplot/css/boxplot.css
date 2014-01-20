@@ -1,0 +1,27 @@
+svg text {
+  font-weight: 100;
+}
+svg .labels text {
+  fill: #333;
+  font-size: 10px;
+}
+svg .axis .domain {
+  fill: none;
+  stroke: #eee;
+}
+svg .axis .tick line {
+  stroke: #aaa;
+}
+svg .axis .tick text {
+  fill: #888;
+  font-size: 10px;
+}
+textarea {
+  resize: none;
+  width: 100%;
+  border: #eee 1px solid;
+  color: #666;
+  font-size: 10px;
+  margin-top: 50px;
+  height: 200px;
+}
