@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>index.litcoffee</title>
+  <title>YAML Database</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
   <link rel="stylesheet" media="all" href="docco.css" />
@@ -13,7 +13,28 @@
 
       <div class="header">
         
-          <h1>index.litcoffee</h1>
+          
+          <h1 id="yaml-database">YAML Database</h1>
+<p>YAML database is a document database which stores documents as YAML files. The documents in the database can be maintained by simply editing the yaml files.</p>
+<p>This database was designed to be used for systems like CMS systems, where an easy way to edit data is necessary and the number of data objects is not very high. It can be also used to store settings and configurations.</p>
+<p>Storing the database as separate files lets you use version control systems like git on the database, which is again ideal for storing settings, configurations, blog posts and CMS content.</p>
+<h3 id="advantages">Advantages</h3>
+<ul>
+<li>Can easily change database entries</li>
+<li>Can use version control on the database</li>
+<li>Ideal for settings and configurations (user configs etc)</li>
+</ul>
+<h3 id="disadvantages">Disadvantages</h3>
+<ul>
+<li>No SQL or similar functionality (like searching the database)</li>
+<li>Not suitable for storing transactional data</li>
+</ul>
+
+          
+            <div class='highlight'><pre>fs = <span class="hljs-built_in">require</span> <span class="hljs-string">'fs'</span>
+YAML = <span class="hljs-built_in">require</span> <span class="hljs-string">"yamljs"</span>
+_ = <span class="hljs-built_in">require</span> <span class="hljs-string">'underscore'</span></pre></div>
+          
         
 
         
@@ -40,15 +61,6 @@
         
       </div>
 
-      
-        
-        <p>Required repositories</p>
-
-        
-          <div class='highlight'><pre>fs = <span class="hljs-built_in">require</span> <span class="hljs-string">'fs'</span>
-YAML = <span class="hljs-built_in">require</span> <span class="hljs-string">"yamljs"</span>
-_ = <span class="hljs-built_in">require</span> <span class="hljs-string">'underscore'</span></pre></div>
-        
       
         
         <p>Find files in a directory</p>
