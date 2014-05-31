@@ -4,72 +4,57 @@
 <head>
   <title>index.litcoffee</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
   <link rel="stylesheet" media="all" href="docco.css" />
 </head>
 <body>
-  <div id="container">
-    <div id="background"></div>
-    
-      <ul id="jump_to">
-        <li>
-          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
-          <a class="small" href="javascript:void(0);">+</a>
-          <div id="jump_wrapper">
-          <div id="jump_page">
-            
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>index.litcoffee</h1>
+        
+
+        
+          <div class="toc">
+            <h3>Table of Contents</h3>
+            <ol>
               
-              <a class="source" href="example.html">
-                example.litcoffee
-              </a>
-            
+                
+                <li>
+                  <a class="source" href="example.html">
+                    example.litcoffee
+                  </a>
+                </li>
               
-              <a class="source" href="index.html">
-                index.litcoffee
-              </a>
-            
+                
+                <li>
+                  <a class="source" href="index.html">
+                    index.litcoffee
+                  </a>
+                </li>
+              
+            </ol>
           </div>
-        </li>
-      </ul>
-    
-    <ul class="sections">
         
-          <li id="title">
-              <div class="annotation">
-                  <h1>index.litcoffee</h1>
-              </div>
-          </li>
-        
-        
-        
-        <li id="section-1">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-1">&#182;</a>
-              </div>
-              <p>Required repositories</p>
+      </div>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>fs = <span class="hljs-built_in">require</span> <span class="hljs-string">'fs'</span>
+      
+        
+        <p>Required repositories</p>
+
+        
+          <div class='highlight'><pre>fs = <span class="hljs-built_in">require</span> <span class="hljs-string">'fs'</span>
 YAML = <span class="hljs-built_in">require</span> <span class="hljs-string">"yamljs"</span>
-_ = <span class="hljs-built_in">require</span> <span class="hljs-string">'underscore'</span></pre></div></div>
-            
-        </li>
+_ = <span class="hljs-built_in">require</span> <span class="hljs-string">'underscore'</span></pre></div>
         
+      
         
-        <li id="section-2">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-2">&#182;</a>
-              </div>
-              <p>Find files in a directory</p>
+        <p>Find files in a directory</p>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">findFiles</span> = <span class="hljs-params">(dir, callback)</span> -&gt;</span>
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">findFiles</span> = <span class="hljs-params">(dir, callback)</span> -&gt;</span>
  fileList = []
  err = []
 
@@ -108,61 +93,37 @@ _ = <span class="hljs-built_in">require</span> <span class="hljs-string">'unders
 
    done()
 
- recurse dir</pre></div></div>
-            
-        </li>
+ recurse dir</pre></div>
         
+      
         
-        <li id="section-3">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
-              </div>
-              <h2 id="database">Database</h2>
+        <h2 id="database">Database</h2>
 <p>Setup the database with a set of models and a directory. The models will reside in subdirectories with the same name.</p>
 <p>Each model should be a subclass of <code>Model</code> class.</p>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Database</span></span>
+        
+          <div class='highlight'><pre><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Database</span></span>
  <span class="hljs-attribute">constructor</span>: <span class="hljs-function"><span class="hljs-params">(path, models)</span> -&gt;</span>
   <span class="hljs-property">@models</span> = models
-  <span class="hljs-property">@path</span> = path</pre></div></div>
-            
-        </li>
+  <span class="hljs-property">@path</span> = path</pre></div>
         
+      
         
-        <li id="section-4">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
-              </div>
-              <h4 id="save-a-model">Save a model</h4>
+        <h4 id="save-a-model">Save a model</h4>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre> <span class="hljs-attribute">save</span>: <span class="hljs-function"><span class="hljs-params">(model, data, file, callback)</span> -&gt;</span>
+        
+          <div class='highlight'><pre> <span class="hljs-attribute">save</span>: <span class="hljs-function"><span class="hljs-params">(model, data, file, callback)</span> -&gt;</span>
   data = YAML.stringify data, <span class="hljs-number">1000</span>, <span class="hljs-number">1</span>
   fs.writeFile file, data, <span class="hljs-attribute">encoding</span>: <span class="hljs-string">'utf8'</span>, <span class="hljs-function"><span class="hljs-params">(err)</span> -&gt;</span>
-   callback err</pre></div></div>
-            
-        </li>
+   callback err</pre></div>
         
+      
         
-        <li id="section-5">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
-              </div>
-              <h4 id="load-files">Load files</h4>
+        <h4 id="load-files">Load files</h4>
 <p>This will load all the files of type <code>model</code> recursing over the subdirectories.</p>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre> <span class="hljs-attribute">loadFiles</span>: <span class="hljs-function"><span class="hljs-params">(model, callback)</span> -&gt;</span>
+        
+          <div class='highlight'><pre> <span class="hljs-attribute">loadFiles</span>: <span class="hljs-function"><span class="hljs-params">(model, callback)</span> -&gt;</span>
   path = <span class="hljs-string">"<span class="hljs-subst">#{<span class="hljs-property">@path</span>}</span>/<span class="hljs-subst">#{model}</span>"</span>
   objs = []
   files = []
@@ -187,23 +148,15 @@ _ = <span class="hljs-built_in">require</span> <span class="hljs-string">'unders
    err = e
    err ?= []
    files = f
-   loadFile()</pre></div></div>
-            
-        </li>
+   loadFile()</pre></div>
         
+      
         
-        <li id="section-6">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
-              </div>
-              <h4 id="load-file">Load file</h4>
+        <h4 id="load-file">Load file</h4>
 <p>Loads a single file of type model</p>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre> <span class="hljs-attribute">loadFile</span>: <span class="hljs-function"><span class="hljs-params">(model, file, callback)</span> -&gt;</span>
+        
+          <div class='highlight'><pre> <span class="hljs-attribute">loadFile</span>: <span class="hljs-function"><span class="hljs-params">(model, file, callback)</span> -&gt;</span>
   fs.readFile file, <span class="hljs-attribute">encoding</span>: <span class="hljs-string">'utf8'</span>, <span class="hljs-function"><span class="hljs-params">(e1, data)</span> =&gt;</span>
    <span class="hljs-keyword">if</span> e1?
     callback <span class="hljs-string">"Error reading file: <span class="hljs-subst">#{file}</span>, <span class="hljs-subst">#{e1}</span>"</span>, <span class="hljs-literal">null</span>
@@ -214,106 +167,66 @@ _ = <span class="hljs-built_in">require</span> <span class="hljs-string">'unders
    <span class="hljs-keyword">catch</span> e2
     callback <span class="hljs-string">"Error parsing file: <span class="hljs-subst">#{file}</span>, <span class="hljs-subst">#{e2}</span>"</span>, <span class="hljs-literal">null</span>
     <span class="hljs-keyword">return</span>
-   callback <span class="hljs-literal">null</span>, <span class="hljs-keyword">new</span> <span class="hljs-property">@models</span>[model] data, <span class="hljs-attribute">file</span>: file, <span class="hljs-attribute">db</span>: <span class="hljs-keyword">this</span></pre></div></div>
-            
-        </li>
+   callback <span class="hljs-literal">null</span>, <span class="hljs-keyword">new</span> <span class="hljs-property">@models</span>[model] data, <span class="hljs-attribute">file</span>: file, <span class="hljs-attribute">db</span>: <span class="hljs-keyword">this</span></pre></div>
         
+      
         
-        <li id="section-7">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
-              </div>
-              <h2 id="model-class">Model class</h2>
+        <h2 id="model-class">Model class</h2>
 <p>Introduces class level function initialize and include. This class is the base class of all other data models. It has <code>get</code> and <code>set</code> methods to change values. The structure of the object is defined by <code>defaults</code>.</p>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Model</span></span>
+        
+          <div class='highlight'><pre><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Model</span></span>
  <span class="hljs-attribute">constructor</span>:<span class="hljs-function"> -&gt;</span>
   <span class="hljs-property">@_init</span>.apply @, arguments
 
- <span class="hljs-attribute">_initFuncs</span>: []</pre></div></div>
-            
-        </li>
+ <span class="hljs-attribute">_initFuncs</span>: []</pre></div>
         
+      
         
-        <li id="section-8">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
-              </div>
-              <h4 id="register-initialize-functions-">Register initialize functions.</h4>
+        <h4 id="register-initialize-functions-">Register initialize functions.</h4>
 <p>All initializer funcitons in subclasses will be called with the constructor arguments.</p>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre> <span class="hljs-property">@initialize</span>: <span class="hljs-function"><span class="hljs-params">(func)</span> -&gt;</span>
+        
+          <div class='highlight'><pre> <span class="hljs-property">@initialize</span>: <span class="hljs-function"><span class="hljs-params">(func)</span> -&gt;</span>
   @::_initFuncs = _.clone @::_initFuncs
   @::_initFuncs.push func
 
  <span class="hljs-attribute">_init</span>:<span class="hljs-function"> -&gt;</span>
   <span class="hljs-keyword">for</span> init <span class="hljs-keyword">in</span> <span class="hljs-property">@_initFuncs</span>
-   init.apply @, arguments</pre></div></div>
-            
-        </li>
+   init.apply @, arguments</pre></div>
         
+      
         
-        <li id="section-9">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
-              </div>
-              <h4 id="include-objects-">Include objects.</h4>
+        <h4 id="include-objects-">Include objects.</h4>
 <p>You can include objects by registering them with @include. This solves the problem of single inheritence.</p>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre> <span class="hljs-property">@include</span>: <span class="hljs-function"><span class="hljs-params">(obj)</span> -&gt;</span>
+        
+          <div class='highlight'><pre> <span class="hljs-property">@include</span>: <span class="hljs-function"><span class="hljs-params">(obj)</span> -&gt;</span>
   <span class="hljs-keyword">for</span> k, v <span class="hljs-keyword">of</span> obj <span class="hljs-keyword">when</span> <span class="hljs-keyword">not</span> @::[k]?
    @::[k] = v
 
 
  <span class="hljs-attribute">model</span>: <span class="hljs-string">'Model'</span>
 
- <span class="hljs-attribute">_defaults</span>: {}</pre></div></div>
-            
-        </li>
+ <span class="hljs-attribute">_defaults</span>: {}</pre></div>
         
+      
         
-        <li id="section-10">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
-              </div>
-              <h4 id="register-default-key-value-set-">Register default key value set.</h4>
+        <h4 id="register-default-key-value-set-">Register default key value set.</h4>
 <p>Subclasses can add to default key-values of parent classes</p>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre> <span class="hljs-property">@defaults</span>: <span class="hljs-function"><span class="hljs-params">(defaults)</span> -&gt;</span>
+        
+          <div class='highlight'><pre> <span class="hljs-property">@defaults</span>: <span class="hljs-function"><span class="hljs-params">(defaults)</span> -&gt;</span>
   @::_defaults = _.clone @::_defaults
   <span class="hljs-keyword">for</span> k, v <span class="hljs-keyword">of</span> defaults
-   @::_defaults[k] = v</pre></div></div>
-            
-        </li>
+   @::_defaults[k] = v</pre></div>
         
+      
         
-        <li id="section-11">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
-              </div>
-              <p>Build a model with the structure of defaults. <code>options.db</code> is a reference to the <code>Database</code> object, which will be used when updating the object. <code>options.file</code> is the path of the file, which will be null if this is a new object.</p>
+        <p>Build a model with the structure of defaults. <code>options.db</code> is a reference to the <code>Database</code> object, which will be used when updating the object. <code>options.file</code> is the path of the file, which will be null if this is a new object.</p>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre> <span class="hljs-property">@initialize</span> <span class="hljs-function"><span class="hljs-params">(values, options)</span> -&gt;</span>
+        
+          <div class='highlight'><pre> <span class="hljs-property">@initialize</span> <span class="hljs-function"><span class="hljs-params">(values, options)</span> -&gt;</span>
   <span class="hljs-property">@file</span> = options.file <span class="hljs-keyword">if</span> options.file?
   <span class="hljs-property">@db</span> = options.db
   <span class="hljs-property">@values</span> = {}
@@ -322,92 +235,52 @@ _ = <span class="hljs-built_in">require</span> <span class="hljs-string">'unders
    <span class="hljs-keyword">if</span> values[k]?
     <span class="hljs-property">@values</span>[k] = values[k]
    <span class="hljs-keyword">else</span>
-    <span class="hljs-property">@values</span>[k] = v</pre></div></div>
-            
-        </li>
+    <span class="hljs-property">@values</span>[k] = v</pre></div>
         
+      
         
-        <li id="section-12">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-12">&#182;</a>
-              </div>
-              <h4 id="returns-key-value-set">Returns key value set</h4>
+        <h4 id="returns-key-value-set">Returns key value set</h4>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre> <span class="hljs-attribute">toJSON</span>:<span class="hljs-function"> -&gt;</span> _.clone <span class="hljs-property">@values</span></pre></div></div>
-            
-        </li>
         
+          <div class='highlight'><pre> <span class="hljs-attribute">toJSON</span>:<span class="hljs-function"> -&gt;</span> _.clone <span class="hljs-property">@values</span></pre></div>
         
-        <li id="section-13">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-13">&#182;</a>
-              </div>
-              <h4 id="get-value-of-a-given-key">Get value of a given key</h4>
+      
+        
+        <h4 id="get-value-of-a-given-key">Get value of a given key</h4>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre> <span class="hljs-attribute">get</span>: <span class="hljs-function"><span class="hljs-params">(key)</span> -&gt;</span> <span class="hljs-property">@values</span>[key]</pre></div></div>
-            
-        </li>
         
+          <div class='highlight'><pre> <span class="hljs-attribute">get</span>: <span class="hljs-function"><span class="hljs-params">(key)</span> -&gt;</span> <span class="hljs-property">@values</span>[key]</pre></div>
         
-        <li id="section-14">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-14">&#182;</a>
-              </div>
-              <h4 id="set-key-value-combination">Set key value combination</h4>
+      
+        
+        <h4 id="set-key-value-combination">Set key value combination</h4>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre> <span class="hljs-attribute">set</span>: <span class="hljs-function"><span class="hljs-params">(obj)</span> -&gt;</span>
+        
+          <div class='highlight'><pre> <span class="hljs-attribute">set</span>: <span class="hljs-function"><span class="hljs-params">(obj)</span> -&gt;</span>
   <span class="hljs-keyword">for</span> k, v <span class="hljs-keyword">of</span> obj
-   <span class="hljs-property">@values</span>[k] = v <span class="hljs-keyword">if</span> k <span class="hljs-keyword">of</span> <span class="hljs-property">@_defaults</span></pre></div></div>
-            
-        </li>
+   <span class="hljs-property">@values</span>[k] = v <span class="hljs-keyword">if</span> k <span class="hljs-keyword">of</span> <span class="hljs-property">@_defaults</span></pre></div>
         
+      
         
-        <li id="section-15">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-15">&#182;</a>
-              </div>
-              <h3 id="save-the-object">Save the object</h3>
+        <h3 id="save-the-object">Save the object</h3>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre> <span class="hljs-attribute">save</span>: <span class="hljs-function"><span class="hljs-params">(callback)</span> -&gt;</span>
+        
+          <div class='highlight'><pre> <span class="hljs-attribute">save</span>: <span class="hljs-function"><span class="hljs-params">(callback)</span> -&gt;</span>
   <span class="hljs-keyword">return</span> <span class="hljs-keyword">unless</span> <span class="hljs-property">@file</span>?
 
-  <span class="hljs-property">@db</span>.save <span class="hljs-property">@model</span>, <span class="hljs-property">@toJSON</span>(), <span class="hljs-property">@file</span>, callback</pre></div></div>
-            
-        </li>
+  <span class="hljs-property">@db</span>.save <span class="hljs-property">@model</span>, <span class="hljs-property">@toJSON</span>(), <span class="hljs-property">@file</span>, callback</pre></div>
         
+      
         
-        <li id="section-16">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-16">&#182;</a>
-              </div>
-              <h1 id="exports">Exports</h1>
+        <h1 id="exports">Exports</h1>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre><span class="hljs-built_in">exports</span>.Database = Database
-<span class="hljs-built_in">exports</span>.Model = Model</pre></div></div>
-            
-        </li>
         
-    </ul>
+          <div class='highlight'><pre><span class="hljs-built_in">exports</span>.Database = Database
+<span class="hljs-built_in">exports</span>.Model = Model</pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
   </div>
 </body>
 </html>
