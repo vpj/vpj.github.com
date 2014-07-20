@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>example.litcoffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="example.html">
+                example.litcoffee
+              </a>
+            
+              
+              <a class="source" href="weya.html">
+                weya.litcoffee
+              </a>
+            
+              
+              <a class="source" href="weya_base.html">
+                weya_base.litcoffee
+              </a>
+            
+              
+              <a class="source" href="weya_router.html">
+                weya_router.litcoffee
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>example.litcoffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p>Create a sample div</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Student</span></span>
+ <span class="hljs-attribute">constructor</span>: <span class="hljs-function"><span class="hljs-params">(name, age)</span> -&gt;</span>
+  <span class="hljs-property">@name</span> = name
+  <span class="hljs-property">@age</span> = age
+
+ <span class="hljs-attribute">template</span>:<span class="hljs-function"> -&gt;</span>
+  <span class="hljs-property">@div</span> <span class="hljs-string">"#name.col-md-6"</span>,<span class="hljs-function"> -&gt;</span>
+   <span class="hljs-property">@span</span> <span class="hljs-string">"Name"</span>
+   <span class="hljs-property">@span</span> <span class="hljs-property">@$</span>.name
+  <span class="hljs-property">@div</span> <span class="hljs-string">"#age.col-md-6"</span>, <span class="hljs-attribute">style</span>: {<span class="hljs-attribute">background</span>: <span class="hljs-string">"red"</span>},<span class="hljs-function"> -&gt;</span>
+   <span class="hljs-property">@span</span> <span class="hljs-string">"Age"</span>
+   <span class="hljs-property">@span</span> <span class="hljs-string">"<span class="hljs-subst">#{<span class="hljs-property">@$</span>.age}</span>"</span>
+   <span class="hljs-property">@input</span> <span class="hljs-string">"#ageInput"</span>, <span class="hljs-attribute">type</span>: <span class="hljs-string">"text"</span>, <span class="hljs-literal">null</span>
+
+ <span class="hljs-attribute">render</span>:<span class="hljs-function"> -&gt;</span>
+  <span class="hljs-built_in">console</span>.log Weya.markup <span class="hljs-attribute">context</span>: @, <span class="hljs-property">@template</span>
+  Weya <span class="hljs-attribute">elem</span>: <span class="hljs-built_in">document</span>.body, <span class="hljs-attribute">context</span>: @, <span class="hljs-property">@template</span>
+
+
+student = <span class="hljs-keyword">new</span> Student <span class="hljs-string">"Varuna"</span>, <span class="hljs-number">26</span>
+student.render()</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

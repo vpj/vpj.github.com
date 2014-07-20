@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>weya.litcoffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="example.html">
+                example.litcoffee
+              </a>
+            
+              
+              <a class="source" href="weya.html">
+                weya.litcoffee
+              </a>
+            
+              
+              <a class="source" href="weya_base.html">
+                weya_base.litcoffee
+              </a>
+            
+              
+              <a class="source" href="weya_router.html">
+                weya_router.litcoffee
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>weya.litcoffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p>List of SVG elements</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Tags =
+ <span class="hljs-attribute">svg</span>: <span class="hljs-string">'a altGlyph altGlyphDef altGlyphItem animate animateColor animateMotion
+  animateTransform circle clipPath color-profile cursor defs desc ellipse
+  feBlend feColorMatrix feComponentTransfer feComposite feConvolveMatrix
+  feDiffuseLighting feDisplacementMap feDistantLight feFlood feFuncA feFuncB
+  feFuncG feFuncR feGaussianBlur feImage feMerge feMergeNode feMorphology
+  feOffset fePointLight feSpecularLighting feSpotLight feTile feTurbulence
+  filter font font-face font-face-format font-face-name font-face-src
+  font-face-uri foreignObject g glyph glyphRef hkern image line linearGradient
+  marker mask metadata missing-glyph mpath path pattern polygon polyline
+  radialGradient rect script set stop style svg symbol text textPath
+  title tref tspan use view vkern switch foreignObject'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>List of HTML elements</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre> <span class="hljs-attribute">html</span>: <span class="hljs-string">'a abbr address article aside audio b bdi bdo blockquote body button
+  canvas caption cite code colgroup datalist dd del details dfn div dl dt em
+  fieldset figcaption figure footer form h1 h2 h3 h4 h5 h6 head header hgroup
+  html i iframe ins kbd label legend li main map mark menu meter nav noscript object
+  ol optgroup option output p pre progress q rp rt ruby s samp script section
+  select small span strong style sub summary sup table tbody td textarea tfoot
+  th thead time title tr u ul video'</span>
+
+ <span class="hljs-attribute">htmlVoid</span>: <span class="hljs-string">'area base br col command embed hr img input keygen link meta param
+  source track wbr'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Wrapper for browser API</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Api =
+ <span class="hljs-attribute">document</span>: <span class="hljs-property">@document</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <h1 id="weya-dom">Weya DOM</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">weyaDomCreate</span> = -&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Weya object to be passed as <code>this</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre> weya =
+  <span class="hljs-attribute">_elem</span>: <span class="hljs-literal">null</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Manipulating dom objects</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre> <span class="hljs-function"><span class="hljs-title">setStyles</span> = <span class="hljs-params">(elem, styles)</span> -&gt;</span>
+  <span class="hljs-keyword">for</span> k, v <span class="hljs-keyword">of</span> styles
+   <span class="hljs-keyword">if</span> v?
+    elem.style.setProperty k, v
+   <span class="hljs-keyword">else</span>
+    elem.style.removeProperty k
+
+ <span class="hljs-function"><span class="hljs-title">setEvents</span> = <span class="hljs-params">(elem, events)</span> -&gt;</span>
+  <span class="hljs-keyword">for</span> k, v <span class="hljs-keyword">of</span> events
+   elem.addEventListener k, v, <span class="hljs-literal">false</span>
+
+ <span class="hljs-function"><span class="hljs-title">setAttributes</span> = <span class="hljs-params">(elem, attrs)</span> -&gt;</span>
+  <span class="hljs-keyword">for</span> k, v <span class="hljs-keyword">of</span> attrs
+   <span class="hljs-keyword">switch</span> k
+    <span class="hljs-keyword">when</span> <span class="hljs-string">'style'</span> <span class="hljs-keyword">then</span> setStyles elem, v
+    <span class="hljs-keyword">when</span> <span class="hljs-string">'on'</span> <span class="hljs-keyword">then</span> setEvents elem, v
+    <span class="hljs-keyword">else</span>
+     <span class="hljs-keyword">if</span> v?
+      elem.setAttribute k, v
+     <span class="hljs-keyword">else</span>
+      elem.removeAttribute k</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Parse id and class string</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre> parseIdClass = (str) -&gt;
+  res =
+   id: null
+   class: []
+
+  for c, i in str.split "."
+   if c.indexOf("#") is 0
+    res.id = c.substr 1
+   else if c isnt ""
+    if not res.class?
+     res.class = [c]
+    else
+     res.class.push c
+
+  return res</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Append a child element</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre> <span class="hljs-function"><span class="hljs-title">append</span> = <span class="hljs-params">(ns, name, args)</span> -&gt;</span>
+  idClass = <span class="hljs-literal">null</span>
+  contentText = <span class="hljs-literal">null</span>
+  attrs = <span class="hljs-literal">null</span>
+  contentFunction = <span class="hljs-literal">null</span>
+
+  <span class="hljs-keyword">for</span> arg, i <span class="hljs-keyword">in</span> args
+   <span class="hljs-keyword">switch</span> <span class="hljs-keyword">typeof</span> arg
+    <span class="hljs-keyword">when</span> <span class="hljs-string">'function'</span> <span class="hljs-keyword">then</span> contentFunction = arg
+    <span class="hljs-keyword">when</span> <span class="hljs-string">'object'</span> <span class="hljs-keyword">then</span> attrs = arg
+    <span class="hljs-keyword">when</span> <span class="hljs-string">'string'</span>
+     <span class="hljs-keyword">if</span> args.length <span class="hljs-keyword">is</span> <span class="hljs-number">1</span>
+      contentText = arg
+     <span class="hljs-keyword">else</span>
+      c = arg.charAt <span class="hljs-number">0</span>
+
+      <span class="hljs-keyword">if</span> i <span class="hljs-keyword">is</span> <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> (c <span class="hljs-keyword">is</span> <span class="hljs-string">'#'</span> <span class="hljs-keyword">or</span> c <span class="hljs-keyword">is</span> <span class="hljs-string">'.'</span>)
+       idClass = arg
+      <span class="hljs-keyword">else</span>
+       contentText = arg</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Keep a reference to parent element</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  pElem = <span class="hljs-property">@_elem</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Keep a reference of <code>elem</code> to return at the end of the function</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> ns?
+   elem = <span class="hljs-property">@_elem</span> = Api.<span class="hljs-built_in">document</span>.createElementNS ns, name
+  <span class="hljs-keyword">else</span>
+   elem = <span class="hljs-property">@_elem</span> = Api.<span class="hljs-built_in">document</span>.createElement name
+
+  <span class="hljs-keyword">if</span> idClass?
+   idClass = parseIdClass idClass
+   <span class="hljs-keyword">if</span> idClass.id?
+    elem.id = idClass.id
+   <span class="hljs-keyword">if</span> idClass.class?
+    <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> idClass.class
+     elem.classList.add c
+
+  <span class="hljs-keyword">if</span> attrs?
+   setAttributes elem, attrs
+
+  <span class="hljs-keyword">if</span> pElem?
+   pElem.appendChild elem
+
+  <span class="hljs-keyword">if</span> contentFunction?
+   contentFunction.call @
+  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> contentText?
+   elem.textContent = contentText
+
+  <span class="hljs-property">@_elem</span> = pElem
+  <span class="hljs-keyword">return</span> elem</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Wrap <code>append</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre> <span class="hljs-function"><span class="hljs-title">wrapAppend</span> = <span class="hljs-params">(ns, name)</span> -&gt;</span><span class="hljs-function">
+  -&gt;</span>
+   append.call @, ns, name, arguments</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Initialize</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre> <span class="hljs-keyword">for</span> name <span class="hljs-keyword">in</span> Tags.svg.split <span class="hljs-string">' '</span>
+  weya[name] = wrapAppend <span class="hljs-string">"http://www.w3.org/2000/svg"</span>, name
+
+ <span class="hljs-keyword">for</span> name <span class="hljs-keyword">in</span> Tags.html.split <span class="hljs-string">' '</span>
+  weya[name] = wrapAppend <span class="hljs-string">"http://www.w3.org/1999/xhtml"</span>, name
+
+ <span class="hljs-keyword">for</span> name <span class="hljs-keyword">in</span> Tags.htmlVoid.split <span class="hljs-string">' '</span>
+  weya[name] = wrapAppend <span class="hljs-literal">null</span>, name
+
+ <span class="hljs-keyword">return</span> weya</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <h1 id="weya-markup">Weya Markup</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">weyaMarkupCreate</span> = -&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>Weya object to be passed as <code>this</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre> weya =
+  <span class="hljs-attribute">_buf</span>: <span class="hljs-literal">null</span>
+  <span class="hljs-attribute">_indent</span>: <span class="hljs-number">0</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Render components</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre> <span class="hljs-function"><span class="hljs-title">setStyles</span> = <span class="hljs-params">(buf, styles)</span> -&gt;</span>
+  buf.push <span class="hljs-string">" style=\""</span>
+  <span class="hljs-keyword">for</span> k, v <span class="hljs-keyword">of</span> styles
+   buf.push <span class="hljs-string">"<span class="hljs-subst">#{k}</span>:<span class="hljs-subst">#{v}</span>;"</span>
+  buf.push <span class="hljs-string">"\""</span>
+
+ <span class="hljs-function"><span class="hljs-title">setEvents</span> = <span class="hljs-params">(buf, events)</span> -&gt;</span>
+  <span class="hljs-keyword">for</span> k, v <span class="hljs-keyword">of</span> events
+   buf.push <span class="hljs-string">" on<span class="hljs-subst">#{k}</span>=\"<span class="hljs-subst">#{v}</span>\""</span>
+
+ <span class="hljs-function"><span class="hljs-title">setAttributes</span> = <span class="hljs-params">(buf, attrs)</span> -&gt;</span>
+  <span class="hljs-keyword">for</span> k, v <span class="hljs-keyword">of</span> attrs
+   <span class="hljs-keyword">switch</span> k
+    <span class="hljs-keyword">when</span> <span class="hljs-string">'style'</span> <span class="hljs-keyword">then</span> setStyles buf, v
+    <span class="hljs-keyword">when</span> <span class="hljs-string">'on'</span> <span class="hljs-keyword">then</span> setEvents buf, v
+    <span class="hljs-keyword">else</span>
+     buf.push <span class="hljs-string">" <span class="hljs-subst">#{k}</span>=\"<span class="hljs-subst">#{v}</span>\""</span>
+
+ <span class="hljs-function"><span class="hljs-title">setIndent</span> = <span class="hljs-params">(buf, indent)</span> -&gt;</span>
+  <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> [<span class="hljs-number">0.</span>..indent]
+   buf.push <span class="hljs-string">" "</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>Parse id and class string</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre> parseIdClass = (str) -&gt;
+  res =
+   id: null
+   class: null
+
+  for c, i in str.split "."
+   if c.indexOf("#") is 0
+    res.id = c.substr 1
+   else if c isnt ""
+    if not res.class?
+     res.class = c
+    else
+     res.class += " #{c}"
+
+  return res</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Append a child element</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre> <span class="hljs-function"><span class="hljs-title">append</span> = <span class="hljs-params">(ns, name, args)</span> -&gt;</span>
+  idClass = <span class="hljs-literal">null</span>
+  contentText = <span class="hljs-literal">null</span>
+  attrs = <span class="hljs-literal">null</span>
+  contentFunction = <span class="hljs-literal">null</span>
+
+  <span class="hljs-keyword">for</span> arg, i <span class="hljs-keyword">in</span> args
+   <span class="hljs-keyword">switch</span> <span class="hljs-keyword">typeof</span> arg
+    <span class="hljs-keyword">when</span> <span class="hljs-string">'function'</span> <span class="hljs-keyword">then</span> contentFunction = arg
+    <span class="hljs-keyword">when</span> <span class="hljs-string">'object'</span> <span class="hljs-keyword">then</span> attrs = arg
+    <span class="hljs-keyword">when</span> <span class="hljs-string">'string'</span>
+     <span class="hljs-keyword">if</span> args.length <span class="hljs-keyword">is</span> <span class="hljs-number">1</span>
+      contentText = arg
+     <span class="hljs-keyword">else</span>
+      c = arg.charAt <span class="hljs-number">0</span>
+
+      <span class="hljs-keyword">if</span> i <span class="hljs-keyword">is</span> <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> (c <span class="hljs-keyword">is</span> <span class="hljs-string">'#'</span> <span class="hljs-keyword">or</span> c <span class="hljs-keyword">is</span> <span class="hljs-string">'.'</span>)
+       idClass = arg
+      <span class="hljs-keyword">else</span>
+       contentText = arg
+
+  buf = <span class="hljs-property">@_buf</span>
+
+  setIndent buf, <span class="hljs-property">@_indent</span>
+
+  buf.push <span class="hljs-string">"&lt;<span class="hljs-subst">#{name}</span>"</span>
+
+  <span class="hljs-keyword">if</span> idClass?
+   idClass = parseIdClass idClass
+   <span class="hljs-keyword">if</span> idClass.id?
+    buf.push <span class="hljs-string">" id=\"<span class="hljs-subst">#{idClass.id}</span>\""</span>
+   <span class="hljs-keyword">if</span> idClass.class?
+    buf.push <span class="hljs-string">" class=\"<span class="hljs-subst">#{idClass.class}</span>\""</span>
+
+  <span class="hljs-keyword">if</span> attrs?
+   setAttributes buf, attrs</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Can close void elements (element that self close) with a <code>/&gt;</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  buf.push <span class="hljs-string">"&gt;\n"</span>
+  <span class="hljs-property">@_indent</span>++
+
+  <span class="hljs-keyword">if</span> contentFunction?
+   contentFunction.call @
+  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> contentText?
+   setIndent buf, <span class="hljs-property">@_indent</span>
+   buf.push contentText
+   buf.push <span class="hljs-string">"\n"</span>
+
+  <span class="hljs-property">@_indent</span>--
+  setIndent buf, <span class="hljs-property">@_indent</span>
+  buf.push <span class="hljs-string">"&lt;/<span class="hljs-subst">#{name}</span>&gt;\n"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>Wrap <code>append</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre> <span class="hljs-function"><span class="hljs-title">wrapAppend</span> = <span class="hljs-params">(ns, name)</span> -&gt;</span><span class="hljs-function">
+  -&gt;</span>
+   append.call @, ns, name, arguments</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Initialize</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre> <span class="hljs-keyword">for</span> name <span class="hljs-keyword">in</span> Tags.svg.split <span class="hljs-string">' '</span>
+  weya[name] = wrapAppend <span class="hljs-string">"http://www.w3.org/2000/svg"</span>, name
+
+ <span class="hljs-keyword">for</span> name <span class="hljs-keyword">in</span> Tags.html.split <span class="hljs-string">' '</span>
+  weya[name] = wrapAppend <span class="hljs-literal">null</span>, name
+
+ <span class="hljs-keyword">for</span> name <span class="hljs-keyword">in</span> Tags.htmlVoid.split <span class="hljs-string">' '</span>
+  weya[name] = wrapAppend <span class="hljs-literal">null</span>, name
+
+ <span class="hljs-keyword">return</span> weya</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <h1 id="weya-api">Weya API</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>weyaDom = weyaDomCreate()
+weyaMarkup = weyaMarkupCreate()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>Create and append to <code>options.elem</code>. If <code>options.context</code> is provied it can be accessed via <code>@$</code>.
+If <code>options.elem</code> is <code>null</code>, the element is created but not appended.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-property">@Weya</span> = <span class="hljs-function"><span class="hljs-title">Weya</span> = <span class="hljs-params">(options, func)</span> -&gt;</span>
+ weya = weyaDom
+ pContext = weya.$
+ weya.$ = options.context
+ pElem = weya._elem
+ weya._elem = options.elem
+ r = func?.call weya
+ weya._elem = pElem
+ weya.$ = pContext
+ <span class="hljs-keyword">return</span> r
+
+Weya.<span class="hljs-function"><span class="hljs-title">markup</span> = <span class="hljs-params">(options, func)</span> -&gt;</span>
+ weya = weyaMarkup
+ pContext = weya.$
+ weya.$ = options.context
+ pBuf = weya._buf
+ weya._buf = []
+ r = func?.call weya
+ buf = weya._buf
+ weya._buf = pBuf
+ weya.$ = pContext
+ <span class="hljs-keyword">return</span> buf.join <span class="hljs-string">''</span>
+
+<span class="hljs-keyword">if</span> <span class="hljs-built_in">module</span>?
+ <span class="hljs-built_in">module</span>.<span class="hljs-built_in">exports</span> = Weya</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
