@@ -1,0 +1,24 @@
+.docscript {
+  font-family: "Open Sans", sans-serif;
+  color: #444;
+  line-height: 1.5;
+}
+.docscript h1,
+.docscript h2,
+.docscript h3,
+.docscript h4,
+.docscript h5,
+.docscript h6 {
+  font-family: "Open Sans", sans-serif;
+  font-weight: bold;
+}
+.docscript .sidenote {
+  font-size: 0.8em;
+  margin-bottom: 20px;
+}
+.docscript .fill {
+  width: 100%;
+}
+.docscript img {
+  max-width: 100%;
+}
