@@ -2,8 +2,24 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  Mod.require('Weya.Base', 'Docscript.TYPES', 'Docscript.Text', 'Docscript.Block', 'Docscript.Section', 'Docscript.List', 'Docscript.ListItem', 'Docscript.Sidenote', 'Docscript.Article', 'Docscript.Media', 'Docscript.Reader', function(Base, TYPES, Text, Block, Section, List, ListItem, Sidenote, Article, Media, Reader) {
-    var Parser;
+  Mod.require('Weya.Base', 'Docscript.TYPES', 'Docscript.Text', 'Docscript.Bold', 'Docscript.Italics', 'Docscript.SuperScript', 'Docscript.SubScript', 'Docscript.Code', 'Docscript.Link', 'Docscript.Block', 'Docscript.Section', 'Docscript.List', 'Docscript.ListItem', 'Docscript.Sidenote', 'Docscript.Article', 'Docscript.Media', 'Docscript.Reader', function(Base, TYPES, Text, Bold, Italics, SuperScript, SubScript, Code, Link, Block, Section, List, ListItem, Sidenote, Article, Media, Reader) {
+    var Parser, TOKENS, TOKEN_MATCHES;
+    TOKENS = {
+      bold: Bold,
+      italics: Italics,
+      superScript: SuperScript,
+      subScript: SubScript,
+      code: Code
+    };
+    TOKEN_MATCHES = {
+      bold: '**',
+      italics: '--',
+      subScript: '__',
+      superScript: '^^',
+      code: '``',
+      linkBegin: '<<',
+      linkEnd: '>>'
+    };
     Parser = (function(_super) {
       __extends(Parser, _super);
 
@@ -22,21 +38,108 @@
         this.node = this.root;
         this.main = true;
         this.sidenotes = [];
-        return this.prevBlock = null;
+        this.prevBlock = null;
+        return this.blocks = [];
       });
 
       Parser.prototype.parse = function() {
-        var _results;
-        _results = [];
+        var block, e, _i, _len, _ref, _results;
         while (this.reader.has()) {
-          this.process();
-          _results.push(this.reader.next());
+          try {
+            this.process();
+          } catch (_error) {
+            e = _error;
+            throw new Error("Line " + (this.reader.n + 1) + ": " + e.message);
+          }
+          this.reader.next();
+        }
+        _ref = this.blocks;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          block = _ref[_i];
+          try {
+            _results.push(this.parseText(block.text, block));
+          } catch (_error) {
+            e = _error;
+            throw new Error("" + e.message + ": \"" + block.text + "\"");
+          }
         }
         return _results;
       };
 
+      Parser.prototype.getToken = function(text, n) {
+        var match, token;
+        for (token in TOKEN_MATCHES) {
+          match = TOKEN_MATCHES[token];
+          if ((text.substr(n, match.length)) === match) {
+            return {
+              type: token,
+              length: match.length
+            };
+          }
+        }
+        return null;
+      };
+
+      Parser.prototype.parseText = function(text, node) {
+        var L, add, cur, i, last, token;
+        this.node = node;
+        L = text.length;
+        last = i = 0;
+        cur = 0;
+        add = (function(_this) {
+          return function() {
+            if (cur > last) {
+              _this.addNode(new Text({
+                text: text.substr(last, cur - last)
+              }));
+              return _this.node = _this.node.parent();
+            }
+          };
+        })(this);
+        while (i < L) {
+          token = this.getToken(text, i);
+          if (token != null) {
+            cur = i;
+            i += token.length;
+          } else {
+            ++i;
+            continue;
+          }
+          if (TOKENS[token.type] != null) {
+            if (this.node.type === token.type) {
+              add();
+              this.node = this.node.parent();
+            } else {
+              add();
+              this.addNode(new TOKENS[token.type]({}));
+            }
+          } else {
+            switch (token.type) {
+              case 'linkBegin':
+                add();
+                this.addNode(new Link({}));
+                break;
+              case 'linkEnd':
+                if (this.node.type !== TYPES.link) {
+                  throw new Error('Unexpected link terminator');
+                } else {
+                  this.node.setLink(this.parseLink(text.substr(last, cur - last)));
+                  this.node = this.node.parent();
+                }
+            }
+          }
+          last = i;
+        }
+        cur = i;
+        return add();
+      };
+
       Parser.prototype.addNode = function(node) {
         this.node.add(node);
+        if (node.type === TYPES.block) {
+          this.blocks.push(node);
+        }
         return this.node = node;
       };
 
@@ -180,14 +283,17 @@
               level: line.level
             }));
             this.node.heading.addText(line.text);
+            this.blocks.push(this.node.heading);
             break;
           case TYPES.sidenote:
             if (this.main) {
               this.main = false;
               id = this.node.id;
+              console.log('sidenote', id);
               if (this.prevBlock != null) {
                 id = this.prevBlock.id;
               }
+              console.log('sidenote', id);
               n = new Sidenote({
                 indentation: line.indentation,
                 link: id
@@ -214,11 +320,28 @@
               indentation: line.indentation + 1,
               media: this.parseMedia(line.text)
             }));
-            break;
+            this.prevBlock = this.node;
+            return;
           default:
             throw new Error('Unknown syntax');
         }
         return this.prevBlock = null;
+      };
+
+      Parser.prototype.parseLink = function(text) {
+        var link, parts;
+        text = text.replace(/\)/g, '');
+        parts = text.split('(');
+        link = {};
+        if (parts.length <= 0 || parts[0] === '') {
+          throw new Error('Invalid media syntax');
+        }
+        link.link = parts[0].trim();
+        if (parts.length <= 1) {
+          return link;
+        }
+        link.text = parts[1].trim();
+        return link;
       };
 
       Parser.prototype.parseMedia = function(text) {
@@ -226,14 +349,14 @@
         text = text.replace(/\)/g, '');
         parts = text.split('(');
         media = {};
-        if (parts.length <= 0) {
+        if (parts.length <= 0 || parts[0] === '') {
           throw new Error('Invalid media syntax');
         }
-        media.src = parts[0];
+        media.src = parts[0].trim();
         if (parts.length <= 1) {
           return media;
         }
-        media.alt = parts[1];
+        media.alt = parts[1].trim();
         return media;
       };
 

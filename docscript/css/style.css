@@ -10,7 +10,6 @@
 .docscript h5,
 .docscript h6 {
   font-family: "Open Sans", sans-serif;
-  font-weight: bold;
 }
 .docscript .sidenote {
   font-size: 0.8em;
@@ -19,6 +18,19 @@
 .docscript .fill {
   width: 100%;
 }
-.docscript img {
+.docscript .image-container {
+  margin: 10px 0px;
+}
+.docscript .image-container img {
   max-width: 100%;
+}
+.CodeMirror {
+  background: #dedede;
+  margin-bottom: 20px;
+  font-size: 0.9em;
+}
+.error {
+  font-weight: bold;
+  font-family: monospace;
+  color: #ff4444;
 }

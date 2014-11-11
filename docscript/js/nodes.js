@@ -3,7 +3,7 @@
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Mod.require('Weya.Base', 'Weya', function(Base, Weya) {
-    var Article, Block, List, ListItem, Media, NODE_ID, Node, Section, Sidenote, TYPES, Text;
+    var Article, Block, Bold, Code, Italics, Link, List, ListItem, Media, NODE_ID, Node, Section, Sidenote, SubScript, SuperScript, TYPES, Text;
     NODE_ID = 0;
     TYPES = {
       code: 'code',
@@ -13,7 +13,13 @@
       sidenote: 'sidenote',
       section: 'section',
       heading: 'heading',
-      media: 'media'
+      media: 'media',
+      bold: 'bold',
+      italics: 'italics',
+      superScript: 'superScript',
+      subScript: 'subScript',
+      code: 'code',
+      link: 'link'
     };
     Node = (function(_super) {
       __extends(Node, _super);
@@ -49,6 +55,10 @@
         node.setParent(this);
         this.children.push(node);
         return node;
+      };
+
+      Node.prototype.add = function(node) {
+        return this._add(node);
       };
 
       Node.prototype.template = function() {
@@ -103,6 +113,122 @@
       return Text;
 
     })(Node);
+    Bold = (function(_super) {
+      __extends(Bold, _super);
+
+      function Bold() {
+        return Bold.__super__.constructor.apply(this, arguments);
+      }
+
+      Bold.extend();
+
+      Bold.prototype.type = TYPES.bold;
+
+      Bold.prototype.template = function() {
+        return this.$.elem = this.strong(".bold", null);
+      };
+
+      return Bold;
+
+    })(Node);
+    Italics = (function(_super) {
+      __extends(Italics, _super);
+
+      function Italics() {
+        return Italics.__super__.constructor.apply(this, arguments);
+      }
+
+      Italics.extend();
+
+      Italics.prototype.type = TYPES.italics;
+
+      Italics.prototype.template = function() {
+        return this.$.elem = this.em(".italics", null);
+      };
+
+      return Italics;
+
+    })(Node);
+    SuperScript = (function(_super) {
+      __extends(SuperScript, _super);
+
+      function SuperScript() {
+        return SuperScript.__super__.constructor.apply(this, arguments);
+      }
+
+      SuperScript.extend();
+
+      SuperScript.prototype.type = TYPES.superScript;
+
+      SuperScript.prototype.template = function() {
+        return this.$.elem = this.sup(".superScript", null);
+      };
+
+      return SuperScript;
+
+    })(Node);
+    SubScript = (function(_super) {
+      __extends(SubScript, _super);
+
+      function SubScript() {
+        return SubScript.__super__.constructor.apply(this, arguments);
+      }
+
+      SubScript.extend();
+
+      SubScript.prototype.type = TYPES.subScript;
+
+      SubScript.prototype.template = function() {
+        return this.$.elem = this.sub(".subScript", null);
+      };
+
+      return SubScript;
+
+    })(Node);
+    Code = (function(_super) {
+      __extends(Code, _super);
+
+      function Code() {
+        return Code.__super__.constructor.apply(this, arguments);
+      }
+
+      Code.extend();
+
+      Code.prototype.type = TYPES.code;
+
+      Code.prototype.template = function() {
+        return this.$.elem = this.code(".code", null);
+      };
+
+      return Code;
+
+    })(Node);
+    Link = (function(_super) {
+      __extends(Link, _super);
+
+      function Link() {
+        return Link.__super__.constructor.apply(this, arguments);
+      }
+
+      Link.extend();
+
+      Link.prototype.setLink = function(options) {
+        this.link = options.link;
+        this.text = options.text;
+        return this.text != null ? this.text : this.text = this.link;
+      };
+
+      Link.prototype.type = TYPES.link;
+
+      Link.prototype.template = function() {
+        return this.$.elem = this.a(".link", {
+          href: this.$.link
+        }, this.$.text);
+      };
+
+      return Link;
+
+    })(Node);
     Block = (function(_super) {
       __extends(Block, _super);
 
@@ -115,20 +241,15 @@
       Block.prototype.type = TYPES.block;
 
       Block.initialize(function(options) {
-        return this.paragraph = options.paragraph;
+        this.paragraph = options.paragraph;
+        return this.text = '';
       });
 
-      Block.prototype.add = function() {
-        throw new Error('New line expected');
-      };
-
       Block.prototype.addText = function(text) {
-        if (this.children.length > 0) {
-          text = " " + text;
+        if (this.text !== '') {
+          this.text += ' ';
         }
-        return this._add(new Text({
-          text: text
-        }));
+        return this.text += text;
       };
 
       Block.prototype.template = function() {
@@ -155,10 +276,6 @@
 
       Article.initialize(function(options) {});
 
-      Article.prototype.add = function(node) {
-        return this._add(node);
-      };
-
       Article.prototype.template = function() {
         return this.$.elem = this.div(".article", null);
       };
@@ -181,12 +298,9 @@
         this.heading = new Block({
           indentation: options.indentation
         });
+        this.heading.setParent(this);
         return this.level = options.level;
       });
-
-      Section.prototype.add = function(node) {
-        return this._add(node);
-      };
 
       Section.prototype.template = function() {
         return this.$.elem = this.div(".section", function() {
@@ -217,6 +331,7 @@
           elem: options.elem,
           context: this
         }, this.template);
+        options.nodes[this.id] = this;
         this.heading.render({
           elem: this.elems.heading,
           nodes: options.nodes
@@ -278,10 +393,6 @@
         return this.ordered = options.ordered;
       });
 
-      ListItem.prototype.add = function(node) {
-        return this._add(node);
-      };
-
       ListItem.prototype.template = function() {
         return this.$.elem = this.li(".list-item", null);
       };
@@ -303,10 +414,6 @@
       });
 
       Sidenote.prototype.type = TYPES.sidenote;
-
-      Sidenote.prototype.add = function(node) {
-        return this._add(node);
-      };
 
       Sidenote.prototype.template = function() {
         return this.$.elem = this.div(".sidenote", null);
@@ -340,9 +447,11 @@
       };
 
       Media.prototype.template = function() {
-        return this.$.elem = this.img(".image", {
-          src: this.$.src,
-          alt: this.$.alt
+        return this.$.elem = this.div(".image-container", function() {
+          return this.$.elems.img = this.img(".image", {
+            src: this.$.src,
+            alt: this.$.alt
+          });
         });
       };
 
@@ -365,7 +474,9 @@
           elem: options.elem,
           context: this
         }, this.template);
-        this.elem.addEventListener('load', this.on.load);
+        options.nodes[this.id] = this;
+        console.log('image', this.id);
+        this.elems.img.addEventListener('load', this.on.load);
         return options.nodes[this.id] = this;
       };
 
@@ -373,6 +484,12 @@
 
     })(Node);
     Mod.set('Docscript.Text', Text);
+    Mod.set('Docscript.Bold', Bold);
+    Mod.set('Docscript.Italics', Italics);
+    Mod.set('Docscript.SuperScript', SuperScript);
+    Mod.set('Docscript.SubScript', SubScript);
+    Mod.set('Docscript.Code', Code);
+    Mod.set('Docscript.Link', Link);
     Mod.set('Docscript.Block', Block);
     Mod.set('Docscript.Section', Section);
     Mod.set('Docscript.List', List);

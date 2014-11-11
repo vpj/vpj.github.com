@@ -82,7 +82,7 @@
               line.type = TYPES.sidenote;
               i += 2;
             } else {
-              throw new Error('Unknown syntax');
+              --i;
             }
             break;
           case '*':
@@ -91,15 +91,15 @@
               line.type = TYPES.list;
               line.ordered = false;
             } else {
-              throw new Error('Unknown syntax');
+              --i;
             }
             break;
           case '!':
             ++i;
             line.type = TYPES.media;
-            break;
-          default:
-            line.type = TYPES.block;
+        }
+        if (line.type == null) {
+          line.type = TYPES.block;
         }
         line.text = (s.substr(i)).trim();
         return line;
