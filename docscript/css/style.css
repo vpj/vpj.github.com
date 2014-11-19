@@ -24,6 +24,10 @@
 .docscript .image-container img {
   max-width: 100%;
 }
+.docscript .special {
+  background: #e0e0e0;
+  padding: 10px;
+}
 .CodeMirror {
   background: #dedede;
   margin-bottom: 20px;
@@ -33,4 +37,7 @@
   font-weight: bold;
   font-family: monospace;
   color: #ff4444;
+}
+.preview {
+  overflow-y: scroll;
 }

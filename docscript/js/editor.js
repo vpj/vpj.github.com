@@ -27,7 +27,7 @@
                 }
               }, "Render");
             });
-            return this.div(".col-md-7", function() {
+            return this.$.elems.preview = this.div(".preview.col-md-7", function() {
               this.div(".row.error", function() {
                 return this.$.elems.errors = this.div(".col-md-12", null);
               });
@@ -61,15 +61,19 @@
         parser = new Parser({
           text: text
         });
+        parser.parse();
         try {
-          parser.parse();
+          if (false) {
+            parser.parse();
+          }
         } catch (_error) {
           e = _error;
           this.elems.errors.textContent = e.message;
           return;
         }
         this.elems.errors.textContent = '';
-        return parser.render(this.elems.previewMain, this.elems.previewSidebar);
+        parser.render(this.elems.previewMain, this.elems.previewSidebar);
+        return parser.positionSidenotes();
       };
 
       Editor.listen('setupEditor', function() {
@@ -84,6 +88,7 @@
         height = window.innerHeight;
         console.log(height);
         this.editor.setSize(null, "" + (height - 100) + "px");
+        this.elems.preview.style.maxHeight = "" + (height - 100) + "px";
         return this.editor.setValue(Sample);
       });
 

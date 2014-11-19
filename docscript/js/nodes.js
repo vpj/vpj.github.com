@@ -3,24 +3,29 @@
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Mod.require('Weya.Base', 'Weya', function(Base, Weya) {
-    var Article, Block, Bold, Code, Italics, Link, List, ListItem, Media, NODE_ID, Node, Section, Sidenote, SubScript, SuperScript, TYPES, Text;
+    var Article, Block, Bold, Code, CodeBlock, Html, Italics, Link, List, ListItem, Media, NODES, NODE_ID, Node, PREFIX, Section, Sidenote, Special, SubScript, SuperScript, TYPES, Text;
     NODE_ID = 0;
+    PREFIX = 'docscript_';
     TYPES = {
-      code: 'code',
+      sidenote: 'sidenote',
+      codeBlock: 'codeBlock',
+      special: 'special',
+      html: 'html',
+      section: 'section',
+      heading: 'heading',
       list: 'list',
       listItem: 'listItem',
       block: 'block',
-      sidenote: 'sidenote',
-      section: 'section',
-      heading: 'heading',
       media: 'media',
       bold: 'bold',
       italics: 'italics',
       superScript: 'superScript',
       subScript: 'subScript',
       code: 'code',
-      link: 'link'
+      link: 'link',
+      mediaInline: 'mediaInline'
     };
+    NODES = {};
     Node = (function(_super) {
       __extends(Node, _super);
 
@@ -36,7 +41,8 @@
         this.children = [];
         this.id = NODE_ID;
         this.elems = {};
-        return NODE_ID++;
+        NODE_ID++;
+        return NODES[this.id] = this;
       });
 
       Node.prototype.setParent = function(parent) {
@@ -45,10 +51,6 @@
 
       Node.prototype.parent = function() {
         return this._parent;
-      };
-
-      Node.prototype.onLoaded = function(callback) {
-        return callback();
       };
 
       Node.prototype._add = function(node) {
@@ -62,7 +64,7 @@
       };
 
       Node.prototype.template = function() {
-        return this.$.elem = this.div(".node", null);
+        return this.$.elem = this.div("#" + PREFIX + this.$.id + ".node", null);
       };
 
       Node.prototype.render = function(options) {
@@ -70,7 +72,6 @@
           elem: options.elem,
           context: this
         }, this.template);
-        options.nodes[this.id] = this;
         return this.renderChildren(this.elem, options);
       };
 
@@ -81,8 +82,7 @@
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           child = _ref[_i];
           _results.push(child.render({
-            elem: elem,
-            nodes: options.nodes
+            elem: elem
           }));
         }
         return _results;
@@ -107,7 +107,7 @@
       });
 
       Text.prototype.template = function() {
-        return this.$.elem = this.span(".text", this.$.text);
+        return this.$.elem = this.span("#" + PREFIX + this.$.id + ".text", this.$.text);
       };
 
       return Text;
@@ -125,7 +125,7 @@
       Bold.prototype.type = TYPES.bold;
 
       Bold.prototype.template = function() {
-        return this.$.elem = this.strong(".bold", null);
+        return this.$.elem = this.strong("#" + PREFIX + this.$.id + ".bold", null);
       };
 
       return Bold;
@@ -143,7 +143,7 @@
       Italics.prototype.type = TYPES.italics;
 
       Italics.prototype.template = function() {
-        return this.$.elem = this.em(".italics", null);
+        return this.$.elem = this.em("#" + PREFIX + this.$.id + ".italics", null);
       };
 
       return Italics;
@@ -161,7 +161,7 @@
       SuperScript.prototype.type = TYPES.superScript;
 
       SuperScript.prototype.template = function() {
-        return this.$.elem = this.sup(".superScript", null);
+        return this.$.elem = this.sup("#" + PREFIX + this.$.id + ".superScript", null);
       };
 
       return SuperScript;
@@ -179,7 +179,7 @@
       SubScript.prototype.type = TYPES.subScript;
 
       SubScript.prototype.template = function() {
-        return this.$.elem = this.sub(".subScript", null);
+        return this.$.elem = this.sub("#" + PREFIX + this.$.id + ".subScript", null);
       };
 
       return SubScript;
@@ -197,7 +197,7 @@
       Code.prototype.type = TYPES.code;
 
       Code.prototype.template = function() {
-        return this.$.elem = this.code(".code", null);
+        return this.$.elem = this.code("#" + PREFIX + this.$.id + ".code", null);
       };
 
       return Code;
@@ -221,7 +221,7 @@
       Link.prototype.type = TYPES.link;
 
       Link.prototype.template = function() {
-        return this.$.elem = this.a(".link", {
+        return this.$.elem = this.a("#" + PREFIX + this.$.id + ".link", {
           href: this.$.link
         }, this.$.text);
       };
@@ -254,13 +254,95 @@
 
       Block.prototype.template = function() {
         if (this.$.paragraph) {
-          return this.$.elem = this.p(".paragraph", null);
+          return this.$.elem = this.p("#" + PREFIX + this.$.id + ".paragraph", null);
         } else {
-          return this.$.elem = this.span(".block", null);
+          return this.$.elem = this.span("#" + PREFIX + this.$.id + ".block", null);
         }
       };
 
       return Block;
+
+    })(Node);
+    CodeBlock = (function(_super) {
+      __extends(CodeBlock, _super);
+
+      function CodeBlock() {
+        return CodeBlock.__super__.constructor.apply(this, arguments);
+      }
+
+      CodeBlock.extend();
+
+      CodeBlock.prototype.type = TYPES.codeBlock;
+
+      CodeBlock.initialize(function() {
+        return this.text = '';
+      });
+
+      CodeBlock.prototype.addText = function(text) {
+        if (this.text !== '') {
+          this.text += '\n';
+        }
+        return this.text += text;
+      };
+
+      CodeBlock.prototype.template = function() {
+        return this.$.elem = this.pre("#" + PREFIX + this.$.id + ".codeBlock", this.$.text);
+      };
+
+      return CodeBlock;
+
+    })(Node);
+    Special = (function(_super) {
+      __extends(Special, _super);
+
+      function Special() {
+        return Special.__super__.constructor.apply(this, arguments);
+      }
+
+      Special.extend();
+
+      Special.prototype.type = TYPES.special;
+
+      Special.prototype.template = function() {
+        return this.$.elem = this.div("#" + PREFIX + this.$.id + ".special", null);
+      };
+
+      return Special;
+
+    })(Node);
+    Html = (function(_super) {
+      __extends(Html, _super);
+
+      function Html() {
+        return Html.__super__.constructor.apply(this, arguments);
+      }
+
+      Html.extend();
+
+      Html.prototype.type = TYPES.html;
+
+      Html.initialize(function() {
+        return this.text = '';
+      });
+
+      Html.prototype.addText = function(text) {
+        if (this.text !== '') {
+          this.text += '\n';
+        }
+        return this.text += text;
+      };
+
+      Html.prototype.render = function(options) {
+        Weya({
+          elem: options.elem,
+          context: this
+        }, function() {
+          return this.$.elem = this.div("#" + PREFIX + this.$.id + ".html", null);
+        });
+        return this.elem.innerHTML = this.text;
+      };
+
+      return Html;
 
     })(Node);
     Article = (function(_super) {
@@ -277,7 +359,7 @@
       Article.initialize(function(options) {});
 
       Article.prototype.template = function() {
-        return this.$.elem = this.div(".article", null);
+        return this.$.elem = this.div("#" + PREFIX + this.$.id + ".article", null);
       };
 
       return Article;
@@ -303,7 +385,7 @@
       });
 
       Section.prototype.template = function() {
-        return this.$.elem = this.div(".section", function() {
+        return this.$.elem = this.div("#" + PREFIX + this.$.id + ".section", function() {
           var h;
           h = (function() {
             switch (this.$.level) {
@@ -331,10 +413,8 @@
           elem: options.elem,
           context: this
         }, this.template);
-        options.nodes[this.id] = this;
         this.heading.render({
-          elem: this.elems.heading,
-          nodes: options.nodes
+          elem: this.elems.heading
         });
         return this.renderChildren(this.elems.content, options);
       };
@@ -369,9 +449,9 @@
 
       List.prototype.template = function() {
         if (this.$.ordered) {
-          return this.$.elem = this.ol(".list", null);
+          return this.$.elem = this.ol("#" + PREFIX + this.$.id + ".list", null);
         } else {
-          return this.$.elem = this.ul(".list", null);
+          return this.$.elem = this.ul("#" + PREFIX + this.$.id + ".list", null);
         }
       };
 
@@ -394,7 +474,7 @@
       });
 
       ListItem.prototype.template = function() {
-        return this.$.elem = this.li(".list-item", null);
+        return this.$.elem = this.li("#" + PREFIX + this.$.id + ".list-item", null);
       };
 
       return ListItem;
@@ -416,7 +496,7 @@
       Sidenote.prototype.type = TYPES.sidenote;
 
       Sidenote.prototype.template = function() {
-        return this.$.elem = this.div(".sidenote", null);
+        return this.$.elem = this.div("#" + PREFIX + this.$.id + ".sidenote", null);
       };
 
       return Sidenote;
@@ -434,10 +514,7 @@
       Media.initialize(function(options) {
         this.src = options.media.src;
         this.alt = options.media.alt;
-        if (this.alt == null) {
-          this.alt = options.media.src;
-        }
-        return this.loaded = false;
+        return this.alt != null ? this.alt : this.alt = options.media.src;
       });
 
       Media.prototype.type = TYPES.media;
@@ -447,7 +524,7 @@
       };
 
       Media.prototype.template = function() {
-        return this.$.elem = this.div(".image-container", function() {
+        return this.$.elem = this.div("#" + PREFIX + this.$.id + ".image-container", function() {
           return this.$.elems.img = this.img(".image", {
             src: this.$.src,
             alt: this.$.alt
@@ -455,29 +532,11 @@
         });
       };
 
-      Media.prototype.onLoaded = function(callback) {
-        this.onLoadCallback = callback;
-        if (this.loaded) {
-          return this.onLoadCallback();
-        }
-      };
-
-      Media.listen('load', function() {
-        this.loaded = true;
-        if (this.onLoadCallback != null) {
-          return this.onLoadCallback();
-        }
-      });
-
       Media.prototype.render = function(options) {
-        Weya({
+        return Weya({
           elem: options.elem,
           context: this
         }, this.template);
-        options.nodes[this.id] = this;
-        console.log('image', this.id);
-        this.elems.img.addEventListener('load', this.on.load);
-        return options.nodes[this.id] = this;
       };
 
       return Media;
@@ -497,6 +556,10 @@
     Mod.set('Docscript.Sidenote', Sidenote);
     Mod.set('Docscript.Article', Article);
     Mod.set('Docscript.Media', Media);
+    Mod.set('Docscript.CodeBlock', CodeBlock);
+    Mod.set('Docscript.Special', Special);
+    Mod.set('Docscript.Html', Html);
+    Mod.set('Docscript.NODES', NODES);
     return Mod.set('Docscript.TYPES', TYPES);
   });
 

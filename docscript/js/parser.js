@@ -2,14 +2,13 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  Mod.require('Weya.Base', 'Docscript.TYPES', 'Docscript.Text', 'Docscript.Bold', 'Docscript.Italics', 'Docscript.SuperScript', 'Docscript.SubScript', 'Docscript.Code', 'Docscript.Link', 'Docscript.Block', 'Docscript.Section', 'Docscript.List', 'Docscript.ListItem', 'Docscript.Sidenote', 'Docscript.Article', 'Docscript.Media', 'Docscript.Reader', function(Base, TYPES, Text, Bold, Italics, SuperScript, SubScript, Code, Link, Block, Section, List, ListItem, Sidenote, Article, Media, Reader) {
+  Mod.require('Weya.Base', 'Docscript.TYPES', 'Docscript.Text', 'Docscript.Bold', 'Docscript.Italics', 'Docscript.SuperScript', 'Docscript.SubScript', 'Docscript.Code', 'Docscript.Link', 'Docscript.Block', 'Docscript.Section', 'Docscript.List', 'Docscript.ListItem', 'Docscript.Sidenote', 'Docscript.Article', 'Docscript.Media', 'Docscript.CodeBlock', 'Docscript.Special', 'Docscript.Html', 'Docscript.NODES', 'Docscript.Reader', function(Base, TYPES, Text, Bold, Italics, SuperScript, SubScript, Code, Link, Block, Section, List, ListItem, Sidenote, Article, Media, CodeBlock, Special, Html, NODES, Reader) {
     var Parser, TOKENS, TOKEN_MATCHES;
     TOKENS = {
       bold: Bold,
       italics: Italics,
       superScript: SuperScript,
-      subScript: SubScript,
-      code: Code
+      subScript: SubScript
     };
     TOKEN_MATCHES = {
       bold: '**',
@@ -46,10 +45,10 @@
         var block, e, _i, _len, _ref, _results;
         while (this.reader.has()) {
           try {
-            this.process();
+            this.processLine();
           } catch (_error) {
             e = _error;
-            throw new Error("Line " + (this.reader.n + 1) + ": " + e.message);
+            throw e;
           }
           this.reader.next();
         }
@@ -127,6 +126,15 @@
                   this.node.setLink(this.parseLink(text.substr(last, cur - last)));
                   this.node = this.node.parent();
                 }
+                break;
+              case 'code':
+                add();
+                this.addNode(new Code({}));
+                last = i;
+                cur = i = text.indexOf(TOKEN_MATCHES.code, i);
+                add();
+                this.node = this.node.parent();
+                i += TOKEN_MATCHES.code.length;
             }
           }
           last = i;
@@ -163,7 +171,7 @@
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           sidenote = _ref[_i];
           elemSidenote = sidenote.elem;
-          elemContent = this.nodes[sidenote.link].elem;
+          elemContent = NODES[sidenote.link].elem;
           topSidenote = this.getOffsetTop(elemSidenote, this.elems.sidebar);
           topContent = this.getOffsetTop(elemContent, this.elems.main);
           if (topContent > topSidenote) {
@@ -192,52 +200,67 @@
       };
 
       Parser.prototype.render = function(main, sidebar) {
-        var sidenote, _i, _len, _ref;
+        var sidenote, _i, _len, _ref, _results;
         this.elems = {
           main: main,
           sidebar: sidebar
         };
-        this.nodes = {};
         this.root.render({
-          elem: main,
-          nodes: this.nodes
+          elem: main
         });
         _ref = this.sidenotes;
+        _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           sidenote = _ref[_i];
-          sidenote.render({
-            elem: sidebar,
-            nodes: this.nodes
-          });
+          _results.push(sidenote.render({
+            elem: sidebar
+          }));
         }
+        return _results;
+      };
+
+      Parser.prototype.positionSidenotes = function() {
         return window.requestAnimationFrame(this.on.rendered);
       };
 
       Parser.listen('rendered', function() {
-        var id, loaded, n, node, _ref, _results;
+        var a, check, i, img, loaded, mainImg, n, sidebarImg, _i, _j, _k, _len, _len1, _len2;
+        mainImg = this.elems.main.getElementsByTagName('img');
+        sidebarImg = this.elems.sidebar.getElementsByTagName('img');
+        a = [];
+        for (_i = 0, _len = mainImg.length; _i < _len; _i++) {
+          i = mainImg[_i];
+          a.push(i);
+        }
+        for (_j = 0, _len1 = sidebarImg.length; _j < _len1; _j++) {
+          i = sidebarImg[_j];
+          a.push(i);
+        }
         n = 0;
-        loaded = (function(_this) {
+        check = (function(_this) {
           return function() {
-            n--;
-            if (n === 0) {
+            if (n === a.length) {
               return _this.setFills();
             }
           };
         })(this);
-        for (id in this.nodes) {
+        loaded = function() {
           n++;
+          return check();
+        };
+        for (_k = 0, _len2 = a.length; _k < _len2; _k++) {
+          img = a[_k];
+          if (!img.complete) {
+            img.addEventListener('load', loaded);
+          } else {
+            n++;
+          }
         }
-        _ref = this.nodes;
-        _results = [];
-        for (id in _ref) {
-          node = _ref[id];
-          _results.push(node.onLoaded(loaded));
-        }
-        return _results;
+        return check();
       });
 
-      Parser.prototype.process = function() {
-        var id, line, n;
+      Parser.prototype.processLine = function() {
+        var id, line, n, prev;
         line = this.reader.get();
         if (line.empty) {
           if (this.node.type === TYPES.block) {
@@ -253,9 +276,45 @@
           }
         }
         switch (line.type) {
-          case TYPES.code:
-            this.addNode(new Code({
+          case TYPES.codeBlock:
+            prev = this.node;
+            this.addNode(new CodeBlock({
               indentation: 0
+            }));
+            while (true) {
+              this.reader.next();
+              if (!this.reader.has()) {
+                break;
+              }
+              line = this.reader.get();
+              if (line.type === TYPES.codeBlock) {
+                break;
+              }
+              this.node.addText(line.line);
+            }
+            this.node = prev;
+            break;
+          case TYPES.html:
+            prev = this.node;
+            this.addNode(new Html({
+              indentation: 0
+            }));
+            while (true) {
+              this.reader.next();
+              if (!this.reader.has()) {
+                break;
+              }
+              line = this.reader.get();
+              if (line.type === TYPES.html) {
+                break;
+              }
+              this.node.addText(line.line);
+            }
+            this.node = prev;
+            break;
+          case TYPES.special:
+            this.addNode(new Special({
+              indentation: line.indentation + 1
             }));
             break;
           case TYPES.list:
