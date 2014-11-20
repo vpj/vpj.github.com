@@ -4,8 +4,6 @@
 
   Mod.require('Weya.Base', 'Weya', function(Base, Weya) {
     var Article, Block, Bold, Code, CodeBlock, Html, Italics, Link, List, ListItem, Media, NODES, NODE_ID, Node, PREFIX, Section, Sidenote, Special, SubScript, SuperScript, TYPES, Text;
-    NODE_ID = 0;
-    PREFIX = 'docscript_';
     TYPES = {
       sidenote: 'sidenote',
       codeBlock: 'codeBlock',
@@ -26,6 +24,8 @@
       mediaInline: 'mediaInline'
     };
     NODES = {};
+    NODE_ID = 0;
+    PREFIX = 'docscript_';
     Node = (function(_super) {
       __extends(Node, _super);
 

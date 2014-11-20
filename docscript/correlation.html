@@ -1,0 +1,169 @@
+<!DOCTYPE html><html>
+ <head>
+  <meta charset="utf-8">
+  </meta>
+  <title>
+   Docscript
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </meta>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  </meta>
+  <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900,200italic,300italic,400italic,600italic,700italic,900italica" rel="stylesheet" type="text/css">
+  </link>
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+  </link>
+  <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  </link>
+  <link href="lib/fontawesome/css/font-awesome.min.css" rel="stylesheet">
+  </link>
+  <link href="lib/codemirror/codemirror.css" rel="stylesheet">
+  </link>
+  <link href="css/style.css" rel="stylesheet">
+  </link>
+  <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+  </link>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-37809145-1', 'auto');
+ga('send', 'pageview');
+  </script>
+ </head>
+ <body>
+  <div class="container">
+   <div id="docscript-container" class="row docscript">
+    <div id="main" class="col-xs-9">
+     <div id="docscript_0" class="article"><div id="docscript_1" class="section"><h1 class="heading"><span id="docscript_2" class="block"><span id="docscript_68" class="text">Correlation Test</span></span></h1><div class="content"><p id="docscript_3" class="paragraph"><em id="docscript_69" class="italics"><span id="docscript_70" class="text">Correlation test observes if the payments to a vendor has a similar pattern compared to payments to other vendors.</span></em></p><div id="docscript_4" class="special"><div id="docscript_5" class="section"><h2 class="heading"><span id="docscript_6" class="block"><strong id="docscript_71" class="bold"><span id="docscript_72" class="text">Example Findings</span></strong></span></h2><div class="content"></div></div><p id="docscript_7" class="paragraph"><em id="docscript_73" class="italics"><span id="docscript_74" class="text">Ghost Vendors: Fake vendors where there is no co-relation to the average vendor pattern.</span></em></p><p id="docscript_8" class="paragraph"><span id="docscript_75" class="text">Transportation cost should correlate with company’s production pattern. Labor cost should correlate with company’s production pattern.</span></p></div><div id="docscript_9" class="section"><h2 class="heading"><span id="docscript_10" class="block"><span id="docscript_76" class="text">Correlation</span></span></h2><div class="content"><p id="docscript_11" class="paragraph"><span id="docscript_77" class="text">The correlation between the payment pattern to a particular vendor and total payments to all vendors is calculated. The correlation is a figure between -1 and +1.</span></p><ul id="docscript_12" class="list"><li id="docscript_13" class="list-item"><span id="docscript_14" class="block"><strong id="docscript_78" class="bold"><span id="docscript_79" class="text">Correlation of +1</span></strong></span><p id="docscript_18" class="paragraph"><span id="docscript_82" class="text">A correlation of +1 means that the pattern of payments to the vendor and the pattern of total payments match 100%.</span></p><p id="docscript_19" class="paragraph"><span id="docscript_83" class="text">That is, when payments to the vendor are low total payments are low, and when payments to the vendor are high total payments are high. In other words, the graphs of the two payments patterns can be coincided with each other if one of them is scaled and shifted.</span></p></li><li id="docscript_20" class="list-item"><span id="docscript_21" class="block"><strong id="docscript_84" class="bold"><span id="docscript_85" class="text">Correlation of -1</span></strong></span><p id="docscript_25" class="paragraph"><span id="docscript_88" class="text">This is the exact opposite of +1 correlation.</span></p><p id="docscript_26" class="paragraph"><span id="docscript_89" class="text">The payments to the vendor exactly match the inverted total payment pattern. Payments to the vendor are high when total payments are low, and payments to the vendor are low when total payments are high.</span></p></li><li id="docscript_27" class="list-item"><span id="docscript_28" class="block"><strong id="docscript_90" class="bold"><span id="docscript_91" class="text">Correlation of 0</span></strong></span><p id="docscript_32" class="paragraph"><span id="docscript_94" class="text">A correlation of 0 signals that vendor payment pattern has no relationship to total payment pattern.</span></p><p id="docscript_33" class="paragraph"><span id="docscript_95" class="text">The plot below shows an example of a near-zero correlation.</span></p></li></ul></div></div><div id="docscript_34" class="section"><h2 class="heading"><span id="docscript_35" class="block"><span id="docscript_96" class="text">Interpreting Results</span></span></h2><div class="content"><ul id="docscript_36" class="list"><li id="docscript_37" class="list-item"><span id="docscript_38" class="block"><strong id="docscript_97" class="bold"><span id="docscript_98" class="text">High Positive Correlation (Greater than +0.3)</span></strong></span><p id="docscript_39" class="paragraph"><span id="docscript_99" class="text">These are probably the main suppliers such as raw material suppliers and suppliers of other related goods or services such as transportation of raw materials, temporary labor and import/export tax.</span></p><p id="docscript_40" class="paragraph"><em id="docscript_100" class="italics"><span id="docscript_101" class="text">The risk level is low and hence the need for investigation is low.</span></em></p></li><li id="docscript_41" class="list-item"><span id="docscript_42" class="block"><strong id="docscript_102" class="bold"><span id="docscript_103" class="text">Low Positive Correlation (Less than +0.1)</span></strong></span><p id="docscript_43" class="paragraph"><span id="docscript_104" class="text">Usually, these are the vendors who have a fixed supply with some component of variability based on the production rates of the company. Examples are electricity, water and tools supply. Also, the supplies with high levels of stocks will fall into this category.</span></p><p id="docscript_44" class="paragraph"><em id="docscript_105" class="italics"><span id="docscript_106" class="text">These can also be considered as low risk, and only investigated if the type of vendor does not fall into this category.</span></em></p></li><li id="docscript_45" class="list-item"><span id="docscript_46" class="block"><strong id="docscript_107" class="bold"><span id="docscript_108" class="text">Zero Correlation (Between -0.1 and +0.1)</span></strong></span><p id="docscript_47" class="paragraph"><span id="docscript_109" class="text">Zero correlation usually happens with vendors who supply at a fixed rate, for example office supplies. Fixed asset supplies such as new machinery also will have a near zero correlation.</span></p><p id="docscript_48" class="paragraph"><em id="docscript_110" class="italics"><span id="docscript_111" class="text">Anything other than these should be investigated, as there might be delayed and advance payments to manipulate accounts and fraudulent payments to fake vendors.</span></em></p></li><li id="docscript_49" class="list-item"><span id="docscript_50" class="block"><strong id="docscript_112" class="bold"><span id="docscript_113" class="text">Negative Correlation (Less than -0.1)</span></strong></span><p id="docscript_51" class="paragraph"><span id="docscript_114" class="text">The level of risk is high. Maintenance might fall into this category since it is done when the machinery have free time. If there are products manufactured during seasons when the demand for the main products, and vendors related to those will fall into this category.</span></p><p id="docscript_52" class="paragraph"><em id="docscript_115" class="italics"><span id="docscript_116" class="text">Any vendor in this category is worth being investigated, to find fraud or at least to get insights into payment patterns.</span></em></p></li></ul></div></div><div id="docscript_53" class="section"><h2 class="heading"><span id="docscript_54" class="block"><span id="docscript_117" class="text">Correlation Test on Forestpin</span></span></h2><div class="content"><p id="docscript_55" class="paragraph"><span id="docscript_118" class="text">Click the </span><strong id="docscript_119" class="bold"><span id="docscript_120" class="text">VENDORS: PAYMENT VALUE</span></strong><span id="docscript_121" class="text"> tile and select a vendor (</span><strong id="docscript_122" class="bold"><span id="docscript_123" class="text">Woodville</span></strong><span id="docscript_124" class="text"> in this example), and then click the show data related only to that specific vendor.</span></p><p id="docscript_59" class="paragraph"><span id="docscript_127" class="text">Now you should see the main screen results for the picked vendor, </span><strong id="docscript_128" class="bold"><span id="docscript_129" class="text">Woodville</span></strong><span id="docscript_130" class="text">, as shown below:</span></p><div id="docscript_60" class="image-container"><img class="image" src="http://i.imgur.com/cjN8Xre.png" alt="http://i.imgur.com/cjN8Xre.png"></div><p id="docscript_61" class="paragraph"><span id="docscript_131" class="text">Pick on the </span><strong id="docscript_132" class="bold"><span id="docscript_133" class="text">PAYMENT CORRELATION ANALYSIS</span></strong><span id="docscript_134" class="text"> test and you will see results of the correlation test as shown below. This test shows the correlation between all vendor invoices and the vendor </span><strong id="docscript_135" class="bold"><span id="docscript_136" class="text">Woodville</span></strong><span id="docscript_137" class="text">.</span></p><div id="docscript_65" class="image-container"><img class="image" src="http://i.imgur.com/t6vnJ4q.png" alt="http://i.imgur.com/t6vnJ4q.png"></div><p id="docscript_66" class="paragraph"><span id="docscript_140" class="text">The blue bars at the bottom represent the total invoice value by month. The whitelines on the top shows if both are totally correlated (Correlation +1) the amount of purchasing that should have been done. The bars on top show the actuals.</span></p><p id="docscript_67" class="paragraph"><span id="docscript_141" class="text">If the bars are green, then the vendor invoices are in a similar pattern to the total; If the bars are in red, it's the opposite.</span></p></div></div></div></div></div>
+    </div>
+    <div id="sidebar" class="col-xs-3">
+     <div id="docscript_15" class="sidenote"><div id="docscript_16" class="image-container"><img class="image" src="http://i.imgur.com/ScyEcvl.png" alt="http://i.imgur.com/ScyEcvl.png"></div><p id="docscript_17" class="paragraph"><em id="docscript_80" class="italics"><span id="docscript_81" class="text">Correlation of +1</span></em></p></div><div id="docscript_22" class="sidenote"><div id="docscript_23" class="image-container"><img class="image" src="http://i.imgur.com/dlW9dwk.png" alt="http://i.imgur.com/dlW9dwk.png"></div><p id="docscript_24" class="paragraph"><em id="docscript_86" class="italics"><span id="docscript_87" class="text">Correlation of -1</span></em></p></div><div id="docscript_29" class="sidenote"><div id="docscript_30" class="image-container"><img class="image" src="http://i.imgur.com/z2gWKfg.png" alt="http://i.imgur.com/z2gWKfg.png"></div><p id="docscript_31" class="paragraph"><em id="docscript_92" class="italics"><span id="docscript_93" class="text">Correlation of 0</span></em></p></div><div id="docscript_56" class="sidenote"><div id="docscript_57" class="image-container"><img class="image" src="http://i.imgur.com/ezLQKo9.png" alt="http://i.imgur.com/ezLQKo9.png"></div><p id="docscript_58" class="paragraph"><em id="docscript_125" class="italics"><span id="docscript_126" class="text"> Vendors: Payment Value Tile</span></em></p></div><div id="docscript_62" class="sidenote"><div id="docscript_63" class="image-container"><img class="image" src="http://i.imgur.com/GtAfhPK.png" alt="http://i.imgur.com/GtAfhPK.png"></div><p id="docscript_64" class="paragraph"><em id="docscript_138" class="italics"><span id="docscript_139" class="text">Payment Correlation Analysis Tile</span></em></p></div>
+    </div>
+   </div>
+  </div>
+  <div id="code" style="display:none;">
+   #Correlation Test
+
+ --Correlation test observes if the payments to a vendor has a similar pattern compared to payments to other vendors.
+
+ +++
+  ##**Example Findings
+
+  --Ghost Vendors: Fake vendors where there is no co-relation to the average vendor pattern.
+
+  Transportation cost should correlate with company’s production pattern. Labor cost should correlate with company’s production pattern.
+
+
+ ##Correlation
+
+  The correlation between the payment pattern to a particular vendor and total payments to all vendors is calculated. The correlation is a figure between -1 and +1.
+
+  * **Correlation of +1
+
+   >>>
+   !http://i.imgur.com/ScyEcvl.png
+   --Correlation of +1
+   >>>
+
+   A correlation of +1 means that the pattern of payments to the vendor and the pattern of total payments match 100%.
+
+   That is, when payments to the vendor are low total payments are low, and when payments to the vendor are high total payments are high. In other words, the graphs of the two payments patterns can be coincided with each other if one of them is scaled and shifted.
+
+  * **Correlation of -1
+
+   >>>
+   !http://i.imgur.com/dlW9dwk.png
+   --Correlation of -1
+   >>>
+
+   This is the exact opposite of +1 correlation.
+
+   The payments to the vendor exactly match the inverted total payment pattern. Payments to the vendor are high when total payments are low, and payments to the vendor are low when total payments are high.
+
+  * **Correlation of 0
+
+   >>>
+   !http://i.imgur.com/z2gWKfg.png
+   --Correlation of 0
+   >>>
+
+   A correlation of 0 signals that vendor payment pattern has no relationship to total payment pattern.
+
+   The plot below shows an example of a near-zero correlation.
+
+
+ ##Interpreting Results
+
+  * **High Positive Correlation (Greater than +0.3)
+
+   These are probably the main suppliers such as raw material suppliers and suppliers of other related goods or services such as transportation of raw materials, temporary labor and import/export tax.
+
+   --The risk level is low and hence the need for investigation is low.
+
+  * **Low Positive Correlation (Less than +0.1)
+
+   Usually, these are the vendors who have a fixed supply with some component of variability based on the production rates of the company. Examples are electricity, water and tools supply. Also, the supplies with high levels of stocks will fall into this category.
+
+   --These can also be considered as low risk, and only investigated if the type of vendor does not fall into this category.
+
+  * **Zero Correlation (Between -0.1 and +0.1)
+
+   Zero correlation usually happens with vendors who supply at a fixed rate, for example office supplies. Fixed asset supplies such as new machinery also will have a near zero correlation.
+
+   --Anything other than these should be investigated, as there might be delayed and advance payments to manipulate accounts and fraudulent payments to fake vendors.
+
+  * **Negative Correlation (Less than -0.1)
+
+   The level of risk is high. Maintenance might fall into this category since it is done when the machinery have free time. If there are products manufactured during seasons when the demand for the main products, and vendors related to those will fall into this category.
+
+   --Any vendor in this category is worth being investigated, to find fraud or at least to get insights into payment patterns.
+
+
+ ##Correlation Test on Forestpin
+
+  Click the **VENDORS: PAYMENT VALUE** tile and select a vendor (**Woodville** in this example), and then click the show data related only to that specific vendor.
+
+  >>>
+  !http://i.imgur.com/ezLQKo9.png
+  -- Vendors: Payment Value Tile
+  >>>
+
+  Now you should see the main screen results for the picked vendor, **Woodville**, as shown below:
+
+  !http://i.imgur.com/cjN8Xre.png
+
+  Pick on the **PAYMENT CORRELATION ANALYSIS** test and you will see results of the correlation test as shown below. This test shows the correlation between all vendor invoices and the vendor **Woodville**.
+
+  >>>
+  !http://i.imgur.com/GtAfhPK.png
+  --Payment Correlation Analysis Tile
+  >>>
+
+  !http://i.imgur.com/t6vnJ4q.png
+
+
+  The blue bars at the bottom represent the total invoice value by month. The whitelines on the top shows if both are totally correlated (Correlation +1) the amount of purchasing that should have been done. The bars on top show the actuals.
+
+  If the bars are green, then the vendor invoices are in a similar pattern to the total; If the bars are in red, it's the opposite.
+
+
+  </div>
+  <script src="lib/weya/weya.js">
+  </script>
+  <script src="lib/weya/base.js">
+  </script>
+  <script src="lib/mod/mod.js">
+  </script>
+  <script src="js/static.js?v=9">
+  </script>
+  <script src="js/parser.js?v=9">
+  </script>
+  <script src="js/reader.js?v=9">
+  </script>
+  <script src="js/nodes.js?v=9">
+  </script>
+ </body>
+</html>

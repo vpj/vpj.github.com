@@ -73,7 +73,11 @@
         }
         this.elems.errors.textContent = '';
         parser.render(this.elems.previewMain, this.elems.previewSidebar);
-        return parser.positionSidenotes();
+        return window.requestAnimationFrame(function() {
+          return parser.mediaLoaded(function() {
+            return parser.setFills();
+          });
+        });
       };
 
       Editor.listen('setupEditor', function() {

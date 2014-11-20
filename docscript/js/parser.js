@@ -3,7 +3,8 @@
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Mod.require('Weya.Base', 'Docscript.TYPES', 'Docscript.Text', 'Docscript.Bold', 'Docscript.Italics', 'Docscript.SuperScript', 'Docscript.SubScript', 'Docscript.Code', 'Docscript.Link', 'Docscript.Block', 'Docscript.Section', 'Docscript.List', 'Docscript.ListItem', 'Docscript.Sidenote', 'Docscript.Article', 'Docscript.Media', 'Docscript.CodeBlock', 'Docscript.Special', 'Docscript.Html', 'Docscript.NODES', 'Docscript.Reader', function(Base, TYPES, Text, Bold, Italics, SuperScript, SubScript, Code, Link, Block, Section, List, ListItem, Sidenote, Article, Media, CodeBlock, Special, Html, NODES, Reader) {
-    var Parser, TOKENS, TOKEN_MATCHES;
+    var PREFIX, Parser, TOKENS, TOKEN_MATCHES;
+    PREFIX = 'docscript_';
     TOKENS = {
       bold: Bold,
       italics: Italics,
@@ -219,11 +220,26 @@
         return _results;
       };
 
-      Parser.prototype.positionSidenotes = function() {
-        return window.requestAnimationFrame(this.on.rendered);
+      Parser.prototype.collectElements = function(options) {
+        var id, node, _results;
+        this.elems = {
+          main: options.main,
+          sidebar: options.sidebar
+        };
+        _results = [];
+        for (id in NODES) {
+          node = NODES[id];
+          node.elem = document.getElementById("" + PREFIX + id);
+          if (node.elem == null) {
+            throw new Error("Element " + id + " not found");
+          } else {
+            _results.push(void 0);
+          }
+        }
+        return _results;
       };
 
-      Parser.listen('rendered', function() {
+      Parser.prototype.mediaLoaded = function(callback) {
         var a, check, i, img, loaded, mainImg, n, sidebarImg, _i, _j, _k, _len, _len1, _len2;
         mainImg = this.elems.main.getElementsByTagName('img');
         sidebarImg = this.elems.sidebar.getElementsByTagName('img');
@@ -240,7 +256,7 @@
         check = (function(_this) {
           return function() {
             if (n === a.length) {
-              return _this.setFills();
+              return callback();
             }
           };
         })(this);
@@ -257,7 +273,7 @@
           }
         }
         return check();
-      });
+      };
 
       Parser.prototype.processLine = function() {
         var id, line, n, prev;

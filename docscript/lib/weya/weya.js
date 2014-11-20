@@ -82,7 +82,7 @@
       return res;
     };
     append = function(ns, name, args) {
-      var arg, attrs, c, contentFunction, contentText, elem, i, idClass, pElem, _i, _j, _len, _len1, _ref;
+      var arg, attrs, c, className, contentFunction, contentText, elem, i, idClass, pElem, _i, _j, _len, _len1, _ref;
       idClass = null;
       contentText = null;
       attrs = null;
@@ -121,11 +121,16 @@
           elem.id = idClass.id;
         }
         if (idClass["class"] != null) {
+          className = '';
           _ref = idClass["class"];
           for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
             c = _ref[_j];
-            elem.classList.add(c);
+            if (className !== '') {
+              className += ' ';
+            }
+            className += "" + c;
           }
+          elem.className = className;
         }
       }
       if (attrs != null) {
@@ -344,6 +349,16 @@
     weya._buf = pBuf;
     weya.$ = pContext;
     return buf.join('');
+  };
+
+  Weya.setApi = function(api) {
+    var k, v, _results;
+    _results = [];
+    for (k in api) {
+      v = api[k];
+      _results.push(Api[k] = v);
+    }
+    return _results;
   };
 
   if (typeof module !== "undefined" && module !== null) {
