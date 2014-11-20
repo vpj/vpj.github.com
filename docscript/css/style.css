@@ -10,10 +10,27 @@
 .docscript h5,
 .docscript h6 {
   font-family: "Open Sans", sans-serif;
+  line-height: 1.2;
+}
+.docscript h1,
+.docscript h2 {
+  margin-top: 40px;
+}
+.docscript h3 {
+  margin-top: 30px;
+}
+.docscript h4,
+.docscript h5,
+.docscript h6 {
+  margin-top: 25px;
+}
+.docscript ol,
+.docscript ul {
+  padding-left: 20px;
 }
 .docscript .sidenote {
   font-size: 0.8em;
-  margin-bottom: 20px;
+  padding-bottom: 20px;
 }
 .docscript .fill {
   width: 100%;
