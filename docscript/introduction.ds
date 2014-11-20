@@ -14,13 +14,15 @@
  Initially we were working with editors such as Microsoft Word. It was alright
  when we had a couple of documents but it wasn't easy to maintain formats and
  manage them as larger documents came in. Then we started looking at
- alternatives such as <<http://en.wikipedia.org/wiki/LaTeX(LaTeX)>>
+ alternatives like <<http://en.wikipedia.org/wiki/LaTeX(LaTeX)>>
  and <<http://en.wikipedia.org/wiki/Markdown(Markdown)>>.
 
  Both these options would make managing the documentations much easier. The
  documents could be version controlled with **git**, which lets us do a number
- things such as branching, etc. Although LeTeX gives a lot of flexibility,
- it was a little too complicated, especially for non-technical writers.
+ things: version control, branching, collaboration, etc. Although LeTeX gives
+ a lot of flexibility,  it was a little too complicated,
+ especially for non-technical writers.
+
  Markdown on the other hand was much simpler but didn't support some of the key
  features we wanted. Markdown doesn't work well when printing. It breaks pages
  random places. The other problem was that Markdown didn't support
@@ -74,7 +76,7 @@
    #####**<<https://github.com/vpj/docscript(Fork me on github)>>
   >>>
 
-  **<<http://vpj.github.io/docscript/inroduction.ds(Download the source code of this document)>>
+  **<<http://vpj.github.io/docscript/introduction.ds(Download the source code of this document)>>
 
   Here are some of the sample documents we've created:
 
@@ -91,7 +93,7 @@
   ``git submodule update`` after cloning docscript.
 
   >>>
-   A few npm packeges such as ``optimist`` are also required.
+   A few npm packeges such as ``optimist`` are required.
   >>>
 
 
@@ -146,8 +148,8 @@
      >>>
 
   Althought indentation doesn't help much in standard rendering except in a
-  a few cases such as lists it's has a number of of other uses. It lets us
-  programmetically set page breaks when printing (This is not implemented yet).
+  a few cases (e.g. lists) it's has a number of of other uses. It lets us
+  programmetically set page breaks when printing (not implemented yet).
   Other advantage is we can use **code folding** when editing; which come handy
   when working with large documents.
 
@@ -163,11 +165,11 @@
    --Tweet this button in a sidenote^^1^^
   >>>
 
-  We've also changed some syntaxes of Markdown, such as ``<<`` and ``>>`` for
-  links instead of ``[]()`` of markdown, because we felt it was a little more
+  We've changed some syntaxes of Markdown; for instance, ``<<`` and ``>>`` are
+  used for links instead of ``[]()``, because we felt it was a little more
   intuitive (resemblence with HTML tags).
 
-  Docscript also introduces HTML blocks marked by ```<<<```, where you can add
+  Docscript introduces HTML blocks marked by ```<<<```, where you can add
   any HTML content.
 
   >>>
@@ -178,7 +180,7 @@
 
   ###Headings
 
-   This is very much like Markdown. ``#`` for level 1 headings ```##`` for
+   Headings have the same syntax as Markdown. ``#`` for level 1 headings ```##`` for
    level 2 headings and so on. The content that belongs to the heading should
    indented.
 
@@ -202,7 +204,7 @@
   ###List
 
    Ordered lists begin with ``- `` while unordered lists begin with ``* ``.
-   Since lists are also structured with indentations, it's easy to have lists
+   Since lists can be structured with indentations, it's easy to have lists
    within lists.
 
    ```
@@ -374,8 +376,8 @@
  ###**Future Plans
 
   We need to add **inline images** to include small illustrations within text.
-  I also plan on supporting comments, so that we can include notes that are
-  not present in the rendered document. I was also thinking of adding a
+  I plan on supporting comments as well. So that we can include notes that are
+  not present in the rendered document. I might add a
   shorthand for sidenotes; for example,
 
   ```
@@ -385,8 +387,8 @@
   ```
 
   A lot of work need to be done on the CLI to render multiple files and
-  to compose large document based on a number of files. I also intend to use
+  to compose large document based on a number of files. I am thinking of using
   this for my blog.
 
-  We also plan on creating syntax files for vim.
+  We also want to creating syntax files for vim.
 
