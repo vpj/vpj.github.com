@@ -276,7 +276,7 @@
       };
 
       Parser.prototype.processLine = function() {
-        var id, line, n, prev;
+        var id, indent, line, n;
         line = this.reader.get();
         if (line.empty) {
           if (this.node.type === TYPES.block) {
@@ -291,11 +291,16 @@
             throw new Error('Invalid indentation');
           }
         }
+        if (this.node.type === TYPES.list) {
+          if (line.type !== TYPES.list) {
+            this.node = this.node.parent();
+          }
+        }
         switch (line.type) {
           case TYPES.codeBlock:
-            prev = this.node;
+            indent = line.indentation + 1;
             this.addNode(new CodeBlock({
-              indentation: 0
+              indentation: line.indentation + 1
             }));
             while (true) {
               this.reader.next();
@@ -303,17 +308,19 @@
                 break;
               }
               line = this.reader.get();
+              if (!line.empty && line.indentation < indent) {
+                indent = line.indentation;
+              }
               if (line.type === TYPES.codeBlock) {
                 break;
               }
-              this.node.addText(line.line);
+              this.node.addText(line.line.substr(indent));
             }
-            this.node = prev;
             break;
           case TYPES.html:
-            prev = this.node;
+            indent = line.indentation + 1;
             this.addNode(new Html({
-              indentation: 0
+              indentation: line.indentation + 1
             }));
             while (true) {
               this.reader.next();
@@ -321,12 +328,14 @@
                 break;
               }
               line = this.reader.get();
+              if (!line.empty && line.indentation < indent) {
+                indent = line.indentation;
+              }
               if (line.type === TYPES.html) {
                 break;
               }
-              this.node.addText(line.line);
+              this.node.addText(line.line.substr(indent));
             }
-            this.node = prev;
             break;
           case TYPES.special:
             this.addNode(new Special({

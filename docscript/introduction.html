@@ -1,0 +1,427 @@
+<!DOCTYPE html><html>
+ <head>
+  <meta charset="utf-8">
+  </meta>
+  <title>
+   Docscript
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </meta>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  </meta>
+  <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900,200italic,300italic,400italic,600italic,700italic,900italica" rel="stylesheet" type="text/css">
+  </link>
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+  </link>
+  <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  </link>
+  <link href="lib/fontawesome/css/font-awesome.min.css" rel="stylesheet">
+  </link>
+  <link href="lib/codemirror/codemirror.css" rel="stylesheet">
+  </link>
+  <link href="css/style.css" rel="stylesheet">
+  </link>
+  <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+  </link>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-37809145-1', 'auto');
+ga('send', 'pageview');
+  </script>
+ </head>
+ <body>
+  <div class="container">
+   <div id="docscript-container" class="row docscript">
+    <div id="main" class="col-xs-9">
+     <div id="docscript_0" class="article"><div id="docscript_1" class="section"><h1 class="heading"><span id="docscript_2" class="block"><span id="docscript_147" class="text">Markdown like syntax for Edward Tufte style document</span></span></h1><div class="content"><p id="docscript_5" class="paragraph"><span id="docscript_150" class="text">We started working on a documentation engine to create documents such as </span><em id="docscript_151" class="italics"><span id="docscript_152" class="text">printed user manuals</span></em><span id="docscript_153" class="text">, </span><em id="docscript_154" class="italics"><span id="docscript_155" class="text">getting started guides</span></em><span id="docscript_156" class="text">, </span><em id="docscript_157" class="italics"><span id="docscript_158" class="text">online help</span></em><span id="docscript_159" class="text">, </span><em id="docscript_160" class="italics"><span id="docscript_161" class="text">training handouts</span></em><span id="docscript_162" class="text"> and </span><em id="docscript_163" class="italics"><span id="docscript_164" class="text">internal documents</span></em><span id="docscript_165" class="text"> at </span><strong id="docscript_166" class="bold"><a id="docscript_167" class="link" href="http://www.forestpin.com">Foresptin</a></strong><span id="docscript_168" class="text">.</span></p><p id="docscript_9" class="paragraph"><span id="docscript_171" class="text">Initially we were working with editors such as Microsoft Word. It was alright when we had a couple of documents but it wasn't easy to maintain formats and manage them as larger documents came in. Then we started looking at alternatives such as </span><a id="docscript_172" class="link" href="http://en.wikipedia.org/wiki/LaTeX">LaTeX</a><span id="docscript_173" class="text"> and </span><a id="docscript_174" class="link" href="http://en.wikipedia.org/wiki/Markdown">Markdown</a><span id="docscript_175" class="text">.</span></p><p id="docscript_10" class="paragraph"><span id="docscript_176" class="text">Both these options would make managing the documentations much easier. The documents could be version controlled with </span><strong id="docscript_177" class="bold"><span id="docscript_178" class="text">git</span></strong><span id="docscript_179" class="text">, which lets us do a number things such as branching, etc. Although LeTeX gives a lot of flexibility, it was a little too complicated, especially for non-technical writers. Markdown on the other hand was much simpler but didn't support some of the key features we wanted. Markdown doesn't work well when printing. It breaks pages random places. The other problem was that Markdown didn't support sidenotes.</span></p><p id="docscript_11" class="paragraph"><a id="docscript_180" class="link" href="http://rmarkdown.rstudio.com/">R Markdown</a><span id="docscript_181" class="text"> suported formatting inspired by Tufte. This was the best already available option for us. We honestly didn't have very good reasons not to use it and develop our own.</span></p><p id="docscript_15" class="paragraph"><span id="docscript_188" class="text">However there were a few advantages of developing our own tool:</span></p><ul id="docscript_16" class="list"><li id="docscript_17" class="list-item"><span id="docscript_18" class="block"><span id="docscript_189" class="text">Give us total control</span></span><p id="docscript_19" class="paragraph"><span id="docscript_190" class="text">We would be able to modify the tool to perfectly fit our needs</span></p></li><li id="docscript_20" class="list-item"><span id="docscript_21" class="block"><span id="docscript_191" class="text">Mardown doesn't have a structure</span></span><p id="docscript_22" class="paragraph"><span id="docscript_192" class="text">For instance, in the following document,</span></p><pre id="docscript_23" class="codeBlock">#Heading1
+Intro
+#Heading2
+Paragraph
+#Heading3
+Paragraph
+Conclusion</pre><p id="docscript_24" class="paragraph"><span id="docscript_193" class="text">it is not clear whether </span><code id="docscript_194" class="code"><span id="docscript_195" class="text">Conclusion</span></code><span id="docscript_196" class="text"> belongs to </span><code id="docscript_197" class="code"><span id="docscript_198" class="text">Heading1</span></code><span id="docscript_199" class="text"> or </span><code id="docscript_200" class="code"><span id="docscript_201" class="text">Heading3</span></code><span id="docscript_202" class="text">. This again gives some trouble when paginating.</span></p></li><li id="docscript_25" class="list-item"><span id="docscript_26" class="block"><span id="docscript_203" class="text">R Markdown seemed to be use verbose syntaxes for some of the commonly needed functions</span></span></li></ul><div id="docscript_27" class="section"><h3 class="heading"><span id="docscript_28" class="block"><span id="docscript_204" class="text">DocScript Project</span></span></h3><div class="content"><p id="docscript_29" class="paragraph"><span id="docscript_205" class="text">Docscript is available on </span><a id="docscript_206" class="link" href="https://github.com/vpj/docscript">Github</a><span id="docscript_207" class="text">. It is not fully baked yet but you can give it a try.</span></p><p id="docscript_33" class="paragraph"><span id="docscript_209" class="text">Here are some of the sample documents we've created:</span></p><ul id="docscript_34" class="list"><li id="docscript_35" class="list-item"><span id="docscript_36" class="block"><a id="docscript_210" class="link" href="http://vpj.github.io/docscript/benford.html">Benford's Law Test</a></span></li><li id="docscript_37" class="list-item"><span id="docscript_38" class="block"><a id="docscript_211" class="link" href="http://vpj.github.io/docscript/dashboard.html">Forestpin Dashboard</a></span></li><li id="docscript_39" class="list-item"><span id="docscript_40" class="block"><a id="docscript_212" class="link" href="http://vpj.github.io/docscript/correlation.html">Correlation Test</a></span></li></ul></div></div><div id="docscript_41" class="section"><h2 class="heading"><span id="docscript_42" class="block"><span id="docscript_213" class="text">Design</span></span></h2><div class="content"><p id="docscript_43" class="paragraph"><span id="docscript_214" class="text">Docscript uses indentation to specify hierarchy of content.</span></p><div id="docscript_44" class="special"><div id="docscript_45" class="section"><h4 class="heading"><span id="docscript_46" class="block"><span id="docscript_215" class="text">Example</span></span></h4><div class="content"><pre id="docscript_47" class="codeBlock">###Heading1
+
+ Introduction
+
+ * Point one
+
+  Description about point one
+
+ ####Subtopic
+
+  Subtopic content
+
+  More subtopic content
+
+ This belongs to Heading1</pre></div></div></div><div id="docscript_61" class="special"></div><p id="docscript_62" class="paragraph"><span id="docscript_224" class="text">Althought indentation doesn't help much in standard rendering except in a a few cases such as lists it's has a number of of other uses. It lets us programmetically set page breaks when printing (This is not implemented yet). Other advantage is we can use </span><strong id="docscript_225" class="bold"><span id="docscript_226" class="text">code folding</span></strong><span id="docscript_227" class="text"> when editing; which come handy when working with large documents.</span></p><p id="docscript_63" class="paragraph"><span id="docscript_228" class="text">Another key feature of docscript is sidenotes. You can have notes as well as images in sidenotes.</span></p><p id="docscript_66" class="paragraph"><span id="docscript_230" class="text">We've also changed some syntaxes of Markdown, such as </span><code id="docscript_231" class="code"><span id="docscript_232" class="text">&lt;&lt;</span></code><span id="docscript_233" class="text"> and </span><code id="docscript_234" class="code"><span id="docscript_235" class="text">&gt;&gt;</span></code><span id="docscript_236" class="text"> for links instead of </span><code id="docscript_237" class="code"><span id="docscript_238" class="text">[]()</span></code><span id="docscript_239" class="text"> of markdown, because we felt it was a little more intuitive (resemblence with HTML tags).</span></p><p id="docscript_67" class="paragraph"><span id="docscript_240" class="text">Docscript also introduces HTML blocks marked by </span><code id="docscript_241" class="code"><span id="docscript_242" class="text">`&lt;&lt;&lt;</span></code><span id="docscript_243" class="text">`, where you can add any HTML content.</span></p></div></div><div id="docscript_68" class="section"><h2 class="heading"><span id="docscript_69" class="block"><span id="docscript_244" class="text">Reference</span></span></h2><div class="content"><div id="docscript_70" class="section"><h3 class="heading"><span id="docscript_71" class="block"><span id="docscript_245" class="text">Headings</span></span></h3><div class="content"><p id="docscript_72" class="paragraph"><span id="docscript_246" class="text">This is very much like Markdown. </span><code id="docscript_247" class="code"><span id="docscript_248" class="text">#</span></code><span id="docscript_249" class="text"> for level 1 headings </span><code id="docscript_250" class="code"><span id="docscript_251" class="text">`##</span></code><span id="docscript_252" class="text"> for level 2 headings and so on. The content that belongs to the heading should indented.</span></p></div></div><div id="docscript_76" class="section"><h3 class="heading"><span id="docscript_77" class="block"><span id="docscript_255" class="text">Paragraphs</span></span></h3><div class="content"><p id="docscript_78" class="paragraph"><span id="docscript_256" class="text">Again similar to Markdown. Paragraphs are separated by blank lines.</span></p></div></div><div id="docscript_81" class="section"><h3 class="heading"><span id="docscript_82" class="block"><span id="docscript_257" class="text">List</span></span></h3><div class="content"><p id="docscript_83" class="paragraph"><span id="docscript_258" class="text">Ordered lists begin with </span><code id="docscript_259" class="code"><span id="docscript_260" class="text">- </span></code><span id="docscript_261" class="text"> while unordered lists begin with </span><code id="docscript_262" class="code"><span id="docscript_263" class="text">* </span></code><span id="docscript_264" class="text">. Since lists are also structured with indentations, it's easy to have lists within lists.</span></p><pre id="docscript_84" class="codeBlock">- Introduction
+- Analyses
+
+ - Daily analysis
+ - Benford's law
+ - Timeseries analysis
+- Visualizations
+
+ * Treemap
+ * Bar charts
+ * Dashboard</pre></div></div><div id="docscript_107" class="section"><h3 class="heading"><span id="docscript_108" class="block"><span id="docscript_274" class="text">Media</span></span></h3><div class="content"><p id="docscript_109" class="paragraph"><span id="docscript_275" class="text">Images can be added with </span><code id="docscript_276" class="code"><span id="docscript_277" class="text">!</span></code><span id="docscript_278" class="text">.</span></p><pre id="docscript_110" class="codeBlock">!https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png</pre></div></div><div id="docscript_113" class="section"><h3 class="heading"><span id="docscript_114" class="block"><span id="docscript_279" class="text">Special Blocks</span></span></h3><div class="content"><p id="docscript_115" class="paragraph"><span id="docscript_280" class="text">This is similar to block quotes.</span></p><pre id="docscript_116" class="codeBlock">+++
+ This is a special segment.
+
+ Can have all the other things like images.
+
+ !assets/blur.png
++++</pre><div id="docscript_117" class="special"><p id="docscript_118" class="paragraph"><span id="docscript_281" class="text">This is a special segment.</span></p><p id="docscript_119" class="paragraph"><span id="docscript_282" class="text">Can have all the other things like images.</span></p><div id="docscript_120" class="image-container"><img class="image" src="assets/blur.png" alt="assets/blur.png"></div></div><div id="docscript_121" class="special"></div></div></div><div id="docscript_122" class="section"><h3 class="heading"><span id="docscript_123" class="block"><span id="docscript_283" class="text">Code Blocks</span></span></h3><div class="content"><p id="docscript_124" class="paragraph"><span id="docscript_284" class="text">Code blocks are identified by three backtick quotes (`). Three ` should be placed at the beginning and end of code block.</span></p></div></div><div id="docscript_125" class="section"><h3 class="heading"><span id="docscript_126" class="block"><span id="docscript_285" class="text">Html Blocks</span></span></h3><div class="content"><p id="docscript_127" class="paragraph"><span id="docscript_286" class="text">Html blocks are identified by </span><code id="docscript_287" class="code"><span id="docscript_288" class="text">&lt;&lt;&lt;</span></code><span id="docscript_289" class="text"> at the begining and end of html blocks.</span></p><pre id="docscript_128" class="codeBlock">&lt;&lt;&lt;
+ &lt;blockquote class="twitter-tweet" lang="en"&gt;&lt;p&gt;Docscript &lt;a href="http://t.co/iaPELYc7RL"&gt;http://t.co/iaPELYc7RL&lt;/a&gt; Alternative to &lt;a href="https://twitter.com/hashtag/markdown?src=hash"&gt;#markdown&lt;/a&gt; written in &lt;a href="https://twitter.com/hashtag/coffeescript?src=hash"&gt;#coffeescript&lt;/a&gt;&lt;/p&gt;&amp;mdash; Varuna Jayasiri (@vpj) &lt;a href="https://twitter.com/vpj/status/532035802578944003"&gt;November 11, 2014&lt;/a&gt;&lt;/blockquote&gt;
+ &lt;script async src="http://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+&lt;&lt;&lt;</pre><p id="docscript_129" class="paragraph"><span id="docscript_290" class="text">Here's a tweet embedded with an HTML block.</span></p><div id="docscript_130" class="html"><blockquote class="twitter-tweet" lang="en"><p>Docscript <a href="http://t.co/iaPELYc7RL">http://t.co/iaPELYc7RL</a> Alternative to <a href="https://twitter.com/hashtag/markdown?src=hash">#markdown</a> written in <a href="https://twitter.com/hashtag/coffeescript?src=hash">#coffeescript</a></p>— Varuna Jayasiri (@vpj) <a href="https://twitter.com/vpj/status/532035802578944003">November 11, 2014</a></blockquote>
+<script async="" src="//platform.twitter.com/widgets.js" charset="utf-8"></script></div></div></div><div id="docscript_133" class="section"><h3 class="heading"><span id="docscript_134" class="block"><span id="docscript_292" class="text">Bold</span></span></h3><div class="content"><p id="docscript_135" class="paragraph"><span id="docscript_293" class="text">Text can be made bold with </span><code id="docscript_294" class="code"><span id="docscript_295" class="text">**</span></code><span id="docscript_296" class="text">.</span></p><pre id="docscript_136" class="codeBlock">**This is bold** and this is not.
+
+**This entire paragraph is bold.
+Still the same paragraph.</pre></div></div><div id="docscript_140" class="section"><h3 class="heading"><span id="docscript_141" class="block"><span id="docscript_302" class="text">Italics</span></span></h3><div class="content"><p id="docscript_142" class="paragraph"><span id="docscript_303" class="text">Text can be made italics with </span><code id="docscript_304" class="code"><span id="docscript_305" class="text">--</span></code><span id="docscript_306" class="text">.</span></p><pre id="docscript_143" class="codeBlock">**This is italics** and this is not
+
+**This entire paragraph is in italics.
+Still the same paragraph</pre></div></div></div></div></div></div></div>
+    </div>
+    <div id="sidebar" class="col-xs-3">
+     <div id="docscript_3" class="sidenote"><p id="docscript_4" class="paragraph"><strong id="docscript_148" class="bold"><a id="docscript_149" class="link" href="http://vpj.github.io/docscript/inroduction.ds">Source of this document</a></strong></p></div><div id="docscript_6" class="sidenote"><div id="docscript_7" class="image-container"><img class="image" src="https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png" alt="https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png"></div><p id="docscript_8" class="paragraph"><em id="docscript_169" class="italics"><span id="docscript_170" class="text">Forestpin Logo</span></em></p></div><div id="docscript_12" class="sidenote"><p id="docscript_13" class="paragraph"><a id="docscript_182" class="link" href="http://rmarkdown.rstudio.com/tufte_handout_format.html">RStudio Markdown</a><span id="docscript_183" class="text"> does seem to have tufte style for Markdown.</span></p><p id="docscript_14" class="paragraph"><em id="docscript_184" class="italics"><a id="docscript_185" class="link" href="http://sachsmc.github.io/tufterhandout/">Sample</a><span id="docscript_186" class="text"> - </span><a id="docscript_187" class="link" href="https://raw.githubusercontent.com/sachsmc/tufterhandout/master/vignettes/example.Rmd">Source</a></em></p></div><div id="docscript_30" class="sidenote"><div id="docscript_31" class="section"><h4 class="heading"><span id="docscript_32" class="block"><a id="docscript_208" class="link" href="https://github.com/vpj/docscript">Fork me on github</a></span></h4><div class="content"></div></div></div><div id="docscript_48" class="sidenote"><div id="docscript_49" class="section"><h3 class="heading"><span id="docscript_50" class="block"><span id="docscript_216" class="text">Heading1</span></span></h3><div class="content"><p id="docscript_51" class="paragraph"><span id="docscript_217" class="text">Introduction</span></p><ul id="docscript_52" class="list"><li id="docscript_53" class="list-item"><span id="docscript_54" class="block"><span id="docscript_218" class="text">Point one</span></span><p id="docscript_55" class="paragraph"><span id="docscript_219" class="text">Description about point one</span></p></li></ul><div id="docscript_56" class="section"><h4 class="heading"><span id="docscript_57" class="block"><span id="docscript_220" class="text">Subtopic</span></span></h4><div class="content"><p id="docscript_58" class="paragraph"><span id="docscript_221" class="text">Subtopic content</span></p><p id="docscript_59" class="paragraph"><span id="docscript_222" class="text">More subtopic content</span></p></div></div><p id="docscript_60" class="paragraph"><span id="docscript_223" class="text">This belongs to Heading1</span></p></div></div></div><div id="docscript_64" class="sidenote"><p id="docscript_65" class="paragraph"><span id="docscript_229" class="text">Like this</span></p></div><div id="docscript_73" class="sidenote"><p id="docscript_74" class="paragraph"><em id="docscript_253" class="italics"><span id="docscript_254" class="text">Example with indentation</span></em></p><pre id="docscript_75" class="codeBlock">#Heading
+
+ Indented content</pre></div><div id="docscript_79" class="sidenote"><pre id="docscript_80" class="codeBlock">Paragraph1
+More of paragraph1
+
+Paragraph2</pre></div><div id="docscript_85" class="sidenote"><ol id="docscript_86" class="list"><li id="docscript_87" class="list-item"><span id="docscript_88" class="block"><span id="docscript_265" class="text">Introduction</span></span></li><li id="docscript_89" class="list-item"><span id="docscript_90" class="block"><span id="docscript_266" class="text">Analyses</span></span><ol id="docscript_91" class="list"><li id="docscript_92" class="list-item"><span id="docscript_93" class="block"><span id="docscript_267" class="text">Daily analysis</span></span></li><li id="docscript_94" class="list-item"><span id="docscript_95" class="block"><span id="docscript_268" class="text">Benford's law</span></span></li><li id="docscript_96" class="list-item"><span id="docscript_97" class="block"><span id="docscript_269" class="text">Timeseries analysis</span></span></li></ol></li><li id="docscript_98" class="list-item"><span id="docscript_99" class="block"><span id="docscript_270" class="text">Visualizations</span></span><ul id="docscript_100" class="list"><li id="docscript_101" class="list-item"><span id="docscript_102" class="block"><span id="docscript_271" class="text">Treemap</span></span></li><li id="docscript_103" class="list-item"><span id="docscript_104" class="block"><span id="docscript_272" class="text">Bar charts</span></span></li><li id="docscript_105" class="list-item"><span id="docscript_106" class="block"><span id="docscript_273" class="text">Dashboard</span></span></li></ul></li></ol></div><div id="docscript_111" class="sidenote"><div id="docscript_112" class="image-container"><img class="image" src="https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png" alt="https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png"></div></div><div id="docscript_131" class="sidenote"><p id="docscript_132" class="paragraph"><span id="docscript_291" class="text">This won't work in online editor since the twitter script will not load</span></p></div><div id="docscript_137" class="sidenote"><p id="docscript_138" class="paragraph"><strong id="docscript_297" class="bold"><span id="docscript_298" class="text">This is bold</span></strong><span id="docscript_299" class="text"> and this is not.</span></p><p id="docscript_139" class="paragraph"><strong id="docscript_300" class="bold"><span id="docscript_301" class="text">This entire paragraph is bold. Still the same paragraph.</span></strong></p></div><div id="docscript_144" class="sidenote"><p id="docscript_145" class="paragraph"><strong id="docscript_307" class="bold"><span id="docscript_308" class="text">This is italics</span></strong><span id="docscript_309" class="text"> and this is not</span></p><p id="docscript_146" class="paragraph"><strong id="docscript_310" class="bold"><span id="docscript_311" class="text">This entire paragraph is in italics. Still the same paragraph</span></strong></p></div>
+    </div>
+   </div>
+  </div>
+  <div id="code" style="display:none;">
+   #Markdown like syntax for Edward Tufte style document
+
+ >>>
+  **<<http://vpj.github.io/docscript/inroduction.ds(Source of this document)>>
+ >>>
+
+ We started working on a documentation engine to create documents such
+ as --printed user manuals--, --getting started guides--, --online help--,
+ --training handouts-- and --internal documents-- at
+ **<<http://www.forestpin.com(Foresptin)>>**.
+
+ >>>
+  !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png
+
+  --Forestpin Logo
+ >>>
+
+ Initially we were working with editors such as Microsoft Word. It was alright
+ when we had a couple of documents but it wasn't easy to maintain formats and
+ manage them as larger documents came in. Then we started looking at
+ alternatives such as <<http://en.wikipedia.org/wiki/LaTeX(LaTeX)>>
+ and <<http://en.wikipedia.org/wiki/Markdown(Markdown)>>.
+
+ Both these options would make managing the documentations much easier. The
+ documents could be version controlled with **git**, which lets us do a number
+ things such as branching, etc. Although LeTeX gives a lot of flexibility,
+ it was a little too complicated, especially for non-technical writers.
+ Markdown on the other hand was much simpler but didn't support some of the key
+ features we wanted. Markdown doesn't work well when printing. It breaks pages
+ random places. The other problem was that Markdown didn't support
+ sidenotes.
+
+ <<http://rmarkdown.rstudio.com/(R Markdown)>> suported formatting inspired by
+ Tufte. This was the best already available option for us. We honestly didn't
+ have very good reasons not to use it and develop our own.
+
+ >>>
+  <<http://rmarkdown.rstudio.com/tufte_handout_format.html(RStudio Markdown)>>
+  does seem to have tufte style for Markdown.
+
+  --<<http://sachsmc.github.io/tufterhandout/(Sample)>> -
+  <<https://raw.githubusercontent.com/sachsmc/tufterhandout/master/vignettes/example.Rmd(Source)>>
+ >>>
+
+
+ However there were a few advantages of developing our own tool:
+
+  * Give us total control
+
+   We would be able to modify the tool to perfectly fit our needs
+
+  * Mardown doesn't have a structure
+
+   For instance, in the following document,
+
+   ```
+    #Heading1
+    Intro
+    #Heading2
+    Paragraph
+    #Heading3
+    Paragraph
+    Conclusion
+   ```
+
+   it is not clear whether ``Conclusion`` belongs to ``Heading1`` or
+   ``Heading3``. This again gives some trouble when paginating.
+
+  * R Markdown seemed to be use verbose syntaxes for some of the commonly
+   needed functions
+
+ ###DocScript Project
+
+  Docscript is available on <<https://github.com/vpj/docscript(Github)>>. It
+  is not fully baked yet but you can give it a try.
+
+  >>>
+   ####<<https://github.com/vpj/docscript(Fork me on github)>>
+  >>>
+
+  Here are some of the sample documents we've created:
+
+   * <<http://vpj.github.io/docscript/benford.html(Benford's Law Test)>>
+   * <<http://vpj.github.io/docscript/dashboard.html(Forestpin Dashboard)>>
+   * <<http://vpj.github.io/docscript/correlation.html(Correlation Test)>>
+
+ ##Design
+
+  Docscript uses indentation to specify hierarchy of content.
+
+  +++
+   ####Example
+
+    ```
+    ###Heading1
+
+     Introduction
+
+     * Point one
+
+      Description about point one
+
+     ####Subtopic
+
+      Subtopic content
+
+      More subtopic content
+
+     This belongs to Heading1
+    ```
+
+   >>>
+    ###Heading1
+
+     Introduction
+
+     * Point one
+
+      Description about point one
+
+     ####Subtopic
+
+      Subtopic content
+
+      More subtopic content
+
+     This belongs to Heading1
+   >>>
+  +++
+
+  Althought indentation doesn't help much in standard rendering except in a
+  a few cases such as lists it's has a number of of other uses. It lets us
+  programmetically set page breaks when printing (This is not implemented yet).
+  Other advantage is we can use **code folding** when editing; which come handy
+  when working with large documents.
+
+  Another key feature of docscript is sidenotes. You can have notes as well
+  as images in sidenotes.
+
+  >>>
+   Like this
+  >>>
+
+  We've also changed some syntaxes of Markdown, such as ``<<`` and ``>>`` for
+  links instead of ``[]()`` of markdown, because we felt it was a little more
+  intuitive (resemblence with HTML tags).
+
+  Docscript also introduces HTML blocks marked by ```<<<```, where you can add
+  any HTML content.
+
+ ##Reference
+
+  ###Headings
+
+   This is very much like Markdown. ``#`` for level 1 headings ```##`` for
+   level 2 headings and so on. The content that belongs to the heading should
+   indented.
+
+   >>>
+    --Example with indentation
+
+    ```
+     #Heading
+
+      Indented content
+    ```
+   >>>
+
+  ###Paragraphs
+
+   Again similar to Markdown. Paragraphs are separated by blank lines.
+
+   >>>
+    ```
+     Paragraph1
+     More of paragraph1
+
+     Paragraph2
+    ```
+   >>>
+
+  ###List
+
+   Ordered lists begin with ``- `` while unordered lists begin with ``* ``.
+   Since lists are also structured with indentations, it's easy to have lists
+   within lists.
+
+   ```
+    - Introduction
+    - Analyses
+
+     - Daily analysis
+     - Benford's law
+     - Timeseries analysis
+    - Visualizations
+
+     * Treemap
+     * Bar charts
+     * Dashboard
+   ```
+
+    >>>
+     - Introduction
+     - Analyses
+
+      - Daily analysis
+      - Benford's law
+      - Timeseries analysis
+     - Visualizations
+
+      * Treemap
+      * Bar charts
+      * Dashboard
+    >>>
+
+  ###Media
+
+   Images can be added with ``!``.
+
+   ```
+    !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png
+   ```
+
+   >>>
+    !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png
+   >>>
+
+  ###Special Blocks
+
+   This is similar to block quotes.
+
+   ```
+    +++
+     This is a special segment.
+
+     Can have all the other things like images.
+
+     !assets/blur.png
+    +++
+   ```
+   +++
+    This is a special segment.
+
+    Can have all the other things like images.
+
+    !assets/blur.png
+   +++
+
+  ###Code Blocks
+
+   Code blocks are identified by three backtick quotes (`). Three ` should be
+   placed at the beginning and end of code block.
+
+  ###Html Blocks
+
+   Html blocks are identified by ``<<<`` at the begining and end of html blocks.
+
+   ```
+    <<<
+     <blockquote class="twitter-tweet" lang="en"><p>Docscript <a href="http://t.co/iaPELYc7RL">http://t.co/iaPELYc7RL</a> Alternative to <a href="https://twitter.com/hashtag/markdown?src=hash">#markdown</a> written in <a href="https://twitter.com/hashtag/coffeescript?src=hash">#coffeescript</a></p>&mdash; Varuna Jayasiri (@vpj) <a href="https://twitter.com/vpj/status/532035802578944003">November 11, 2014</a></blockquote>
+     <script async src="http://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <<<
+   ```
+
+   Here's a tweet embedded with an HTML block.
+
+   <<<
+    <blockquote class="twitter-tweet" lang="en"><p>Docscript <a href="http://t.co/iaPELYc7RL">http://t.co/iaPELYc7RL</a> Alternative to <a href="https://twitter.com/hashtag/markdown?src=hash">#markdown</a> written in <a href="https://twitter.com/hashtag/coffeescript?src=hash">#coffeescript</a></p>&mdash; Varuna Jayasiri (@vpj) <a href="https://twitter.com/vpj/status/532035802578944003">November 11, 2014</a></blockquote>
+    <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+   <<<
+
+    >>>
+     This won't work in online editor since the twitter script will not load
+    >>>
+
+  ###Bold
+
+   Text can be made bold with ``**``.
+
+   ```
+    **This is bold** and this is not.
+
+    **This entire paragraph is bold.
+    Still the same paragraph.
+   ```
+    >>>
+     **This is bold** and this is not.
+
+     **This entire paragraph is bold.
+     Still the same paragraph.
+    >>>
+
+  ###Italics
+
+   Text can be made italics with ``--``.
+
+   ```
+    **This is italics** and this is not
+
+    **This entire paragraph is in italics.
+    Still the same paragraph
+   ```
+    >>>
+     **This is italics** and this is not
+
+     **This entire paragraph is in italics.
+     Still the same paragraph
+    >>>
+
+
+
+
+  </div>
+  <script src="lib/weya/weya.js">
+  </script>
+  <script src="lib/weya/base.js">
+  </script>
+  <script src="lib/mod/mod.js">
+  </script>
+  <script src="js/static.js?v=9">
+  </script>
+  <script src="js/parser.js?v=9">
+  </script>
+  <script src="js/reader.js?v=9">
+  </script>
+  <script src="js/nodes.js?v=9">
+  </script>
+ </body>
+</html>

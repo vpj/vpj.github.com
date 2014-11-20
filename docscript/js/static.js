@@ -15,7 +15,16 @@
     });
     return window.requestAnimationFrame(function() {
       return parser.mediaLoaded(function() {
-        return parser.setFills();
+        var int, n;
+        parser.setFills();
+        n = 0;
+        return int = setInterval(function() {
+          parser.setFills();
+          n++;
+          if (n === 10) {
+            return clearInterval(int);
+          }
+        }, 1000);
       });
     });
   });
