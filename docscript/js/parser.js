@@ -38,7 +38,7 @@
         this.node = this.root;
         this.main = true;
         this.sidenotes = [];
-        this.prevBlock = null;
+        this.prevNode = null;
         return this.blocks = [];
       });
 
@@ -49,7 +49,7 @@
             this.processLine();
           } catch (_error) {
             e = _error;
-            throw e;
+            throw new Error("Line " + (this.reader.n + 1) + ": " + e.message);
           }
           this.reader.next();
         }
@@ -149,7 +149,7 @@
         if (node.type === TYPES.block) {
           this.blocks.push(node);
         }
-        return this.node = node;
+        return this.prevNode = this.node = node;
       };
 
       Parser.prototype.getOffsetTop = function(elem, parent) {
@@ -276,25 +276,42 @@
       };
 
       Parser.prototype.processLine = function() {
-        var id, indent, line, n;
+        var id, indent, line, n, _results, _results1;
         line = this.reader.get();
         if (line.empty) {
           if (this.node.type === TYPES.block) {
-            this.prevBlock = this.node;
+            this.prevNode = this.node;
             this.node = this.node.parent();
+          }
+          if (this.node.type === TYPES.codeBlock || this.node.type === TYPES.html) {
+            this.node.addText(line.line.substr(this.node.indentation));
           }
           return;
         }
         while (line.indentation < this.node.indentation) {
+          this.prevNode = this.node;
           this.node = this.node.parent();
           if (this.node == null) {
-            throw new Error('Invalid indentation');
+            if (this.main) {
+              throw new Error('Invalid indentation');
+            }
+            this.main = true;
+            this.node = this.mainNode;
           }
         }
-        if (this.node.type === TYPES.list) {
-          if (line.type !== TYPES.list) {
-            this.node = this.node.parent();
-          }
+        if (this.prevNode == null) {
+          this.prevNode = this.node;
+        }
+        switch (this.node.type) {
+          case TYPES.list:
+            if (line.type !== TYPES.list) {
+              this.node = this.node.parent();
+            }
+            break;
+          case TYPES.codeBlock:
+          case TYPES.html:
+            this.node.addText(line.line.substr(this.node.indentation));
+            return;
         }
         switch (line.type) {
           case TYPES.codeBlock:
@@ -302,7 +319,8 @@
             this.addNode(new CodeBlock({
               indentation: line.indentation + 1
             }));
-            while (true) {
+            _results = [];
+            while (false) {
               this.reader.next();
               if (!this.reader.has()) {
                 break;
@@ -314,15 +332,17 @@
               if (line.type === TYPES.codeBlock) {
                 break;
               }
-              this.node.addText(line.line.substr(indent));
+              _results.push(this.node.addText(line.line.substr(indent)));
             }
+            return _results;
             break;
           case TYPES.html:
             indent = line.indentation + 1;
             this.addNode(new Html({
               indentation: line.indentation + 1
             }));
-            while (true) {
+            _results1 = [];
+            while (false) {
               this.reader.next();
               if (!this.reader.has()) {
                 break;
@@ -334,14 +354,14 @@
               if (line.type === TYPES.html) {
                 break;
               }
-              this.node.addText(line.line.substr(indent));
+              _results1.push(this.node.addText(line.line.substr(indent)));
             }
+            return _results1;
             break;
           case TYPES.special:
-            this.addNode(new Special({
+            return this.addNode(new Special({
               indentation: line.indentation + 1
             }));
-            break;
           case TYPES.list:
             if (this.node.type !== TYPES.list) {
               this.addNode(new List({
@@ -358,7 +378,7 @@
                 indentation: line.indentation + 1,
                 paragraph: false
               }));
-              this.node.addText(line.text);
+              return this.node.addText(line.text);
             }
             break;
           case TYPES.heading:
@@ -367,29 +387,23 @@
               level: line.level
             }));
             this.node.heading.addText(line.text);
-            this.blocks.push(this.node.heading);
-            break;
+            return this.blocks.push(this.node.heading);
           case TYPES.sidenote:
-            if (this.main) {
-              this.main = false;
-              id = this.node.id;
-              console.log('sidenote', id);
-              if (this.prevBlock != null) {
-                id = this.prevBlock.id;
-              }
-              console.log('sidenote', id);
-              n = new Sidenote({
-                indentation: line.indentation,
-                link: id
-              });
-              this.mainNode = this.node;
-              this.node = n;
-              this.sidenotes.push(n);
-            } else {
-              this.main = true;
-              this.node = this.mainNode;
+            if (!this.main) {
+              throw new Error('Cannot have a sidenote inside a sidenote');
             }
-            break;
+            this.main = false;
+            id = this.node.id;
+            if (this.prevNode != null) {
+              id = this.prevNode.id;
+            }
+            n = new Sidenote({
+              indentation: line.indentation + 1,
+              link: id
+            });
+            this.mainNode = this.node;
+            this.node = n;
+            return this.sidenotes.push(n);
           case TYPES.block:
             if (this.node.type !== TYPES.block) {
               this.addNode(new Block({
@@ -397,19 +411,17 @@
                 paragraph: true
               }));
             }
-            this.node.addText(line.text);
-            break;
+            return this.node.addText(line.text);
           case TYPES.media:
             this.addNode(new Media({
               indentation: line.indentation + 1,
               media: this.parseMedia(line.text)
             }));
-            this.prevBlock = this.node;
-            return;
+            this.prevNode = this.node;
+            break;
           default:
             throw new Error('Unknown syntax');
         }
-        return this.prevBlock = null;
       };
 
       Parser.prototype.parseLink = function(text) {

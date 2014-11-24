@@ -61,11 +61,8 @@
         parser = new Parser({
           text: text
         });
-        parser.parse();
         try {
-          if (false) {
-            parser.parse();
-          }
+          parser.parse();
         } catch (_error) {
           e = _error;
           this.elems.errors.textContent = e.message;
@@ -83,7 +80,7 @@
       Editor.listen('setupEditor', function() {
         var height;
         this.editor = CodeMirror.fromTextArea(this.elems.textarea, {
-          mode: "text",
+          mode: "docscript",
           lineNumbers: true,
           lineWrapping: true,
           tabSize: 1
