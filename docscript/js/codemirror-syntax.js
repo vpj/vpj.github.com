@@ -1,13 +1,26 @@
 (function() {
-  CodeMirror.defineMode("docscript", (function(cmCfg, modeCfg) {
-    var clearState, htmlMode, matchBlock, matchInline, matchStart, mode, operator, operatorInline;
-    operator = "tag strong";
-    operatorInline = "string";
-    htmlMode = CodeMirror.getMode(cmCfg, {
-      name: "xml",
-      htmlMode: true
-    });
-    matchBlock = function(stream, state) {
+  var Mode, OPERATOR, OPERATOR_INLINE;
+
+  OPERATOR = "tag strong";
+
+  OPERATOR_INLINE = "string";
+
+  Mode = (function() {
+    function Mode(CodeMirror) {
+      this.CodeMirror = CodeMirror;
+      this.CodeMirror.defineMode("docscript", this.defineMode.bind(this), "xml");
+      this.CodeMirror.defineMIME("text/x-docscript", "docscript");
+    }
+
+    Mode.prototype.defineMode = function(cmCfg, modeCfg) {
+      this.htmlMode = this.CodeMirror.getMode(cmCfg, {
+        name: "xml",
+        htmlMode: true
+      });
+      return this.getMode();
+    };
+
+    Mode.prototype.matchBlock = function(stream, state) {
       var match, stack;
       stack = state.stack;
       match = stream.match(/^<<</);
@@ -17,8 +30,8 @@
           type: 'html'
         });
         stream.skipToEnd();
-        state.htmlState = CodeMirror.startState(htmlMode);
-        return operator;
+        state.htmlState = this.CodeMirror.startState(this.htmlMode);
+        return OPERATOR;
       }
       match = stream.match(/^\+\+\+/);
       if (match) {
@@ -27,7 +40,7 @@
           type: 'special'
         });
         stream.skipToEnd();
-        return operator;
+        return OPERATOR;
       }
       match = stream.match(/^>>>/);
       if (match) {
@@ -36,7 +49,7 @@
           type: 'sidenote'
         });
         stream.skipToEnd();
-        return operator;
+        return OPERATOR;
       }
       match = stream.match(/^```/);
       if (match) {
@@ -45,41 +58,43 @@
           type: 'code'
         });
         stream.skipToEnd();
-        return operator;
+        return OPERATOR;
       }
       return null;
     };
-    matchStart = function(stream, state) {
+
+    Mode.prototype.matchStart = function(stream, state) {
       var match;
       match = stream.match(/^\!/);
       if (match) {
         state.media = true;
-        return operator;
+        return OPERATOR;
       }
       match = stream.match(/^\* /);
       if (match) {
-        clearState(state);
-        return operator;
+        this.clearState(state);
+        return OPERATOR;
       }
       match = stream.match(/^- /);
       if (match) {
-        clearState(state);
-        return operator;
+        this.clearState(state);
+        return OPERATOR;
       }
       match = stream.match(/^#/);
       if (match) {
         stream.eatWhile('#');
-        clearState(state);
+        this.clearState(state);
         state.heading = true;
-        return "" + operator + " header";
+        return "" + OPERATOR + " header";
       }
     };
-    matchInline = function(stream, state) {
+
+    Mode.prototype.matchInline = function(stream, state) {
       var match;
       match = stream.match(/^``/);
       if (match) {
         state.code = !state.code;
-        return operatorInline;
+        return OPERATOR_INLINE;
       }
       if (state.code) {
         return null;
@@ -87,36 +102,37 @@
       match = stream.match(/^\*\*/);
       if (match) {
         state.bold = !state.bold;
-        return operatorInline;
+        return OPERATOR_INLINE;
       }
       match = stream.match(/^--/);
       if (match) {
         state.italics = !state.italics;
-        return operatorInline;
+        return OPERATOR_INLINE;
       }
       match = stream.match(/^__/);
       if (match) {
         state.subscript = !state.subscript;
-        return operatorInline;
+        return OPERATOR_INLINE;
       }
       match = stream.match(/^\^\^/);
       if (match) {
         state.superscript = !state.superscript;
-        return operatorInline;
+        return OPERATOR_INLINE;
       }
       match = stream.match(/^<</);
       if (match) {
         state.link = true;
-        return operatorInline;
+        return OPERATOR_INLINE;
       }
       match = stream.match(/^>>/);
       if (match) {
         state.link = false;
-        return operatorInline;
+        return OPERATOR_INLINE;
       }
       return null;
     };
-    clearState = function(state) {
+
+    Mode.prototype.clearState = function(state) {
       state.bold = false;
       state.italics = false;
       state.subscript = false;
@@ -124,70 +140,55 @@
       state.code = false;
       return state.link = false;
     };
-    mode = {
-      startState: function() {
-        return {
-          stack: [],
-          htmlState: null,
-          start: true,
-          bold: false,
-          italics: false,
-          subscript: false,
-          superscript: false,
-          code: false,
-          link: false,
-          heading: false,
-          media: false
-        };
-      },
-      blankLine: function(state) {
-        return clearState(state);
-      },
-      token: function(stream, state) {
-        var l, match, s, stack, t, types, _i, _j, _len, _len1;
-        if (state.media) {
-          stream.skipToEnd();
-          state.media = false;
-          return "link";
+
+    Mode.prototype.startState = function() {
+      return {
+        stack: [],
+        htmlState: null,
+        start: true,
+        bold: false,
+        italics: false,
+        subscript: false,
+        superscript: false,
+        code: false,
+        link: false,
+        heading: false,
+        media: false
+      };
+    };
+
+    Mode.prototype.blankLine = function(state) {
+      return this.clearState(state);
+    };
+
+    Mode.prototype.token = function(stream, state) {
+      var l, match, s, stack, t, types, _i, _j, _len, _len1;
+      if (state.media) {
+        stream.skipToEnd();
+        state.media = false;
+        return "link";
+      }
+      if (stream.sol()) {
+        state.start = true;
+        if (state.heading) {
+          state.heading = false;
+          this.clearState(state);
         }
-        if (stream.sol()) {
-          state.start = true;
-          if (state.heading) {
-            state.heading = false;
-            clearState(state);
-          }
-          s = stream.eatSpace();
-          if (stream.eol()) {
-            clearState(state);
-          }
-          if (s) {
-            return "";
-          }
+        s = stream.eatSpace();
+        if (stream.eol()) {
+          this.clearState(state);
         }
-        stack = state.stack;
-        if (state.start) {
-          while (stack.length > 0) {
-            if (stack[stack.length - 1].indentation >= stream.indentation()) {
-              stack.pop();
-            } else {
-              break;
-            }
-          }
-          types = {
-            sidenote: false,
-            html: false,
-            special: false,
-            code: false
-          };
-          for (_i = 0, _len = stack.length; _i < _len; _i++) {
-            t = stack[_i];
-            types[t.type] = true;
-          }
-          if (!types.code && !types.html) {
-            match = matchBlock(stream, state);
-            if (match != null) {
-              return match;
-            }
+        if (s) {
+          return "";
+        }
+      }
+      stack = state.stack;
+      if (state.start) {
+        while (stack.length > 0) {
+          if (stack[stack.length - 1].indentation >= stream.indentation()) {
+            stack.pop();
+          } else {
+            break;
           }
         }
         types = {
@@ -196,52 +197,105 @@
           special: false,
           code: false
         };
-        for (_j = 0, _len1 = stack.length; _j < _len1; _j++) {
-          t = stack[_j];
+        for (_i = 0, _len = stack.length; _i < _len; _i++) {
+          t = stack[_i];
           types[t.type] = true;
         }
-        l = "";
-        if (types.html) {
-          l = htmlMode.token(stream, state.htmlState);
-          l = "" + l;
-        } else if (types.code) {
-          stream.skipToEnd();
-          l = "meta";
-        } else {
-          if (state.start) {
-            match = matchStart(stream, state);
-            if (match) {
-              return match;
-            }
-          }
-          match = matchInline(stream, state);
+        if (!types.code && !types.html) {
+          match = this.matchBlock(stream, state);
           if (match != null) {
             return match;
           }
-          stream.next();
-          state.start = false;
-          if (state.heading) {
-            l += " header";
-          }
-          if (state.bold) {
-            l += " strong";
-          }
-          if (state.italics) {
-            l += " em";
-          }
-          if (state.link) {
-            l += " link";
-          }
-          if (state.code) {
-            l += " meta";
+        }
+      }
+      types = {
+        sidenote: false,
+        html: false,
+        special: false,
+        code: false
+      };
+      for (_j = 0, _len1 = stack.length; _j < _len1; _j++) {
+        t = stack[_j];
+        types[t.type] = true;
+      }
+      l = "";
+      if (types.html) {
+        l = this.htmlMode.token(stream, state.htmlState);
+        l = "" + l;
+      } else if (types.code) {
+        stream.skipToEnd();
+        l = "meta";
+      } else {
+        if (state.start) {
+          match = this.matchStart(stream, state);
+          if (match) {
+            return match;
           }
         }
-        return l;
+        match = this.matchInline(stream, state);
+        if (match != null) {
+          return match;
+        }
+        stream.next();
+        state.start = false;
+        if (state.heading) {
+          l += " header";
+        }
+        if (state.bold) {
+          l += " strong";
+        }
+        if (state.italics) {
+          l += " em";
+        }
+        if (state.link) {
+          l += " link";
+        }
+        if (state.code) {
+          l += " meta";
+        }
       }
+      return l;
     };
-    return mode;
-  }), "xml");
 
-  CodeMirror.defineMIME("text/x-docscript", "docscript");
+    Mode.prototype.getMode = function() {
+      var mode, self;
+      self = this;
+      mode = {
+        fold: "indent",
+        startState: this.startState,
+        blankLine: function(state) {
+          return self.blankLine(state);
+        },
+        token: function(stream, state) {
+          return self.token(stream, state);
+        }
+      };
+      return mode;
+    };
+
+    return Mode;
+
+  })();
+
+  if ((typeof define !== "undefined" && define !== null) && (typeof brackets !== "undefined" && brackets !== null)) {
+    define(function(require, exports, module) {
+      "use strict";
+      var CodeMirror, LanguageManager, lang;
+      LanguageManager = brackets.getModule("language/LanguageManager");
+      CodeMirror = brackets.getModule("thirdparty/CodeMirror2/lib/codemirror");
+      new Mode(CodeMirror);
+      lang = LanguageManager.defineLanguage("docscript", {
+        name: "Docscript",
+        mode: "docscript",
+        fileExtensions: [".ds"],
+        lineComment: ["\/\/"]
+      });
+      return lang.done(function() {
+        return console.log("[Docscript] Module loaded.");
+      });
+    });
+  } else if (typeof CodeMirror !== "undefined" && CodeMirror !== null) {
+    new Mode(CodeMirror);
+  }
 
 }).call(this);

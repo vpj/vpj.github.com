@@ -133,6 +133,9 @@
                 this.addNode(new Code({}));
                 last = i;
                 cur = i = text.indexOf(TOKEN_MATCHES.code, i);
+                if (i === -1) {
+                  cur = i = L;
+                }
                 add();
                 this.node = this.node.parent();
                 i += TOKEN_MATCHES.code.length;

@@ -83,7 +83,9 @@
           mode: "docscript",
           lineNumbers: true,
           lineWrapping: true,
-          tabSize: 1
+          tabSize: 1,
+          foldGutter: true,
+          gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
         });
         this.editor.on('change', this.on.change);
         height = window.innerHeight;
