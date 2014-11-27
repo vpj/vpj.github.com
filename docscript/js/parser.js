@@ -2,7 +2,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  Mod.require('Weya.Base', 'Docscript.TYPES', 'Docscript.Text', 'Docscript.Bold', 'Docscript.Italics', 'Docscript.SuperScript', 'Docscript.SubScript', 'Docscript.Code', 'Docscript.Link', 'Docscript.Block', 'Docscript.Section', 'Docscript.List', 'Docscript.ListItem', 'Docscript.Sidenote', 'Docscript.Article', 'Docscript.Media', 'Docscript.CodeBlock', 'Docscript.Special', 'Docscript.Html', 'Docscript.NODES', 'Docscript.Reader', function(Base, TYPES, Text, Bold, Italics, SuperScript, SubScript, Code, Link, Block, Section, List, ListItem, Sidenote, Article, Media, CodeBlock, Special, Html, NODES, Reader) {
+  Mod.require('Weya.Base', 'Docscript.TYPES', 'Docscript.Text', 'Docscript.Bold', 'Docscript.Italics', 'Docscript.SuperScript', 'Docscript.SubScript', 'Docscript.Code', 'Docscript.Link', 'Docscript.Block', 'Docscript.Section', 'Docscript.List', 'Docscript.ListItem', 'Docscript.Sidenote', 'Docscript.Article', 'Docscript.Media', 'Docscript.CodeBlock', 'Docscript.Special', 'Docscript.Html', 'Docscript.Map', 'Docscript.Reader', function(Base, TYPES, Text, Bold, Italics, SuperScript, SubScript, Code, Link, Block, Section, List, ListItem, Sidenote, Article, Media, CodeBlock, Special, Html, Map, Reader) {
     var PREFIX, Parser, TOKENS, TOKEN_MATCHES;
     PREFIX = 'docscript_';
     TOKENS = {
@@ -30,9 +30,11 @@
       Parser.extend();
 
       Parser.initialize(function(options) {
+        this.map = new Map(options);
         this.reader = new Reader(options.text);
         delete options.text;
         this.root = new Article({
+          map: this.map,
           indentation: 0
         });
         this.node = this.root;
@@ -45,8 +47,9 @@
       Parser.prototype.parse = function() {
         var block, e, _i, _len, _ref, _results;
         while (this.reader.has()) {
+          this.processLine();
           try {
-            this.processLine();
+
           } catch (_error) {
             e = _error;
             throw new Error("Line " + (this.reader.n + 1) + ": " + e.message);
@@ -91,6 +94,7 @@
           return function() {
             if (cur > last) {
               _this.addNode(new Text({
+                map: _this.map,
                 text: text.substr(last, cur - last)
               }));
               return _this.node = _this.node.parent();
@@ -112,13 +116,17 @@
               this.node = this.node.parent();
             } else {
               add();
-              this.addNode(new TOKENS[token.type]({}));
+              this.addNode(new TOKENS[token.type]({
+                map: this.map
+              }));
             }
           } else {
             switch (token.type) {
               case 'linkBegin':
                 add();
-                this.addNode(new Link({}));
+                this.addNode(new Link({
+                  map: this.map
+                }));
                 break;
               case 'linkEnd':
                 if (this.node.type !== TYPES.link) {
@@ -130,7 +138,9 @@
                 break;
               case 'code':
                 add();
-                this.addNode(new Code({}));
+                this.addNode(new Code({
+                  map: this.map
+                }));
                 last = i;
                 cur = i = text.indexOf(TOKEN_MATCHES.code, i);
                 if (i === -1) {
@@ -175,7 +185,7 @@
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           sidenote = _ref[_i];
           elemSidenote = sidenote.elem;
-          elemContent = NODES[sidenote.link].elem;
+          elemContent = this.map.nodes[sidenote.link].elem;
           topSidenote = this.getOffsetTop(elemSidenote, this.elems.sidebar);
           topContent = this.getOffsetTop(elemContent, this.elems.main);
           if (topContent > topSidenote) {
@@ -224,14 +234,15 @@
       };
 
       Parser.prototype.collectElements = function(options) {
-        var id, node, _results;
+        var id, node, _ref, _results;
         this.elems = {
           main: options.main,
           sidebar: options.sidebar
         };
+        _ref = this.map.nodes;
         _results = [];
-        for (id in NODES) {
-          node = NODES[id];
+        for (id in _ref) {
+          node = _ref[id];
           node.elem = document.getElementById("" + PREFIX + id);
           if (node.elem == null) {
             throw new Error("Element " + id + " not found");
@@ -320,6 +331,7 @@
           case TYPES.codeBlock:
             indent = line.indentation + 1;
             this.addNode(new CodeBlock({
+              map: this.map,
               indentation: line.indentation + 1
             }));
             _results = [];
@@ -342,6 +354,7 @@
           case TYPES.html:
             indent = line.indentation + 1;
             this.addNode(new Html({
+              map: this.map,
               indentation: line.indentation + 1
             }));
             _results1 = [];
@@ -363,21 +376,25 @@
             break;
           case TYPES.special:
             return this.addNode(new Special({
+              map: this.map,
               indentation: line.indentation + 1
             }));
           case TYPES.list:
             if (this.node.type !== TYPES.list) {
               this.addNode(new List({
+                map: this.map,
                 ordered: line.ordered,
                 indentation: line.indentation
               }));
             }
             this.addNode(new ListItem({
+              map: this.map,
               ordered: line.ordered,
               indentation: line.indentation + 1
             }));
             if (line.text !== '') {
               this.addNode(new Block({
+                map: this.map,
                 indentation: line.indentation + 1,
                 paragraph: false
               }));
@@ -386,6 +403,7 @@
             break;
           case TYPES.heading:
             this.addNode(new Section({
+              map: this.map,
               indentation: line.indentation + 1,
               level: line.level
             }));
@@ -401,6 +419,7 @@
               id = this.prevNode.id;
             }
             n = new Sidenote({
+              map: this.map,
               indentation: line.indentation + 1,
               link: id
             });
@@ -410,6 +429,7 @@
           case TYPES.block:
             if (this.node.type !== TYPES.block) {
               this.addNode(new Block({
+                map: this.map,
                 indentation: line.indentation,
                 paragraph: true
               }));
@@ -417,6 +437,7 @@
             return this.node.addText(line.text);
           case TYPES.media:
             this.addNode(new Media({
+              map: this.map,
               indentation: line.indentation + 1,
               media: this.parseMedia(line.text)
             }));

@@ -61,6 +61,7 @@
         parser = new Parser({
           text: text
         });
+        parser.parse();
         try {
           parser.parse();
         } catch (_error) {

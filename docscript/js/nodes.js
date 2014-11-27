@@ -3,7 +3,7 @@
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Mod.require('Weya.Base', 'Weya', function(Base, Weya) {
-    var Article, Block, Bold, Code, CodeBlock, Html, Italics, Link, List, ListItem, Media, NODES, NODE_ID, Node, PREFIX, Section, Sidenote, Special, SubScript, SuperScript, TYPES, Text;
+    var Article, Block, Bold, Code, CodeBlock, Html, Italics, Link, List, ListItem, Map, Media, Node, PREFIX, Section, Sidenote, Special, SubScript, SuperScript, TYPES, Text;
     TYPES = {
       sidenote: 'sidenote',
       codeBlock: 'codeBlock',
@@ -23,9 +23,31 @@
       link: 'link',
       mediaInline: 'mediaInline'
     };
-    NODES = {};
-    NODE_ID = 0;
     PREFIX = 'docscript_';
+    Map = (function(_super) {
+      __extends(Map, _super);
+
+      function Map() {
+        return Map.__super__.constructor.apply(this, arguments);
+      }
+
+      Map.initialize(function(options) {
+        this.nodes = {};
+        this.id = 0;
+        if (options.id) {
+          return this.id = options.id;
+        }
+      });
+
+      Map.prototype.add = function(node) {
+        node.id = this.id;
+        this.nodes[this.id] = node;
+        return this.id++;
+      };
+
+      return Map;
+
+    })(Base);
     Node = (function(_super) {
       __extends(Node, _super);
 
@@ -39,10 +61,8 @@
         this.indentation = options.indentation;
         this._parent = null;
         this.children = [];
-        this.id = NODE_ID;
-        this.elems = {};
-        NODE_ID++;
-        return NODES[this.id] = this;
+        options.map.add(this);
+        return this.elems = {};
       });
 
       Node.prototype.setParent = function(parent) {
@@ -378,6 +398,7 @@
 
       Section.initialize(function(options) {
         this.heading = new Block({
+          map: options.map,
           indentation: options.indentation
         });
         this.heading.setParent(this);
@@ -559,7 +580,7 @@
     Mod.set('Docscript.CodeBlock', CodeBlock);
     Mod.set('Docscript.Special', Special);
     Mod.set('Docscript.Html', Html);
-    Mod.set('Docscript.NODES', NODES);
+    Mod.set('Docscript.Map', Map);
     return Mod.set('Docscript.TYPES', TYPES);
   });
 
