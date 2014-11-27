@@ -47,9 +47,8 @@
       Parser.prototype.parse = function() {
         var block, e, _i, _len, _ref, _results;
         while (this.reader.has()) {
-          this.processLine();
           try {
-
+            this.processLine();
           } catch (_error) {
             e = _error;
             throw new Error("Line " + (this.reader.n + 1) + ": " + e.message);
