@@ -1,0 +1,144 @@
+/*---------------------------------------------------
+    LESS Elements 0.9
+  ---------------------------------------------------
+    A set of useful LESS mixins
+    More info at: http://lesselements.com
+  ---------------------------------------------------*/
+.wallapatta {
+  font-family: "Lato", sans-serif;
+  color: #4d4d4d;
+  line-height: 1.5;
+  font-size: 16px;
+}
+.wallapatta h1,
+.wallapatta h2,
+.wallapatta h3,
+.wallapatta h4,
+.wallapatta h5,
+.wallapatta h6 {
+  font-family: "Lato", sans-serif;
+  line-height: 1.2;
+  color: #3a3a3a;
+}
+.wallapatta p {
+  margin: 0 0 1.5em;
+}
+@-webkit-keyframes link-animation {
+  from {
+    color: #000;
+  }
+  to {
+    color: #98ff98;
+  }
+}
+.wallapatta a {
+  color: #000;
+  border-bottom: 2px solid #98FF98;
+}
+.wallapatta a:hover {
+  text-decoration: none;
+  color: #98ff98;
+  -webkit-animation-name: link-animation;
+  -webkit-animation-duration: 0.5s;
+}
+.wallapatta h1,
+.wallapatta h2 {
+  margin-top: 40px;
+}
+.wallapatta h1 {
+  margin-bottom: 30px;
+}
+.wallapatta h3 {
+  margin-top: 30px;
+}
+.wallapatta h4,
+.wallapatta h5,
+.wallapatta h6 {
+  margin-top: 25px;
+}
+.wallapatta ol,
+.wallapatta ul {
+  padding-left: 20px;
+}
+.wallapatta .sidenote {
+  font-size: 0.8em;
+  padding-bottom: 20px;
+}
+.wallapatta .fill {
+  width: 100%;
+}
+.wallapatta .image-container {
+  margin: 10px 0px;
+}
+.wallapatta .image-container img {
+  max-width: 100%;
+}
+.wallapatta h1.title {
+  font-weight: 300;
+  font-size: 48px;
+}
+.wallapatta .special {
+  background: #e0e0e0;
+  padding: 10px;
+  border-left: 10px solid #aaa;
+  margin-bottom: 1.5em;
+}
+@media print {
+  .wallapatta a[href]:after {
+    content: " (" attr(href) ")";
+    font-size: 10px;
+    font-weight: normal;
+    font-style: italic;
+    color: #777;
+    word-wrap: break-word;
+  }
+}
+@media print {
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+}
+.paginate {
+  margin: 50px 0;
+}
+.paginate .prev-page,
+.paginate .next-page {
+  font-size: 16px;
+  display: block;
+  border: 1px solid #aaa;
+  color: #666;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  padding: 5px 15px;
+}
+.paginate .prev-page:hover,
+.paginate .next-page:hover {
+  text-decoration: none;
+  color: #98ff98;
+  -webkit-animation-name: link-animation;
+  -webkit-animation-duration: 0.5s;
+}
+.paginate .prev-page {
+  float: left;
+}
+.paginate .next-page {
+  float: right;
+}
+.CodeMirror {
+  background: #f8f8f8;
+  margin-bottom: 20px;
+  font-size: 0.9em;
+}
+.error {
+  font-weight: bold;
+  font-family: monospace;
+  color: #ff4444;
+}
+.preview {
+  overflow-y: scroll;
+}
+.wallapatta-container {
+  max-width: 750px;
+}
