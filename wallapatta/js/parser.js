@@ -2,9 +2,8 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  Mod.require('Weya.Base', 'Wallapatta.TYPES', 'Wallapatta.Text', 'Wallapatta.Bold', 'Wallapatta.Italics', 'Wallapatta.SuperScript', 'Wallapatta.SubScript', 'Wallapatta.Code', 'Wallapatta.Link', 'Wallapatta.Block', 'Wallapatta.Section', 'Wallapatta.List', 'Wallapatta.ListItem', 'Wallapatta.Sidenote', 'Wallapatta.Article', 'Wallapatta.Media', 'Wallapatta.CodeBlock', 'Wallapatta.Special', 'Wallapatta.Html', 'Wallapatta.Map', 'Wallapatta.Reader', function(Base, TYPES, Text, Bold, Italics, SuperScript, SubScript, Code, Link, Block, Section, List, ListItem, Sidenote, Article, Media, CodeBlock, Special, Html, Map, Reader) {
-    var PREFIX, Parser, TOKENS, TOKEN_MATCHES;
-    PREFIX = 'wallapatta_';
+  Mod.require('Weya.Base', 'Wallapatta.TYPES', 'Wallapatta.Text', 'Wallapatta.Bold', 'Wallapatta.Italics', 'Wallapatta.SuperScript', 'Wallapatta.SubScript', 'Wallapatta.Code', 'Wallapatta.Link', 'Wallapatta.Block', 'Wallapatta.Section', 'Wallapatta.List', 'Wallapatta.ListItem', 'Wallapatta.Sidenote', 'Wallapatta.Article', 'Wallapatta.Media', 'Wallapatta.CodeBlock', 'Wallapatta.Table', 'Wallapatta.Special', 'Wallapatta.Html', 'Wallapatta.Map', 'Wallapatta.Reader', 'Wallapatta.Render', function(Base, TYPES, Text, Bold, Italics, SuperScript, SubScript, Code, Link, Block, Section, List, ListItem, Sidenote, Article, Media, CodeBlock, Table, Special, Html, Map, Reader, Render) {
+    var BLOCK_LEVEL, Parser, TOKENS, TOKEN_MATCHES;
     TOKENS = {
       bold: Bold,
       italics: Italics,
@@ -20,6 +19,7 @@
       linkBegin: '<<',
       linkEnd: '>>'
     };
+    BLOCK_LEVEL = 10;
     Parser = (function(_super) {
       __extends(Parser, _super);
 
@@ -44,6 +44,14 @@
         return this.blocks = [];
       });
 
+      Parser.prototype.getRender = function() {
+        return new Render({
+          map: this.map,
+          root: this.root,
+          sidenotes: this.sidenotes
+        });
+      };
+
       Parser.prototype.parse = function() {
         var block, e, _i, _len, _ref, _results;
         while (this.reader.has()) {
@@ -55,6 +63,7 @@
           }
           this.reader.next();
         }
+        this.map.smallElements();
         _ref = this.blocks;
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -67,6 +76,14 @@
           }
         }
         return _results;
+      };
+
+      Parser.prototype.addNode = function(node) {
+        this.node.add(node);
+        if (node.type === TYPES.block) {
+          this.blocks.push(node);
+        }
+        return this.prevNode = this.node = node;
       };
 
       Parser.prototype.getToken = function(text, n) {
@@ -156,161 +173,8 @@
         return add();
       };
 
-      Parser.prototype.addNode = function(node) {
-        this.node.add(node);
-        if (node.type === TYPES.block) {
-          this.blocks.push(node);
-        }
-        return this.prevNode = this.node = node;
-      };
-
-      Parser.prototype.getOffsetTop = function(elem, parent) {
-        var top;
-        top = 0;
-        while (elem != null) {
-          if (elem === parent) {
-            break;
-          }
-          top += elem.offsetTop;
-          elem = elem.offsetParent;
-        }
-        return top;
-      };
-
-      Parser.prototype.setFills = function() {
-        var elemContent, elemSidenote, fill, sidenote, topContent, topSidenote, _i, _len, _ref, _results;
-        _ref = this.sidenotes;
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          sidenote = _ref[_i];
-          elemSidenote = sidenote.elem;
-          elemContent = this.map.nodes[sidenote.link].elem;
-          topSidenote = this.getOffsetTop(elemSidenote, this.elems.sidebar);
-          topContent = this.getOffsetTop(elemContent, this.elems.main);
-          if (topContent > topSidenote) {
-            fill = Weya({}, function() {
-              return this.div(".fill", {
-                style: {
-                  height: "1px"
-                }
-              });
-            });
-            elemSidenote.parentNode.insertBefore(fill, elemSidenote);
-          } else if (topContent < topSidenote) {
-            fill = Weya({}, function() {
-              return this.div(".fill", {
-                style: {
-                  height: "1px"
-                }
-              });
-            });
-            elemContent.parentNode.insertBefore(fill, elemContent);
-          }
-          topSidenote = this.getOffsetTop(elemSidenote, this.elems.sidebar);
-          topContent = this.getOffsetTop(elemContent, this.elems.main);
-          if (topContent > topSidenote) {
-            fill = Weya({}, function() {
-              return this.div(".fill", {
-                style: {
-                  height: "" + (topContent - topSidenote) + "px"
-                }
-              });
-            });
-            _results.push(elemSidenote.parentNode.insertBefore(fill, elemSidenote));
-          } else if (topContent < topSidenote) {
-            fill = Weya({}, function() {
-              return this.div(".fill", {
-                style: {
-                  height: "" + (topSidenote - topContent) + "px"
-                }
-              });
-            });
-            _results.push(elemContent.parentNode.insertBefore(fill, elemContent));
-          } else {
-            _results.push(void 0);
-          }
-        }
-        return _results;
-      };
-
-      Parser.prototype.render = function(main, sidebar) {
-        var sidenote, _i, _len, _ref, _results;
-        this.elems = {
-          main: main,
-          sidebar: sidebar
-        };
-        this.root.render({
-          elem: main
-        });
-        _ref = this.sidenotes;
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          sidenote = _ref[_i];
-          _results.push(sidenote.render({
-            elem: sidebar
-          }));
-        }
-        return _results;
-      };
-
-      Parser.prototype.collectElements = function(options) {
-        var id, node, _ref, _results;
-        this.elems = {
-          main: options.main,
-          sidebar: options.sidebar
-        };
-        _ref = this.map.nodes;
-        _results = [];
-        for (id in _ref) {
-          node = _ref[id];
-          node.elem = document.getElementById("" + PREFIX + id);
-          if (node.elem == null) {
-            throw new Error("Element " + id + " not found");
-          } else {
-            _results.push(void 0);
-          }
-        }
-        return _results;
-      };
-
-      Parser.prototype.mediaLoaded = function(callback) {
-        var a, check, i, img, loaded, mainImg, n, sidebarImg, _i, _j, _k, _len, _len1, _len2;
-        mainImg = this.elems.main.getElementsByTagName('img');
-        sidebarImg = this.elems.sidebar.getElementsByTagName('img');
-        a = [];
-        for (_i = 0, _len = mainImg.length; _i < _len; _i++) {
-          i = mainImg[_i];
-          a.push(i);
-        }
-        for (_j = 0, _len1 = sidebarImg.length; _j < _len1; _j++) {
-          i = sidebarImg[_j];
-          a.push(i);
-        }
-        n = 0;
-        check = (function(_this) {
-          return function() {
-            if (n === a.length) {
-              return callback();
-            }
-          };
-        })(this);
-        loaded = function() {
-          n++;
-          return check();
-        };
-        for (_k = 0, _len2 = a.length; _k < _len2; _k++) {
-          img = a[_k];
-          if (!img.complete) {
-            img.addEventListener('load', loaded);
-          } else {
-            n++;
-          }
-        }
-        return check();
-      };
-
       Parser.prototype.processLine = function() {
-        var id, indent, line, n, _results, _results1;
+        var id, indent, line, n;
         line = this.reader.get();
         if (line.empty) {
           if (this.node.type === TYPES.block) {
@@ -344,56 +208,30 @@
             break;
           case TYPES.codeBlock:
           case TYPES.html:
+          case TYPES.table:
             this.node.addText(line.line.substr(this.node.indentation));
             return;
         }
         switch (line.type) {
+          case TYPES.table:
+            indent = line.indentation + 1;
+            return this.addNode(new Table({
+              map: this.map,
+              indentation: line.indentation + 1
+            }));
           case TYPES.codeBlock:
             indent = line.indentation + 1;
-            this.addNode(new CodeBlock({
+            return this.addNode(new CodeBlock({
               map: this.map,
-              indentation: line.indentation + 1
+              indentation: line.indentation + 1,
+              lang: line.text
             }));
-            _results = [];
-            while (false) {
-              this.reader.next();
-              if (!this.reader.has()) {
-                break;
-              }
-              line = this.reader.get();
-              if (!line.empty && line.indentation < indent) {
-                indent = line.indentation;
-              }
-              if (line.type === TYPES.codeBlock) {
-                break;
-              }
-              _results.push(this.node.addText(line.line.substr(indent)));
-            }
-            return _results;
-            break;
           case TYPES.html:
             indent = line.indentation + 1;
-            this.addNode(new Html({
+            return this.addNode(new Html({
               map: this.map,
               indentation: line.indentation + 1
             }));
-            _results1 = [];
-            while (false) {
-              this.reader.next();
-              if (!this.reader.has()) {
-                break;
-              }
-              line = this.reader.get();
-              if (!line.empty && line.indentation < indent) {
-                indent = line.indentation;
-              }
-              if (line.type === TYPES.html) {
-                break;
-              }
-              _results1.push(this.node.addText(line.line.substr(indent)));
-            }
-            return _results1;
-            break;
           case TYPES.special:
             return this.addNode(new Special({
               map: this.map,
@@ -427,7 +265,11 @@
               indentation: line.indentation + 1,
               level: line.level
             }));
-            this.node.heading.addText(line.text);
+            this.node.setHeading({
+              map: this.map,
+              indentation: line.indentation + 1,
+              text: line.text
+            });
             return this.blocks.push(this.node.heading);
           case TYPES.sidenote:
             if (!this.main) {
@@ -448,6 +290,11 @@
             return this.sidenotes.push(n);
           case TYPES.block:
             if (this.node.type !== TYPES.block) {
+              this.addNode(new Section({
+                map: this.map,
+                indentation: line.indentation + 1,
+                level: BLOCK_LEVEL
+              }));
               this.addNode(new Block({
                 map: this.map,
                 indentation: line.indentation,

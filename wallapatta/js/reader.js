@@ -9,6 +9,7 @@
       code: '```',
       special: '+++',
       html: '<<<',
+      table: '|||',
       heading: '#',
       orderedList: '- ',
       unorderedList: '* ',
@@ -93,6 +94,9 @@
             break;
           case BLOCK_TOKENS.code:
             line.type = TYPES.codeBlock;
+            break;
+          case BLOCK_TOKENS.table:
+            line.type = TYPES.table;
             break;
           case BLOCK_TOKENS.special:
             line.type = TYPES.special;

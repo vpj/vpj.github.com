@@ -3,12 +3,27 @@
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Mod.require('Weya.Base', 'Weya', function(Base, Weya) {
-    var Article, Block, Bold, Code, CodeBlock, Html, Italics, Link, List, ListItem, Map, Media, Node, PREFIX, Section, Sidenote, Special, SubScript, SuperScript, TYPES, Text;
+    var Article, Block, Bold, Code, CodeBlock, ENTITY_MAP, Html, Italics, Link, List, ListItem, Map, Media, Node, PREFIX, Section, Sidenote, Special, SubScript, SuperScript, TYPES, Table, Text, escapeHtml;
+    ENTITY_MAP = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': '&quot;',
+      "'": '&#39;',
+      "/": '&#x2F;'
+    };
+    escapeHtml = function(string) {
+      return String(string).replace(/[&<>"'\/]/g, function(s) {
+        return ENTITY_MAP[s];
+      });
+    };
     TYPES = {
+      article: 'article',
       sidenote: 'sidenote',
       codeBlock: 'codeBlock',
       special: 'special',
       html: 'html',
+      table: 'table',
       section: 'section',
       heading: 'heading',
       list: 'list',
@@ -35,9 +50,15 @@
         this.nodes = {};
         this.id = 0;
         if (options.id) {
-          return this.id = options.id;
+          this.id = options.id;
         }
+        this.start = this.id;
+        return this.N = 0;
       });
+
+      Map.prototype.smallElements = function() {
+        return this.N = this.id;
+      };
 
       Map.prototype.add = function(node) {
         node.id = this.id;
@@ -294,8 +315,13 @@
 
       CodeBlock.prototype.type = TYPES.codeBlock;
 
-      CodeBlock.initialize(function() {
-        return this.text = '';
+      CodeBlock.initialize(function(options) {
+        this.text = '';
+        this.lang = options.lang.trim();
+        this.cssClass = ".nohighlight";
+        if (this.lang !== '') {
+          return this.cssClass = "." + this.lang;
+        }
       });
 
       CodeBlock.prototype.addText = function(text) {
@@ -305,11 +331,121 @@
         return this.text += text;
       };
 
-      CodeBlock.prototype.template = function() {
-        return this.$.elem = this.pre("#" + PREFIX + this.$.id + ".codeBlock", this.$.text);
+      CodeBlock.prototype.render = function(options) {
+        var code, codeElem, html;
+        code = this.text.trimRight();
+        html = false;
+        if (this.lang !== '' && (typeof hljs !== "undefined" && hljs !== null) && ((hljs.getLanguage(this.lang)) != null)) {
+          code = hljs.highlight(this.lang, code, true);
+          code = code.value;
+          html = true;
+        }
+        codeElem = null;
+        Weya({
+          elem: options.elem,
+          context: this
+        }, function() {
+          return this.$.elem = this.pre("#" + PREFIX + this.$.id + ".codeBlock", function() {
+            return codeElem = this.code(this.$.cssClass, "");
+          });
+        });
+        return codeElem.innerHTML = escapeHtml(code);
       };
 
       return CodeBlock;
+
+    })(Node);
+    Table = (function(_super) {
+      __extends(Table, _super);
+
+      function Table() {
+        return Table.__super__.constructor.apply(this, arguments);
+      }
+
+      Table.extend();
+
+      Table.prototype.type = TYPES.table;
+
+      Table.initialize(function(options) {
+        this.table = [];
+        return this.header = 0;
+      });
+
+      Table.prototype.addText = function(text) {
+        var cell, row, _i, _len;
+        if ((text.trim().substr(0, 3)) === '===') {
+          this.header = this.table.length;
+          return;
+        }
+        text = text.split('|');
+        row = [];
+        for (_i = 0, _len = text.length; _i < _len; _i++) {
+          cell = text[_i];
+          if (cell === '') {
+            if (row.length > 0) {
+              row[row.length - 1].span++;
+            }
+            continue;
+          }
+          row.push({
+            span: 1,
+            text: cell.trim()
+          });
+        }
+        return this.table.push(row);
+      };
+
+      Table.prototype.render = function(options) {
+        var codeElem;
+        codeElem = null;
+        return Weya({
+          elem: options.elem,
+          context: this
+        }, function() {
+          return this.$.elem = this.table("#" + PREFIX + this.$.id + ".table", function() {
+            this.thead(function() {
+              var i, row, _i, _ref, _results;
+              _results = [];
+              for (i = _i = 0, _ref = this.$.header; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+                row = this.$.table[i];
+                _results.push(this.tr(function() {
+                  var cell, _j, _len, _results1;
+                  _results1 = [];
+                  for (_j = 0, _len = row.length; _j < _len; _j++) {
+                    cell = row[_j];
+                    _results1.push(this.th({
+                      colspan: cell.span
+                    }, cell.text));
+                  }
+                  return _results1;
+                }));
+              }
+              return _results;
+            });
+            return this.tbody(function() {
+              var i, row, _i, _ref, _ref1, _results;
+              _results = [];
+              for (i = _i = _ref = this.$.header, _ref1 = this.$.table.length; _ref <= _ref1 ? _i < _ref1 : _i > _ref1; i = _ref <= _ref1 ? ++_i : --_i) {
+                row = this.$.table[i];
+                _results.push(this.tr(function() {
+                  var cell, _j, _len, _results1;
+                  _results1 = [];
+                  for (_j = 0, _len = row.length; _j < _len; _j++) {
+                    cell = row[_j];
+                    _results1.push(this.td({
+                      colspan: cell.span
+                    }, cell.text));
+                  }
+                  return _results1;
+                }));
+              }
+              return _results;
+            });
+          });
+        });
+      };
+
+      return Table;
 
     })(Node);
     Special = (function(_super) {
@@ -374,7 +510,7 @@
 
       Article.extend();
 
-      Article.prototype.type = TYPES.document;
+      Article.prototype.type = TYPES.article;
 
       Article.initialize(function(options) {});
 
@@ -397,13 +533,17 @@
       Section.prototype.type = TYPES.section;
 
       Section.initialize(function(options) {
+        return this.level = options.level;
+      });
+
+      Section.prototype.setHeading = function(options) {
         this.heading = new Block({
           map: options.map,
           indentation: options.indentation
         });
         this.heading.setParent(this);
-        return this.level = options.level;
-      });
+        return this.heading.addText(options.text);
+      };
 
       Section.prototype.template = function() {
         return this.$.elem = this.div("#" + PREFIX + this.$.id + ".section", function() {
@@ -422,9 +562,13 @@
                 return this.h5;
               case 6:
                 return this.h6;
+              default:
+                return null;
             }
           }).call(this);
-          this.$.elems.heading = h.call(this, ".heading", null);
+          if (h != null) {
+            this.$.elems.heading = h.call(this, ".heading", null);
+          }
           return this.$.elems.content = this.div(".content", null);
         });
       };
@@ -434,9 +578,11 @@
           elem: options.elem,
           context: this
         }, this.template);
-        this.heading.render({
-          elem: this.elems.heading
-        });
+        if (this.elems.heading != null) {
+          this.heading.render({
+            elem: this.elems.heading
+          });
+        }
         return this.renderChildren(this.elems.content, options);
       };
 
@@ -578,6 +724,7 @@
     Mod.set('Wallapatta.Article', Article);
     Mod.set('Wallapatta.Media', Media);
     Mod.set('Wallapatta.CodeBlock', CodeBlock);
+    Mod.set('Wallapatta.Table', Table);
     Mod.set('Wallapatta.Special', Special);
     Mod.set('Wallapatta.Html', Html);
     Mod.set('Wallapatta.Map', Map);
