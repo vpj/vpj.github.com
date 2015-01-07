@@ -3,20 +3,7 @@
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Mod.require('Weya.Base', 'Weya', function(Base, Weya) {
-    var Article, Block, Bold, Code, CodeBlock, ENTITY_MAP, Html, Italics, Link, List, ListItem, Map, Media, Node, PREFIX, Section, Sidenote, Special, SubScript, SuperScript, TYPES, Table, Text, escapeHtml;
-    ENTITY_MAP = {
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': '&quot;',
-      "'": '&#39;',
-      "/": '&#x2F;'
-    };
-    escapeHtml = function(string) {
-      return String(string).replace(/[&<>"'\/]/g, function(s) {
-        return ENTITY_MAP[s];
-      });
-    };
+    var Article, Block, Bold, Code, CodeBlock, Html, Italics, Link, List, ListItem, Map, Media, Node, PREFIX, Section, Sidenote, Special, SubScript, SuperScript, TYPES, Table, Text;
     TYPES = {
       article: 'article',
       sidenote: 'sidenote',
@@ -349,7 +336,7 @@
             return codeElem = this.code(this.$.cssClass, "");
           });
         });
-        return codeElem.innerHTML = escapeHtml(code);
+        return codeElem.textContent = code;
       };
 
       return CodeBlock;
