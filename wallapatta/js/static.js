@@ -3,6 +3,11 @@
     var PAGE_HEIGHT, PAGE_WIDTH, PRINT, RATIO, doc, docs, process, processAll, renderPrint, renderWeb, _i, _len;
     RATIO = 0;
     PAGE_HEIGHT = PAGE_WIDTH = 0;
+    if ((window.location.href.indexOf('print')) !== -1) {
+      PRINT = true;
+    } else {
+      PRINT = false;
+    }
     renderWeb = function(render) {
       return render.mediaLoaded(function() {
         var int, n;
@@ -52,7 +57,7 @@
         sidebar: sidebar
       });
       return window.requestAnimationFrame(function() {
-        if ((window.location.href.indexOf('print')) !== -1) {
+        if (PRINT) {
           return renderPrint(render);
         } else {
           return renderWeb(render);
@@ -69,7 +74,6 @@
       }
       return _results;
     };
-    PRINT = true;
     if (PRINT) {
       docs = document.getElementsByClassName('wallapatta-container');
       for (_i = 0, _len = docs.length; _i < _len; _i++) {
