@@ -2,7 +2,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  Mod.require('Weya.Base', 'Weya', function(Base, Weya) {
+  Mod.require('Weya.Base', 'Weya', 'HLJS', function(Base, Weya, HLJS) {
     var Article, Block, Bold, Code, CodeBlock, Html, Italics, Link, List, ListItem, Map, Media, Node, PREFIX, Section, Sidenote, Special, SubScript, SuperScript, TYPES, Table, Text;
     TYPES = {
       article: 'article',
@@ -322,8 +322,8 @@
         var code, codeElem, html;
         code = this.text.trimRight();
         html = false;
-        if (this.lang !== '' && (typeof hljs !== "undefined" && hljs !== null) && ((hljs.getLanguage(this.lang)) != null)) {
-          code = hljs.highlight(this.lang, code, true);
+        if (this.lang !== '' && (HLJS != null) && ((HLJS.getLanguage(this.lang)) != null)) {
+          code = HLJS.highlight(this.lang, code, true);
           code = code.value;
           html = true;
         }
@@ -336,7 +336,11 @@
             return codeElem = this.code(this.$.cssClass, "");
           });
         });
-        return codeElem.textContent = code;
+        if (html) {
+          return codeElem.innerHTML = code;
+        } else {
+          return codeElem.textContent = code;
+        }
       };
 
       return CodeBlock;
