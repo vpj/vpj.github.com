@@ -3,7 +3,7 @@
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Mod.require('Weya.Base', 'Weya', 'HLJS', function(Base, Weya, HLJS) {
-    var Article, Block, Bold, Code, CodeBlock, Html, Italics, Link, List, ListItem, Map, Media, Node, PREFIX, Section, Sidenote, Special, SubScript, SuperScript, TYPES, Table, Text;
+    var Article, Block, Bold, Code, CodeBlock, Html, Italics, Link, List, ListItem, Map, Media, MediaInline, Node, PREFIX, Section, Sidenote, Special, SubScript, SuperScript, TYPES, Table, Text;
     TYPES = {
       article: 'article',
       sidenote: 'sidenote',
@@ -255,6 +255,40 @@
       };
 
       return Link;
+
+    })(Node);
+    MediaInline = (function(_super) {
+      __extends(MediaInline, _super);
+
+      function MediaInline() {
+        return MediaInline.__super__.constructor.apply(this, arguments);
+      }
+
+      MediaInline.extend();
+
+      MediaInline.prototype.type = TYPES.mediaInline;
+
+      MediaInline.prototype.setMedia = function(options) {
+        this.src = options.src;
+        this.alt = options.alt;
+        return this.alt != null ? this.alt : this.alt = options.src;
+      };
+
+      MediaInline.prototype.template = function() {
+        return this.$.elem = this.img("#" + PREFIX + this.$.id + ".image-inline", {
+          src: this.$.src,
+          alt: this.$.alt
+        });
+      };
+
+      MediaInline.prototype.render = function(options) {
+        return Weya({
+          elem: options.elem,
+          context: this
+        }, this.template);
+      };
+
+      return MediaInline;
 
     })(Node);
     Block = (function(_super) {
@@ -707,6 +741,7 @@
     Mod.set('Wallapatta.SubScript', SubScript);
     Mod.set('Wallapatta.Code', Code);
     Mod.set('Wallapatta.Link', Link);
+    Mod.set('Wallapatta.MediaInline', MediaInline);
     Mod.set('Wallapatta.Block', Block);
     Mod.set('Wallapatta.Section', Section);
     Mod.set('Wallapatta.List', List);

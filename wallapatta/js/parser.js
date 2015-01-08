@@ -2,7 +2,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  Mod.require('Weya.Base', 'Wallapatta.TYPES', 'Wallapatta.Text', 'Wallapatta.Bold', 'Wallapatta.Italics', 'Wallapatta.SuperScript', 'Wallapatta.SubScript', 'Wallapatta.Code', 'Wallapatta.Link', 'Wallapatta.Block', 'Wallapatta.Section', 'Wallapatta.List', 'Wallapatta.ListItem', 'Wallapatta.Sidenote', 'Wallapatta.Article', 'Wallapatta.Media', 'Wallapatta.CodeBlock', 'Wallapatta.Table', 'Wallapatta.Special', 'Wallapatta.Html', 'Wallapatta.Map', 'Wallapatta.Reader', 'Wallapatta.Render', function(Base, TYPES, Text, Bold, Italics, SuperScript, SubScript, Code, Link, Block, Section, List, ListItem, Sidenote, Article, Media, CodeBlock, Table, Special, Html, Map, Reader, Render) {
+  Mod.require('Weya.Base', 'Wallapatta.TYPES', 'Wallapatta.Text', 'Wallapatta.Bold', 'Wallapatta.Italics', 'Wallapatta.SuperScript', 'Wallapatta.SubScript', 'Wallapatta.Code', 'Wallapatta.Link', 'Wallapatta.MediaInline', 'Wallapatta.Block', 'Wallapatta.Section', 'Wallapatta.List', 'Wallapatta.ListItem', 'Wallapatta.Sidenote', 'Wallapatta.Article', 'Wallapatta.Media', 'Wallapatta.CodeBlock', 'Wallapatta.Table', 'Wallapatta.Special', 'Wallapatta.Html', 'Wallapatta.Map', 'Wallapatta.Reader', 'Wallapatta.Render', function(Base, TYPES, Text, Bold, Italics, SuperScript, SubScript, Code, Link, MediaInline, Block, Section, List, ListItem, Sidenote, Article, Media, CodeBlock, Table, Special, Html, Map, Reader, Render) {
     var BLOCK_LEVEL, Parser, TOKENS, TOKEN_MATCHES;
     TOKENS = {
       bold: Bold,
@@ -17,7 +17,9 @@
       superScript: '^^',
       code: '``',
       linkBegin: '<<',
-      linkEnd: '>>'
+      linkEnd: '>>',
+      mediaBegin: '[[',
+      mediaEnd: ']]'
     };
     BLOCK_LEVEL = 10;
     Parser = (function(_super) {
@@ -149,6 +151,20 @@
                   throw new Error('Unexpected link terminator');
                 } else {
                   this.node.setLink(this.parseLink(text.substr(last, cur - last)));
+                  this.node = this.node.parent();
+                }
+                break;
+              case 'mediaBegin':
+                add();
+                this.addNode(new MediaInline({
+                  map: this.map
+                }));
+                break;
+              case 'mediaEnd':
+                if (this.node.type !== TYPES.mediaInline) {
+                  throw new Error('Unexpected media terminator');
+                } else {
+                  this.node.setMedia(this.parseMedia(text.substr(last, cur - last)));
                   this.node = this.node.parent();
                 }
                 break;
