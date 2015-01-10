@@ -23,7 +23,8 @@
       subScript: 'subScript',
       code: 'code',
       link: 'link',
-      mediaInline: 'mediaInline'
+      mediaInline: 'mediaInline',
+      comment: '///'
     };
     PREFIX = 'wallapatta_';
     Map = (function(_super) {
@@ -396,14 +397,15 @@
         return this.header = 0;
       });
 
-      Table.prototype.addText = function(text) {
-        var cell, row, _i, _len;
+      Table.prototype.addText = function(text, options) {
+        var cell, node, nodes, row, _i, _len;
         if ((text.trim().substr(0, 3)) === '===') {
           this.header = this.table.length;
-          return;
+          return [];
         }
         text = text.split('|');
         row = [];
+        nodes = [];
         for (_i = 0, _len = text.length; _i < _len; _i++) {
           cell = text[_i];
           if (cell === '') {
@@ -412,62 +414,91 @@
             }
             continue;
           }
+          node = new Block({
+            map: options.map,
+            indentation: this.indentation
+          });
+          node.setParent(this);
+          node.addText(cell.trim());
           row.push({
             span: 1,
-            text: cell.trim()
+            node: node
           });
+          nodes.push(node);
         }
-        return this.table.push(row);
+        this.table.push(row);
+        return nodes;
       };
 
       Table.prototype.render = function(options) {
-        var codeElem;
+        var cell, codeElem, elems, i, j, row, _i, _len, _results;
         codeElem = null;
-        return Weya({
+        elems = [];
+        Weya({
           elem: options.elem,
           context: this
         }, function() {
           return this.$.elem = this.table("#" + PREFIX + this.$.id + ".table", function() {
             this.thead(function() {
-              var i, row, _i, _ref, _results;
+              var cells, i, row, _i, _ref, _results;
               _results = [];
               for (i = _i = 0, _ref = this.$.header; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
                 row = this.$.table[i];
-                _results.push(this.tr(function() {
+                cells = [];
+                this.tr(function() {
                   var cell, _j, _len, _results1;
                   _results1 = [];
                   for (_j = 0, _len = row.length; _j < _len; _j++) {
                     cell = row[_j];
-                    _results1.push(this.th({
+                    _results1.push(cells.push(this.th({
                       colspan: cell.span
-                    }, cell.text));
+                    })));
                   }
                   return _results1;
-                }));
+                });
+                _results.push(elems.push(cells));
               }
               return _results;
             });
             return this.tbody(function() {
-              var i, row, _i, _ref, _ref1, _results;
+              var cells, i, row, _i, _ref, _ref1, _results;
               _results = [];
               for (i = _i = _ref = this.$.header, _ref1 = this.$.table.length; _ref <= _ref1 ? _i < _ref1 : _i > _ref1; i = _ref <= _ref1 ? ++_i : --_i) {
                 row = this.$.table[i];
-                _results.push(this.tr(function() {
+                cells = [];
+                this.tr(function() {
                   var cell, _j, _len, _results1;
                   _results1 = [];
                   for (_j = 0, _len = row.length; _j < _len; _j++) {
                     cell = row[_j];
-                    _results1.push(this.td({
+                    _results1.push(cells.push(this.td({
                       colspan: cell.span
-                    }, cell.text));
+                    })));
                   }
                   return _results1;
-                }));
+                });
+                _results.push(elems.push(cells));
               }
               return _results;
             });
           });
         });
+        _results = [];
+        for (i = _i = 0, _len = elems.length; _i < _len; i = ++_i) {
+          row = elems[i];
+          _results.push((function() {
+            var _j, _len1, _results1;
+            _results1 = [];
+            for (j = _j = 0, _len1 = row.length; _j < _len1; j = ++_j) {
+              cell = row[j];
+              _results1.push(this.table[i][j].node.render({
+                elem: cell
+              }));
+            }
+            return _results1;
+          }).call(this));
+        }
+        return _results;
       };
 
       return Table;

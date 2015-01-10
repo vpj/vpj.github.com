@@ -3,7 +3,7 @@
 
   OPERATOR = "tag strong";
 
-  OPERATOR_INLINE = "string";
+  OPERATOR_INLINE = "tag strong";
 
   Mode = (function() {
     function Mode(CodeMirror) {
@@ -31,6 +31,15 @@
         });
         stream.skipToEnd();
         state.htmlState = this.CodeMirror.startState(this.htmlMode);
+        return OPERATOR;
+      }
+      match = stream.match(/^\|\|\|/);
+      if (match) {
+        stack.push({
+          indentation: stream.indentation(),
+          type: 'table'
+        });
+        stream.skipToEnd();
         return OPERATOR;
       }
       match = stream.match(/^\+\+\+/);
@@ -70,6 +79,11 @@
         state.media = true;
         return OPERATOR;
       }
+      match = stream.match(/^\/\/\//);
+      if (match) {
+        state.comment = true;
+        return OPERATOR;
+      }
       match = stream.match(/^\* /);
       if (match) {
         this.clearState(state);
@@ -90,7 +104,7 @@
     };
 
     Mode.prototype.matchInline = function(stream, state) {
-      var match;
+      var match, t, _i, _len, _ref;
       match = stream.match(/^``/);
       if (match) {
         state.code = !state.code;
@@ -129,6 +143,26 @@
         state.link = false;
         return OPERATOR_INLINE;
       }
+      match = stream.match(/^\[\[/);
+      if (match) {
+        state.inlineMedia = true;
+        return OPERATOR_INLINE;
+      }
+      match = stream.match(/^\]\]/);
+      if (match) {
+        state.inlineMedia = false;
+        return OPERATOR_INLINE;
+      }
+      match = stream.match(/^\|/);
+      if (match) {
+        _ref = state.stack;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          t = _ref[_i];
+          if (t.type === 'table') {
+            return OPERATOR_INLINE;
+          }
+        }
+      }
       return null;
     };
 
@@ -138,7 +172,9 @@
       state.subscript = false;
       state.superscript = false;
       state.code = false;
-      return state.link = false;
+      state.link = false;
+      state.inlineMedia = false;
+      return state.comment = false;
     };
 
     Mode.prototype.startState = function() {
@@ -152,8 +188,10 @@
         superscript: false,
         code: false,
         link: false,
+        inlineMedia: false,
         heading: false,
-        media: false
+        media: false,
+        comment: false
       };
     };
 
@@ -195,11 +233,15 @@
           sidenote: false,
           html: false,
           special: false,
-          code: false
+          code: false,
+          table: false
         };
         for (_i = 0, _len = stack.length; _i < _len; _i++) {
           t = stack[_i];
           types[t.type] = true;
+        }
+        if (types.table) {
+          this.clearState(state);
         }
         if (!types.code && !types.html) {
           match = this.matchBlock(stream, state);
@@ -212,7 +254,8 @@
         sidenote: false,
         html: false,
         special: false,
-        code: false
+        code: false,
+        table: false
       };
       for (_j = 0, _len1 = stack.length; _j < _len1; _j++) {
         t = stack[_j];
@@ -232,14 +275,17 @@
             return match;
           }
         }
+        state.start = false;
         match = this.matchInline(stream, state);
         if (match != null) {
           return match;
         }
         stream.next();
-        state.start = false;
         if (state.heading) {
           l += " header";
+        }
+        if (state.comment) {
+          l += " comment";
         }
         if (state.bold) {
           l += " strong";
@@ -248,6 +294,9 @@
           l += " em";
         }
         if (state.link) {
+          l += " link";
+        }
+        if (state.inlineMedia) {
           l += " link";
         }
         if (state.code) {

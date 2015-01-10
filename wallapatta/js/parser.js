@@ -190,7 +190,7 @@
       };
 
       Parser.prototype.processLine = function() {
-        var id, indent, line, n;
+        var id, indent, line, n, node, nodes, _i, _len;
         line = this.reader.get();
         if (line.empty) {
           if (this.node.type === TYPES.block) {
@@ -224,8 +224,16 @@
             break;
           case TYPES.codeBlock:
           case TYPES.html:
-          case TYPES.table:
             this.node.addText(line.line.substr(this.node.indentation));
+            return;
+          case TYPES.table:
+            nodes = this.node.addText(line.line.substr(this.node.indentation), {
+              map: this.map
+            });
+            for (_i = 0, _len = nodes.length; _i < _len; _i++) {
+              node = nodes[_i];
+              this.blocks.push(node);
+            }
             return;
         }
         switch (line.type) {
@@ -319,12 +327,12 @@
             }
             return this.node.addText(line.text);
           case TYPES.media:
-            this.addNode(new Media({
+            return this.addNode(new Media({
               map: this.map,
               indentation: line.indentation + 1,
               media: this.parseMedia(line.text)
             }));
-            this.prevNode = this.node;
+          case TYPES.comment:
             break;
           default:
             throw new Error('Unknown syntax');

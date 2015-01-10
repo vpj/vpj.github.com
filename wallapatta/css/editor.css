@@ -1,3 +1,15 @@
+.toolbar {
+  margin: 5px 25px;
+}
+.toolbar i {
+  cursor: pointer;
+  display: inline-block;
+  width: 30px;
+  color: #999;
+}
+.toolbar i:hover {
+  color: #333;
+}
 .CodeMirror {
   background: #f8f8f8;
   margin-bottom: 20px;

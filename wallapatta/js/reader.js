@@ -13,7 +13,8 @@
       heading: '#',
       orderedList: '- ',
       unorderedList: '* ',
-      media: '!'
+      media: '!',
+      comment: '///'
     };
     Reader = (function(_super) {
       __extends(Reader, _super);
@@ -122,6 +123,9 @@
             break;
           case BLOCK_TOKENS.media:
             line.type = TYPES.media;
+            break;
+          case BLOCK_TOKENS.comment:
+            line.type = TYPES.comment;
             break;
           default:
             line.type = TYPES.block;
