@@ -89,15 +89,10 @@
                   }
                 });
               });
-              this.$.elems.textarea = this.textarea(".editor", {
+              return this.$.elems.textarea = this.textarea(".editor", {
                 autocomplete: "off",
                 spellcheck: "false"
               });
-              return this.$.elems.parse = this.button(".button-primary", {
-                on: {
-                  click: this.$.on.parse
-                }
-              }, "Render");
             });
             return this.$.elems.preview = this.div(".preview.seven.columns", function() {
               this.$.elems.errors = this.div(".row.error", null);
@@ -283,8 +278,8 @@
         this.editor.on('change', this.on.change);
         height = window.innerHeight;
         console.log(height);
-        this.editor.setSize(null, "" + (height - 120) + "px");
-        this.elems.preview.style.maxHeight = "" + (height - 120) + "px";
+        this.editor.setSize(null, "" + (height - 100) + "px");
+        this.elems.preview.style.maxHeight = "" + (height - 50) + "px";
         return this.editor.setValue(Sample);
       });
 
