@@ -14,7 +14,7 @@
       Editor.extend();
 
       Editor.prototype.template = function() {
-        return this.div(".container.wallapatta-editor", function() {
+        this.$.elems.editorContainer = this.div(".container.wallapatta-editor", function() {
           return this.div(".row", function() {
             this.div(".five.columns", function() {
               this.div(".toolbar", function() {
@@ -83,9 +83,14 @@
                     click: this.$.on.outdent
                   }
                 });
-                return this.i(".fa.fa-columns", {
+                this.i(".fa.fa-columns", {
                   on: {
                     click: this.$.on.sidenote
+                  }
+                });
+                return this.i(".fa.fa-print", {
+                  on: {
+                    click: this.$.on.pdf
                   }
                 });
               });
@@ -103,10 +108,17 @@
             });
           });
         });
+        return this.$.elems.printContainer = this.div(".container.wallapatta-container.wallapatta-print", function() {
+          return this.$.elems.printDoc = this.div(".row.wallapatta", function() {
+            this.$.elems.printMain = this.div(".nine.columns", null);
+            return this.$.elems.printSidebar = this.div(".three.columns", null);
+          });
+        });
       };
 
       Editor.initialize(function() {
-        return this.elems = {};
+        this.elems = {};
+        return this._isPrint = false;
       });
 
       Editor.listen('change', function() {
@@ -237,6 +249,48 @@
         this.editor.indentLine(line, 'prev');
         this.editor.indentLine(line, 'add');
         return this.editor.focus();
+      });
+
+      Editor.listen('pdf', function() {
+        var e, parser, render, text;
+        if (!this._isPrint) {
+          this._isPrint = true;
+          this.elems.editorContainer.classList.add('wallapatta-editor-print');
+          this.elems.printContainer.style.display = 'block';
+          text = this.editor.getValue();
+          this.elems.printMain.innerHTML = '';
+          this.elems.printSidebar.innerHTML = '';
+          parser = new Parser({
+            text: text
+          });
+          try {
+            parser.parse();
+          } catch (_error) {
+            e = _error;
+            this.elems.errors.textContent = e.message;
+            return;
+          }
+          this.elems.errors.textContent = '';
+          render = parser.getRender();
+          render.render(this.elems.printMain, this.elems.printSidebar);
+          return window.requestAnimationFrame((function(_this) {
+            return function() {
+              var height, ratio, width;
+              ratio = _this.elems.printDoc.offsetWidth / 170;
+              width = ratio * 170;
+              height = ratio * 225;
+              return render.mediaLoaded(function() {
+                return setTimeout(function() {
+                  return render.setPages(height);
+                }, 500);
+              });
+            };
+          })(this));
+        } else {
+          this._isPrint = false;
+          this.elems.editorContainer.classList.remove('wallapatta-editor-print');
+          return this.elems.printContainer.style.display = 'none';
+        }
       });
 
       Editor.prototype.preview = function() {

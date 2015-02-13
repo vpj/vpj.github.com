@@ -28,3 +28,17 @@
   width: 100%;
   overflow-y: hidden;
 }
+.wallapatta-editor-print .editor {
+  display: none;
+}
+.wallapatta-editor-print .CodeMirror {
+  display: none;
+}
+.wallapatta-editor-print .preview {
+  display: none;
+}
+@media print {
+  .wallapatta-editor {
+    display: none;
+  }
+}
