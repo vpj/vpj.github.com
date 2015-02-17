@@ -90,7 +90,7 @@
                 });
                 return this.i(".fa.fa-print", {
                   on: {
-                    click: this.$.on.pdf
+                    click: this.$.on.print
                   }
                 });
               });
@@ -104,6 +104,42 @@
               return this.div(".row.wallapatta", function() {
                 this.$.elems.previewMain = this.div(".nine.columns", null);
                 return this.$.elems.previewSidebar = this.div(".three.columns", null);
+              });
+            });
+          });
+        });
+        this.$.elems.printForm = this.div(".container.print-form", {
+          style: {
+            display: 'none'
+          }
+        }, function() {
+          return this.form(function() {
+            this.button("Edit", {
+              on: {
+                click: this.$.on.closePrint
+              }
+            });
+            return this.div(".row", function() {
+              return this.div(".six.columns", function() {
+                this.label({
+                  "for": "width-input"
+                }, "Width (mm)");
+                this.$.elems.widthInput = this.input("#width-input.u-full-width", {
+                  type: "number",
+                  value: "170"
+                });
+                this.label({
+                  "for": "height-input"
+                }, "Height (mm)");
+                this.$.elems.heightInput = this.input("#height-input.u-full-width", {
+                  type: "number",
+                  value: "225"
+                });
+                return this.button(".button-primary", "Render", {
+                  on: {
+                    click: this.$.on.renderPrint
+                  }
+                });
               });
             });
           });
@@ -251,46 +287,59 @@
         return this.editor.focus();
       });
 
-      Editor.listen('pdf', function() {
-        var e, parser, render, text;
-        if (!this._isPrint) {
-          this._isPrint = true;
-          this.elems.editorContainer.classList.add('wallapatta-editor-print');
-          this.elems.printContainer.style.display = 'block';
-          text = this.editor.getValue();
-          this.elems.printMain.innerHTML = '';
-          this.elems.printSidebar.innerHTML = '';
-          parser = new Parser({
-            text: text
-          });
-          try {
-            parser.parse();
-          } catch (_error) {
-            e = _error;
-            this.elems.errors.textContent = e.message;
-            return;
-          }
-          this.elems.errors.textContent = '';
-          render = parser.getRender();
-          render.render(this.elems.printMain, this.elems.printSidebar);
-          return window.requestAnimationFrame((function(_this) {
-            return function() {
-              var height, ratio, width;
-              ratio = _this.elems.printDoc.offsetWidth / 170;
-              width = ratio * 170;
-              height = ratio * 225;
-              return render.mediaLoaded(function() {
-                return setTimeout(function() {
-                  return render.setPages(height);
-                }, 500);
-              });
-            };
-          })(this));
-        } else {
-          this._isPrint = false;
-          this.elems.editorContainer.classList.remove('wallapatta-editor-print');
-          return this.elems.printContainer.style.display = 'none';
+      Editor.listen('print', function() {
+        this.elems.editorContainer.classList.add('wallapatta-editor-print');
+        this.elems.printContainer.style.display = 'block';
+        return this.elems.printForm.style.display = 'block';
+      });
+
+      Editor.listen('renderPrint', function(e) {
+        var HEIGHT, WIDTH, parser, render, text;
+        e.preventDefault();
+        WIDTH = parseInt(this.elems.widthInput.value);
+        if (isNaN(WIDTH)) {
+          WIDTH = 170;
         }
+        HEIGHT = parseInt(this.elems.heightInput.value);
+        if (isNaN(HEIGHT)) {
+          HEIGHT = 225;
+        }
+        text = this.editor.getValue();
+        this.elems.printMain.innerHTML = '';
+        this.elems.printSidebar.innerHTML = '';
+        parser = new Parser({
+          text: text
+        });
+        try {
+          parser.parse();
+        } catch (_error) {
+          e = _error;
+          this.elems.errors.textContent = e.message;
+          return;
+        }
+        this.elems.errors.textContent = '';
+        render = parser.getRender();
+        render.render(this.elems.printMain, this.elems.printSidebar);
+        this.elems.printContainer.style.width = "" + WIDTH + "mm";
+        return window.requestAnimationFrame((function(_this) {
+          return function() {
+            var height, ratio, width;
+            ratio = _this.elems.printDoc.offsetWidth / WIDTH;
+            width = ratio * WIDTH;
+            height = ratio * HEIGHT;
+            return render.mediaLoaded(function() {
+              return setTimeout(function() {
+                return render.setPages(height);
+              }, 500);
+            });
+          };
+        })(this));
+      });
+
+      Editor.listen('closePrint', function() {
+        this.elems.editorContainer.classList.remove('wallapatta-editor-print');
+        this.elems.printContainer.style.display = 'none';
+        return this.elems.printForm.style.display = 'none';
       });
 
       Editor.prototype.preview = function() {

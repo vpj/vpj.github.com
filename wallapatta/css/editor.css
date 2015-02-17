@@ -28,17 +28,11 @@
   width: 100%;
   overflow-y: hidden;
 }
-.wallapatta-editor-print .editor {
-  display: none;
-}
-.wallapatta-editor-print .CodeMirror {
-  display: none;
-}
-.wallapatta-editor-print .preview {
+.wallapatta-editor-print {
   display: none;
 }
 @media print {
-  .wallapatta-editor {
-    display: none;
+  .print-form {
+    display: none !important;
   }
 }

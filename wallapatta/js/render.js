@@ -3,13 +3,13 @@
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Mod.require('Weya.Base', 'Wallapatta.TYPES', function(Base, TYPES) {
-    var BREAK_COST, INF, PAGE_COST, PAGE_MARGIN, PREFIX, Render, START;
+    var BREAK_COST, EMPTY_PAGE_COST, INF, PAGE_COST, PAGE_MARGIN, PREFIX, Render, START;
     PREFIX = 'wallapatta_';
     INF = 1e10;
     PAGE_COST = 100;
     BREAK_COST = {
       codeBlock: 1000,
-      special: 1000,
+      special: 2000,
       html: 1000,
       heading: 2000,
       list: 1000,
@@ -21,6 +21,11 @@
     };
     PAGE_MARGIN = '1000px';
     START = 1;
+    EMPTY_PAGE_COST = function(filled, height) {
+      var p;
+      p = filled / height;
+      return 1500 / p - 1500;
+    };
     Render = (function(_super) {
       __extends(Render, _super);
 
@@ -126,7 +131,7 @@
           if (pos > H) {
             break;
           }
-          c = this.broken[i] + this.breakCost[i] + PAGE_COST;
+          c = this.broken[i] + this.breakCost[i] + PAGE_COST + EMPTY_PAGE_COST(pos, H);
           if (this.broken[n] >= c) {
             this.broken[n] = c;
             this.nextBreak[n] = i;
