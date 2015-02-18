@@ -9,6 +9,25 @@
   </meta>
  </head>
  <body>
+  <div id="area"></div>
+  <script>
+   (function() {
+    var area = document.getElementById('area');
+    var time = {};
+    console.log = function(text) {
+     var div = document.createElement('div');
+     div.innerText = text;
+     area.insertBefore(div, area.firstChild);
+    };
+    console.time = function(text) {
+     time[text] = (new Date()).getTime();
+    };
+    console.timeEnd = function(text) {
+     console.log(text + ": " + ((new Date()).getTime() - time[text]) + "ms");
+    };
+
+   }).call(this);
+  </script>
   <script src="script.js">
   </script>
  </body>
