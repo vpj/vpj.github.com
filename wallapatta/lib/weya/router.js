@@ -1,7 +1,7 @@
 (function() {
   var History, Router, Weya,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
 
   if (this.Weya == null) {
     this.Weya = {};
@@ -18,8 +18,8 @@
     throw new Error('Weya.Base not found');
   }
 
-  Router = (function(_super) {
-    __extends(Router, _super);
+  Router = (function(superClass) {
+    extend(Router, superClass);
 
     function Router() {
       return Router.__super__.constructor.apply(this, arguments);
@@ -42,14 +42,14 @@
     Router.prototype._routes = {};
 
     Router.routes = function(routes) {
-      var k, v, _results;
+      var k, results, v;
       this.prototype._routes = _.clone(this.prototype._routes);
-      _results = [];
+      results = [];
       for (k in routes) {
         v = routes[k];
-        _results.push(this.prototype._routes[k] = v);
+        results.push(this.prototype._routes[k] = v);
       }
-      return _results;
+      return results;
     };
 
     Router.prototype.start = function(options) {
@@ -84,10 +84,10 @@
       }
       return Weya.history.route(route, (function(_this) {
         return function(fragment, event) {
-          var args, callback, callbacks, _i, _len, _ref, _results;
+          var args, callback, callbacks, i, len, ref, results;
           args = _this._extractParameters(route, fragment);
           _this._event = event;
-          if (((_ref = _this._event) != null ? _ref.type : void 0) === "popstate") {
+          if (((ref = _this._event) != null ? ref.type : void 0) === "popstate") {
             _this._history.pop();
             if (_this._history.length === 0) {
               _this._history.push({
@@ -107,26 +107,26 @@
           if (!Array.isArray(callbacks)) {
             callbacks = [callbacks];
           }
-          _results = [];
-          for (_i = 0, _len = callbacks.length; _i < _len; _i++) {
-            callback = callbacks[_i];
+          results = [];
+          for (i = 0, len = callbacks.length; i < len; i++) {
+            callback = callbacks[i];
             if ((typeof callback) === 'string') {
               callback = _this[callback];
             }
             if (!callback.apply(_this, args)) {
               break;
             } else {
-              _results.push(void 0);
+              results.push(void 0);
             }
           }
-          return _results;
+          return results;
         };
       })(this));
     };
 
     Router.prototype.getState = function() {
-      var _ref, _ref1;
-      if (((_ref = this._event) != null ? (_ref1 = _ref.originalEvent) != null ? _ref1.state : void 0 : void 0) != null) {
+      var ref, ref1;
+      if (((ref = this._event) != null ? (ref1 = ref.originalEvent) != null ? ref1.state : void 0 : void 0) != null) {
         return this._event.originalEvent.state;
       } else {
         return null;
@@ -151,14 +151,14 @@
     };
 
     Router.prototype._bindRoutes = function() {
-      var name, route, _ref, _results;
-      _ref = this._routes;
-      _results = [];
-      for (route in _ref) {
-        name = _ref[route];
-        _results.push(this.route(route, name));
+      var name, ref, results, route;
+      ref = this._routes;
+      results = [];
+      for (route in ref) {
+        name = ref[route];
+        results.push(this.route(route, name));
       }
-      return _results;
+      return results;
     };
 
     Router.prototype._routeToRegExp = function(route) {
@@ -188,8 +188,8 @@
 
   })(Weya.Base);
 
-  History = (function(_super) {
-    __extends(History, _super);
+  History = (function(superClass) {
+    extend(History, superClass);
 
     function History() {
       return History.__super__.constructor.apply(this, arguments);
@@ -260,26 +260,26 @@
     };
 
     History.prototype.back = function() {
-      var _ref;
+      var ref;
       if (this._emulateState === true) {
         this.popEmulateState();
         return this.loadUrl(null, null);
       } else {
-        return (_ref = this.history) != null ? typeof _ref.back === "function" ? _ref.back() : void 0 : void 0;
+        return (ref = this.history) != null ? typeof ref.back === "function" ? ref.back() : void 0 : void 0;
       }
     };
 
     History.prototype.canBack = function() {
-      var _ref;
+      var ref;
       if (this._emulateState === true) {
         return this.stateList.length > 1;
       } else {
-        return ((_ref = this.history) != null ? _ref.back : void 0) != null;
+        return ((ref = this.history) != null ? ref.back : void 0) != null;
       }
     };
 
     History.prototype.start = function(options) {
-      var _ref;
+      var ref;
       History.started = true;
       this.options = _.extend({
         root: '/'
@@ -288,7 +288,7 @@
       this._emulateState = this.options.emulateState === true;
       this._wantsHashChange = this._emulateState === false && this.options.hashChange !== false;
       this._wantsPushState = this._emulateState === false && this.options.pushState === true;
-      this._hasPushState = this._wantsPushState === true && (((_ref = this.history) != null ? _ref.pushState : void 0) != null);
+      this._hasPushState = this._wantsPushState === true && (((ref = this.history) != null ? ref.pushState : void 0) != null);
       if (this._emulateState && (this.options.start != null)) {
         this.pushEmulateState(this.options.start.state, this.options.start.title, this.options.start.fragment);
       }
@@ -387,7 +387,7 @@
       var href;
       if (replace) {
         href = location.href.replace(/(javascript:|#).*$/, '');
-        return location.replace("" + href + "#" + fragment);
+        return location.replace(href + "#" + fragment);
       } else {
         return location.hash = "#" + fragment;
       }

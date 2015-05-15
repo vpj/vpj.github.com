@@ -1,6 +1,6 @@
 (function() {
   Mod.require('Wallapatta.Parser', function(Parser) {
-    var PAGE_HEIGHT, PAGE_WIDTH, PRINT, RATIO, doc, docs, process, processAll, renderPrint, renderWeb, _i, _len;
+    var PAGE_HEIGHT, PAGE_WIDTH, PRINT, RATIO, doc, docs, j, len, process, processAll, renderPrint, renderWeb;
     RATIO = 0;
     PAGE_HEIGHT = PAGE_WIDTH = 0;
     if ((window.location.href.indexOf('print')) !== -1) {
@@ -65,19 +65,19 @@
       });
     };
     processAll = function() {
-      var doc, docs, i, _i, _len, _results;
+      var doc, docs, i, j, len, results;
       docs = document.getElementsByClassName('wallapatta');
-      _results = [];
-      for (i = _i = 0, _len = docs.length; _i < _len; i = ++_i) {
+      results = [];
+      for (i = j = 0, len = docs.length; j < len; i = ++j) {
         doc = docs[i];
-        _results.push(process(i, doc));
+        results.push(process(i, doc));
       }
-      return _results;
+      return results;
     };
     if (PRINT) {
       docs = document.getElementsByClassName('wallapatta-container');
-      for (_i = 0, _len = docs.length; _i < _len; _i++) {
-        doc = docs[_i];
+      for (j = 0, len = docs.length; j < len; j++) {
+        doc = docs[j];
         doc.classList.add('wallapatta-print');
       }
       return window.requestAnimationFrame(function() {

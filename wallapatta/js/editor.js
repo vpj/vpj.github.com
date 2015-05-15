@@ -1,11 +1,11 @@
 (function() {
-  var __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
 
   Mod.require('Weya.Base', 'CodeMirror', 'Wallapatta.Parser', 'Wallapatta.Sample', 'HLJS', function(Base, CodeMirror, Parser, Sample, HLJS) {
-    var Editor, editor;
-    Editor = (function(_super) {
-      __extends(Editor, _super);
+    var EDITOR, Editor;
+    Editor = (function(superClass) {
+      extend(Editor, superClass);
 
       function Editor() {
         return Editor.__super__.constructor.apply(this, arguments);
@@ -18,80 +18,84 @@
           return this.div(".row", function() {
             this.div(".five.columns", function() {
               this.div(".toolbar", function() {
-                this.i(".fa.fa-header", {
-                  on: {
-                    click: this.$.on.header
-                  }
+                this.div("#toolbar", function() {
+                  return this.i(".fa.fa-print", {
+                    on: {
+                      click: this.$.on.print
+                    }
+                  });
                 });
-                this.i(".fa.fa-bold", {
-                  on: {
-                    click: this.$.on.bold
-                  }
-                });
-                this.i(".fa.fa-italic", {
-                  on: {
-                    click: this.$.on.italic
-                  }
-                });
-                this.i(".fa.fa-link", {
-                  on: {
-                    click: this.$.on.link
-                  }
-                });
-                this.i(".fa.fa-code", {
-                  on: {
-                    click: this.$.on.inlineCode
-                  }
-                });
-                this.i(".fa.fa-camera", {
-                  on: {
-                    click: this.$.on.inlineMedia
-                  }
-                });
-                this.i(".fa.fa-superscript", {
-                  on: {
-                    click: this.$.on.superscript
-                  }
-                });
-                this.i(".fa.fa-subscript", {
-                  on: {
-                    click: this.$.on.subscript
-                  }
-                });
-                this.i(".fa.fa-table", {
-                  on: {
-                    click: this.$.on.table
-                  }
-                });
-                this.i(".fa.fa-list-ol", {
-                  on: {
-                    click: this.$.on.listOl
-                  }
-                });
-                this.i(".fa.fa-list-ul", {
-                  on: {
-                    click: this.$.on.listUl
-                  }
-                });
-                this.i(".fa.fa-indent", {
-                  on: {
-                    click: this.$.on.indent
-                  }
-                });
-                this.i(".fa.fa-outdent", {
-                  on: {
-                    click: this.$.on.outdent
-                  }
-                });
-                this.i(".fa.fa-columns", {
-                  on: {
-                    click: this.$.on.sidenote
-                  }
-                });
-                return this.i(".fa.fa-print", {
-                  on: {
-                    click: this.$.on.print
-                  }
+                return this.div(function() {
+                  this.i(".fa.fa-header", {
+                    on: {
+                      click: this.$.on.header
+                    }
+                  });
+                  this.i(".fa.fa-bold", {
+                    on: {
+                      click: this.$.on.bold
+                    }
+                  });
+                  this.i(".fa.fa-italic", {
+                    on: {
+                      click: this.$.on.italic
+                    }
+                  });
+                  this.i(".fa.fa-link", {
+                    on: {
+                      click: this.$.on.link
+                    }
+                  });
+                  this.i(".fa.fa-code", {
+                    on: {
+                      click: this.$.on.inlineCode
+                    }
+                  });
+                  this.i(".fa.fa-camera", {
+                    on: {
+                      click: this.$.on.inlineMedia
+                    }
+                  });
+                  this.i(".fa.fa-superscript", {
+                    on: {
+                      click: this.$.on.superscript
+                    }
+                  });
+                  this.i(".fa.fa-subscript", {
+                    on: {
+                      click: this.$.on.subscript
+                    }
+                  });
+                  this.i(".fa.fa-table", {
+                    on: {
+                      click: this.$.on.table
+                    }
+                  });
+                  this.i(".fa.fa-list-ol", {
+                    on: {
+                      click: this.$.on.listOl
+                    }
+                  });
+                  this.i(".fa.fa-list-ul", {
+                    on: {
+                      click: this.$.on.listUl
+                    }
+                  });
+                  this.i(".fa.fa-indent", {
+                    on: {
+                      click: this.$.on.indent
+                    }
+                  });
+                  this.i(".fa.fa-outdent", {
+                    on: {
+                      click: this.$.on.outdent
+                    }
+                  });
+                  return this.i(".fa.fa-columns", {
+                    on: {
+                      click: this.$.on.sidenote
+                    }
+                  });
                 });
               });
               return this.$.elems.textarea = this.textarea(".editor", {
@@ -158,7 +162,8 @@
       });
 
       Editor.listen('change', function() {
-        return this.preview();
+        this.preview();
+        return typeof this.onChangeListener === "function" ? this.onChangeListener() : void 0;
       });
 
       Editor.listen('parse', function(e) {
@@ -233,39 +238,39 @@
       });
 
       Editor.listen('indent', function() {
-        var i, sel, sels, _i, _len, _results;
+        var i, j, len, results, sel, sels;
         sels = this.editor.listSelections();
-        _results = [];
-        for (_i = 0, _len = sels.length; _i < _len; _i++) {
-          sel = sels[_i];
-          _results.push((function() {
-            var _j, _ref, _ref1, _results1;
-            _results1 = [];
-            for (i = _j = _ref = sel.anchor.line, _ref1 = sel.head.line; _ref <= _ref1 ? _j <= _ref1 : _j >= _ref1; i = _ref <= _ref1 ? ++_j : --_j) {
-              _results1.push(this.editor.indentLine(i, 'add'));
+        results = [];
+        for (j = 0, len = sels.length; j < len; j++) {
+          sel = sels[j];
+          results.push((function() {
+            var k, ref, ref1, results1;
+            results1 = [];
+            for (i = k = ref = sel.anchor.line, ref1 = sel.head.line; ref <= ref1 ? k <= ref1 : k >= ref1; i = ref <= ref1 ? ++k : --k) {
+              results1.push(this.editor.indentLine(i, 'add'));
             }
-            return _results1;
+            return results1;
           }).call(this));
         }
-        return _results;
+        return results;
       });
 
       Editor.listen('outdent', function() {
-        var i, sel, sels, _i, _len, _results;
+        var i, j, len, results, sel, sels;
         sels = this.editor.listSelections();
-        _results = [];
-        for (_i = 0, _len = sels.length; _i < _len; _i++) {
-          sel = sels[_i];
-          _results.push((function() {
-            var _j, _ref, _ref1, _results1;
-            _results1 = [];
-            for (i = _j = _ref = sel.anchor.line, _ref1 = sel.head.line; _ref <= _ref1 ? _j <= _ref1 : _j >= _ref1; i = _ref <= _ref1 ? ++_j : --_j) {
-              _results1.push(this.editor.indentLine(i, 'subtract'));
+        results = [];
+        for (j = 0, len = sels.length; j < len; j++) {
+          sel = sels[j];
+          results.push((function() {
+            var k, ref, ref1, results1;
+            results1 = [];
+            for (i = k = ref = sel.anchor.line, ref1 = sel.head.line; ref <= ref1 ? k <= ref1 : k >= ref1; i = ref <= ref1 ? ++k : --k) {
+              results1.push(this.editor.indentLine(i, 'subtract'));
             }
-            return _results1;
+            return results1;
           }).call(this));
         }
-        return _results;
+        return results;
       });
 
       Editor.listen('listOl', function() {
@@ -320,7 +325,7 @@
         this.elems.errors.textContent = '';
         render = parser.getRender();
         render.render(this.elems.printMain, this.elems.printSidebar);
-        this.elems.printContainer.style.width = "" + WIDTH + "mm";
+        this.elems.printContainer.style.width = WIDTH + "mm";
         return window.requestAnimationFrame((function(_this) {
           return function() {
             var height, ratio, width;
@@ -341,6 +346,14 @@
         this.elems.printContainer.style.display = 'none';
         return this.elems.printForm.style.display = 'none';
       });
+
+      Editor.prototype.setText = function(text) {
+        return this.editor.setValue(text);
+      };
+
+      Editor.prototype.getText = function() {
+        return this.editor.getValue();
+      };
 
       Editor.prototype.preview = function() {
         var e, parser, render, text;
@@ -381,8 +394,8 @@
         this.editor.on('change', this.on.change);
         height = window.innerHeight;
         console.log(height);
-        this.editor.setSize(null, "" + (height - 100) + "px");
-        this.elems.preview.style.maxHeight = "" + (height - 50) + "px";
+        this.editor.setSize(null, (height - 100) + "px");
+        this.elems.preview.style.maxHeight = (height - 50) + "px";
         return this.editor.setValue(Sample);
       });
 
@@ -398,8 +411,9 @@
       return Editor;
 
     })(Base);
-    editor = new Editor;
-    return editor.render();
+    EDITOR = new Editor;
+    EDITOR.render();
+    return Mod.set('Editor', EDITOR);
   });
 
 }).call(this);

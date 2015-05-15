@@ -4,11 +4,28 @@
 .toolbar i {
   cursor: pointer;
   display: inline-block;
-  width: 30px;
+  width: 25px;
   color: #999;
 }
 .toolbar i:hover {
   color: #333;
+}
+.toolbar .file-name {
+  font-size: 12px;
+  font-weight: 600;
+  margin-left: 20px;
+}
+.toolbar span {
+  display: inline-block;
+}
+.toolbar #toolbar {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 3px;
+  margin-bottom: 3px;
+}
+.toolbar #toolbar i {
+  color: #aaa;
+  width: 30px;
 }
 .CodeMirror {
   background: #f8f8f8;

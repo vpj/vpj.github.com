@@ -99,12 +99,12 @@
         stream.eatWhile('#');
         this.clearState(state);
         state.heading = true;
-        return "" + OPERATOR + " header";
+        return OPERATOR + " header";
       }
     };
 
     Mode.prototype.matchInline = function(stream, state) {
-      var match, t, _i, _len, _ref;
+      var i, len, match, ref, t;
       match = stream.match(/^``/);
       if (match) {
         state.code = !state.code;
@@ -155,9 +155,9 @@
       }
       match = stream.match(/^\|/);
       if (match) {
-        _ref = state.stack;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          t = _ref[_i];
+        ref = state.stack;
+        for (i = 0, len = ref.length; i < len; i++) {
+          t = ref[i];
           if (t.type === 'table') {
             return OPERATOR_INLINE;
           }
@@ -200,7 +200,7 @@
     };
 
     Mode.prototype.token = function(stream, state) {
-      var l, match, s, stack, t, types, _i, _j, _len, _len1;
+      var i, j, l, len, len1, match, s, stack, t, types;
       if (state.media) {
         stream.skipToEnd();
         state.media = false;
@@ -236,8 +236,8 @@
           code: false,
           table: false
         };
-        for (_i = 0, _len = stack.length; _i < _len; _i++) {
-          t = stack[_i];
+        for (i = 0, len = stack.length; i < len; i++) {
+          t = stack[i];
           types[t.type] = true;
         }
         if (types.table) {
@@ -257,8 +257,8 @@
         code: false,
         table: false
       };
-      for (_j = 0, _len1 = stack.length; _j < _len1; _j++) {
-        t = stack[_j];
+      for (j = 0, len1 = stack.length; j < len1; j++) {
+        t = stack[j];
         types[t.type] = true;
       }
       l = "";

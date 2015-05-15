@@ -13,15 +13,15 @@
     Base.prototype.on = {};
 
     Base.extend = function() {
-      var events, k, v, _results;
+      var events, k, results, v;
       events = this.prototype.on;
       this.prototype.on = {};
-      _results = [];
+      results = [];
       for (k in events) {
         v = events[k];
-        _results.push(this.prototype.on[k] = v);
+        results.push(this.prototype.on[k] = v);
       }
-      return _results;
+      return results;
     };
 
     Base.listen = function(name, func) {
@@ -46,51 +46,51 @@
     };
 
     Base.prototype._init = function() {
-      var init, _i, _len, _ref;
-      _ref = this._initialize;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        init = _ref[_i];
+      var i, init, len, ref;
+      ref = this._initialize;
+      for (i = 0, len = ref.length; i < len; i++) {
+        init = ref[i];
         init.apply(this, arguments);
       }
     };
 
     Base.include = function(obj) {
-      var event, k, listener, v, _results;
-      _results = [];
+      var event, k, listener, results, v;
+      results = [];
       for (k in obj) {
         v = obj[k];
         switch (k) {
           case 'initialize':
-            _results.push(this.prototype._initialize.push(v));
+            results.push(this.prototype._initialize.push(v));
             break;
           case 'on':
-            _results.push((function() {
-              var _results1;
-              _results1 = [];
+            results.push((function() {
+              var results1;
+              results1 = [];
               for (event in v) {
                 listener = v[event];
-                _results1.push(this.prototype.on[event] = listener);
+                results1.push(this.prototype.on[event] = listener);
               }
-              return _results1;
+              return results1;
             }).call(this));
             break;
           default:
-            _results.push(this.prototype[k] = v);
+            results.push(this.prototype[k] = v);
         }
       }
-      return _results;
+      return results;
     };
 
     Base.initialize(function() {
-      var events, k, v, _results;
+      var events, k, results, v;
       events = this.on;
       this.on = {};
-      _results = [];
+      results = [];
       for (k in events) {
         v = events[k];
-        _results.push(this.on[k] = v.bind(this));
+        results.push(this.on[k] = v.bind(this));
       }
-      return _results;
+      return results;
     });
 
     return Base;

@@ -1,5 +1,5 @@
 (function() {
-  var Mod, callbacks, loaded, modules, _self;
+  var Mod, _self, callbacks, loaded, modules;
 
   Mod = {};
 
@@ -31,7 +31,7 @@
   };
 
   Mod.require = function() {
-    var callback, i, l, list, _i, _j, _len, _ref;
+    var callback, i, j, l, len, list, m, ref;
     if (arguments.length < 1) {
       throw new Error('Mod.require needs at least on argument');
     } else if (arguments.length === 2 && Array.isArray(arguments[0])) {
@@ -40,15 +40,15 @@
     } else {
       callback = arguments[arguments.length - 1];
       list = [];
-      for (i = _i = 0, _ref = arguments.length - 1; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+      for (i = j = 0, ref = arguments.length - 1; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
         list.push(arguments[i]);
       }
     }
     if ((typeof callback) !== 'function') {
       throw new Error('Last argument of Mod.require should be a function');
     }
-    for (_j = 0, _len = list.length; _j < _len; _j++) {
-      l = list[_j];
+    for (m = 0, len = list.length; m < len; m++) {
+      l = list[m];
       if ((typeof l) !== 'string') {
         throw new Error('Required namespaces should be strings');
       }
@@ -61,12 +61,12 @@
   };
 
   Mod.initialize = function() {
-    var cb, first, k, list, n, nC, name, s, satis, todo, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1, _results;
+    var cb, first, j, k, len, len1, len2, len3, len4, list, m, n, nC, name, o, p, q, ref, ref1, results, s, satis, todo;
     while (true) {
       n = 0;
       nC = 0;
-      for (_i = 0, _len = callbacks.length; _i < _len; _i++) {
-        cb = callbacks[_i];
+      for (j = 0, len = callbacks.length; j < len; j++) {
+        cb = callbacks[j];
         if (!(cb.called === false)) {
           continue;
         }
@@ -74,9 +74,9 @@
         k = parseInt(k);
         list = [];
         satis = true;
-        _ref = cb.list;
-        for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-          name = _ref[_j];
+        ref = cb.list;
+        for (m = 0, len1 = ref.length; m < len1; m++) {
+          name = ref[m];
           if (modules[name] != null) {
             list.push(modules[name]);
           } else {
@@ -96,12 +96,12 @@
       if (n !== 0 && nC === 0) {
         todo = {};
         s = "Cyclic dependancy: ";
-        for (_k = 0, _len2 = callbacks.length; _k < _len2; _k++) {
-          cb = callbacks[_k];
+        for (o = 0, len2 = callbacks.length; o < len2; o++) {
+          cb = callbacks[o];
           if (cb.called === false) {
-            _ref1 = cb.list;
-            for (_l = 0, _len3 = _ref1.length; _l < _len3; _l++) {
-              name = _ref1[_l];
+            ref1 = cb.list;
+            for (p = 0, len3 = ref1.length; p < len3; p++) {
+              name = ref1[p];
               if (modules[name] == null) {
                 todo[name] = true;
               }
@@ -117,12 +117,12 @@
       }
     }
     console.log("Initialized");
-    _results = [];
-    for (_m = 0, _len4 = loaded.length; _m < _len4; _m++) {
-      cb = loaded[_m];
-      _results.push(cb());
+    results = [];
+    for (q = 0, len4 = loaded.length; q < len4; q++) {
+      cb = loaded[q];
+      results.push(cb());
     }
-    return _results;
+    return results;
   };
 
 }).call(this);

@@ -12,63 +12,63 @@
   };
 
   weyaDomCreate = function() {
-    var append, name, parseIdClass, setAttributes, setEvents, setStyles, weya, wrapAppend, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
+    var append, j, l, len, len1, len2, m, name, parseIdClass, ref, ref1, ref2, setAttributes, setEvents, setStyles, weya, wrapAppend;
     weya = {
       _elem: null
     };
     setStyles = function(elem, styles) {
-      var k, v, _results;
-      _results = [];
+      var k, results, v;
+      results = [];
       for (k in styles) {
         v = styles[k];
         if (v != null) {
-          _results.push(elem.style.setProperty(k, v));
+          results.push(elem.style.setProperty(k, v));
         } else {
-          _results.push(elem.style.removeProperty(k));
+          results.push(elem.style.removeProperty(k));
         }
       }
-      return _results;
+      return results;
     };
     setEvents = function(elem, events) {
-      var k, v, _results;
-      _results = [];
+      var k, results, v;
+      results = [];
       for (k in events) {
         v = events[k];
-        _results.push(elem.addEventListener(k, v, false));
+        results.push(elem.addEventListener(k, v, false));
       }
-      return _results;
+      return results;
     };
     setAttributes = function(elem, attrs) {
-      var k, v, _results;
-      _results = [];
+      var k, results, v;
+      results = [];
       for (k in attrs) {
         v = attrs[k];
         switch (k) {
           case 'style':
-            _results.push(setStyles(elem, v));
+            results.push(setStyles(elem, v));
             break;
           case 'on':
-            _results.push(setEvents(elem, v));
+            results.push(setEvents(elem, v));
             break;
           default:
             if (v != null) {
-              _results.push(elem.setAttribute(k, v));
+              results.push(elem.setAttribute(k, v));
             } else {
-              _results.push(elem.removeAttribute(k));
+              results.push(elem.removeAttribute(k));
             }
         }
       }
-      return _results;
+      return results;
     };
     parseIdClass = function(str) {
-      var c, i, res, _i, _len, _ref;
+      var c, i, j, len, ref, res;
       res = {
         id: null,
         "class": []
       };
-      _ref = str.split(".");
-      for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
-        c = _ref[i];
+      ref = str.split(".");
+      for (i = j = 0, len = ref.length; j < len; i = ++j) {
+        c = ref[i];
         if (c.indexOf("#") === 0) {
           res.id = c.substr(1);
         } else if (c !== "") {
@@ -82,12 +82,12 @@
       return res;
     };
     append = function(ns, name, args) {
-      var arg, attrs, c, className, contentFunction, contentText, elem, i, idClass, pElem, _i, _j, _len, _len1, _ref;
+      var arg, attrs, c, className, contentFunction, contentText, elem, i, idClass, j, l, len, len1, pElem, ref;
       idClass = null;
       contentText = null;
       attrs = null;
       contentFunction = null;
-      for (i = _i = 0, _len = args.length; _i < _len; i = ++_i) {
+      for (i = j = 0, len = args.length; j < len; i = ++j) {
         arg = args[i];
         switch (typeof arg) {
           case 'function':
@@ -122,9 +122,9 @@
         }
         if (idClass["class"] != null) {
           className = '';
-          _ref = idClass["class"];
-          for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-            c = _ref[_j];
+          ref = idClass["class"];
+          for (l = 0, len1 = ref.length; l < len1; l++) {
+            c = ref[l];
             if (className !== '') {
               className += ' ';
             }
@@ -152,26 +152,26 @@
         return append.call(this, ns, name, arguments);
       };
     };
-    _ref = Tags.svg.split(' ');
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      name = _ref[_i];
+    ref = Tags.svg.split(' ');
+    for (j = 0, len = ref.length; j < len; j++) {
+      name = ref[j];
       weya[name] = wrapAppend("http://www.w3.org/2000/svg", name);
     }
-    _ref1 = Tags.html.split(' ');
-    for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-      name = _ref1[_j];
+    ref1 = Tags.html.split(' ');
+    for (l = 0, len1 = ref1.length; l < len1; l++) {
+      name = ref1[l];
       weya[name] = wrapAppend("http://www.w3.org/1999/xhtml", name);
     }
-    _ref2 = Tags.htmlVoid.split(' ');
-    for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-      name = _ref2[_k];
+    ref2 = Tags.htmlVoid.split(' ');
+    for (m = 0, len2 = ref2.length; m < len2; m++) {
+      name = ref2[m];
       weya[name] = wrapAppend(null, name);
     }
     return weya;
   };
 
   weyaMarkupCreate = function() {
-    var append, name, parseIdClass, setAttributes, setEvents, setIndent, setStyles, weya, wrapAppend, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
+    var append, j, l, len, len1, len2, m, name, parseIdClass, ref, ref1, ref2, setAttributes, setEvents, setIndent, setStyles, weya, wrapAppend;
     weya = {
       _buf: null,
       _indent: 0
@@ -181,54 +181,54 @@
       buf.push(" style=\"");
       for (k in styles) {
         v = styles[k];
-        buf.push("" + k + ":" + v + ";");
+        buf.push(k + ":" + v + ";");
       }
       return buf.push("\"");
     };
     setEvents = function(buf, events) {
-      var k, v, _results;
-      _results = [];
+      var k, results, v;
+      results = [];
       for (k in events) {
         v = events[k];
-        _results.push(buf.push(" on" + k + "=\"" + v + "\""));
+        results.push(buf.push(" on" + k + "=\"" + v + "\""));
       }
-      return _results;
+      return results;
     };
     setAttributes = function(buf, attrs) {
-      var k, v, _results;
-      _results = [];
+      var k, results, v;
+      results = [];
       for (k in attrs) {
         v = attrs[k];
         switch (k) {
           case 'style':
-            _results.push(setStyles(buf, v));
+            results.push(setStyles(buf, v));
             break;
           case 'on':
-            _results.push(setEvents(buf, v));
+            results.push(setEvents(buf, v));
             break;
           default:
-            _results.push(buf.push(" " + k + "=\"" + v + "\""));
+            results.push(buf.push(" " + k + "=\"" + v + "\""));
         }
       }
-      return _results;
+      return results;
     };
     setIndent = function(buf, indent) {
-      var i, _i, _results;
-      _results = [];
-      for (i = _i = 0; 0 <= indent ? _i < indent : _i > indent; i = 0 <= indent ? ++_i : --_i) {
-        _results.push(buf.push(" "));
+      var i, j, ref, results;
+      results = [];
+      for (i = j = 0, ref = indent; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
+        results.push(buf.push(" "));
       }
-      return _results;
+      return results;
     };
     parseIdClass = function(str) {
-      var c, i, res, _i, _len, _ref;
+      var c, i, j, len, ref, res;
       res = {
         id: null,
         "class": null
       };
-      _ref = str.split(".");
-      for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
-        c = _ref[i];
+      ref = str.split(".");
+      for (i = j = 0, len = ref.length; j < len; i = ++j) {
+        c = ref[i];
         if (c.indexOf("#") === 0) {
           res.id = c.substr(1);
         } else if (c !== "") {
@@ -242,12 +242,12 @@
       return res;
     };
     append = function(ns, name, args) {
-      var arg, attrs, buf, c, contentFunction, contentText, i, idClass, _i, _len;
+      var arg, attrs, buf, c, contentFunction, contentText, i, idClass, j, len;
       idClass = null;
       contentText = null;
       attrs = null;
       contentFunction = null;
-      for (i = _i = 0, _len = args.length; _i < _len; i = ++_i) {
+      for (i = j = 0, len = args.length; j < len; i = ++j) {
         arg = args[i];
         switch (typeof arg) {
           case 'function':
@@ -302,19 +302,19 @@
         return append.call(this, ns, name, arguments);
       };
     };
-    _ref = Tags.svg.split(' ');
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      name = _ref[_i];
+    ref = Tags.svg.split(' ');
+    for (j = 0, len = ref.length; j < len; j++) {
+      name = ref[j];
       weya[name] = wrapAppend("http://www.w3.org/2000/svg", name);
     }
-    _ref1 = Tags.html.split(' ');
-    for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-      name = _ref1[_j];
+    ref1 = Tags.html.split(' ');
+    for (l = 0, len1 = ref1.length; l < len1; l++) {
+      name = ref1[l];
       weya[name] = wrapAppend(null, name);
     }
-    _ref2 = Tags.htmlVoid.split(' ');
-    for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-      name = _ref2[_k];
+    ref2 = Tags.htmlVoid.split(' ');
+    for (m = 0, len2 = ref2.length; m < len2; m++) {
+      name = ref2[m];
       weya[name] = wrapAppend(null, name);
     }
     return weya;
@@ -352,13 +352,13 @@
   };
 
   Weya.setApi = function(api) {
-    var k, v, _results;
-    _results = [];
+    var k, results, v;
+    results = [];
     for (k in api) {
       v = api[k];
-      _results.push(Api[k] = v);
+      results.push(Api[k] = v);
     }
-    return _results;
+    return results;
   };
 
   if (typeof module !== "undefined" && module !== null) {

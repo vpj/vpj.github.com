@@ -1,6 +1,6 @@
 (function() {
-  var __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
 
   Mod.require('Weya.Base', 'Wallapatta.TYPES', 'Wallapatta.Text', 'Wallapatta.Bold', 'Wallapatta.Italics', 'Wallapatta.SuperScript', 'Wallapatta.SubScript', 'Wallapatta.Code', 'Wallapatta.Link', 'Wallapatta.MediaInline', 'Wallapatta.Block', 'Wallapatta.Section', 'Wallapatta.List', 'Wallapatta.ListItem', 'Wallapatta.Sidenote', 'Wallapatta.Article', 'Wallapatta.Media', 'Wallapatta.CodeBlock', 'Wallapatta.Table', 'Wallapatta.Special', 'Wallapatta.Html', 'Wallapatta.Map', 'Wallapatta.Reader', 'Wallapatta.Render', function(Base, TYPES, Text, Bold, Italics, SuperScript, SubScript, Code, Link, MediaInline, Block, Section, List, ListItem, Sidenote, Article, Media, CodeBlock, Table, Special, Html, Map, Reader, Render) {
     var BLOCK_LEVEL, Parser, TOKENS, TOKEN_MATCHES;
@@ -22,8 +22,8 @@
       mediaEnd: ']]'
     };
     BLOCK_LEVEL = 10;
-    Parser = (function(_super) {
-      __extends(Parser, _super);
+    Parser = (function(superClass) {
+      extend(Parser, superClass);
 
       function Parser() {
         return Parser.__super__.constructor.apply(this, arguments);
@@ -55,7 +55,7 @@
       };
 
       Parser.prototype.parse = function() {
-        var block, e, _i, _len, _ref, _results;
+        var block, e, j, len, ref, results;
         while (this.reader.has()) {
           try {
             this.processLine();
@@ -66,18 +66,18 @@
           this.reader.next();
         }
         this.map.smallElements();
-        _ref = this.blocks;
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          block = _ref[_i];
+        ref = this.blocks;
+        results = [];
+        for (j = 0, len = ref.length; j < len; j++) {
+          block = ref[j];
           try {
-            _results.push(this.parseText(block.text, block));
+            results.push(this.parseText(block.text, block));
           } catch (_error) {
             e = _error;
-            throw new Error("" + e.message + ": \"" + block.text + "\"");
+            throw new Error(e.message + ": \"" + block.text + "\"");
           }
         }
-        return _results;
+        return results;
       };
 
       Parser.prototype.addNode = function(node) {
@@ -190,7 +190,7 @@
       };
 
       Parser.prototype.processLine = function() {
-        var id, indent, line, n, node, nodes, _i, _len;
+        var id, indent, j, len, line, n, node, nodes;
         line = this.reader.get();
         if (line.empty) {
           if (this.node.type === TYPES.block) {
@@ -230,8 +230,8 @@
             nodes = this.node.addText(line.line.substr(this.node.indentation), {
               map: this.map
             });
-            for (_i = 0, _len = nodes.length; _i < _len; _i++) {
-              node = nodes[_i];
+            for (j = 0, len = nodes.length; j < len; j++) {
+              node = nodes[j];
               this.blocks.push(node);
             }
             return;

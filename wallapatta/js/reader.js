@@ -1,6 +1,6 @@
 (function() {
-  var __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
 
   Mod.require('Weya.Base', 'Wallapatta.TYPES', function(Base, TYPES) {
     var BLOCK_TOKENS, Reader;
@@ -16,8 +16,8 @@
       media: '!',
       comment: '///'
     };
-    Reader = (function(_super) {
-      __extends(Reader, _super);
+    Reader = (function(superClass) {
+      extend(Reader, superClass);
 
       function Reader() {
         return Reader.__super__.constructor.apply(this, arguments);
@@ -45,14 +45,14 @@
       };
 
       Reader.prototype.parse = function() {
-        var n, s, _i, _len, _ref, _results;
-        _ref = this.lines;
-        _results = [];
-        for (n = _i = 0, _len = _ref.length; _i < _len; n = ++_i) {
-          s = _ref[n];
-          _results.push(this.lines[n] = this.parseLine(s));
+        var j, len, n, ref, results, s;
+        ref = this.lines;
+        results = [];
+        for (n = j = 0, len = ref.length; j < len; n = ++j) {
+          s = ref[n];
+          results.push(this.lines[n] = this.parseLine(s));
         }
-        return _results;
+        return results;
       };
 
       Reader.prototype.getToken = function(line, start) {

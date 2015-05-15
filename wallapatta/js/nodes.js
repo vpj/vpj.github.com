@@ -1,9 +1,16 @@
 (function() {
-  var __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
 
   Mod.require('Weya.Base', 'Weya', 'HLJS', function(Base, Weya, HLJS) {
-    var Article, Block, Bold, Code, CodeBlock, Html, Italics, Link, List, ListItem, Map, Media, MediaInline, Node, PREFIX, Section, Sidenote, Special, SubScript, SuperScript, TYPES, Table, Text;
+    var Article, Block, Bold, Code, CodeBlock, Html, Italics, Link, List, ListItem, Map, Media, MediaInline, Node, PREFIX, Section, Sidenote, Special, SubScript, SuperScript, TYPES, Table, Text, decodeURL;
+    decodeURL = function(url) {
+      if (window.wallapattaDecodeURL != null) {
+        return window.wallapattaDecodeURL(url);
+      } else {
+        return url;
+      }
+    };
     TYPES = {
       article: 'article',
       sidenote: 'sidenote',
@@ -27,8 +34,8 @@
       comment: '///'
     };
     PREFIX = 'wallapatta_';
-    Map = (function(_super) {
-      __extends(Map, _super);
+    Map = (function(superClass) {
+      extend(Map, superClass);
 
       function Map() {
         return Map.__super__.constructor.apply(this, arguments);
@@ -57,8 +64,8 @@
       return Map;
 
     })(Base);
-    Node = (function(_super) {
-      __extends(Node, _super);
+    Node = (function(superClass) {
+      extend(Node, superClass);
 
       function Node() {
         return Node.__super__.constructor.apply(this, arguments);
@@ -80,6 +87,17 @@
 
       Node.prototype.parent = function() {
         return this._parent;
+      };
+
+      Node.prototype.isFirstChild = function(node) {
+        if (this.children.length === 0) {
+          return false;
+        }
+        if (node.id === this.children[0].id) {
+          return true;
+        } else {
+          return false;
+        }
       };
 
       Node.prototype._add = function(node) {
@@ -105,23 +123,23 @@
       };
 
       Node.prototype.renderChildren = function(elem, options) {
-        var child, _i, _len, _ref, _results;
-        _ref = this.children;
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          child = _ref[_i];
-          _results.push(child.render({
+        var child, k, len, ref, results;
+        ref = this.children;
+        results = [];
+        for (k = 0, len = ref.length; k < len; k++) {
+          child = ref[k];
+          results.push(child.render({
             elem: elem
           }));
         }
-        return _results;
+        return results;
       };
 
       return Node;
 
     })(Base);
-    Text = (function(_super) {
-      __extends(Text, _super);
+    Text = (function(superClass) {
+      extend(Text, superClass);
 
       function Text() {
         return Text.__super__.constructor.apply(this, arguments);
@@ -142,8 +160,8 @@
       return Text;
 
     })(Node);
-    Bold = (function(_super) {
-      __extends(Bold, _super);
+    Bold = (function(superClass) {
+      extend(Bold, superClass);
 
       function Bold() {
         return Bold.__super__.constructor.apply(this, arguments);
@@ -160,8 +178,8 @@
       return Bold;
 
     })(Node);
-    Italics = (function(_super) {
-      __extends(Italics, _super);
+    Italics = (function(superClass) {
+      extend(Italics, superClass);
 
       function Italics() {
         return Italics.__super__.constructor.apply(this, arguments);
@@ -178,8 +196,8 @@
       return Italics;
 
     })(Node);
-    SuperScript = (function(_super) {
-      __extends(SuperScript, _super);
+    SuperScript = (function(superClass) {
+      extend(SuperScript, superClass);
 
       function SuperScript() {
         return SuperScript.__super__.constructor.apply(this, arguments);
@@ -196,8 +214,8 @@
       return SuperScript;
 
     })(Node);
-    SubScript = (function(_super) {
-      __extends(SubScript, _super);
+    SubScript = (function(superClass) {
+      extend(SubScript, superClass);
 
       function SubScript() {
         return SubScript.__super__.constructor.apply(this, arguments);
@@ -214,8 +232,8 @@
       return SubScript;
 
     })(Node);
-    Code = (function(_super) {
-      __extends(Code, _super);
+    Code = (function(superClass) {
+      extend(Code, superClass);
 
       function Code() {
         return Code.__super__.constructor.apply(this, arguments);
@@ -232,8 +250,8 @@
       return Code;
 
     })(Node);
-    Link = (function(_super) {
-      __extends(Link, _super);
+    Link = (function(superClass) {
+      extend(Link, superClass);
 
       function Link() {
         return Link.__super__.constructor.apply(this, arguments);
@@ -258,8 +276,8 @@
       return Link;
 
     })(Node);
-    MediaInline = (function(_super) {
-      __extends(MediaInline, _super);
+    MediaInline = (function(superClass) {
+      extend(MediaInline, superClass);
 
       function MediaInline() {
         return MediaInline.__super__.constructor.apply(this, arguments);
@@ -277,7 +295,7 @@
 
       MediaInline.prototype.template = function() {
         return this.$.elem = this.img("#" + PREFIX + this.$.id + ".image-inline", {
-          src: this.$.src,
+          src: decodeURL(this.$.src),
           alt: this.$.alt
         });
       };
@@ -292,8 +310,8 @@
       return MediaInline;
 
     })(Node);
-    Block = (function(_super) {
-      __extends(Block, _super);
+    Block = (function(superClass) {
+      extend(Block, superClass);
 
       function Block() {
         return Block.__super__.constructor.apply(this, arguments);
@@ -326,8 +344,8 @@
       return Block;
 
     })(Node);
-    CodeBlock = (function(_super) {
-      __extends(CodeBlock, _super);
+    CodeBlock = (function(superClass) {
+      extend(CodeBlock, superClass);
 
       function CodeBlock() {
         return CodeBlock.__super__.constructor.apply(this, arguments);
@@ -381,8 +399,8 @@
       return CodeBlock;
 
     })(Node);
-    Table = (function(_super) {
-      __extends(Table, _super);
+    Table = (function(superClass) {
+      extend(Table, superClass);
 
       function Table() {
         return Table.__super__.constructor.apply(this, arguments);
@@ -398,7 +416,7 @@
       });
 
       Table.prototype.addText = function(text, options) {
-        var cell, node, nodes, row, _i, _len;
+        var cell, k, len, node, nodes, row;
         if ((text.trim().substr(0, 3)) === '===') {
           this.header = this.table.length;
           return [];
@@ -406,8 +424,8 @@
         text = text.split('|');
         row = [];
         nodes = [];
-        for (_i = 0, _len = text.length; _i < _len; _i++) {
-          cell = text[_i];
+        for (k = 0, len = text.length; k < len; k++) {
+          cell = text[k];
           if (cell === '') {
             if (row.length > 0) {
               row[row.length - 1].span++;
@@ -431,7 +449,7 @@
       };
 
       Table.prototype.render = function(options) {
-        var cell, codeElem, elems, i, j, row, _i, _len, _results;
+        var cell, codeElem, elems, i, j, k, len, results, row;
         codeElem = null;
         elems = [];
         Weya({
@@ -440,72 +458,72 @@
         }, function() {
           return this.$.elem = this.table("#" + PREFIX + this.$.id + ".table", function() {
             this.thead(function() {
-              var cells, i, row, _i, _ref, _results;
-              _results = [];
-              for (i = _i = 0, _ref = this.$.header; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+              var cells, i, k, ref, results, row;
+              results = [];
+              for (i = k = 0, ref = this.$.header; 0 <= ref ? k < ref : k > ref; i = 0 <= ref ? ++k : --k) {
                 row = this.$.table[i];
                 cells = [];
                 this.tr(function() {
-                  var cell, _j, _len, _results1;
-                  _results1 = [];
-                  for (_j = 0, _len = row.length; _j < _len; _j++) {
-                    cell = row[_j];
-                    _results1.push(cells.push(this.th({
+                  var cell, l, len, results1;
+                  results1 = [];
+                  for (l = 0, len = row.length; l < len; l++) {
+                    cell = row[l];
+                    results1.push(cells.push(this.th({
                       colspan: cell.span
                     })));
                   }
-                  return _results1;
+                  return results1;
                 });
-                _results.push(elems.push(cells));
+                results.push(elems.push(cells));
               }
-              return _results;
+              return results;
             });
             return this.tbody(function() {
-              var cells, i, row, _i, _ref, _ref1, _results;
-              _results = [];
-              for (i = _i = _ref = this.$.header, _ref1 = this.$.table.length; _ref <= _ref1 ? _i < _ref1 : _i > _ref1; i = _ref <= _ref1 ? ++_i : --_i) {
+              var cells, i, k, ref, ref1, results, row;
+              results = [];
+              for (i = k = ref = this.$.header, ref1 = this.$.table.length; ref <= ref1 ? k < ref1 : k > ref1; i = ref <= ref1 ? ++k : --k) {
                 row = this.$.table[i];
                 cells = [];
                 this.tr(function() {
-                  var cell, _j, _len, _results1;
-                  _results1 = [];
-                  for (_j = 0, _len = row.length; _j < _len; _j++) {
-                    cell = row[_j];
-                    _results1.push(cells.push(this.td({
+                  var cell, l, len, results1;
+                  results1 = [];
+                  for (l = 0, len = row.length; l < len; l++) {
+                    cell = row[l];
+                    results1.push(cells.push(this.td({
                       colspan: cell.span
                     })));
                   }
-                  return _results1;
+                  return results1;
                 });
-                _results.push(elems.push(cells));
+                results.push(elems.push(cells));
               }
-              return _results;
+              return results;
             });
           });
         });
-        _results = [];
-        for (i = _i = 0, _len = elems.length; _i < _len; i = ++_i) {
+        results = [];
+        for (i = k = 0, len = elems.length; k < len; i = ++k) {
           row = elems[i];
-          _results.push((function() {
-            var _j, _len1, _results1;
-            _results1 = [];
-            for (j = _j = 0, _len1 = row.length; _j < _len1; j = ++_j) {
+          results.push((function() {
+            var l, len1, results1;
+            results1 = [];
+            for (j = l = 0, len1 = row.length; l < len1; j = ++l) {
               cell = row[j];
-              _results1.push(this.table[i][j].node.render({
+              results1.push(this.table[i][j].node.render({
                 elem: cell
               }));
             }
-            return _results1;
+            return results1;
           }).call(this));
         }
-        return _results;
+        return results;
       };
 
       return Table;
 
     })(Node);
-    Special = (function(_super) {
-      __extends(Special, _super);
+    Special = (function(superClass) {
+      extend(Special, superClass);
 
       function Special() {
         return Special.__super__.constructor.apply(this, arguments);
@@ -522,8 +540,8 @@
       return Special;
 
     })(Node);
-    Html = (function(_super) {
-      __extends(Html, _super);
+    Html = (function(superClass) {
+      extend(Html, superClass);
 
       function Html() {
         return Html.__super__.constructor.apply(this, arguments);
@@ -557,8 +575,8 @@
       return Html;
 
     })(Node);
-    Article = (function(_super) {
-      __extends(Article, _super);
+    Article = (function(superClass) {
+      extend(Article, superClass);
 
       function Article() {
         return Article.__super__.constructor.apply(this, arguments);
@@ -577,8 +595,8 @@
       return Article;
 
     })(Node);
-    Section = (function(_super) {
-      __extends(Section, _super);
+    Section = (function(superClass) {
+      extend(Section, superClass);
 
       function Section() {
         return Section.__super__.constructor.apply(this, arguments);
@@ -645,8 +663,8 @@
       return Section;
 
     })(Node);
-    List = (function(_super) {
-      __extends(List, _super);
+    List = (function(superClass) {
+      extend(List, superClass);
 
       function List() {
         return List.__super__.constructor.apply(this, arguments);
@@ -681,8 +699,8 @@
       return List;
 
     })(Node);
-    ListItem = (function(_super) {
-      __extends(ListItem, _super);
+    ListItem = (function(superClass) {
+      extend(ListItem, superClass);
 
       function ListItem() {
         return ListItem.__super__.constructor.apply(this, arguments);
@@ -703,8 +721,8 @@
       return ListItem;
 
     })(Node);
-    Sidenote = (function(_super) {
-      __extends(Sidenote, _super);
+    Sidenote = (function(superClass) {
+      extend(Sidenote, superClass);
 
       function Sidenote() {
         return Sidenote.__super__.constructor.apply(this, arguments);
@@ -725,8 +743,8 @@
       return Sidenote;
 
     })(Node);
-    Media = (function(_super) {
-      __extends(Media, _super);
+    Media = (function(superClass) {
+      extend(Media, superClass);
 
       function Media() {
         return Media.__super__.constructor.apply(this, arguments);
@@ -749,7 +767,7 @@
       Media.prototype.template = function() {
         return this.$.elem = this.div("#" + PREFIX + this.$.id + ".image-container", function() {
           return this.$.elems.img = this.img(".image", {
-            src: this.$.src,
+            src: decodeURL(this.$.src),
             alt: this.$.alt
           });
         });

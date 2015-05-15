@@ -1,9 +1,9 @@
 (function() {
-  var __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
 
   Mod.require('Weya.Base', 'Wallapatta.TYPES', function(Base, TYPES) {
-    var BREAK_COST, EMPTY_PAGE_COST, INF, PAGE_COST, PAGE_MARGIN, PREFIX, Render, START;
+    var BREAK_COST, EMPTY_PAGE_COST, FIRST_CHILD_COST, INF, PAGE_COST, PAGE_MARGIN, PREFIX, Render, START;
     PREFIX = 'wallapatta_';
     INF = 1e10;
     PAGE_COST = 100;
@@ -19,6 +19,7 @@
       article: 0,
       table: 1500
     };
+    FIRST_CHILD_COST = 10000;
     PAGE_MARGIN = '1000px';
     START = 1;
     EMPTY_PAGE_COST = function(filled, height) {
@@ -26,8 +27,8 @@
       p = filled / height;
       return 1500 / p - 1500;
     };
-    Render = (function(_super) {
-      __extends(Render, _super);
+    Render = (function(superClass) {
+      extend(Render, superClass);
 
       function Render() {
         return Render.__super__.constructor.apply(this, arguments);
@@ -46,6 +47,9 @@
         }
         if (node.parent() != null) {
           cost = this.getBreakCost(node.parent(), true);
+          if (node.parent().isFirstChild(node)) {
+            cost += FIRST_CHILD_COST;
+          }
         } else {
           if (node.type !== 'article') {
             throw new Error('oops');
@@ -76,11 +80,11 @@
       };
 
       Render.prototype.getMainNodes = function() {
-        var e, elem, f, i, main, nodes, _i;
+        var e, elem, f, i, k, main, nodes, ref, ref1;
         f = this.map.start;
         e = this.map.N;
         nodes = [];
-        for (i = _i = f; f <= e ? _i < e : _i > e; i = f <= e ? ++_i : --_i) {
+        for (i = k = ref = f, ref1 = e; ref <= ref1 ? k < ref1 : k > ref1; i = ref <= ref1 ? ++k : --k) {
           elem = this.map.nodes[i].elem;
           main = false;
           while (elem != null) {
@@ -98,11 +102,11 @@
       };
 
       Render.prototype.getSidenoteMap = function() {
-        var map, sidenote, _i, _len, _ref;
+        var k, len, map, ref, sidenote;
         map = {};
-        _ref = this.sidenotes;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          sidenote = _ref[_i];
+        ref = this.sidenotes;
+        for (k = 0, len = ref.length; k < len; k++) {
+          sidenote = ref[k];
           map[sidenote.link] = sidenote.id;
         }
         return map;
@@ -154,30 +158,30 @@
       };
 
       Render.prototype.calculatePageBreaks = function() {
-        var i, n, _i, _j, _len, _len1, _ref, _ref1, _results;
+        var i, k, l, len, len1, n, ref, ref1, results;
         INF = 1e10;
         this.broken = [];
         this.nextBreak = [];
-        _ref = this.mainNodes;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          i = _ref[_i];
+        ref = this.mainNodes;
+        for (k = 0, len = ref.length; k < len; k++) {
+          i = ref[k];
           this.broken.push(INF);
           this.nextBreak.push(null);
         }
         this.breakCostMap = {};
         this.breakCost = [];
-        _ref1 = this.mainNodes;
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          i = _ref1[_j];
+        ref1 = this.mainNodes;
+        for (l = 0, len1 = ref1.length; l < len1; l++) {
+          i = ref1[l];
           this.breakCost.push(this.getBreakCost(this.map.nodes[i]));
         }
         n = this.mainNodes.length - 1;
-        _results = [];
+        results = [];
         while (n >= 1) {
           this.calculateNextBreak(n);
-          _results.push(--n);
+          results.push(--n);
         }
-        return _results;
+        return results;
       };
 
       Render.prototype.adjust = function(elemSidenote, elemContent) {
@@ -209,7 +213,7 @@
           fill = Weya({}, function() {
             return this.div(".fill", {
               style: {
-                height: "" + (topContent - topSidenote) + "px"
+                height: (topContent - topSidenote) + "px"
               }
             });
           });
@@ -218,7 +222,7 @@
           fill = Weya({}, function() {
             return this.div(".fill", {
               style: {
-                height: "" + (topSidenote - topContent) + "px"
+                height: (topSidenote - topContent) + "px"
               }
             });
           });
@@ -227,7 +231,7 @@
       };
 
       Render.prototype.setPages = function(H) {
-        var elem, emptyPages, found, i, m, n, node, pos, _results;
+        var elem, emptyPages, found, i, m, n, node, pos, results;
         this.pageHeight = H;
         this.mainNodes = this.getMainNodes();
         this.sidenoteMap = this.getSidenoteMap();
@@ -235,7 +239,7 @@
         n = START;
         pos = 0;
         emptyPages = [];
-        _results = [];
+        results = [];
         while (n < this.mainNodes.length) {
           i = this.nextBreak[n];
           if (n > START) {
@@ -259,13 +263,13 @@
           elem = this.map.nodes[this.mainNodes[i - 1]].elem;
           pos = this.getOffsetTop(elem, this.elems.main);
           pos += elem.offsetHeight;
-          _results.push(n = i);
+          results.push(n = i);
         }
-        return _results;
+        return results;
       };
 
       Render.prototype.setPageFill = function(f, t, pos, emptyPages) {
-        var elemContent, elemSidenote, fill, first, found, m, margin, n, p, s, topContent, topSidenote, _i, _len;
+        var elemContent, elemSidenote, fill, first, found, k, len, m, margin, n, p, s, topContent, topSidenote;
         margin = f > START;
         first = true;
         n = f;
@@ -281,14 +285,14 @@
           elemSidenote = this.map.nodes[s].elem;
           elemContent = this.map.nodes[m].elem;
           if (first && margin) {
-            for (_i = 0, _len = emptyPages.length; _i < _len; _i++) {
-              p = emptyPages[_i];
+            for (k = 0, len = emptyPages.length; k < len; k++) {
+              p = emptyPages[k];
               topSidenote = this.getOffsetTop(elemSidenote, this.elems.sidebar);
               if (topSidenote < p) {
                 fill = Weya({}, function() {
                   return this.div(".fill", {
                     style: {
-                      height: "" + (p.pos - topSidenote) + "px"
+                      height: (p.pos - topSidenote) + "px"
                     }
                   });
                 });
@@ -303,7 +307,7 @@
                   }
                 });
               });
-              fill.style.marginTop = "" + (topContent - topSidenote) + "px";
+              fill.style.marginTop = (topContent - topSidenote) + "px";
               elemSidenote.parentNode.insertBefore(fill, elemSidenote);
             }
             topSidenote = this.getOffsetTop(elemSidenote, this.elems.sidebar);
@@ -311,7 +315,7 @@
               fill = Weya({}, function() {
                 return this.div(".fill", {
                   style: {
-                    height: "" + (pos - topSidenote) + "px"
+                    height: (pos - topSidenote) + "px"
                   }
                 });
               });
@@ -326,7 +330,7 @@
                 }
               });
             });
-            fill.style.marginTop = "" + (topContent - topSidenote - 1) + "px";
+            fill.style.marginTop = (topContent - topSidenote - 1) + "px";
             elemSidenote.parentNode.insertBefore(fill, elemSidenote);
           }
           this.adjust(elemSidenote, elemContent);
@@ -336,20 +340,20 @@
       };
 
       Render.prototype.setFills = function() {
-        var elemContent, elemSidenote, sidenote, _i, _len, _ref, _results;
-        _ref = this.sidenotes;
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          sidenote = _ref[_i];
+        var elemContent, elemSidenote, k, len, ref, results, sidenote;
+        ref = this.sidenotes;
+        results = [];
+        for (k = 0, len = ref.length; k < len; k++) {
+          sidenote = ref[k];
           elemSidenote = sidenote.elem;
           elemContent = this.map.nodes[sidenote.link].elem;
-          _results.push(this.adjust(elemSidenote, elemContent));
+          results.push(this.adjust(elemSidenote, elemContent));
         }
-        return _results;
+        return results;
       };
 
       Render.prototype.render = function(main, sidebar) {
-        var sidenote, _i, _len, _ref, _results;
+        var k, len, ref, results, sidenote;
         this.elems = {
           main: main,
           sidebar: sidebar
@@ -357,48 +361,48 @@
         this.root.render({
           elem: main
         });
-        _ref = this.sidenotes;
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          sidenote = _ref[_i];
-          _results.push(sidenote.render({
+        ref = this.sidenotes;
+        results = [];
+        for (k = 0, len = ref.length; k < len; k++) {
+          sidenote = ref[k];
+          results.push(sidenote.render({
             elem: sidebar
           }));
         }
-        return _results;
+        return results;
       };
 
       Render.prototype.collectElements = function(options) {
-        var id, node, _ref, _results;
+        var id, node, ref, results;
         this.elems = {
           main: options.main,
           sidebar: options.sidebar
         };
-        _ref = this.map.nodes;
-        _results = [];
-        for (id in _ref) {
-          node = _ref[id];
+        ref = this.map.nodes;
+        results = [];
+        for (id in ref) {
+          node = ref[id];
           node.elem = document.getElementById("" + PREFIX + id);
           if (node.elem == null) {
             throw new Error("Element " + id + " not found");
           } else {
-            _results.push(void 0);
+            results.push(void 0);
           }
         }
-        return _results;
+        return results;
       };
 
       Render.prototype.mediaLoaded = function(callback) {
-        var a, check, i, img, loaded, mainImg, n, sidebarImg, _i, _j, _k, _len, _len1, _len2;
+        var a, check, i, img, k, l, len, len1, len2, loaded, mainImg, n, o, sidebarImg;
         mainImg = this.elems.main.getElementsByTagName('img');
         sidebarImg = this.elems.sidebar.getElementsByTagName('img');
         a = [];
-        for (_i = 0, _len = mainImg.length; _i < _len; _i++) {
-          i = mainImg[_i];
+        for (k = 0, len = mainImg.length; k < len; k++) {
+          i = mainImg[k];
           a.push(i);
         }
-        for (_j = 0, _len1 = sidebarImg.length; _j < _len1; _j++) {
-          i = sidebarImg[_j];
+        for (l = 0, len1 = sidebarImg.length; l < len1; l++) {
+          i = sidebarImg[l];
           a.push(i);
         }
         n = 0;
@@ -413,8 +417,8 @@
           n++;
           return check();
         };
-        for (_k = 0, _len2 = a.length; _k < _len2; _k++) {
-          img = a[_k];
+        for (o = 0, len2 = a.length; o < len2; o++) {
+          img = a[o];
           if (!img.complete) {
             img.addEventListener('load', loaded);
           } else {
@@ -425,7 +429,7 @@
       };
 
       Render.prototype.processLine = function() {
-        var id, indent, line, n, _results, _results1;
+        var id, indent, line, n, results, results1;
         line = this.reader.get();
         if (line.empty) {
           if (this.node.type === TYPES.block) {
@@ -469,7 +473,7 @@
               map: this.map,
               indentation: line.indentation + 1
             }));
-            _results = [];
+            results = [];
             while (false) {
               this.reader.next();
               if (!this.reader.has()) {
@@ -482,9 +486,9 @@
               if (line.type === TYPES.codeBlock) {
                 break;
               }
-              _results.push(this.node.addText(line.line.substr(indent)));
+              results.push(this.node.addText(line.line.substr(indent)));
             }
-            return _results;
+            return results;
             break;
           case TYPES.html:
             indent = line.indentation + 1;
@@ -492,7 +496,7 @@
               map: this.map,
               indentation: line.indentation + 1
             }));
-            _results1 = [];
+            results1 = [];
             while (false) {
               this.reader.next();
               if (!this.reader.has()) {
@@ -505,9 +509,9 @@
               if (line.type === TYPES.html) {
                 break;
               }
-              _results1.push(this.node.addText(line.line.substr(indent)));
+              results1.push(this.node.addText(line.line.substr(indent)));
             }
-            return _results1;
+            return results1;
             break;
           case TYPES.special:
             return this.addNode(new Special({
