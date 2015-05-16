@@ -1,0 +1,55 @@
+.toolbar {
+  margin: 5px 25px;
+}
+.toolbar i {
+  cursor: pointer;
+  display: inline-block;
+  width: 25px;
+  color: #999;
+}
+.toolbar i:hover {
+  color: #333;
+}
+.toolbar .file-name {
+  font-size: 12px;
+  font-weight: 600;
+  margin-left: 20px;
+}
+.toolbar span {
+  display: inline-block;
+}
+.toolbar #toolbar {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 3px;
+  margin-bottom: 3px;
+}
+.toolbar #toolbar i {
+  color: #aaa;
+  width: 30px;
+}
+.CodeMirror {
+  background: #f8f8f8;
+  margin-bottom: 20px;
+  font-size: 0.9em;
+}
+.error {
+  font-weight: bold;
+  font-family: monospace;
+  color: #ff4444;
+}
+.preview {
+  overflow-y: scroll;
+}
+.wallapatta-editor {
+  max-width: 2000px;
+  width: 100%;
+  overflow-y: hidden;
+}
+.wallapatta-editor-print {
+  display: none;
+}
+@media print {
+  .print-form {
+    display: none !important;
+  }
+}

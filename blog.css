@@ -1,0 +1,25 @@
+.header {
+ margin-bottom: 20px;
+ text-align: center;
+}
+
+.header h1 {
+ font-weight: bold;
+ text-align: center;
+ font-size: 3rem;
+}
+
+.header h1 a {
+ color: #222;
+ text-decoration: none;
+}
+
+h1.title {
+ font-weight: bold;
+}
+
+h3.date {
+ color: #777;
+ font-weight: bold;
+ font-size: 2rem;
+}

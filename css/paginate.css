@@ -1,0 +1,15 @@
+/*---------------------------------------------------
+    LESS Elements 0.9
+  ---------------------------------------------------
+    A set of useful LESS mixins
+    More info at: http://lesselements.com
+  ---------------------------------------------------*/
+.paginate {
+  margin: 50px 0;
+}
+.paginate .prev-page {
+  float: left;
+}
+.paginate .next-page {
+  float: right;
+}
