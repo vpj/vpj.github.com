@@ -15,7 +15,13 @@
 }
 
 h1.title {
+ margin-top: 100px;
  font-weight: bold;
+}
+
+h1.title a {
+ color: #222;
+ text-decoration: none;
 }
 
 h3.date {
