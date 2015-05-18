@@ -5,7 +5,7 @@
   Mod.require('Weya.Base', 'Weya', 'HLJS', function(Base, Weya, HLJS) {
     var Article, Block, Bold, Code, CodeBlock, Html, Italics, Link, List, ListItem, Map, Media, MediaInline, Node, PREFIX, Section, Sidenote, Special, SubScript, SuperScript, TYPES, Table, Text, decodeURL;
     decodeURL = function(url) {
-      if (window.wallapattaDecodeURL != null) {
+      if ((typeof window !== "undefined" && window !== null ? window.wallapattaDecodeURL : void 0) != null) {
         return window.wallapattaDecodeURL(url);
       } else {
         return url;
