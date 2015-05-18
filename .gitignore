@@ -45,3 +45,5 @@ build.*
 .gitattributes
 .gitmodules
 .gitignore
+
+*/Font-Awesome/src/*
