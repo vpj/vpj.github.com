@@ -68,6 +68,10 @@
         return {};
       };
 
+      Operation.prototype.title = function() {
+        return this.operationName;
+      };
+
       return Operation;
 
     })(Base);

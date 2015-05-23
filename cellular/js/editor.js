@@ -19,9 +19,12 @@
           sidebar: null,
           content: null
         };
-        this.table = new Table();
+        this.table = new Table({
+          onClick: this.on.tableClick
+        });
         this.operation = null;
-        return this.history = [];
+        this.history = [];
+        return this.nHistory = -1;
       });
 
       Editor.prototype.getTable = function() {
@@ -56,15 +59,58 @@
         return this.operation.render();
       };
 
+      Editor.prototype.selectHistory = function(n) {
+        var h, i, j, op, ref;
+        this.nHistory = n - 1;
+        this.table.clear();
+        for (i = j = 0, ref = n; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
+          h = this.history[i];
+          op = new (OPERATIONS.get(h.type))({
+            editor: this
+          });
+          op.setJson(h.data);
+          op.apply();
+        }
+        h = this.history[n];
+        this.operation = new (OPERATIONS.get(h.type))({
+          sidebar: this.elems.sidebar,
+          content: this.elems.content,
+          onCancel: this.on.cancelOperation,
+          onApply: this.on.applyOperation,
+          editor: this
+        });
+        this.operation.setJson(h.data);
+        this.renderTable();
+        this.renderOperations();
+        return window.requestAnimationFrame((function(_this) {
+          return function() {
+            return _this.operation.render();
+          };
+        })(this));
+      };
+
       Editor.listen('applyOperation', function() {
+        this.nHistory++;
+        if (this.nHistory < this.history.length) {
+          this.history = this.history.slice(0, this.nHistory);
+        }
         this.history.push({
+          title: this.operation.title(),
           type: this.operation.type,
           data: this.operation.json()
         });
+        this.nHistory = this.history.length - 1;
         this.operation.apply();
         this.renderTable();
         this.renderOperations();
         return this.operation = null;
+      });
+
+      Editor.listen('tableClick', function(r, c, table) {
+        if (!this.operation) {
+          return;
+        }
+        return this.operation.on.tableSelect(r, c, table);
       });
 
       Editor.listen('cancelOperation', function() {
@@ -86,6 +132,18 @@
         }
       });
 
+      Editor.listen('selectHistory', function(e) {
+        var n;
+        n = e.target;
+        while (n != null) {
+          if (n._history != null) {
+            this.selectHistory(n._history);
+            return;
+          }
+          n = n.parentNode;
+        }
+      });
+
       Editor.listen('tableSelect', function(r, c) {
         if (this.operation == null) {
           return;
@@ -94,8 +152,8 @@
       });
 
       Editor.prototype.renderTable = function() {
-        this.table.render(this.elems.content);
-        return this.table.generate();
+        this.table.clearHighlight();
+        return this.table.render(this.elems.content);
       };
 
       Editor.prototype.renderOperations = function() {
@@ -104,7 +162,7 @@
           elem: this.elems.sidebar,
           context: this
         }, function() {
-          return this.div({
+          this.div('.operations-list', {
             on: {
               click: this.$.on.selectOperation
             }
@@ -112,17 +170,28 @@
             return OPERATIONS.each((function(_this) {
               return function(type, op) {
                 var btn;
-                btn = _this.button(op.name);
+                btn = _this.button(op.operationName);
                 return btn._type = type;
               };
             })(this));
           });
+          return this.div('.history-list', {
+            on: {
+              click: this.$.on.selectHistory
+            }
+          }, function() {
+            var btn, h, i, j, len, ref, results;
+            ref = this.$.history;
+            results = [];
+            for (i = j = 0, len = ref.length; j < len; i = ++j) {
+              h = ref[i];
+              btn = this.button(h.title);
+              results.push(btn._history = i);
+            }
+            return results;
+          });
         });
       };
-
-      Editor.listen('undo', function() {});
-
-      Editor.listen('redo', function() {});
 
       return Editor;
 

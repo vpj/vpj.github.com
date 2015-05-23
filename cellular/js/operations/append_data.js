@@ -3,56 +3,59 @@
     hasProp = {}.hasOwnProperty;
 
   Mod.require('Operation', 'OPERATIONS', function(Base, OPERATIONS) {
-    var AAString, AddColumn, CHARS;
-    CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    AAString = function(n) {
-      var i, j, ref, rev, s;
-      if (n === 0) {
-        return 'A';
-      }
-      s = '';
-      while (n > 0) {
-        s += CHARS[n % CHARS.length];
-        n = Math.floor(n / CHARS.length);
-      }
-      rev = '';
-      for (i = j = 1, ref = s.length; 1 <= ref ? j <= ref : j >= ref; i = 1 <= ref ? ++j : --j) {
-        rev += s[s.length - i];
-      }
-      return rev;
-    };
-    AddColumn = (function(superClass) {
-      extend(AddColumn, superClass);
+    var Append;
+    Append = (function(superClass) {
+      extend(Append, superClass);
 
-      function AddColumn() {
-        return AddColumn.__super__.constructor.apply(this, arguments);
+      function Append() {
+        return Append.__super__.constructor.apply(this, arguments);
       }
 
-      AddColumn.extend();
+      Append.extend();
 
-      AddColumn.prototype.operationName = 'Add Column';
+      Append.prototype.operationName = 'Append Data';
 
-      AddColumn.operationName = 'Add Column';
+      Append.operationName = 'Append Data';
 
-      AddColumn.prototype.type = 'addColumn';
+      Append.prototype.type = 'appendData';
 
-      AddColumn.type = 'addColumn';
+      Append.type = 'appendData';
 
-      AddColumn.prototype.json = function() {
+      Append.prototype.json = function() {
         return {
+          column: this.column,
           data: this.data,
           table: this.table.id
         };
       };
 
-      AddColumn.prototype.setJson = function(json) {
+      Append.prototype.setJson = function(json) {
         this.data = json.data;
+        this.column = json.column;
         return this.table = this.editor.getTable(json.table);
       };
 
-      AddColumn.prototype.render = function() {
+      Append.prototype.render = function() {
         this.elems.sidebar.innerHTML = '';
+        Weya({
+          elem: this.elems.sidebar,
+          context: this
+        }, function() {
+          this.$.elems.status = this.p('Select a column');
+          return this.button({
+            on: {
+              click: this.$.on.cancel
+            }
+          }, 'Cancel');
+        });
+        if (this.column != null) {
+          return this.renderLoad();
+        }
+      };
+
+      Append.prototype.renderLoad = function() {
         this.elems.content.innerHTML = '';
+        this.elems.sidebar.innerHTML = '';
         Weya({
           elem: this.elems.sidebar,
           context: this
@@ -71,16 +74,16 @@
               click: this.$.on.openFile
             }
           }, 'Open file');
-          this.button('.button-primary', {
-            on: {
-              click: this.$.on.loadData
-            }
-          }, 'Load');
-          return this.button({
+          this.button({
             on: {
               click: this.$.on.cancel
             }
           }, 'Cancel');
+          return this.button('.button-primary', {
+            on: {
+              click: this.$.on.loadData
+            }
+          }, 'Load');
         });
         Weya({
           elem: this.elems.content,
@@ -94,7 +97,7 @@
         return window.requestAnimationFrame(this.on.setupEditor);
       };
 
-      AddColumn.listen('setupEditor', function() {
+      Append.listen('setupEditor', function() {
         this.textEditor = CodeMirror.fromTextArea(this.elems.textArea, {
           mode: "text",
           lineNumbers: true,
@@ -107,68 +110,52 @@
         }
       });
 
-      AddColumn.prototype._setData = function() {
+      Append.prototype._setData = function() {
         return this.textEditor.setValue(this.data);
       };
 
-      AddColumn.listen('openFile', function(e) {
+      Append.listen('openFile', function(e) {
         e.preventDefault();
         return this.elems.file.click();
       });
 
-      AddColumn.listen('cancel', function(e) {
+      Append.listen('cancel', function(e) {
         e.preventDefault();
         return this.callbacks.cancel();
       });
 
-      AddColumn.listen('loadData', function(e) {
+      Append.listen('loadData', function(e) {
         e.preventDefault();
         this.data = this.textEditor.getValue();
-        this.table = this.editor.getTable();
         return this.callbacks.apply();
       });
 
-      AddColumn.prototype.apply = function() {
-        var c, column, data, i, id, ids, j, k, l, len, len1, m, o, ref, ref1, ref2, ref3, ref4;
+      Append.listen('tableSelect', function(r, c, table) {
+        this.table = table;
+        this.column = table.columns[c].id;
+        return this.renderLoad();
+      });
+
+      Append.prototype.apply = function() {
+        var c, d, data, i, j, k, l, len, len1, ref, ref1;
         data = this.data.split('\n');
-        if (data.length < this.table.size) {
-          for (i = j = 0, ref = this.table.size - data.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
-            data.push('');
-          }
-        } else if (data.length > this.table.size) {
-          ref1 = this.table.columns;
-          for (k = 0, len = ref1.length; k < len; k++) {
-            c = ref1[k];
-            for (i = l = 0, ref2 = data.length - this.table.size; 0 <= ref2 ? l < ref2 : l > ref2; i = 0 <= ref2 ? ++l : --l) {
-              this.table.data[c.id].push(c["default"]);
+        ref = this.table.columns;
+        for (j = 0, len = ref.length; j < len; j++) {
+          c = ref[j];
+          if (c.id === this.column) {
+            for (i = k = 0, len1 = data.length; k < len1; i = ++k) {
+              d = data[i];
+              this.table.data[c.id].push(d);
             }
           }
-        }
-        ids = {};
-        ref3 = this.table.columns;
-        for (m = 0, len1 = ref3.length; m < len1; m++) {
-          c = ref3[m];
-          ids[c.id] = true;
-        }
-        id = 'A';
-        for (i = o = 0, ref4 = this.table.columns.length; 0 <= ref4 ? o < ref4 : o > ref4; i = 0 <= ref4 ? ++o : --o) {
-          id = AAString(i);
-          if (ids[id] == null) {
-            break;
+          for (i = l = 0, ref1 = data.length; 0 <= ref1 ? l < ref1 : l > ref1; i = 0 <= ref1 ? ++l : --l) {
+            this.table.data[c.id].push(c["default"]);
           }
         }
-        column = id;
-        this.table.columns.push({
-          id: id,
-          name: id,
-          type: 'string',
-          "default": ''
-        });
-        this.table.data[id] = data;
-        return this.table.size = data.length;
+        return this.table.size += data.length;
       };
 
-      AddColumn.listen('changeFile', function(e) {
+      Append.listen('changeFile', function(e) {
         var file, files, reader;
         files = this.elems.file.files;
         if (files.length > 0) {
@@ -186,10 +173,10 @@
         }
       });
 
-      return AddColumn;
+      return Append;
 
     })(Base);
-    return OPERATIONS.set(AddColumn.type, AddColumn);
+    return OPERATIONS.set(Append.type, Append);
   });
 
 }).call(this);
