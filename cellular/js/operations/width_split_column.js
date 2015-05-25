@@ -49,12 +49,7 @@
         }, function() {
           this.$.elems.status = this.p('Select a column');
           this.$.elems.inputsDiv = this.div('');
-          this.button({
-            on: {
-              click: this.$.on.cancel
-            }
-          }, 'Cancel');
-          return this.$.elems.btn = this.button('.button-primary', 'Split', {
+          this.$.elems.btn = this.button('.u-full-width.button-primary', 'Split', {
             on: {
               click: this.$.on.apply
             },
@@ -62,6 +57,11 @@
               display: 'none'
             }
           });
+          return this.button('.u-full-width', {
+            on: {
+              click: this.$.on.cancel
+            }
+          }, 'Cancel');
         });
         if (this.table != null) {
           return this._setData();
@@ -133,7 +133,7 @@
             this.label({
               "for": "split-" + n
             }, "Split " + (n + 1));
-            return elems.input = this.input("#split-" + n, {
+            return elems.input = this.input("#split-" + n + ".u-full-width", {
               value: "" + split,
               type: 'number',
               on: {

@@ -167,10 +167,18 @@
               click: this.$.on.selectOperation
             }
           }, function() {
+            var first;
+            this.h3('Operations:');
+            first = true;
             return OPERATIONS.each((function(_this) {
               return function(type, op) {
                 var btn;
-                btn = _this.button(op.operationName);
+                if (first) {
+                  btn = _this.div(".first", op.operationName);
+                  first = false;
+                } else {
+                  btn = _this.div(op.operationName);
+                }
                 return btn._type = type;
               };
             })(this));
@@ -180,12 +188,19 @@
               click: this.$.on.selectHistory
             }
           }, function() {
-            var btn, h, i, j, len, ref, results;
+            var btn, first, h, i, j, len, ref, results;
+            this.h3('History:');
+            first = true;
             ref = this.$.history;
             results = [];
             for (i = j = 0, len = ref.length; j < len; i = ++j) {
               h = ref[i];
-              btn = this.button(h.title);
+              if (first) {
+                btn = this.div(".first", h.title);
+                first = false;
+              } else {
+                btn = this.div(h.title);
+              }
               results.push(btn._history = i);
             }
             return results;

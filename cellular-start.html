@@ -1,0 +1,188 @@
+<!DOCTYPE html><html>
+ <head>
+  <meta charset="utf-8">
+  </meta>
+  <title>
+   Small data preparation
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </meta>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  </meta>
+  <link href="http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900" rel="stylesheet" type="text/css">
+  </link>
+  <link href="lib/skeleton/css/skeleton.css" rel="stylesheet">
+  </link>
+  <link href="lib/highlightjs/styles/default.css" rel="stylesheet">
+  </link>
+  <link href="css/style.css" rel="stylesheet">
+  </link>
+  <link href="blog.css" rel="stylesheet">
+  </link>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-44255805-1', 'auto');
+ga('send', 'pageview');
+  </script>
+ </head>
+ <body>
+  <div class="container wallapatta-container ">
+   <div class="header ">
+    <h1>
+     <a href="index.html">
+      VARUNA JAYASIRI
+     </a>
+    </h1>
+    <a class="button " href="https://www.twitter.com/vpj">
+     @vpj
+    </a>
+   </div>
+   <div class="wallapatta ">
+    <h1 class="title ">
+     Small data preparation
+    </h1>
+    <h3 class="date ">
+     May 24, 2015
+    </h3>
+    <div class="row ">
+     <div class="wallapatta-main nine columns ">
+      <div id="wallapatta_0" class="article"><div id="wallapatta_1" class="section"><div class="content"><p id="wallapatta_2" class="paragraph"><span id="wallapatta_16" class="text">One of the biggest </span><strong id="wallapatta_17" class="bold"><span id="wallapatta_18" class="text">small data</span></strong><span id="wallapatta_19" class="text"> problems, is that data is structured in different ways. Some legacy systems give out reports in the formats like below.</span></p></div></div><pre id="wallapatta_3" class="codeBlock"><code class="nohighlight">SUPPLIER STATEMENT                         38 November 2011
+
+           B0001   SupplierX Corp
+                   51, AAA STREET, BBB
+===========================================================
+DATE     REF.No.        DESCRIPTION       DEBIT      CREDIT
+===========================================================
+01/04/10                Balance B/F                1,000.00
+
+01/05/10 AAAA-00001     PAYMENT          500,00
+01/06/10 AAAA-00002     PAYMENT          250.00
+
+01/07/10 IIII-00001     INVOICE                    2,000.00
+                                      ---------  ----------
+                                         750.00    3,000.00
+
+31/03/11                Balance C/F                2,250.00
+
+Contd. ......
+
+
+SUPPLIER STATEMENT                         38 November 2011
+
+           B0002   SupplierY Corp
+                   51, ACD STREET, BBB
+===========================================================
+DATE     REF.No.        DESCRIPTION       DEBIT      CREDIT
+===========================================================
+01/04/10                Balance B/F                1,500.00
+
+01/05/10 AAAA-00003     PAYMENT        1,500,00
+
+01/07/10 IIII-00002     INVOICE                    2,000.00
+01/08/10 IIII-00003     INVOICE                    1,000.00
+                                      ---------  ----------
+                                       1,500.00    4,500.00
+
+31/03/11                Balance C/F                3,500.00
+
+Contd. ......</code></pre><div id="wallapatta_4" class="section"><div class="content"><p id="wallapatta_5" class="paragraph"><span id="wallapatta_20" class="text">Getting this into a spreadsheet or a database table to analyse it is not easy. So I started a project to help transform data in various report formats into simple tables and export as comma-separated files.</span></p></div></div><div id="wallapatta_6" class="section"><div class="content"><p id="wallapatta_7" class="paragraph"><span id="wallapatta_21" class="text">The project is called </span><strong id="wallapatta_22" class="bold"><a id="wallapatta_23" class="link" href="http://vpj.github.io/cellular/">cellular</a></strong><span id="wallapatta_24" class="text">, and it is still in the early stages. I thought of writing about it to get ideas and suggestions. It has a simple user interface with the table on the left side with a sidepane on right side.</span></p></div></div><div id="wallapatta_12" class="html"><iframe id="ytplayer" type="text/html" width="555" height="390" src="http://www.youtube.com/embed/M7lc1UVf-VE?autoplay=1&amp;origin=http://example.com" frameborder="0"></iframe>
+</div></div>
+     </div>
+     <div class="wallapatta-sidebar three columns ">
+      <div id="wallapatta_8" class="sidenote"><div id="wallapatta_9" class="html"><iframe src="https://ghbtns.com/github-btn.html?user=vpj&amp;repo=cellular&amp;type=star&amp;count=true&amp;size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
+</div><div id="wallapatta_10" class="section"><div class="content"><p id="wallapatta_11" class="paragraph"><strong id="wallapatta_25" class="bold"><a id="wallapatta_26" class="link" href="http://vpj.github.io/cellular/">demo</a></strong></p></div></div></div><div id="wallapatta_13" class="sidenote"><div id="wallapatta_14" class="section"><div class="content"><p id="wallapatta_15" class="paragraph"><span id="wallapatta_27" class="text">Here's a small screen cast of using </span><strong id="wallapatta_28" class="bold"><span id="wallapatta_29" class="text">cellular</span></strong><span id="wallapatta_30" class="text"> to transform the above report.</span></p></div></div></div>
+     </div>
+     <div style="display:none;">
+      <div class='wallapatta-code'>One of the biggest **small data** problems, is that data is structured in different ways. Some legacy systems give out reports in the formats like below.
+
+```
+ SUPPLIER STATEMENT                         38 November 2011
+
+            B0001   SupplierX Corp
+                    51, AAA STREET, BBB
+ ===========================================================
+ DATE     REF.No.        DESCRIPTION       DEBIT      CREDIT
+ ===========================================================
+ 01/04/10                Balance B/F                1,000.00
+
+ 01/05/10 AAAA-00001     PAYMENT          500,00
+ 01/06/10 AAAA-00002     PAYMENT          250.00
+
+ 01/07/10 IIII-00001     INVOICE                    2,000.00
+                                       ---------  ----------
+                                          750.00    3,000.00
+
+ 31/03/11                Balance C/F                2,250.00
+
+ Contd. ......
+
+
+ SUPPLIER STATEMENT                         38 November 2011
+
+            B0002   SupplierY Corp
+                    51, ACD STREET, BBB
+ ===========================================================
+ DATE     REF.No.        DESCRIPTION       DEBIT      CREDIT
+ ===========================================================
+ 01/04/10                Balance B/F                1,500.00
+
+ 01/05/10 AAAA-00003     PAYMENT        1,500,00
+
+ 01/07/10 IIII-00002     INVOICE                    2,000.00
+ 01/08/10 IIII-00003     INVOICE                    1,000.00
+                                       ---------  ----------
+                                        1,500.00    4,500.00
+
+ 31/03/11                Balance C/F                3,500.00
+
+ Contd. ......
+
+///This is what SAP exports look like.
+
+
+Getting this into a spreadsheet or a database table to analyse it is not easy. So I started a project to help transform data in various report formats into simple tables and export as comma-separated files.
+
+The project is called **<<http://vpj.github.io/cellular/(cellular)>>**, and it is still in the early stages. I thought of writing about it to get ideas and suggestions. It has a simple user interface with the table on the left side with a sidepane on right side.
+
+>>>
+ <<<
+  <iframe src="https://ghbtns.com/github-btn.html?user=vpj&repo=cellular&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
+
+ **<<http://vpj.github.io/cellular/(demo)>>**
+
+<<<
+ <iframe id="ytplayer" type="text/html" width="555" height="390"
+  src="http://www.youtube.com/embed/M7lc1UVf-VE?autoplay=1&origin=http://example.com"
+  frameborder="0"></iframe>
+
+>>>
+ Here's a small screen cast of using **cellular** to transform the above report.
+</div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script src="lib/highlightjs/highlight.pack.js">
+  </script>
+  <script src="lib/weya/weya.js">
+  </script>
+  <script src="lib/weya/base.js">
+  </script>
+  <script src="lib/mod/mod.js">
+  </script>
+  <script src="js/static.js?v=9">
+  </script>
+  <script src="js/parser.js?v=9">
+  </script>
+  <script src="js/reader.js?v=9">
+  </script>
+  <script src="js/nodes.js?v=9">
+  </script>
+  <script src="js/render.js?v=9">
+  </script>
+ </body>
+</html>

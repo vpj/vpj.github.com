@@ -64,19 +64,19 @@
               change: this.$.on.change
             }
           });
-          this.button({
+          this.$.elems.btn = this.button('.u-full-width.button-primary', 'Separate', {
             on: {
-              click: this.$.on.cancel
-            }
-          }, 'Cancel');
-          return this.$.elems.btn = this.button('.button-primary', 'Separate', {
-            on: {
-              click: this.$.on.separate
+              click: this.$.on.apply
             },
             style: {
               display: 'none'
             }
           });
+          return this.button('.u-full-width', {
+            on: {
+              click: this.$.on.cancel
+            }
+          }, 'Cancel');
         });
         if (this.column != null) {
           return this._setData();
@@ -131,7 +131,7 @@
         }
       };
 
-      DelimiterSeparateColumn.listen('separate', function(e) {
+      DelimiterSeparateColumn.listen('apply', function(e) {
         var i, j, k, n, ref, ref1;
         e.preventDefault();
         this.delimiter = this.elems.delimiter.value.trim();

@@ -42,7 +42,7 @@
           context: this
         }, function() {
           this.$.elems.status = this.p('Select a column');
-          return this.button({
+          return this.button('.u-full-width', {
             on: {
               click: this.$.on.cancel
             }
@@ -69,21 +69,21 @@
               change: this.$.on.changeFile
             }
           });
-          this.button({
+          this.button(".u-full-width", {
             on: {
               click: this.$.on.openFile
             }
           }, 'Open file');
-          this.button({
+          this.button('.u-full-width.button-primary', {
+            on: {
+              click: this.$.on.apply
+            }
+          }, 'Load');
+          return this.button(".u-full-width", {
             on: {
               click: this.$.on.cancel
             }
           }, 'Cancel');
-          return this.button('.button-primary', {
-            on: {
-              click: this.$.on.loadData
-            }
-          }, 'Load');
         });
         Weya({
           elem: this.elems.content,
@@ -124,7 +124,7 @@
         return this.callbacks.cancel();
       });
 
-      Append.listen('loadData', function(e) {
+      Append.listen('apply', function(e) {
         e.preventDefault();
         this.data = this.textEditor.getValue();
         return this.callbacks.apply();

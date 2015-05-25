@@ -48,12 +48,7 @@
               click: this.$.on.removeClick
             }
           });
-          this.button({
-            on: {
-              click: this.$.on.cancel
-            }
-          }, 'Cancel');
-          return this.$.elems.btn = this.button('.button-primary', 'Delete', {
+          this.$.elems.btn = this.button('.u-full-width.button-primary', 'Delete', {
             on: {
               click: this.$.on.apply
             },
@@ -61,6 +56,11 @@
               display: 'none'
             }
           });
+          return this.button('.u-full-width', {
+            on: {
+              click: this.$.on.cancel
+            }
+          }, 'Cancel');
         });
         if (this.table != null) {
           return this._setData();
@@ -142,15 +142,17 @@
           elems.div = this.div(function() {
             elems.label = this.label({
               "for": "search-" + id
-            }, name);
-            elems.input = this.input("#search-" + id, {
+            }, function() {
+              this.span(name);
+              return elems.remove = this.span('.remove', 'X');
+            });
+            return elems.input = this.input("#search-" + id + ".u-full-width", {
               value: search,
               type: 'text',
               on: {
                 change: this.$.on.change
               }
             });
-            return elems.remove = this.button('Remove');
           });
           elems.remove._id = id;
           return this.$.elems.inputs[id] = elems;

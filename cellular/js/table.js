@@ -171,7 +171,6 @@
           col.width = 5 + Math.ceil(width);
           this.dims.tableWidth += col.width;
         }
-        this.dims.tableWidth = Math.max(this.dims.tableWidth, this.dims.containerWidth);
         return this.refresh();
       });
 

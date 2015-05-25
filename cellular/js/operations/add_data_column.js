@@ -66,17 +66,17 @@
               change: this.$.on.changeFile
             }
           });
-          this.button({
+          this.button(".u-full-width", {
             on: {
               click: this.$.on.openFile
             }
           }, 'Open file');
-          this.button('.button-primary', {
+          this.button(".u-full-width.button-primary", {
             on: {
-              click: this.$.on.loadData
+              click: this.$.on.apply
             }
           }, 'Load');
-          return this.button({
+          return this.button(".u-full-width", {
             on: {
               click: this.$.on.cancel
             }
@@ -121,7 +121,7 @@
         return this.callbacks.cancel();
       });
 
-      AddColumn.listen('loadData', function(e) {
+      AddColumn.listen('apply', function(e) {
         e.preventDefault();
         this.data = this.textEditor.getValue();
         this.table = this.editor.getTable();

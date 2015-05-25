@@ -35,7 +35,7 @@
           elem: this.elems.sidebar,
           context: this
         }, function() {
-          return this.button({
+          return this.button('.u-full-width', {
             on: {
               click: this.$.on.cancel
             }
