@@ -1,0 +1,126 @@
+<!DOCTYPE html><html>
+ <head>
+  <meta charset="utf-8">
+  </meta>
+  <title>
+   jsblocks, React, Angular performance compared with Weya.coffee
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </meta>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  </meta>
+  <link href="http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900" rel="stylesheet" type="text/css">
+  </link>
+  <link href="lib/skeleton/css/skeleton.css" rel="stylesheet">
+  </link>
+  <link href="lib/highlightjs/styles/default.css" rel="stylesheet">
+  </link>
+  <link href="css/style.css" rel="stylesheet">
+  </link>
+  <link href="blog.css" rel="stylesheet">
+  </link>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-44255805-1', 'auto');
+ga('send', 'pageview');
+  </script>
+ </head>
+ <body>
+  <div class="container wallapatta-container ">
+   <div class="header ">
+    <h1>
+     <a href="index.html">
+      VARUNA JAYASIRI
+     </a>
+    </h1>
+    <a class="button " href="https://www.twitter.com/vpj">
+     @vpj
+    </a>
+   </div>
+   <div class="wallapatta ">
+    <h1 class="title ">
+     jsblocks, React, Angular performance compared with Weya.coffee
+    </h1>
+    <h3 class="date ">
+     May 27, 2016
+    </h3>
+    <div style="margin-bottom:30px;">
+     <a class="twitter-share-button " href="https://twitter.com/share" data-via="vpj" data-size="large">
+      Tweet
+     </a>
+     <script>
+      !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+     </script>
+    </div>
+    <div class="row ">
+     <div class="wallapatta-main nine columns ">
+      <div id="wallapatta_0" class="article"><div id="wallapatta_1" class="section"><div class="content"><p id="wallapatta_2" class="paragraph"><span id="wallapatta_48" class="text">I came across </span><a id="wallapatta_49" class="link" href="http://jsblocks.com/">jsblock</a><span id="wallapatta_50" class="text"> yesterday on Hacker News. They had a nice performance comparison test case set comparing jsblocks with </span><a id="wallapatta_51" class="link" href="https://angularjs.org/">Angular</a><span id="wallapatta_52" class="text"> and </span><a id="wallapatta_53" class="link" href="https://facebook.github.io/react/">React</a><span id="wallapatta_54" class="text">. It made me curious to see how the small library we use (</span><a id="wallapatta_55" class="link" href="https://github.com/vpj/weya">Weya.coffee</a><span id="wallapatta_56" class="text">) compares in performance with these.</span></p></div></div><div id="wallapatta_7" class="section"><div class="content"><p id="wallapatta_8" class="paragraph"><span id="wallapatta_60" class="text">I ran the tests on Chrome broswer on a Macbook Air (1.6Ghz i5, 2GB). I have not altered test cases provided on </span><a id="wallapatta_61" class="link" href="http://jsblocks.com/">jsblock</a><span id="wallapatta_62" class="text">, and have added test cases for Weya for </span><strong id="wallapatta_63" class="bold"><span id="wallapatta_64" class="text">Rendering</span></strong><span id="wallapatta_65" class="text"> and </span><strong id="wallapatta_66" class="bold"><span id="wallapatta_67" class="text">Syncing Changes</span></strong><span id="wallapatta_68" class="text">., The results on Safari are not accurate in </span><em id="wallapatta_69" class="italics"><span id="wallapatta_70" class="text">syncing-changes</span></em><span id="wallapatta_71" class="text"> test case, because jsblock test case use </span><code id="wallapatta_72" class="code"><span id="wallapatta_73" class="text">setTimeout(0)</span></code><span id="wallapatta_74" class="text"> to resync which is called before html is actually rendered while the Weya test case use </span><code id="wallapatta_75" class="code"><span id="wallapatta_76" class="text">requestAnimationFrame</span></code><span id="wallapatta_77" class="text"> which waits till it's rendered.</span></p></div></div><div id="wallapatta_12" class="section"><h3 class="heading"><span id="wallapatta_13" class="block"><span id="wallapatta_80" class="text">Rendering</span></span></h3><div class="content"><table id="wallapatta_14" class="table"><thead><tr><th colspan="1"><span id="wallapatta_15" class="block"><span id="wallapatta_81" class="text">Library</span></span></th><th colspan="1"><span id="wallapatta_16" class="block"><span id="wallapatta_82" class="text">Time (ms)</span></span></th><th colspan="1"><span id="wallapatta_17" class="block"><span id="wallapatta_83" class="text">Bar (shorter is better)</span></span></th></tr></thead><tbody><tr><td colspan="1"><span id="wallapatta_18" class="block"><span id="wallapatta_84" class="text">Weya.coffee</span></span></td><td colspan="1"><span id="wallapatta_19" class="block"><span id="wallapatta_85" class="text">404</span></span></td><td colspan="1"><span id="wallapatta_20" class="block"><span id="wallapatta_86" class="text">====</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_21" class="block"><span id="wallapatta_87" class="text">jsblocks</span></span></td><td colspan="1"><span id="wallapatta_22" class="block"><span id="wallapatta_88" class="text">801</span></span></td><td colspan="1"><span id="wallapatta_23" class="block"><span id="wallapatta_89" class="text">========</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_24" class="block"><span id="wallapatta_90" class="text">React</span></span></td><td colspan="1"><span id="wallapatta_25" class="block"><span id="wallapatta_91" class="text">1065</span></span></td><td colspan="1"><span id="wallapatta_26" class="block"><span id="wallapatta_92" class="text">==========</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_27" class="block"><span id="wallapatta_93" class="text">Angular</span></span></td><td colspan="1"><span id="wallapatta_28" class="block"><span id="wallapatta_94" class="text">2432</span></span></td><td colspan="1"><span id="wallapatta_29" class="block"><span id="wallapatta_95" class="text">========================</span></span></td></tr></tbody></table></div></div><div id="wallapatta_30" class="section"><h3 class="heading"><span id="wallapatta_31" class="block"><span id="wallapatta_96" class="text">Syncing Changes</span></span></h3><div class="content"><table id="wallapatta_32" class="table"><thead><tr><th colspan="1"><span id="wallapatta_33" class="block"><span id="wallapatta_97" class="text">Library</span></span></th><th colspan="1"><span id="wallapatta_34" class="block"><span id="wallapatta_98" class="text">Time (ms)</span></span></th><th colspan="1"><span id="wallapatta_35" class="block"><span id="wallapatta_99" class="text">Bar (shorter is better)</span></span></th></tr></thead><tbody><tr><td colspan="1"><span id="wallapatta_36" class="block"><span id="wallapatta_100" class="text">Weya.coffee</span></span></td><td colspan="1"><span id="wallapatta_37" class="block"><span id="wallapatta_101" class="text">1593</span></span></td><td colspan="1"><span id="wallapatta_38" class="block"><span id="wallapatta_102" class="text">========</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_39" class="block"><span id="wallapatta_103" class="text">jsblocks</span></span></td><td colspan="1"><span id="wallapatta_40" class="block"><span id="wallapatta_104" class="text">2035</span></span></td><td colspan="1"><span id="wallapatta_41" class="block"><span id="wallapatta_105" class="text">==========</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_42" class="block"><span id="wallapatta_106" class="text">React</span></span></td><td colspan="1"><span id="wallapatta_43" class="block"><span id="wallapatta_107" class="text">2781</span></span></td><td colspan="1"><span id="wallapatta_44" class="block"><span id="wallapatta_108" class="text">==============</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_45" class="block"><span id="wallapatta_109" class="text">Angular</span></span></td><td colspan="1"><span id="wallapatta_46" class="block"><span id="wallapatta_110" class="text">8081</span></span></td><td colspan="1"><span id="wallapatta_47" class="block"><span id="wallapatta_111" class="text">========================================</span></span></td></tr></tbody></table></div></div></div>
+     </div>
+     <div class="wallapatta-sidebar three columns ">
+      <div id="wallapatta_3" class="sidenote"><div id="wallapatta_4" class="section"><div class="content"><p id="wallapatta_5" class="paragraph"><span id="wallapatta_57" class="text">Weya.coffee is more of a rendering tool than a a framework. The main difference between Weya and other frameworks is that instead of writing logic inside html, markup is written in coffeescript. Weya comes with a router and a base class inspired by </span><a id="wallapatta_58" class="link" href="http://backbonejs.org/">backbone.js</a><span id="wallapatta_59" class="text">.</span></p></div></div><div id="wallapatta_6" class="html"><iframe src="https://ghbtns.com/github-btn.html?user=vpj&amp;repo=weya&amp;type=star&amp;count=true&amp;size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
+</div></div><div id="wallapatta_9" class="sidenote"><div id="wallapatta_10" class="section"><div class="content"><p id="wallapatta_11" class="paragraph"><strong id="wallapatta_78" class="bold"><a id="wallapatta_79" class="link" href="http://vpj.github.io/jsblocks-performance.zip">Download the performance test cases</a></strong></p></div></div></div>
+     </div>
+     <div style="display:none;">
+      <div class='wallapatta-code'>I came across <<http://jsblocks.com/(jsblock)>> yesterday on Hacker News. They had a nice performance comparison test case set comparing jsblocks with <<https://angularjs.org/(Angular)>> and <<https://facebook.github.io/react/(React)>>. It made me curious to see how the small library we use (<<https://github.com/vpj/weya(Weya.coffee)>>) compares in performance with these.
+
+>>>
+ Weya.coffee is more of a rendering tool than a a framework. The main difference between Weya and other frameworks is that instead of writing logic inside html, markup is written in coffeescript. Weya comes with a router and a base class inspired by <<http://backbonejs.org/(backbone.js)>>.
+
+ <<<
+  <iframe src="https://ghbtns.com/github-btn.html?user=vpj&repo=weya&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
+
+I ran the tests on Chrome broswer on a Macbook Air (1.6Ghz i5, 2GB). I have not altered test cases provided on <<http://jsblocks.com/(jsblock)>>, and have added test cases for Weya for **Rendering** and **Syncing Changes**., The results on Safari are not accurate in --syncing-changes-- test case, because jsblock test case use ``setTimeout(0)`` to resync which is called before html is actually rendered while the Weya test case use ``requestAnimationFrame`` which waits till it's rendered.
+
+>>>
+ **<<http://vpj.github.io/jsblocks-performance.zip(Download the performance test cases)>>
+
+
+### Rendering
+
+ |||
+  Library | Time (ms) |Bar (shorter is better)
+  ===
+  Weya.coffee | 404 | ====
+  jsblocks | 801 | ========
+  React | 1065 | ==========
+  Angular | 2432 | ========================
+
+### Syncing Changes
+
+ |||
+  Library | Time (ms) | Bar (shorter is better)
+  ===
+  Weya.coffee | 1593 | ========
+  jsblocks | 2035 | ==========
+  React | 2781 | ==============
+  Angular | 8081 | ========================================
+
+</div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script src="lib/highlightjs/highlight.pack.js">
+  </script>
+  <script src="lib/weya/weya.js">
+  </script>
+  <script src="lib/weya/base.js">
+  </script>
+  <script src="lib/mod/mod.js">
+  </script>
+  <script src="js/static.js?v=9">
+  </script>
+  <script src="js/parser.js?v=9">
+  </script>
+  <script src="js/reader.js?v=9">
+  </script>
+  <script src="js/nodes.js?v=9">
+  </script>
+  <script src="js/render.js?v=9">
+  </script>
+ </body>
+</html>

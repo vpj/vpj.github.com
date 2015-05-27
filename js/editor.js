@@ -393,10 +393,17 @@
         });
         this.editor.on('change', this.on.change);
         height = window.innerHeight;
-        console.log(height);
         this.editor.setSize(null, (height - 100) + "px");
         this.elems.preview.style.maxHeight = (height - 50) + "px";
-        return this.editor.setValue(Sample);
+        this.editor.setValue(Sample);
+        return window.addEventListener('resize', this.on.resize);
+      });
+
+      Editor.listen('resize', function() {
+        var height;
+        height = window.innerHeight;
+        this.editor.setSize(null, (height - 100) + "px");
+        return this.elems.preview.style.maxHeight = (height - 50) + "px";
       });
 
       Editor.prototype.render = function() {
