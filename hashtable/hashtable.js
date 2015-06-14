@@ -34,7 +34,6 @@
       if (reserved == null) {
         reserved = Math.floor(this._options.reserved * this._options.resizeFactor);
       }
-      console.log(reserved);
       next = this._next;
       values = this._values;
       keys = this._keys;
