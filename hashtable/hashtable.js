@@ -32,7 +32,7 @@
     Hashtable.prototype.resize = function(reserved) {
       var M, i, j, keys, next, ref, results, values;
       if (reserved == null) {
-        reserved = parseInt(this._options.reserved * this._options.resizeFactor);
+        reserved = Math.floor(this._options.reserved * this._options.resizeFactor);
       }
       console.log(reserved);
       next = this._next;
@@ -93,11 +93,11 @@
       var n;
       n = key % this._reserved;
       while (true) {
+        if (this._keys[n] === key) {
+          return this._values[n];
+        }
         if (this._next[n] < 0) {
           break;
-        }
-        if (this._keys[n] = key) {
-          return this._values[n];
         }
         n = this._next[n];
       }
@@ -109,7 +109,7 @@
       obj = {};
       for (i = j = 0, ref = this._M; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
         if (this._next[i] !== EMPTY) {
-          obj[keys[i]] = values[i];
+          obj[this._keys[i]] = this._values[i];
         }
       }
       return obj;
