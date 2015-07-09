@@ -1,5 +1,5 @@
 (function() {
-  var Api, Tags, Weya, weyaDom, weyaDomCreate, weyaMarkup, weyaMarkupCreate;
+  var Api, Tags, Weya, getParameters, parseIdClass, weyaDom, weyaDomCreate, weyaMarkup, weyaMarkupCreate;
 
   Tags = {
     svg: 'a altGlyph altGlyphDef altGlyphItem animate animateColor animateMotion animateTransform circle clipPath color-profile cursor defs desc ellipse feBlend feColorMatrix feComponentTransfer feComposite feConvolveMatrix feDiffuseLighting feDisplacementMap feDistantLight feFlood feFuncA feFuncB feFuncG feFuncR feGaussianBlur feImage feMerge feMergeNode feMorphology feOffset fePointLight feSpecularLighting feSpotLight feTile feTurbulence filter font font-face font-face-format font-face-name font-face-src font-face-uri foreignObject g glyph glyphRef hkern image line linearGradient marker mask metadata missing-glyph mpath path pattern polygon polyline radialGradient rect script set stop style svg symbol text textPath title tref tspan use view vkern switch foreignObject',
@@ -11,8 +11,63 @@
     document: this.document
   };
 
+  parseIdClass = function(str) {
+    var c, i, j, len, ref, res;
+    res = {
+      id: null,
+      "class": []
+    };
+    ref = str.split(".");
+    for (i = j = 0, len = ref.length; j < len; i = ++j) {
+      c = ref[i];
+      if (c.indexOf("#") === 0) {
+        res.id = c.substr(1);
+      } else if (c !== "") {
+        if (res["class"] == null) {
+          res["class"] = [c];
+        } else {
+          res["class"].push(c);
+        }
+      }
+    }
+    return res;
+  };
+
+  getParameters = function(args) {
+    var arg, c, i, j, len, params;
+    params = {
+      idClass: null,
+      text: null,
+      attrs: null,
+      func: null
+    };
+    for (i = j = 0, len = args.length; j < len; i = ++j) {
+      arg = args[i];
+      switch (typeof arg) {
+        case 'function':
+          params.func = arg;
+          break;
+        case 'object':
+          params.attrs = arg;
+          break;
+        case 'string':
+          if (args.length === 1) {
+            params.text = arg;
+          } else {
+            c = arg.charAt(0);
+            if (i === 0 && (c === '#' || c === '.')) {
+              params.idClass = parseIdClass(arg);
+            } else {
+              params.text = arg;
+            }
+          }
+      }
+    }
+    return params;
+  };
+
   weyaDomCreate = function() {
-    var append, j, l, len, len1, len2, m, name, parseIdClass, ref, ref1, ref2, setAttributes, setEvents, setStyles, weya, wrapAppend;
+    var append, j, l, len, len1, len2, m, name, ref, ref1, ref2, setAttributes, setData, setEvents, setIdClass, setStyles, weya, wrapAppend;
     weya = {
       _elem: null
     };
@@ -38,6 +93,15 @@
       }
       return results;
     };
+    setData = function(elem, data) {
+      var k, results, v;
+      results = [];
+      for (k in data) {
+        v = data[k];
+        results.push(elem[k] = v);
+      }
+      return results;
+    };
     setAttributes = function(elem, attrs) {
       var k, results, v;
       results = [];
@@ -50,6 +114,9 @@
           case 'on':
             results.push(setEvents(elem, v));
             break;
+          case 'data':
+            results.push(setData(elem, v));
+            break;
           default:
             if (v != null) {
               results.push(elem.setAttribute(k, v));
@@ -60,89 +127,56 @@
       }
       return results;
     };
-    parseIdClass = function(str) {
-      var c, i, j, len, ref, res;
-      res = {
-        id: null,
-        "class": []
-      };
-      ref = str.split(".");
-      for (i = j = 0, len = ref.length; j < len; i = ++j) {
-        c = ref[i];
-        if (c.indexOf("#") === 0) {
-          res.id = c.substr(1);
-        } else if (c !== "") {
-          if (res["class"] == null) {
-            res["class"] = [c];
-          } else {
-            res["class"].push(c);
+    setIdClass = function(elem, idClass) {
+      var c, className, j, l, len, len1, ref, ref1, results;
+      if (idClass.id != null) {
+        elem.id = idClass.id;
+      }
+      if (idClass["class"] != null) {
+        if (elem.classList != null) {
+          ref = idClass["class"];
+          results = [];
+          for (j = 0, len = ref.length; j < len; j++) {
+            c = ref[j];
+            results.push(elem.classList.add(c));
           }
+          return results;
+        } else {
+          className = '';
+          ref1 = idClass["class"];
+          for (l = 0, len1 = ref1.length; l < len1; l++) {
+            c = ref1[l];
+            if (className !== '') {
+              className += ' ';
+            }
+            className += "" + c;
+          }
+          return elem.className = className;
         }
       }
-      return res;
     };
     append = function(ns, name, args) {
-      var arg, attrs, c, className, contentFunction, contentText, elem, i, idClass, j, l, len, len1, pElem, ref;
-      idClass = null;
-      contentText = null;
-      attrs = null;
-      contentFunction = null;
-      for (i = j = 0, len = args.length; j < len; i = ++j) {
-        arg = args[i];
-        switch (typeof arg) {
-          case 'function':
-            contentFunction = arg;
-            break;
-          case 'object':
-            attrs = arg;
-            break;
-          case 'string':
-            if (args.length === 1) {
-              contentText = arg;
-            } else {
-              c = arg.charAt(0);
-              if (i === 0 && (c === '#' || c === '.')) {
-                idClass = arg;
-              } else {
-                contentText = arg;
-              }
-            }
-        }
-      }
+      var elem, pElem, params;
+      params = getParameters(args);
       pElem = this._elem;
       if (ns != null) {
         elem = this._elem = Api.document.createElementNS(ns, name);
       } else {
         elem = this._elem = Api.document.createElement(name);
       }
-      if (idClass != null) {
-        idClass = parseIdClass(idClass);
-        if (idClass.id != null) {
-          elem.id = idClass.id;
-        }
-        if (idClass["class"] != null) {
-          className = '';
-          ref = idClass["class"];
-          for (l = 0, len1 = ref.length; l < len1; l++) {
-            c = ref[l];
-            if (className !== '') {
-              className += ' ';
-            }
-            className += "" + c;
-          }
-          elem.className = className;
-        }
+      if (params.idClass != null) {
+        setIdClass(elem, params.idClass);
       }
-      if (attrs != null) {
-        setAttributes(elem, attrs);
+      if (params.attrs != null) {
+        setAttributes(elem, params.attrs);
       }
       if (pElem != null) {
         pElem.appendChild(elem);
       }
-      if (contentFunction != null) {
-        contentFunction.call(this);
-      } else if (contentText != null) {
-        elem.textContent = contentText;
+      if (params.func != null) {
+        params.func.call(this);
+      } else if (params.text != null) {
+        elem.textContent = params.text;
       }
       this._elem = pElem;
       return elem;
@@ -171,7 +205,7 @@
   };
 
   weyaMarkupCreate = function() {
-    var append, j, l, len, len1, len2, m, name, parseIdClass, ref, ref1, ref2, setAttributes, setEvents, setIndent, setStyles, weya, wrapAppend;
+    var append, j, l, len, len1, len2, m, name, ref, ref1, ref2, setAttributes, setData, setEvents, setIndent, setStyles, weya, wrapAppend;
     weya = {
       _buf: null,
       _indent: 0
@@ -194,6 +228,15 @@
       }
       return results;
     };
+    setData = function(buf, data) {
+      var k, results, v;
+      results = [];
+      for (k in data) {
+        v = data[k];
+        results.push(buf.push(" data-" + k + "=\"" + v + "\""));
+      }
+      return results;
+    };
     setAttributes = function(buf, attrs) {
       var k, results, v;
       results = [];
@@ -205,6 +248,9 @@
             break;
           case 'on':
             results.push(setEvents(buf, v));
+            break;
+          case 'data':
+            results.push(setData(buf, v));
             break;
           default:
             results.push(buf.push(" " + k + "=\"" + v + "\""));
@@ -220,77 +266,36 @@
       }
       return results;
     };
-    parseIdClass = function(str) {
-      var c, i, j, len, ref, res;
-      res = {
-        id: null,
-        "class": null
-      };
-      ref = str.split(".");
-      for (i = j = 0, len = ref.length; j < len; i = ++j) {
-        c = ref[i];
-        if (c.indexOf("#") === 0) {
-          res.id = c.substr(1);
-        } else if (c !== "") {
-          if (res["class"] == null) {
-            res["class"] = c;
-          } else {
-            res["class"] += " " + c;
-          }
-        }
-      }
-      return res;
-    };
     append = function(ns, name, args) {
-      var arg, attrs, buf, c, contentFunction, contentText, i, idClass, j, len;
-      idClass = null;
-      contentText = null;
-      attrs = null;
-      contentFunction = null;
-      for (i = j = 0, len = args.length; j < len; i = ++j) {
-        arg = args[i];
-        switch (typeof arg) {
-          case 'function':
-            contentFunction = arg;
-            break;
-          case 'object':
-            attrs = arg;
-            break;
-          case 'string':
-            if (args.length === 1) {
-              contentText = arg;
-            } else {
-              c = arg.charAt(0);
-              if (i === 0 && (c === '#' || c === '.')) {
-                idClass = arg;
-              } else {
-                contentText = arg;
-              }
-            }
-        }
-      }
+      var buf, c, cssClass, j, len, params, ref;
+      params = getParameters(args);
       buf = this._buf;
       setIndent(buf, this._indent);
       buf.push("<" + name);
-      if (idClass != null) {
-        idClass = parseIdClass(idClass);
-        if (idClass.id != null) {
-          buf.push(" id=\"" + idClass.id + "\"");
+      if (params.idClass != null) {
+        if (params.idClass.id != null) {
+          buf.push(" id=\"" + params.idClass.id + "\"");
         }
-        if (idClass["class"] != null) {
-          buf.push(" class=\"" + idClass["class"] + "\"");
+        if (params.idClass["class"] != null) {
+          cssClass = '';
+          ref = params.idClass["class"];
+          for (j = 0, len = ref.length; j < len; j++) {
+            c = ref[j];
+            cssClass += c + " ";
+          }
+          buf.push(" class=\"" + cssClass + "\"");
         }
       }
-      if (attrs != null) {
-        setAttributes(buf, attrs);
+      if (params.attrs != null) {
+        setAttributes(buf, params.attrs);
       }
       buf.push(">\n");
       this._indent++;
-      if (contentFunction != null) {
-        contentFunction.call(this);
-      } else if (contentText != null) {
+      if (params.func != null) {
+        params.func.call(this);
+      } else if (params.text != null) {
         setIndent(buf, this._indent);
-        buf.push(contentText);
+        buf.push(params.text);
         buf.push("\n");
       }
       this._indent--;
@@ -325,29 +330,59 @@
   weyaMarkup = weyaMarkupCreate();
 
   this.Weya = Weya = function(options, func) {
-    var pContext, pElem, r, weya;
+    var helper, helpersAdded, j, len, name, pContext, pElem, r, ref, weya;
     weya = weyaDom;
     pContext = weya.$;
     weya.$ = options.context;
+    helpersAdded = [];
+    if (options.helpers != null) {
+      ref = options.helpers;
+      for (name in ref) {
+        helper = ref[name];
+        if (weya[name] == null) {
+          helpersAdded.push(name);
+          weya[name] = helper.bind(weya);
+        }
+      }
+    }
     pElem = weya._elem;
     weya._elem = options.elem;
     r = func != null ? func.call(weya) : void 0;
     weya._elem = pElem;
     weya.$ = pContext;
+    for (j = 0, len = helpersAdded.length; j < len; j++) {
+      name = helpersAdded[j];
+      delete weya[name];
+    }
     return r;
   };
 
   Weya.markup = function(options, func) {
-    var buf, pBuf, pContext, r, weya;
+    var buf, helper, helpersAdded, j, len, name, pBuf, pContext, r, ref, weya;
     weya = weyaMarkup;
     pContext = weya.$;
     weya.$ = options.context;
+    helpersAdded = [];
+    if (options.helpers != null) {
+      ref = options.helpers;
+      for (name in ref) {
+        helper = ref[name];
+        if (weya[name] == null) {
+          helpersAdded.push(name);
+          weya[name] = helper.bind(weya);
+        }
+      }
+    }
     pBuf = weya._buf;
     weya._buf = [];
     r = func != null ? func.call(weya) : void 0;
     buf = weya._buf;
     weya._buf = pBuf;
     weya.$ = pContext;
+    for (j = 0, len = helpersAdded.length; j < len; j++) {
+      name = helpersAdded[j];
+      delete weya[name];
+    }
     return buf.join('');
   };
 

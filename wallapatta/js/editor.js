@@ -139,7 +139,7 @@
                   type: "number",
                   value: "225"
                 });
-                return this.button(".button-primary", "Render", {
+                return this.button(".button-primary", "Print", {
                   on: {
                     click: this.$.on.renderPrint
                   }
@@ -334,7 +334,10 @@
             height = ratio * HEIGHT;
             return render.mediaLoaded(function() {
               return setTimeout(function() {
-                return render.setPages(height);
+                render.setPages(height);
+                return window.requestAnimationFrame(function() {
+                  return window.print();
+                });
               }, 500);
             });
           };
@@ -393,10 +396,17 @@
         });
         this.editor.on('change', this.on.change);
         height = window.innerHeight;
-        console.log(height);
         this.editor.setSize(null, (height - 100) + "px");
         this.elems.preview.style.maxHeight = (height - 50) + "px";
-        return this.editor.setValue(Sample);
+        this.editor.setValue(Sample);
+        return window.addEventListener('resize', this.on.resize);
+      });
+
+      Editor.listen('resize', function() {
+        var height;
+        height = window.innerHeight;
+        this.editor.setSize(null, (height - 100) + "px");
+        return this.elems.preview.style.maxHeight = (height - 50) + "px";
       });
 
       Editor.prototype.render = function() {

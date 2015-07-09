@@ -9,18 +9,24 @@
       PRINT = false;
     }
     renderWeb = function(render) {
-      return render.mediaLoaded(function() {
-        var int, n;
+      var _count, _imagesLoaded, _interval, _render;
+      _imagesLoaded = false;
+      _count = 0;
+      _interval = null;
+      _render = function() {
         render.setFills();
-        n = 0;
-        return int = setInterval(function() {
-          render.setFills();
-          n++;
-          if (n === 10) {
-            return clearInterval(int);
+        if (_imagesLoaded) {
+          _count++;
+          if (_count === 10) {
+            return clearInterval(_interval);
           }
-        }, 1000);
+        }
+      };
+      render.mediaLoaded(function() {
+        _imagesLoaded = true;
+        return _render();
       });
+      return _interval = setInterval(_render, 1000);
     };
     renderPrint = function(render) {
       return render.mediaLoaded(function() {

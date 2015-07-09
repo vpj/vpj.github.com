@@ -1,9 +1,19 @@
 (function() {
-  var Mod, _self, callbacks, loaded, modules;
+  var LOG, Mod, ModError, _self, callbacks, everythingLoaded, initializeCalled, loaded, modules, run, running,
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
 
   Mod = {};
 
   _self = null;
+
+  if ((typeof console !== "undefined" && console !== null ? console.log : void 0) != null) {
+    LOG = console.log.bind(console);
+  } else {
+    LOG = function() {
+      return null;
+    };
+  }
 
   if (typeof GLOBAL !== "undefined" && GLOBAL !== null) {
     GLOBAL.Mod = Mod;
@@ -19,11 +29,54 @@
 
   loaded = [];
 
-  Mod.set = function(name, module) {
-    if (modules[name] != null) {
-      throw new Error("Module " + name + " already registered");
+  initializeCalled = false;
+
+  everythingLoaded = false;
+
+  running = false;
+
+  ModError = (function(superClass) {
+    extend(ModError, superClass);
+
+    function ModError(message) {
+      ModError.__super__.constructor.call(this, message);
+      this.message = message;
     }
-    return modules[name] = module;
+
+    return ModError;
+
+  })(Error);
+
+  Mod.set = function(name, module) {
+    var cb, e, j, len, results;
+    if (modules[name] != null) {
+      throw new ModError("Module " + name + " already registered");
+    }
+    modules[name] = module;
+    if (initializeCalled && !running) {
+      try {
+        running = true;
+        run();
+      } catch (_error) {
+        e = _error;
+        running = false;
+        LOG("MOD: Set - " + name);
+        if (e instanceof ModError) {
+          LOG("MOD: Error - " + e.message);
+        } else {
+          throw e;
+        }
+      }
+    }
+    if (everythingLoaded) {
+      LOG("MOD: All dependencies are met");
+      results = [];
+      for (j = 0, len = loaded.length; j < len; j++) {
+        cb = loaded[j];
+        results.push(cb());
+      }
+      return results;
+    }
   };
 
   Mod.onLoad = function(callback) {
@@ -33,7 +86,7 @@
   Mod.require = function() {
     var callback, i, j, l, len, list, m, ref;
     if (arguments.length < 1) {
-      throw new Error('Mod.require needs at least on argument');
+      throw new ModError('Mod.require needs at least on argument');
     } else if (arguments.length === 2 && Array.isArray(arguments[0])) {
       list = arguments[0];
       callback = arguments[1];
@@ -45,12 +98,12 @@
       }
     }
     if ((typeof callback) !== 'function') {
-      throw new Error('Last argument of Mod.require should be a function');
+      throw new ModError('Last argument of Mod.require should be a function');
     }
     for (m = 0, len = list.length; m < len; m++) {
       l = list[m];
       if ((typeof l) !== 'string') {
-        throw new Error('Required namespaces should be strings');
+        throw new ModError('Required namespaces should be strings');
       }
     }
     return callbacks.push({
@@ -60,8 +113,9 @@
     });
   };
 
-  Mod.initialize = function() {
-    var cb, first, j, k, len, len1, len2, len3, len4, list, m, n, nC, name, o, p, q, ref, ref1, results, s, satis, todo;
+  run = function() {
+    var cb, first, j, k, len, len1, len2, len3, list, m, n, nC, name, o, p, ref, ref1, s, satis, todo;
+    everythingLoaded = false;
     while (true) {
       n = 0;
       nC = 0;
@@ -113,16 +167,36 @@
           s += "" + first + name;
           first = ", ";
         }
-        throw new Error(s);
+        throw new ModError(s);
       }
     }
-    console.log("Initialized");
-    results = [];
-    for (q = 0, len4 = loaded.length; q < len4; q++) {
-      cb = loaded[q];
-      results.push(cb());
+    return everythingLoaded = true;
+  };
+
+  Mod.initialize = function() {
+    var cb, e, j, len, results;
+    initializeCalled = true;
+    try {
+      running = true;
+      run();
+    } catch (_error) {
+      e = _error;
+      if (e instanceof ModError) {
+        LOG("MOD: Error - " + e.message);
+      } else {
+        throw e;
+      }
     }
-    return results;
+    running = false;
+    if (everythingLoaded) {
+      LOG("MOD: All dependencies are met");
+      results = [];
+      for (j = 0, len = loaded.length; j < len; j++) {
+        cb = loaded[j];
+        results.push(cb());
+      }
+      return results;
+    }
   };
 
 }).call(this);
