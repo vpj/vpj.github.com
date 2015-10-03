@@ -1,0 +1,11 @@
+!_TAG_FILE_FORMAT	2	/extended format/
+!_TAG_FILE_SORTED	0	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Łukasz Korecki	/lukasz@korecki.me/
+!_TAG_PROGRAM_NAME	CoffeeTags	//
+!_TAG_PROGRAM_URL	https://github.com/lukaszkorecki/CoffeeTags	/GitHub repository/
+!_TAG_PROGRAM_VERSION	0.6.0	//
+TRANSACTION	index.coffee	/^TRANSACTION =$/;"	o	line:3	language:coffee	object:window
+for 	index.coffee	/^       for k, v of TRANSACTION$/;"	b	line:86	language:coffee
+template	index.coffee	/^template = ->$/;"	f	line:21	language:coffee	object:window
+transform	index.coffee	/^       @g transform: "translate(20, 30)", ->$/;"	f	line:43	language:coffee	object:template.href.width
+width	index.coffee	/^      @svg ".bullet", width: "300px", height: "85px", ->$/;"	f	line:42	language:coffee	object:template.href

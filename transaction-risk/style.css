@@ -1,0 +1,89 @@
+.transaction-details {
+ margin-top: 20px;
+ margin-bottom: 20px;
+ font-size: .9em;
+}
+.risk-details {
+ font-size: .9em;
+}
+.transaction-risk {
+ margin-bottom: 20px;
+}
+
+.value-label {
+ font-size: .9em;
+ color: #999;
+ font-weight: bold;
+}
+.value {
+ margin-bottom: 10px;
+ font-weight: bold;
+}
+.comment {
+ font-size: .8em;
+ font-style: italic;
+ color: #777;
+}
+
+.transaction-risk .value {
+ font-size: 2em;
+}
+
+.risk-description .value {
+ font-weight: bold;
+ margin: none;
+}
+.risk-description .field {
+ font-weight: bold;
+ margin: none;
+ color: #666;
+}
+.explanation {
+ font-size: .9em;
+ color: #444;
+}
+.risk-details .value-label {
+ font-size: 1em;
+ color: #666;
+ font-weight: normal;
+}
+
+
+.green {
+ fill: rgba(40, 182, 44, 0.4);
+ stroke: rgba(40, 182, 44, 1);
+ color: rgba(40, 182, 44, 1);
+}
+.orange {
+ fill: rgba(255, 133, 27, 0.4);
+ stroke: rgba(255, 133, 27, 1);
+ color: rgba(255, 133, 27, 1);
+}
+.red {
+ fill: rgba(255, 65, 54, 0.4);
+ stroke: rgba(255, 65, 54, 1);
+ color: rgba(255, 65, 54, 1);
+}
+.sparkline-fill {
+ stroke: none;
+ fill: #09c;
+ opacity: .1;
+}
+.sparkline-line {
+ stroke: #09c;
+ fill: none;
+}
+
+svg.bullet text.axis-label {
+ text-anchor: middle;
+ fill: #999;
+ font-size: .8em;
+}
+svg.bullet text.value-label {
+ text-anchor: middle;
+ fill: #111;
+ font-size: .9em;
+}
+svg.bullet line.value {
+ stroke: rgba(0, 0, 0, 0.7);
+}
