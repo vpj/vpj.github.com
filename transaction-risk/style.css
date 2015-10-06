@@ -1,3 +1,14 @@
+.copyright {
+ font-size: 0.7em;
+ color: #777;
+ margin-top: 5px;
+}
+.date {
+ margin-top: 20px;
+ font-size: 0.7em;
+ color: #666;
+ font-style: italics;
+}
 .transaction-details {
  margin-top: 20px;
  margin-bottom: 20px;
@@ -25,6 +36,7 @@
  color: #777;
 }
 
+
 .transaction-risk .value {
  font-size: 2em;
 }
@@ -48,6 +60,30 @@
  font-weight: normal;
 }
 
+@media print {
+ .value-label {
+  color: #999 !important;
+ }
+ .comment {
+  color: #999 !important;
+ }
+ .risk-description .field {
+  color: #666 !important;
+ }
+ .explanation {
+  color: #444 !important;
+ }
+ .risk-details .value-label {
+  color: #666 !important;
+ }
+ .copyright {
+  color: #777 !important;
+ }
+ .date {
+  color: #666 !important;
+ }
+}
+
 
 .green {
  fill: rgba(40, 182, 44, 0.4);
@@ -64,11 +100,29 @@
  stroke: rgba(255, 65, 54, 1);
  color: rgba(255, 65, 54, 1);
 }
+@media print {
+ .green {
+  fill: rgba(40, 182, 44, 0.4) !important;
+  stroke: rgba(40, 182, 44, 1) !important;
+  color: rgba(40, 182, 44, 1) !important;
+ }
+ .orange {
+  fill: rgba(255, 133, 27, 0.4) !important;
+  stroke: rgba(255, 133, 27, 1) !important;
+  color: rgba(255, 133, 27, 1) !important;
+ }
+ .red {
+  fill: rgba(255, 65, 54, 0.4) !important;
+  stroke: rgba(255, 65, 54, 1) !important;
+  color: rgba(255, 65, 54, 1) !important;
+ }
+}
 .sparkline-fill {
  stroke: none;
  fill: #09c;
  opacity: .1;
 }
+
 .sparkline-line {
  stroke: #09c;
  fill: none;
