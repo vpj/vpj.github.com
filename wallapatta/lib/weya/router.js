@@ -44,8 +44,13 @@
     Router.prototype._routes = {};
 
     Router.routes = function(routes) {
-      var k, results, v;
-      this.prototype._routes = _.clone(this.prototype._routes);
+      var k, results, temp, v;
+      temp = this.prototype._routes;
+      this.prototype._routes = {};
+      for (k in temp) {
+        v = temp[k];
+        this.prototype._routes[k] = v;
+      }
       results = [];
       for (k in routes) {
         v = routes[k];
@@ -81,12 +86,12 @@
     };
 
     Router.prototype.route = function(route, name) {
-      if (!_.isRegExp(route)) {
+      if ((Object.prototype.toString.call(route)) !== '[object RegExp]') {
         route = this._routeToRegExp(route);
       }
       return Weya.history.route(route, (function(_this) {
         return function(fragment, event) {
-          var args, callback, callbacks, i, len, ref, results;
+          var args, callback, callbacks, j, len, ref, results;
           args = _this._extractParameters(route, fragment);
           _this._event = event;
           if (((ref = _this._event) != null ? ref.type : void 0) === "popstate") {
@@ -110,8 +115,8 @@
             callbacks = [callbacks];
           }
           results = [];
-          for (i = 0, len = callbacks.length; i < len; i++) {
-            callback = callbacks[i];
+          for (j = 0, len = callbacks.length; j < len; j++) {
+            callback = callbacks[j];
             if ((typeof callback) === 'string') {
               callback = _this[callback];
             }
@@ -175,15 +180,16 @@
     };
 
     Router.prototype._extractParameters = function(route, fragment) {
-      var params;
+      var i, j, len, p, params, results;
       params = route.exec(fragment).slice(1);
-      return _.map(params, function(param) {
-        if (param) {
-          return decodeURIComponent(param);
-        } else {
-          return null;
+      results = [];
+      for (i = j = 0, len = params.length; j < len; i = ++j) {
+        p = params[i];
+        if (p != null) {
+          results.push(params[i] = decodeURIComponent(p));
         }
-      });
+      }
+      return results;
     };
 
     return Router;
@@ -209,7 +215,7 @@
 
     History.initialize(function() {
       this.handlers = [];
-      _.bindAll(this, 'checkUrl');
+      this.checkUrl = this.checkUrl.bind(this);
       this.history = window.history;
       this.location = window.location;
       return this.stateList = [];
@@ -283,16 +289,26 @@
     };
 
     History.prototype.start = function(options) {
-      var ref;
+      var k, opt, ref, ref1, v;
       History.started = true;
-      this.options = _.extend({
+      opt = {
         root: '/'
-      }, this.options, options);
+      };
+      ref = this.options;
+      for (k in ref) {
+        v = ref[k];
+        opt[k] = v;
+      }
+      for (k in options) {
+        v = options[k];
+        opt[k] = v;
+      }
+      this.options = opt;
       this.root = this.options.root;
       this._emulateState = this.options.emulateState === true;
       this._wantsHashChange = this._emulateState === false && this.options.hashChange !== false;
       this._wantsPushState = this._emulateState === false && this.options.pushState === true;
-      this._hasPushState = this._wantsPushState === true && (((ref = this.history) != null ? ref.pushState : void 0) != null);
+      this._hasPushState = this._wantsPushState === true && (((ref1 = this.history) != null ? ref1.pushState : void 0) != null);
       if (this._emulateState && (this.options.start != null)) {
         this.pushEmulateState(this.options.start.state, this.options.start.title, this.options.start.fragment);
       }
@@ -327,15 +343,15 @@
     };
 
     History.prototype.loadUrl = function(fragment, e) {
+      var handler, j, len, ref;
       fragment = this.fragment = this.getFragment(fragment);
-      return _.any(this.handlers, function(handler) {
+      ref = this.handlers;
+      for (j = 0, len = ref.length; j < len; j++) {
+        handler = ref[j];
         if (handler.route.test(fragment)) {
-          handler.callback(fragment, e);
-          return true;
-        } else {
-          return false;
+          return handler.callback(fragment, e);
         }
-      });
+      }
     };
 
     History.prototype.navigate = function(fragment, options) {

@@ -7,15 +7,13 @@
   </title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </meta>
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  </meta>
   <link href="http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900" rel="stylesheet" type="text/css">
   </link>
   <link href="lib/skeleton/css/skeleton.css" rel="stylesheet">
   </link>
   <link href="lib/highlightjs/styles/default.css" rel="stylesheet">
   </link>
-  <link href="lib/Font-Awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="lib/Font-Awesome/css/font-awesome.css" rel="stylesheet">
   </link>
   <link href="css/style.css" rel="stylesheet">
   </link>
@@ -60,16 +58,16 @@ ga('send', 'pageview');
      </div>
      <div style="display:none;">
       <div class='wallapatta-code'>Wallapatta has a syntax similar to
-<<http://en.wikipedia.org/wiki/Markdown(Markdown)>> and uses a layout
+&lt;&lt;http://en.wikipedia.org/wiki/Markdown(Markdown)&gt;&gt; and uses a layout
 inspired by handouts of Edward R. Tufte^^1^^.
 
- >>>
-  ^^1^^ <<http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000hB
-  (Book design: advice and examples - edwardtufte.com)>>
+ &gt;&gt;&gt;
+  ^^1^^ &lt;&lt;http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000hB
+  (Book design: advice and examples - edwardtufte.com)&gt;&gt;
 
- <<<
-  <a class="github-button" href="https://github.com/vpj/wallapatta" data-icon="octicon-star" data-style="mega">Star</a>
-  <script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+ &lt;&lt;&lt;
+  &lt;a class="github-button" href="https://github.com/vpj/wallapatta" data-icon="octicon-star" data-style="mega"&gt;Star&lt;/a&gt;
+  &lt;script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"&gt;&lt;/script&gt;
 
 ##Overview
 
@@ -90,7 +88,7 @@ inspired by handouts of Edward R. Tufte^^1^^.
 
    This belongs to Heading 1
 
- >>>
+ &gt;&gt;&gt;
   ###Heading 1
 
    Introduction
@@ -109,37 +107,37 @@ inspired by handouts of Edward R. Tufte^^1^^.
 
  It also helps while working with large documents because **code folding** can be used with Wallapatta. The hierarchy of content is important for printing as well- to indentify where to break pages.
 
- >>>
+ &gt;&gt;&gt;
   --Page breaking for printing is not implemented yet
 
  Side notes are another key feature of Wallapatta. You can have text, lists, links, HTML content, as well as images, in side notes.
 
- >>>
-  <<<
-   <a href="https://twitter.com/share" class="twitter-share-button" data-via="vpj" data-size="large">Tweet</a>
-   <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+ &gt;&gt;&gt;
+  &lt;&lt;&lt;
+   &lt;a href="https://twitter.com/share" class="twitter-share-button" data-via="vpj" data-size="large"&gt;Tweet&lt;/a&gt;
+   &lt;script&gt;!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');&lt;/script&gt;
 
   --**Tweet** button in a side note
 
- We've changed some of the syntax from Markdown; for instance, ``<<`` and ``>>`` are used for links instead of ``[]()``, because we felt that it's a little more
+ We've changed some of the syntax from Markdown; for instance, ``&lt;&lt;`` and ``&gt;&gt;`` are used for links instead of ``[]()``, because we felt that it's a little more
  intuitive due to its resemblence with HTML tags.
 
- <<reference.html(Read the Wallapatta reference)>> for a detailed description on each component, including examples for usage.
+ &lt;&lt;reference.html(Read the Wallapatta reference)&gt;&gt; for a detailed description on each component, including examples for usage.
 
 ##Get Started
 
- Use the <<http://vpj.github.io/wallapatta(online editor)>> to try out the Wallapatta syntax.
+ Use the &lt;&lt;http://vpj.github.io/wallapatta(online editor)&gt;&gt; to try out the Wallapatta syntax.
 
  ###Setting Up The CLI
 
-  >>>
+  &gt;&gt;&gt;
    A few packages such as ``optimist`` are required.
 
   The command line interface requires ``nodejs`` and ``coffeescript``, and needs to be cloned from Github. Follow the steps below to set up the Wallapatta CLI.
 
   ####1. Clone the repository
 
-   Clone the <<https://github.com/vpj/wallapatta(Wallapatta repository)>> from Github.
+   Clone the &lt;&lt;https://github.com/vpj/wallapatta(Wallapatta repository)&gt;&gt; from Github.
 
   ####2. Initialize submodules
 
@@ -166,15 +164,15 @@ inspired by handouts of Edward R. Tufte^^1^^.
 
  ###Adobe Brackets Extension
 
-  Want a good editor to write documents in? Here's the guide on how to install the <<brackets.html(Wallapatta extension for Brackets)>>, and enable syntax highlighting.
+  Want a good editor to write documents in? Here's the guide on how to install the &lt;&lt;brackets.html(Wallapatta extension for Brackets)&gt;&gt;, and enable syntax highlighting.
 
 ##Reference
 
- <<reference.html(Read the Wallapatta reference)>> for a detailed description on each component, including examples for usage.
+ &lt;&lt;reference.html(Read the Wallapatta reference)&gt;&gt; for a detailed description on each component, including examples for usage.
 
 ##Roadmap
 
- We've published the roadmap of a <<https://trello.com/b/WDVpJBt2/wallapatta-roadmap(Trello Board)>>. You can vote for new features if you have a Trello account.
+ We've published the roadmap of a &lt;&lt;https://trello.com/b/WDVpJBt2/wallapatta-roadmap(Trello Board)&gt;&gt;. You can vote for new features if you have a Trello account.
 </div>
      </div>
     </div>

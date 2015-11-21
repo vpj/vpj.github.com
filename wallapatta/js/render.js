@@ -10,6 +10,7 @@
     BREAK_COST = {
       codeBlock: 1000,
       special: 2000,
+      full: 2000,
       html: 1000,
       heading: 2000,
       list: 1000,
@@ -25,7 +26,8 @@
     EMPTY_PAGE_COST = function(filled, height) {
       var p;
       p = filled / height;
-      return 1500 / p - 1500;
+      p = Math.sqrt(p);
+      return parseInt(1500 / p - 1500);
     };
     Render = (function(superClass) {
       extend(Render, superClass);
@@ -40,6 +42,38 @@
         return this.sidenotes = options.sidenotes;
       });
 
+      Render.prototype._parentPositionCost = function(node) {
+        var cost, p;
+        cost = 0;
+        if (node.parent() != null) {
+          p = node.parent().getChildPosition(node);
+          p = Math.max(p, 0.01);
+          p = Math.sqrt(p);
+          cost += (FIRST_CHILD_COST / p - FIRST_CHILD_COST) / 10;
+        }
+        return cost;
+      };
+
+      Render.prototype.getNodeBreakCost = function(node) {
+        var cost;
+        cost = this._parentPositionCost(node);
+        if (BREAK_COST[node.type] != null) {
+          cost += BREAK_COST[node.type];
+        } else if (node.type === 'section') {
+          cost += 25 * Math.pow(1.44, node.level);
+        } else {
+          throw new Error('Unknown type');
+        }
+        return cost;
+      };
+
+      Render.prototype.getBreakTopCost = function(node) {
+        var cost;
+        cost = this._parentPositionCost(node);
+        cost -= this.getNodeBreakCost(node);
+        return cost;
+      };
+
       Render.prototype.getBreakCost = function(node) {
         var cost;
         if (this.breakCostMap[node.id] != null) {
@@ -47,22 +81,13 @@
         }
         if (node.parent() != null) {
           cost = this.getBreakCost(node.parent(), true);
-          if (node.parent().isFirstChild(node)) {
-            cost += FIRST_CHILD_COST;
-          }
         } else {
           if (node.type !== 'article') {
             throw new Error('oops');
           }
           cost = 0;
         }
-        if (BREAK_COST[node.type] != null) {
-          this.breakCostMap[node.id] = cost + BREAK_COST[node.type];
-        } else if (node.type === 'section') {
-          this.breakCostMap[node.id] = cost + 100 * (node.level - 3);
-        } else {
-          throw new Error('Unknown type');
-        }
+        this.breakCostMap[node.id] = cost + this.getNodeBreakCost(node);
         return this.breakCostMap[node.id];
       };
 
@@ -120,6 +145,9 @@
         H = this.pageHeight;
         if (n === 1) {
           H -= this.getOffsetTop(elem, null);
+          if (H <= this.pageHeight / 2) {
+            H = this.pageHeight;
+          }
         }
         i = n + 1;
         sidenote = 0;
@@ -152,8 +180,10 @@
           ++i;
         }
         if (i >= this.mainNodes.length) {
-          this.broken[n] = 0;
-          return this.nextBreak[n] = null;
+          if ((ielem == null) || pos + ielem.offsetHeight <= H) {
+            this.broken[n] = 0;
+            return this.nextBreak[n] = null;
+          }
         }
       };
 
@@ -173,7 +203,7 @@
         ref1 = this.mainNodes;
         for (l = 0, len1 = ref1.length; l < len1; l++) {
           i = ref1[l];
-          this.breakCost.push(this.getBreakCost(this.map.nodes[i]));
+          this.breakCost.push((this.getBreakCost(this.map.nodes[i])) + (this.getBreakTopCost(this.map.nodes[i])));
         }
         n = this.mainNodes.length - 1;
         results = [];
@@ -230,12 +260,38 @@
         }
       };
 
-      Render.prototype.setPages = function(H) {
+      Render.prototype.addPageBackground = function(H, W, elem) {
+        var y;
+        y = this.getOffsetTop(elem, document.body);
+        return Weya({
+          elem: this.elems.pageBackgrounds
+        }, function() {
+          return this.div(".page-background", "", {
+            style: {
+              top: y + "px",
+              left: "0",
+              height: H + "px",
+              width: W + "px"
+            }
+          });
+        });
+      };
+
+      Render.prototype.setPages = function(H, W) {
         var elem, emptyPages, found, i, m, n, node, pos, results;
         this.pageHeight = H;
         this.mainNodes = this.getMainNodes();
         this.sidenoteMap = this.getSidenoteMap();
         this.calculatePageBreaks();
+        if (this.elems.pageBackgrounds != null) {
+          document.body.removeChild(this.elems.pageBackgrounds);
+        }
+        Weya({
+          elem: document.body,
+          context: this
+        }, function() {
+          return this.$.elems.pageBackgrounds = this.div(".page-backgrounds", '');
+        });
         n = START;
         pos = 0;
         emptyPages = [];
@@ -263,6 +319,7 @@
           elem = this.map.nodes[this.mainNodes[i - 1]].elem;
           pos = this.getOffsetTop(elem, this.elems.main);
           pos += elem.offsetHeight;
+          this.addPageBackground(H, W, this.map.nodes[this.mainNodes[n]].elem);
           results.push(n = i);
         }
         return results;
@@ -288,7 +345,7 @@
             for (k = 0, len = emptyPages.length; k < len; k++) {
               p = emptyPages[k];
               topSidenote = this.getOffsetTop(elemSidenote, this.elems.sidebar);
-              if (topSidenote < p) {
+              if (topSidenote < p.pos) {
                 fill = Weya({}, function() {
                   return this.div(".fill", {
                     style: {
@@ -426,197 +483,6 @@
           }
         }
         return check();
-      };
-
-      Render.prototype.processLine = function() {
-        var id, indent, line, n, results, results1;
-        line = this.reader.get();
-        if (line.empty) {
-          if (this.node.type === TYPES.block) {
-            this.prevNode = this.node;
-            this.node = this.node.parent();
-          }
-          if (this.node.type === TYPES.codeBlock || this.node.type === TYPES.html) {
-            this.node.addText(line.line.substr(this.node.indentation));
-          }
-          return;
-        }
-        while (line.indentation < this.node.indentation) {
-          this.prevNode = this.node;
-          this.node = this.node.parent();
-          if (this.node == null) {
-            if (this.main) {
-              throw new Error('Invalid indentation');
-            }
-            this.main = true;
-            this.node = this.mainNode;
-          }
-        }
-        if (this.prevNode == null) {
-          this.prevNode = this.node;
-        }
-        switch (this.node.type) {
-          case TYPES.list:
-            if (line.type !== TYPES.list) {
-              this.node = this.node.parent();
-            }
-            break;
-          case TYPES.codeBlock:
-          case TYPES.html:
-            this.node.addText(line.line.substr(this.node.indentation));
-            return;
-        }
-        switch (line.type) {
-          case TYPES.codeBlock:
-            indent = line.indentation + 1;
-            this.addNode(new CodeBlock({
-              map: this.map,
-              indentation: line.indentation + 1
-            }));
-            results = [];
-            while (false) {
-              this.reader.next();
-              if (!this.reader.has()) {
-                break;
-              }
-              line = this.reader.get();
-              if (!line.empty && line.indentation < indent) {
-                indent = line.indentation;
-              }
-              if (line.type === TYPES.codeBlock) {
-                break;
-              }
-              results.push(this.node.addText(line.line.substr(indent)));
-            }
-            return results;
-            break;
-          case TYPES.html:
-            indent = line.indentation + 1;
-            this.addNode(new Html({
-              map: this.map,
-              indentation: line.indentation + 1
-            }));
-            results1 = [];
-            while (false) {
-              this.reader.next();
-              if (!this.reader.has()) {
-                break;
-              }
-              line = this.reader.get();
-              if (!line.empty && line.indentation < indent) {
-                indent = line.indentation;
-              }
-              if (line.type === TYPES.html) {
-                break;
-              }
-              results1.push(this.node.addText(line.line.substr(indent)));
-            }
-            return results1;
-            break;
-          case TYPES.special:
-            return this.addNode(new Special({
-              map: this.map,
-              indentation: line.indentation + 1
-            }));
-          case TYPES.list:
-            if (this.node.type !== TYPES.list) {
-              this.addNode(new List({
-                map: this.map,
-                ordered: line.ordered,
-                indentation: line.indentation
-              }));
-            }
-            this.addNode(new ListItem({
-              map: this.map,
-              ordered: line.ordered,
-              indentation: line.indentation + 1
-            }));
-            if (line.text !== '') {
-              this.addNode(new Block({
-                map: this.map,
-                indentation: line.indentation + 1,
-                paragraph: false
-              }));
-              return this.node.addText(line.text);
-            }
-            break;
-          case TYPES.heading:
-            this.addNode(new Section({
-              map: this.map,
-              indentation: line.indentation + 1,
-              level: line.level
-            }));
-            this.node.heading.addText(line.text);
-            return this.blocks.push(this.node.heading);
-          case TYPES.sidenote:
-            if (!this.main) {
-              throw new Error('Cannot have a sidenote inside a sidenote');
-            }
-            this.main = false;
-            id = this.node.id;
-            if (this.prevNode != null) {
-              id = this.prevNode.id;
-            }
-            n = new Sidenote({
-              map: this.map,
-              indentation: line.indentation + 1,
-              link: id
-            });
-            this.mainNode = this.node;
-            this.node = n;
-            return this.sidenotes.push(n);
-          case TYPES.block:
-            if (this.node.type !== TYPES.block) {
-              this.addNode(new Block({
-                map: this.map,
-                indentation: line.indentation,
-                paragraph: true
-              }));
-            }
-            return this.node.addText(line.text);
-          case TYPES.media:
-            this.addNode(new Media({
-              map: this.map,
-              indentation: line.indentation + 1,
-              media: this.parseMedia(line.text)
-            }));
-            this.prevNode = this.node;
-            break;
-          default:
-            throw new Error('Unknown syntax');
-        }
-      };
-
-      Render.prototype.parseLink = function(text) {
-        var link, parts;
-        text = text.replace(/\)/g, '');
-        parts = text.split('(');
-        link = {};
-        if (parts.length <= 0 || parts[0] === '') {
-          throw new Error('Invalid media syntax');
-        }
-        link.link = parts[0].trim();
-        if (parts.length <= 1) {
-          return link;
-        }
-        link.text = parts[1].trim();
-        return link;
-      };
-
-      Render.prototype.parseMedia = function(text) {
-        var media, parts;
-        text = text.replace(/\)/g, '');
-        parts = text.split('(');
-        media = {};
-        if (parts.length <= 0 || parts[0] === '') {
-          throw new Error('Invalid media syntax');
-        }
-        media.src = parts[0].trim();
-        if (parts.length <= 1) {
-          return media;
-        }
-        media.alt = parts[1].trim();
-        return media;
       };
 
       return Render;

@@ -299,7 +299,7 @@
       });
 
       Editor.listen('renderPrint', function(e) {
-        var HEIGHT, WIDTH, parser, render, text;
+        var HEIGHT, WIDTH, error, parser, render, text;
         e.preventDefault();
         WIDTH = parseInt(this.elems.widthInput.value);
         if (isNaN(WIDTH)) {
@@ -317,8 +317,8 @@
         });
         try {
           parser.parse();
-        } catch (_error) {
-          e = _error;
+        } catch (error) {
+          e = error;
           this.elems.errors.textContent = e.message;
           return;
         }
@@ -334,7 +334,7 @@
             height = ratio * HEIGHT;
             return render.mediaLoaded(function() {
               return setTimeout(function() {
-                render.setPages(height);
+                render.setPages(height, width);
                 return window.requestAnimationFrame(function() {
                   return window.print();
                 });
@@ -359,7 +359,7 @@
       };
 
       Editor.prototype.preview = function() {
-        var e, parser, render, text;
+        var e, error, parser, render, text;
         text = this.editor.getValue();
         this.elems.previewMain.innerHTML = '';
         this.elems.previewSidebar.innerHTML = '';
@@ -368,8 +368,8 @@
         });
         try {
           parser.parse();
-        } catch (_error) {
-          e = _error;
+        } catch (error) {
+          e = error;
           this.elems.errors.textContent = e.message;
           return;
         }

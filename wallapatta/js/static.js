@@ -1,10 +1,24 @@
 (function() {
   Mod.require('Wallapatta.Parser', function(Parser) {
-    var PAGE_HEIGHT, PAGE_WIDTH, PRINT, RATIO, doc, docs, j, len, process, processAll, renderPrint, renderWeb;
+    var PAGE_HEIGHT, PAGE_WIDTH, PRINT, PRINT_HEIGHT, PRINT_WIDTH, RATIO, doc, docs, i, j, len, p, process, processAll, renderPrint, renderWeb;
     RATIO = 0;
     PAGE_HEIGHT = PAGE_WIDTH = 0;
+    PRINT_HEIGHT = PAGE_WIDTH = NaN;
     if ((window.location.href.indexOf('print')) !== -1) {
       PRINT = true;
+      i = window.location.href.indexOf('print');
+      p = window.location.href.substr(i + 'print='.length);
+      p = p.split('x');
+      if (p.length === 2) {
+        PRINT_WIDTH = parseInt(p[0]);
+        PRINT_HEIGHT = parseInt(p[1]);
+      }
+      if (isNaN(PRINT_WIDTH)) {
+        PRINT_WIDTH = 178;
+      }
+      if (isNaN(PRINT_HEIGHT)) {
+        PRINT_HEIGHT = 225;
+      }
     } else {
       PRINT = false;
     }
@@ -31,7 +45,7 @@
     renderPrint = function(render) {
       return render.mediaLoaded(function() {
         return setTimeout(function() {
-          return render.setPages(PAGE_HEIGHT);
+          return render.setPages(PAGE_HEIGHT, PAGE_WIDTH);
         }, 5000);
       });
     };
@@ -71,7 +85,7 @@
       });
     };
     processAll = function() {
-      var doc, docs, i, j, len, results;
+      var doc, docs, j, len, results;
       docs = document.getElementsByClassName('wallapatta');
       results = [];
       for (i = j = 0, len = docs.length; j < len; i = ++j) {
@@ -85,11 +99,12 @@
       for (j = 0, len = docs.length; j < len; j++) {
         doc = docs[j];
         doc.classList.add('wallapatta-print');
+        doc.style.width = PRINT_WIDTH + "mm";
       }
       return window.requestAnimationFrame(function() {
-        RATIO = docs[0].offsetWidth / 170;
-        PAGE_WIDTH = RATIO * 170;
-        PAGE_HEIGHT = RATIO * 225;
+        RATIO = docs[0].offsetWidth / PRINT_WIDTH;
+        PAGE_WIDTH = RATIO * PRINT_WIDTH;
+        PAGE_HEIGHT = RATIO * PRINT_HEIGHT;
         return processAll();
       });
     } else {
@@ -101,6 +116,7 @@
     Mod.set('Weya', Weya);
     Mod.set('Weya.Base', Weya.Base);
     Mod.set('HLJS', hljs);
+    Mod.set('CoffeeScript', 'CoffeeScript');
     return Mod.initialize();
   });
 
