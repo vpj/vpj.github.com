@@ -1,0 +1,38 @@
+<!DOCTYPE html><html>
+ <head>
+  <meta charset="utf-8">
+  </meta>
+  <title>Benchmark</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </meta>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  </meta>
+ </head>
+ <body>
+  <div id="area"></div>
+  <script>
+   (function() {
+    var area = document.getElementById('area');
+    var time = {};
+    console.log = function(text) {
+     var div = document.createElement('div');
+     div.innerText = text;
+     area.insertBefore(div, area.firstChild);
+    };
+    console.time = function(text) {
+     time[text] = (new Date()).getTime();
+    };
+    console.timeEnd = function(text) {
+     console.log(text + ": " + ((new Date()).getTime() - time[text]) + "ms");
+    };
+
+    window.nextTick = function(callback) {
+     window.requestAnimationFrame(callback);
+    };
+
+   }).call(this);
+  </script>
+  <script src="string_slice_join.js">
+  </script>
+ </body>
+</html>
