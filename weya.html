@@ -89,22 +89,22 @@ Weya container, <span class="hljs-function">-&gt;</span>
     .data(data)
   .enter().append(<span class="hljs-string">"g"</span>)
     .attr(<span class="hljs-string">"class"</span>, <span class="hljs-string">"g"</span>)
-    .attr(<span class="hljs-string">"transform"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-string">"translate("</span> + x0(d.State) + <span class="hljs-string">",0)"</span>; });
+    .attr(<span class="hljs-string">"transform"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d</span>) </span>{ <span class="hljs-keyword">return</span> <span class="hljs-string">"translate("</span> + x0(d.State) + <span class="hljs-string">",0)"</span>; });
 
 state.selectAll(<span class="hljs-string">"rect"</span>)
-    .data(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> d.ages; })
+    .data(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d</span>) </span>{ <span class="hljs-keyword">return</span> d.ages; })
   .enter().append(<span class="hljs-string">"rect"</span>)
     .attr(<span class="hljs-string">"width"</span>, x1.rangeBand())
-    .attr(<span class="hljs-string">"x"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> x1(d.name); })
-    .attr(<span class="hljs-string">"y"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> y(d.value); })
-    .attr(<span class="hljs-string">"height"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> height - y(d.value); })
-    .style(<span class="hljs-string">"fill"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> color(d.name); });
+    .attr(<span class="hljs-string">"x"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d</span>) </span>{ <span class="hljs-keyword">return</span> x1(d.name); })
+    .attr(<span class="hljs-string">"y"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d</span>) </span>{ <span class="hljs-keyword">return</span> y(d.value); })
+    .attr(<span class="hljs-string">"height"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d</span>) </span>{ <span class="hljs-keyword">return</span> height - y(d.value); })
+    .style(<span class="hljs-string">"fill"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d</span>) </span>{ <span class="hljs-keyword">return</span> color(d.name); });
 
 <span class="hljs-keyword">var</span> legend = svg.selectAll(<span class="hljs-string">".legend"</span>)
     .data(ageNames.slice().reverse())
   .enter().append(<span class="hljs-string">"g"</span>)
     .attr(<span class="hljs-string">"class"</span>, <span class="hljs-string">"legend"</span>)
-    .attr(<span class="hljs-string">"transform"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(d, i)</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-string">"translate(0,"</span> + i * <span class="hljs-number">20</span> + <span class="hljs-string">")"</span>; });
+    .attr(<span class="hljs-string">"transform"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d, i</span>) </span>{ <span class="hljs-keyword">return</span> <span class="hljs-string">"translate(0,"</span> + i * <span class="hljs-number">20</span> + <span class="hljs-string">")"</span>; });
 
 legend.append(<span class="hljs-string">"rect"</span>)
     .attr(<span class="hljs-string">"x"</span>, width - <span class="hljs-number">18</span>)
@@ -117,7 +117,7 @@ legend.append(<span class="hljs-string">"text"</span>)
     .attr(<span class="hljs-string">"y"</span>, <span class="hljs-number">9</span>)
     .attr(<span class="hljs-string">"dy"</span>, <span class="hljs-string">".35em"</span>)
     .style(<span class="hljs-string">"text-anchor"</span>, <span class="hljs-string">"end"</span>)
-    .text(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> d; });</code></pre><div id="wallapatta_33" class="section"><div class="content"><p id="wallapatta_34" class="paragraph"><span id="wallapatta_68" class="text">Another problem we solved with Weya is that d3.js draws all the elements that are represented by the data at once. And with Weya we can draw progressively - this is quite useful when you have a lot of data and you don't won't the interface to go unresponsive until everything is drawn. Here's a small example to show the point.</span></p></div></div><pre id="wallapatta_35" class="codeBlock"><code class="coffee">i = <span class="hljs-number">0</span>
+    .text(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d</span>) </span>{ <span class="hljs-keyword">return</span> d; });</code></pre><div id="wallapatta_33" class="section"><div class="content"><p id="wallapatta_34" class="paragraph"><span id="wallapatta_68" class="text">Another problem we solved with Weya is that d3.js draws all the elements that are represented by the data at once. And with Weya we can draw progressively - this is quite useful when you have a lot of data and you don't won't the interface to go unresponsive until everything is drawn. Here's a small example to show the point.</span></p></div></div><pre id="wallapatta_35" class="codeBlock"><code class="coffee">i = <span class="hljs-number">0</span>
 data = ...
 <span class="hljs-function">
 <span class="hljs-title">draw</span> = -&gt;</span>
@@ -138,24 +138,24 @@ draw()</code></pre><div id="wallapatta_36" class="section"><div class="content">
 </div><div id="wallapatta_5" class="section"><div class="content"><p id="wallapatta_6" class="paragraph"><a id="wallapatta_43" class="link" href="http://jsperf.com/weya-jquery-d3-coffeecup">Performance comparison among d3, coffeecup and weya</a></p></div></div><div id="wallapatta_7" class="section"><div class="content"><p id="wallapatta_8" class="paragraph"><a id="wallapatta_44" class="link" href="http://bl.ocks.org/vpj/9636655">Bar chart example</a></p></div></div></div><div id="wallapatta_18" class="sidenote"><div id="wallapatta_19" class="section"><div class="content"><p id="wallapatta_20" class="paragraph"><a id="wallapatta_58" class="link" href="http://jsperf.com/weya-jquery-d3-coffeecup">Performance comparison among d3, coffeecup and weya</a></p></div></div></div>
      </div>
      <div style="display:none;">
-      <div class='wallapatta-code'>Weya.coffee is a lightweight library with no dependencies to generate DOM elements. We developed it to replace <<https://github.com/gradus/coffeecup(Coffeecup)>> as a client side template engine. Because of its simplicity and performance, we are also using Weya to replace DOM manipulation of <<http://d3js.org/(d3.js)>> in data visualizations.
+      <div class='wallapatta-code'>Weya.coffee is a lightweight library with no dependencies to generate DOM elements. We developed it to replace &lt;&lt;https://github.com/gradus/coffeecup(Coffeecup)&gt;&gt; as a client side template engine. Because of its simplicity and performance, we are also using Weya to replace DOM manipulation of &lt;&lt;http://d3js.org/(d3.js)&gt;&gt; in data visualizations.
 
->>>
- <<<
-  <iframe src="https://ghbtns.com/github-btn.html?user=vpj&repo=weya&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
+&gt;&gt;&gt;
+ &lt;&lt;&lt;
+  &lt;iframe src="https://ghbtns.com/github-btn.html?user=vpj&repo=weya&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px"&gt;&lt;/iframe&gt;
 
- <<http://jsperf.com/weya-jquery-d3-coffeecup(Performance comparison among d3, coffeecup and weya)>>
+ &lt;&lt;http://jsperf.com/weya-jquery-d3-coffeecup(Performance comparison among d3, coffeecup and weya)&gt;&gt;
 
- <<http://bl.ocks.org/vpj/9636655(Bar chart example)>>
+ &lt;&lt;http://bl.ocks.org/vpj/9636655(Bar chart example)&gt;&gt;
 
 Here's a small example to show the usage.
 
 ```coffee
  userElems = []
- Weya container, ->
-  @div ".users", ->
+ Weya container, -&gt;
+  @div ".users", -&gt;
    for user, i in users
-    userDiv = @div '.user', on: {click: editUser}, ->
+    userDiv = @div '.user', on: {click: editUser}, -&gt;
      name = @span ".name", user.name
      @span ".phone", user.phone
      if v.image?
@@ -170,8 +170,8 @@ The above code creates a list of users. It binds the data to the dom element ``u
 
  Weya is quite similar to Coffeecup in terms of the syntax. But it's much faster, so it won't fail if you have lots of elements.
 
- >>>
-  <<http://jsperf.com/weya-jquery-d3-coffeecup(Performance comparison among d3, coffeecup and weya)>>
+ &gt;&gt;&gt;
+  &lt;&lt;http://jsperf.com/weya-jquery-d3-coffeecup(Performance comparison among d3, coffeecup and weya)&gt;&gt;
 
 
  Also, Weya lets you register event handlers. I feel this is much cleaner than registering events later with CSS selectors, and it's easier to maintain the code since events are register within the DOM creation code.
@@ -180,12 +180,12 @@ The above code creates a list of users. It binds the data to the dom element ``u
 
  We use weya to replace most all the d3.js DOM manipulation.
 
- Code with Weya is simpler, shorter and nicely intended. Here's the code that draws bar chart in	<<http://bl.ocks.org/vpj/9636655(this example)>>.
+ Code with Weya is simpler, shorter and nicely intended. Here's the code that draws bar chart in	&lt;&lt;http://bl.ocks.org/vpj/9636655(this example)&gt;&gt;.
 
  ```coffee
-  Weya svg, ->
+  Weya svg, -&gt;
    for d in data
-    @g ".g", transform: "translate(#{x0 d.State},0)", ->
+    @g ".g", transform: "translate(#{x0 d.State},0)", -&gt;
      for age in d.ages
       @rect
        width: x1.rangeBand()
@@ -195,13 +195,13 @@ The above code creates a list of users. It binds the data to the dom element ``u
        fill: color age.name
 
    for d, i in ageNames.slice().reverse()
-    @g ".legend", transform: "translate(0,#{i * 20})", ->
+    @g ".legend", transform: "translate(0,#{i * 20})", -&gt;
      @rect x: width - 18, width: 18, height: 18, fill: color d
      @text
       x: width - 24, y: 9, dy: ".35em"
       style: {'text-anchor': "end"}, text: d
 
- Here's the code that does the <<http://bl.ocks.org/mbostock/388705(same with d3.js)>>.
+ Here's the code that does the &lt;&lt;http://bl.ocks.org/mbostock/388705(same with d3.js)&gt;&gt;.
 
  ```javascript
   var state = svg.selectAll(".state")
@@ -245,12 +245,12 @@ The above code creates a list of users. It binds the data to the dom element ``u
   i = 0
   data = ...
 
-  draw = ->
+  draw = -&gt;
    return if i is data.length
 
    d = data[i]
-   Weya container, ->
-    @div '.user', ->
+   Weya container, -&gt;
+    @div '.user', -&gt;
      ...
 
    i++

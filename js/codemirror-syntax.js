@@ -17,12 +17,50 @@
         name: "xml",
         htmlMode: true
       });
+      this.javascriptMode = this.CodeMirror.getMode(cmCfg, {
+        name: "javascript",
+        javascriptMode: true
+      });
+      this.coffeescriptMode = this.CodeMirror.getMode(cmCfg, {
+        name: "coffeescript",
+        coffeescriptMode: true
+      });
       return this.getMode();
     };
 
     Mode.prototype.matchBlock = function(stream, state) {
       var match, stack;
       stack = state.stack;
+      match = stream.match(/^<<<weya/);
+      if (match) {
+        stack.push({
+          indentation: stream.indentation(),
+          type: 'coffeescript'
+        });
+        stream.skipToEnd();
+        state.coffeescriptState = this.CodeMirror.startState(this.coffeescriptMode);
+        return OPERATOR;
+      }
+      match = stream.match(/^<<<coffee/);
+      if (match) {
+        stack.push({
+          indentation: stream.indentation(),
+          type: 'coffeescript'
+        });
+        stream.skipToEnd();
+        state.coffeescriptState = this.CodeMirror.startState(this.coffeescriptMode);
+        return OPERATOR;
+      }
+      match = stream.match(/^<<<js/);
+      if (match) {
+        stack.push({
+          indentation: stream.indentation(),
+          type: 'javascript'
+        });
+        stream.skipToEnd();
+        state.javascriptState = this.CodeMirror.startState(this.javascriptMode);
+        return OPERATOR;
+      }
       match = stream.match(/^<<</);
       if (match) {
         stack.push({
@@ -47,6 +85,15 @@
         stack.push({
           indentation: stream.indentation(),
           type: 'special'
+        });
+        stream.skipToEnd();
+        return OPERATOR;
+      }
+      match = stream.match(/^<\!>/);
+      if (match) {
+        stack.push({
+          indentation: stream.indentation(),
+          type: 'full'
         });
         stream.skipToEnd();
         return OPERATOR;
@@ -138,6 +185,14 @@
         state.link = true;
         return OPERATOR_INLINE;
       }
+      match = stream.match(/^<-/);
+      if (match) {
+        return OPERATOR_INLINE;
+      }
+      match = stream.match(/^->/);
+      if (match) {
+        return OPERATOR_INLINE;
+      }
       match = stream.match(/^>>/);
       if (match) {
         state.link = false;
@@ -181,6 +236,8 @@
       return {
         stack: [],
         htmlState: null,
+        coffeescriptState: null,
+        javascriptState: null,
         start: true,
         bold: false,
         italics: false,
@@ -232,7 +289,10 @@
         types = {
           sidenote: false,
           html: false,
+          coffeescript: false,
+          javascript: false,
           special: false,
+          full: false,
           code: false,
           table: false
         };
@@ -243,7 +303,7 @@
         if (types.table) {
           this.clearState(state);
         }
-        if (!types.code && !types.html) {
+        if (!types.code && !types.html && !types.coffeescript && !types.javascript) {
           match = this.matchBlock(stream, state);
           if (match != null) {
             return match;
@@ -253,7 +313,10 @@
       types = {
         sidenote: false,
         html: false,
+        coffeescript: false,
+        javascript: false,
         special: false,
+        full: false,
         code: false,
         table: false
       };
@@ -262,7 +325,13 @@
         types[t.type] = true;
       }
       l = "";
-      if (types.html) {
+      if (types.coffeescript) {
+        l = this.coffeescriptMode.token(stream, state.coffeescriptState);
+        l = "" + l;
+      } else if (types.javascript) {
+        l = this.javascriptMode.token(stream, state.javascriptState);
+        l = "" + l;
+      } else if (types.html) {
         l = this.htmlMode.token(stream, state.htmlState);
         l = "" + l;
       } else if (types.code) {

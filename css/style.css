@@ -1,3 +1,21 @@
+.wallapatta h1 {
+  font-size: 3.5rem;
+}
+.wallapatta h2 {
+  font-size: 3rem;
+}
+.wallapatta h3 {
+  font-size: 2.5rem;
+}
+.wallapatta h4 {
+  font-size: 2rem;
+}
+.wallapatta h5 {
+  font-size: 1.5rem;
+}
+.wallapatta h6 {
+  font-size: 1rem;
+}
 .wallapatta pre {
   word-wrap: break-word;
 }
@@ -9,11 +27,16 @@
   padding-bottom: 20px;
   padding-top: 10px;
 }
+.wallapatta .full {
+  width: 133%;
+}
 .wallapatta .image-container {
   margin: 10px 0px;
+  text-align: center;
 }
 .wallapatta .image-container img {
   max-width: 100%;
+  display: inline-block;
 }
 .wallapatta .image-inline {
   height: 1.5em;
@@ -25,16 +48,6 @@
   border-left: 10px solid #CCCCCC;
   margin-bottom: 1.5em;
 }
-@media print {
-  .wallapatta a[href]:after {
-    content: " (" attr(href) ")";
-    font-size: 10px;
-    font-weight: normal;
-    font-style: italic;
-    color: #777;
-    word-wrap: break-word;
-  }
-}
 .wallapatta-container {
   max-width: 750px;
 }
@@ -42,6 +55,14 @@
   max-width: 5000px;
   width: 170mm;
   margin: 0;
+}
+.wallapatta-print .wallapatta a[href]:after {
+  content: " (" attr(href) ")";
+  font-size: 10px;
+  font-weight: normal;
+  font-style: italic;
+  color: #777;
+  word-wrap: break-word;
 }
 h2.heading {
   margin-top: 40px;
@@ -117,21 +138,31 @@ h1 {
     margin-left: 0;
   }
   h1 {
-    font-size: 5.0rem;
+    font-size: 3.5rem;
   }
   h2 {
-    font-size: 4.2rem;
+    font-size: 3rem;
   }
   h3 {
-    font-size: 3.6rem;
+    font-size: 2.5rem;
   }
   h4 {
-    font-size: 3.0rem;
+    font-size: 2rem;
   }
   h5 {
-    font-size: 2.4rem;
+    font-size: 1.5rem;
   }
   h6 {
-    font-size: 1.5rem;
+    font-size: 1rem;
+  }
+}
+.page-backgrounds .page-background {
+  position: absolute;
+  z-index: -1;
+  border: 8px solid #eee;
+}
+@media print {
+  .page-backgrounds {
+    display: none;
   }
 }

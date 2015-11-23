@@ -45,56 +45,54 @@ ga('send', 'pageview');
    </div>
    <div class="wallapatta ">
     <h1 class="title ">
-     <a href="weya-perf.html">
-      jsblocks, React, Angular performance compared with Weya.coffee
+     <a href="string_slice.html">
+      Parent in (sliced string)
      </a>
     </h1>
     <h3 class="date ">
-     May 27, 2015
+     November 23, 2015
     </h3>
     <div class="row ">
      <div class="wallapatta-main nine columns ">
-      <div id="wallapatta_0" class="article"><div id="wallapatta_1" class="section"><div class="content"><p id="wallapatta_2" class="paragraph"><span id="wallapatta_48" class="text">I came across </span><a id="wallapatta_49" class="link" href="http://jsblocks.com/">jsblock</a><span id="wallapatta_50" class="text"> yesterday on Hacker News. They had a nice performance comparison test case set comparing jsblocks with </span><a id="wallapatta_51" class="link" href="https://angularjs.org/">Angular</a><span id="wallapatta_52" class="text"> and </span><a id="wallapatta_53" class="link" href="https://facebook.github.io/react/">React</a><span id="wallapatta_54" class="text">. It made me curious to see how the small library we use (</span><a id="wallapatta_55" class="link" href="https://github.com/vpj/weya">Weya.coffee</a><span id="wallapatta_56" class="text">) compares in performance with these.</span></p></div></div><div id="wallapatta_7" class="section"><div class="content"><p id="wallapatta_8" class="paragraph"><span id="wallapatta_60" class="text">I ran the tests on Chrome broswer on a Macbook Air (1.6Ghz i5, 2GB). I have not altered test cases provided on </span><a id="wallapatta_61" class="link" href="http://jsblocks.com/">jsblock</a><span id="wallapatta_62" class="text">, and have added test cases for Weya for </span><strong id="wallapatta_63" class="bold"><span id="wallapatta_64" class="text">Rendering</span></strong><span id="wallapatta_65" class="text"> and </span><strong id="wallapatta_66" class="bold"><span id="wallapatta_67" class="text">Syncing Changes</span></strong><span id="wallapatta_68" class="text">., The results on Safari are not accurate in </span><em id="wallapatta_69" class="italics"><span id="wallapatta_70" class="text">syncing-changes</span></em><span id="wallapatta_71" class="text"> test case, because jsblock test case use </span><code id="wallapatta_72" class="code"><span id="wallapatta_73" class="text">setTimeout(0)</span></code><span id="wallapatta_74" class="text"> to resync which is called before html is actually rendered while the Weya test case use </span><code id="wallapatta_75" class="code"><span id="wallapatta_76" class="text">requestAnimationFrame</span></code><span id="wallapatta_77" class="text"> which waits till it's rendered.</span></p></div></div><div id="wallapatta_12" class="section"><h3 class="heading"><span id="wallapatta_13" class="block"><span id="wallapatta_80" class="text">Rendering</span></span></h3><div class="content"><table id="wallapatta_14" class="table"><thead><tr><th colspan="1"><span id="wallapatta_15" class="block"><span id="wallapatta_81" class="text">Library</span></span></th><th colspan="1"><span id="wallapatta_16" class="block"><span id="wallapatta_82" class="text">Time (ms)</span></span></th><th colspan="1"><span id="wallapatta_17" class="block"><span id="wallapatta_83" class="text">Bar (shorter is better)</span></span></th></tr></thead><tbody><tr><td colspan="1"><span id="wallapatta_18" class="block"><span id="wallapatta_84" class="text">Weya.coffee</span></span></td><td colspan="1"><span id="wallapatta_19" class="block"><span id="wallapatta_85" class="text">404</span></span></td><td colspan="1"><span id="wallapatta_20" class="block"><span id="wallapatta_86" class="text">====</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_21" class="block"><span id="wallapatta_87" class="text">jsblocks</span></span></td><td colspan="1"><span id="wallapatta_22" class="block"><span id="wallapatta_88" class="text">801</span></span></td><td colspan="1"><span id="wallapatta_23" class="block"><span id="wallapatta_89" class="text">========</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_24" class="block"><span id="wallapatta_90" class="text">React</span></span></td><td colspan="1"><span id="wallapatta_25" class="block"><span id="wallapatta_91" class="text">1065</span></span></td><td colspan="1"><span id="wallapatta_26" class="block"><span id="wallapatta_92" class="text">==========</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_27" class="block"><span id="wallapatta_93" class="text">Angular</span></span></td><td colspan="1"><span id="wallapatta_28" class="block"><span id="wallapatta_94" class="text">2432</span></span></td><td colspan="1"><span id="wallapatta_29" class="block"><span id="wallapatta_95" class="text">========================</span></span></td></tr></tbody></table></div></div><div id="wallapatta_30" class="section"><h3 class="heading"><span id="wallapatta_31" class="block"><span id="wallapatta_96" class="text">Syncing Changes</span></span></h3><div class="content"><table id="wallapatta_32" class="table"><thead><tr><th colspan="1"><span id="wallapatta_33" class="block"><span id="wallapatta_97" class="text">Library</span></span></th><th colspan="1"><span id="wallapatta_34" class="block"><span id="wallapatta_98" class="text">Time (ms)</span></span></th><th colspan="1"><span id="wallapatta_35" class="block"><span id="wallapatta_99" class="text">Bar (shorter is better)</span></span></th></tr></thead><tbody><tr><td colspan="1"><span id="wallapatta_36" class="block"><span id="wallapatta_100" class="text">Weya.coffee</span></span></td><td colspan="1"><span id="wallapatta_37" class="block"><span id="wallapatta_101" class="text">1593</span></span></td><td colspan="1"><span id="wallapatta_38" class="block"><span id="wallapatta_102" class="text">========</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_39" class="block"><span id="wallapatta_103" class="text">jsblocks</span></span></td><td colspan="1"><span id="wallapatta_40" class="block"><span id="wallapatta_104" class="text">2035</span></span></td><td colspan="1"><span id="wallapatta_41" class="block"><span id="wallapatta_105" class="text">==========</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_42" class="block"><span id="wallapatta_106" class="text">React</span></span></td><td colspan="1"><span id="wallapatta_43" class="block"><span id="wallapatta_107" class="text">2781</span></span></td><td colspan="1"><span id="wallapatta_44" class="block"><span id="wallapatta_108" class="text">==============</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_45" class="block"><span id="wallapatta_109" class="text">Angular</span></span></td><td colspan="1"><span id="wallapatta_46" class="block"><span id="wallapatta_110" class="text">8081</span></span></td><td colspan="1"><span id="wallapatta_47" class="block"><span id="wallapatta_111" class="text">========================================</span></span></td></tr></tbody></table></div></div></div>
+      <div id="wallapatta_0" class="article"><div id="wallapatta_1" class="full"><div id="wallapatta_3" class="image-container"><img class="image" src="img/sliced_string.png" alt="img/sliced_string.png"></div></div><div id="wallapatta_4" class="section"><div class="content"><p id="wallapatta_5" class="paragraph"><span id="wallapatta_35" class="text">In Google Chrome </span><sup id="wallapatta_36" class="superScript"><span id="wallapatta_37" class="text">1</span></sup><span id="wallapatta_38" class="text"> when you take substrings of a larger string, the larger string is not garbage collected even if youdo not have a reference to it.</span></p></div></div><div id="wallapatta_9" class="section"><div class="content"><p id="wallapatta_10" class="paragraph"><em id="wallapatta_44" class="italics"><span id="wallapatta_45" class="text">In </span><a id="wallapatta_46" class="link" href="https://www.forestpin.com">Forestpin</a><span id="wallapatta_47" class="text"> Analytics App, we parse considerably large </span><code id="wallapatta_48" class="code"><span id="wallapatta_49" class="text">csv</span></code><span id="wallapatta_50" class="text"> files. Some fields are converted to different data types and a some are kept as strings extracted with </span><code id="wallapatta_51" class="code"><span id="wallapatta_52" class="text">substr</span></code><span id="wallapatta_53" class="text">or </span><code id="wallapatta_54" class="code"><span id="wallapatta_55" class="text">substring</span></code><span id="wallapatta_56" class="text">. This smaller strings keep references to much larger parent strings causing the app to crash sometimes.</span></em></p></div></div><div id="wallapatta_14" class="section"><h2 class="heading"><span id="wallapatta_15" class="block"><span id="wallapatta_62" class="text">Example</span></span></h2><div class="content"><div id="wallapatta_16" class="section"><div class="content"><p id="wallapatta_17" class="paragraph"><span id="wallapatta_63" class="text">Open up </span><a id="wallapatta_64" class="link" href="vpj.github.io/bench/string_slice.html">vpj.github.io/bench/string_slice.html</a><span id="wallapatta_65" class="text"> in Google Chrome. It iteratively,</span></p><ol id="wallapatta_18" class="list"><li id="wallapatta_19" class="list-item"><span id="wallapatta_20" class="block"><span id="wallapatta_66" class="text">creates a random large string (~10M in length)</span></span></li><li id="wallapatta_21" class="list-item"><span id="wallapatta_22" class="block"><span id="wallapatta_67" class="text">take a few substrings</span></span></li><li id="wallapatta_23" class="list-item"><span id="wallapatta_24" class="block"><span id="wallapatta_68" class="text">push the substrings to a global array (the only thing permanently referenced)</span></span></li><li id="wallapatta_25" class="list-item"><span id="wallapatta_26" class="block"><span id="wallapatta_69" class="text">remove references to the large string</span></span></li></ol></div></div><div id="wallapatta_27" class="section"><div class="content"><p id="wallapatta_28" class="paragraph"><span id="wallapatta_70" class="text">When you run it on chrome it crashes before 2000 cycles. </span><sup id="wallapatta_71" class="superScript"><span id="wallapatta_72" class="text">2</span></sup><span id="wallapatta_73" class="text"> If you take a heap snapshot on Chrome Inspector, you can see the large strings, referenced as </span><strong id="wallapatta_74" class="bold"><span id="wallapatta_75" class="text">parent in (sliced string)</span></strong><span id="wallapatta_76" class="text"> by smaller strings (as shown in the above screenshot).</span></p></div></div><div id="wallapatta_32" class="section"><div class="content"><p id="wallapatta_33" class="paragraph"><span id="wallapatta_80" class="text">However </span><a id="wallapatta_81" class="link" href="vpj.github.io/bench/string_slice.html">vpj.github.io/bench/string_slice.html</a><span id="wallapatta_82" class="text"> will run for many more iterations doing the same thing. The only difference is it creates a new string before adding the smaller substrings. Before adding the small substrings to the global array, a new string is created by splitting and joining it. This is not a sliced child of the larger string, and therefore the larger string is garbage collected.</span></p><pre id="wallapatta_34" class="codeBlock"><code class="js">newSmallString = smallString.split(<span class="hljs-string">''</span>).join(<span class="hljs-string">''</span>)</code></pre></div></div></div></div></div>
      </div>
      <div class="wallapatta-sidebar three columns ">
-      <div id="wallapatta_3" class="sidenote"><div id="wallapatta_4" class="section"><div class="content"><p id="wallapatta_5" class="paragraph"><span id="wallapatta_57" class="text">Weya.coffee is more of a rendering tool than a a framework. The main difference between Weya and other frameworks is that instead of writing logic inside html, markup is written in coffeescript. Weya comes with a router and a base class inspired by </span><a id="wallapatta_58" class="link" href="http://backbonejs.org/">backbone.js</a><span id="wallapatta_59" class="text">.</span></p></div></div><div id="wallapatta_6" class="html"><iframe src="https://ghbtns.com/github-btn.html?user=vpj&amp;repo=weya&amp;type=star&amp;count=true&amp;size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
-</div></div><div id="wallapatta_9" class="sidenote"><div id="wallapatta_10" class="section"><div class="content"><p id="wallapatta_11" class="paragraph"><strong id="wallapatta_78" class="bold"><a id="wallapatta_79" class="link" href="http://vpj.github.io/jsblocks-performance.zip">Download the performance test cases</a></strong></p></div></div></div>
+      <div id="wallapatta_2" class="sidenote"></div><div id="wallapatta_6" class="sidenote"><div id="wallapatta_7" class="section"><div class="content"><p id="wallapatta_8" class="paragraph"><sup id="wallapatta_39" class="superScript"><span id="wallapatta_40" class="text">1</span></sup><span id="wallapatta_41" class="text"> Same happens in </span><a id="wallapatta_42" class="link" href="https://nodejs.org/en/">node.js</a><span id="wallapatta_43" class="text"> since it uses V8.</span></p></div></div></div><div id="wallapatta_11" class="sidenote"><div id="wallapatta_12" class="section"><div class="content"><p id="wallapatta_13" class="paragraph"><span id="wallapatta_57" class="text">Best way to overcome this with Javascirpt is to use typed arrays when sizes are large. </span><a id="wallapatta_58" class="link" href="https://github.com/chethiya">Chethiya</a><span id="wallapatta_59" class="text"> created a </span><a id="wallapatta_60" class="link" href="https://github.com/chethiya/lds">library</a><span id="wallapatta_61" class="text"> for this kind of problems.</span></p></div></div></div><div id="wallapatta_29" class="sidenote"><div id="wallapatta_30" class="section"><div class="content"><p id="wallapatta_31" class="paragraph"><sup id="wallapatta_77" class="superScript"><span id="wallapatta_78" class="text">2</span></sup><span id="wallapatta_79" class="text"> This only happens in Chrome, not on Safari. Did not check on Firefox.</span></p></div></div></div>
      </div>
      <div style="display:none;">
-      <div class='wallapatta-code'>I came across <<http://jsblocks.com/(jsblock)>> yesterday on Hacker News. They had a nice performance comparison test case set comparing jsblocks with <<https://angularjs.org/(Angular)>> and <<https://facebook.github.io/react/(React)>>. It made me curious to see how the small library we use (<<https://github.com/vpj/weya(Weya.coffee)>>) compares in performance with these.
+      <div class='wallapatta-code'>&lt;!&gt;
+ !img/sliced_string.png
 
->>>
- Weya.coffee is more of a rendering tool than a a framework. The main difference between Weya and other frameworks is that instead of writing logic inside html, markup is written in coffeescript. Weya comes with a router and a base class inspired by <<http://backbonejs.org/(backbone.js)>>.
+In Google Chrome ^^1^^ when you take substrings of a larger string, the larger string is not garbage collected even if youdo not have a reference to it.
 
- <<<
-  <iframe src="https://ghbtns.com/github-btn.html?user=vpj&repo=weya&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
+&gt;&gt;&gt;
+ ^^1^^ Same happens in &lt;&lt;https://nodejs.org/en/(node.js)&gt;&gt; since it uses V8.
 
-I ran the tests on Chrome broswer on a Macbook Air (1.6Ghz i5, 2GB). I have not altered test cases provided on <<http://jsblocks.com/(jsblock)>>, and have added test cases for Weya for **Rendering** and **Syncing Changes**., The results on Safari are not accurate in --syncing-changes-- test case, because jsblock test case use ``setTimeout(0)`` to resync which is called before html is actually rendered while the Weya test case use ``requestAnimationFrame`` which waits till it's rendered.
+--In &lt;&lt;https://www.forestpin.com(Forestpin)&gt;&gt; Analytics App, we parse considerably large ``csv`` files. Some fields are converted to different data types and a some are kept as strings extracted with ``substr``or ``substring``. This smaller strings keep references to much larger parent strings causing the app to crash sometimes.
 
->>>
- **<<http://vpj.github.io/jsblocks-performance.zip(Download the performance test cases)>>
+&gt;&gt;&gt;
+ Best way to overcome this with Javascirpt is to use typed arrays when sizes are large. &lt;&lt;https://github.com/chethiya(Chethiya)&gt;&gt; created a &lt;&lt;https://github.com/chethiya/lds(library)&gt;&gt; for this kind of problems.
 
+##Example
 
-### Rendering
+ Open up &lt;&lt;vpj.github.io/bench/string_slice.html&gt;&gt; in Google Chrome.
+ It iteratively,
 
- |||
-  Library | Time (ms) |Bar (shorter is better)
-  ===
-  Weya.coffee | 404 | ====
-  jsblocks | 801 | ========
-  React | 1065 | ==========
-  Angular | 2432 | ========================
+  - creates a random large string (~10M in length)
+  - take a few substrings
+  - push the substrings to a global array (the only thing permanently referenced)
+  - remove references to the large string
 
-### Syncing Changes
+ When you run it on chrome it crashes before 2000 cycles. ^^2^^
+ If you take a heap snapshot on Chrome Inspector, you can see the large strings, referenced as **parent in (sliced string)** by smaller strings (as shown in the above screenshot).
 
- |||
-  Library | Time (ms) | Bar (shorter is better)
-  ===
-  Weya.coffee | 1593 | ========
-  jsblocks | 2035 | ==========
-  React | 2781 | ==============
-  Angular | 8081 | ========================================
+ &gt;&gt;&gt;
+  ^^2^^ This only happens in Chrome, not on Safari. Did not check on Firefox.
 
+ However &lt;&lt;vpj.github.io/bench/string_slice.html&gt;&gt; will run for many more iterations doing the same thing. The only difference is it creates a new string before adding the smaller substrings. Before adding the small substrings to the global array, a new string is created by splitting and joining it. This is not a sliced child of the larger string, and therefore the larger string is garbage collected.
+
+  ```js
+   newSmallString = smallString.split('').join('')
 </div>
      </div>
     </div>
@@ -157,10 +155,10 @@ Contd. ......</code></pre><div id="wallapatta_10008" class="section"><div class=
 </div><div id="wallapatta_10014" class="section"><h3 class="heading"><span id="wallapatta_10015" class="block"><strong id="wallapatta_10029" class="bold"><a id="wallapatta_10030" class="link" href="http://vpj.github.io/cellular/">demo</a></strong></span></h3><div class="content"></div></div></div>
      </div>
      <div style="display:none;">
-      <div class='wallapatta-code'><<<
- <iframe width="550" height="310" src="https://www.youtube.com/embed/AcSIzSQIDQ8?autoplay=0" frameborder="0" allowfullscreen></iframe>
+      <div class='wallapatta-code'>&lt;&lt;&lt;
+ &lt;iframe width="550" height="310" src="https://www.youtube.com/embed/AcSIzSQIDQ8?autoplay=0" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;
 
->>>
+&gt;&gt;&gt;
  Here's a small screen cast of using **cellular** to transform the below report.
 
 One of the biggest **small data** problems, is that data is structured in different ways. Some legacy systems give out reports in the formats like below.
@@ -212,13 +210,13 @@ One of the biggest **small data** problems, is that data is structured in differ
 
 Getting this into a spreadsheet or a database table to analyse it is not easy. So I started a project to help transform data in various report formats into simple tables and export as comma-separated files.
 
-The project is called **<<http://vpj.github.io/cellular/(cellular)>>**, and it is still in the early stages. I thought of writing about it to get ideas and suggestions. It has a simple user interface with the table on the left side with a sidepane on right side.
+The project is called **&lt;&lt;http://vpj.github.io/cellular/(cellular)&gt;&gt;**, and it is still in the early stages. I thought of writing about it to get ideas and suggestions. It has a simple user interface with the table on the left side with a sidepane on right side.
 
->>>
- <<<
-  <iframe src="https://ghbtns.com/github-btn.html?user=vpj&repo=cellular&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
+&gt;&gt;&gt;
+ &lt;&lt;&lt;
+  &lt;iframe src="https://ghbtns.com/github-btn.html?user=vpj&repo=cellular&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px"&gt;&lt;/iframe&gt;
 
- ###**<<http://vpj.github.io/cellular/(demo)>>**
+ ###**&lt;&lt;http://vpj.github.io/cellular/(demo)&gt;&gt;**
 
 </div>
      </div>
@@ -257,37 +255,37 @@ The project is called **<<http://vpj.github.io/cellular/(cellular)>>**, and it i
 </div></div><div id="wallapatta_20057" class="sidenote"><div id="wallapatta_20058" class="section"><h3 class="heading"><span id="wallapatta_20059" class="block"><span id="wallapatta_20170" class="text">Heading 1</span></span></h3><div class="content"><div id="wallapatta_20060" class="section"><div class="content"><p id="wallapatta_20061" class="paragraph"><span id="wallapatta_20171" class="text">Introduction to </span><strong id="wallapatta_20172" class="bold"><span id="wallapatta_20173" class="text">Heading 1</span></strong></p></div></div><ul id="wallapatta_20062" class="list"><li id="wallapatta_20063" class="list-item"><span id="wallapatta_20064" class="block"><span id="wallapatta_20174" class="text">Point one</span></span><div id="wallapatta_20065" class="section"><div class="content"><p id="wallapatta_20066" class="paragraph"><span id="wallapatta_20175" class="text">Description about point one</span></p></div></div></li><li id="wallapatta_20067" class="list-item"><span id="wallapatta_20068" class="block"><span id="wallapatta_20176" class="text">Point two</span></span></li></ul><div id="wallapatta_20069" class="section"><h4 class="heading"><span id="wallapatta_20070" class="block"><span id="wallapatta_20177" class="text">Subtopic</span></span></h4><div class="content"><div id="wallapatta_20071" class="section"><div class="content"><p id="wallapatta_20072" class="paragraph"><span id="wallapatta_20178" class="text">Subtopic content</span></p></div></div></div></div><div id="wallapatta_20073" class="section"><div class="content"><p id="wallapatta_20074" class="paragraph"><span id="wallapatta_20179" class="text">This belongs to Heading 1</span></p></div></div></div></div></div>
      </div>
      <div style="display:none;">
-      <div class='wallapatta-code'>I just started moving my blog from <<http://svbtle.com(Svbtle)>> to a static blog generated that I created. It is based on <<http://vpj.github.io/wallapatta/introduction.html(Wallapatta)>>. I wanted to get into svbtle when <<http://dcurt.is/codename-svbtle(Dustin started it)>>, and got invite a little before they opened it to the public. And it's sad to part ways.
+      <div class='wallapatta-code'>I just started moving my blog from &lt;&lt;http://svbtle.com(Svbtle)&gt;&gt; to a static blog generated that I created. It is based on &lt;&lt;http://vpj.github.io/wallapatta/introduction.html(Wallapatta)&gt;&gt;. I wanted to get into svbtle when &lt;&lt;http://dcurt.is/codename-svbtle(Dustin started it)&gt;&gt;, and got invite a little before they opened it to the public. And it's sad to part ways.
 
->>>
- "Wallapatta" is a <<http://www.dwc.gov.lk/index.php/en/wildlife-news1/228-walla-patta-gyrinops-walla-the-tree-to-preserv(tree in Sri Lanka)>>, that contains <<http://en.wikipedia.org/wiki/Agarwood(Agarwood)>>.
+&gt;&gt;&gt;
+ "Wallapatta" is a &lt;&lt;http://www.dwc.gov.lk/index.php/en/wildlife-news1/228-walla-patta-gyrinops-walla-the-tree-to-preserv(tree in Sri Lanka)&gt;&gt;, that contains &lt;&lt;http://en.wikipedia.org/wiki/Agarwood(Agarwood)&gt;&gt;.
 
 
 
 Wallapatta is a
-<<http://en.wikipedia.org/wiki/Markdown(Markdown)>> like syntax that can create documents with layouts
-inspired by handouts of Edward R. Tufte^^1^^. We created it to use for documents. The two great things about Wallapatta is that it creates documents with **sidenotes** and **create print frindly documents** - <<http://vpj.github.io/wallapatta/introduction.html(Wallapatta editor)>> creates print layouts with intelligent page breaks by trying not to place breaks at middle of content like most word processing software do.
+&lt;&lt;http://en.wikipedia.org/wiki/Markdown(Markdown)&gt;&gt; like syntax that can create documents with layouts
+inspired by handouts of Edward R. Tufte^^1^^. We created it to use for documents. The two great things about Wallapatta is that it creates documents with **sidenotes** and **create print frindly documents** - &lt;&lt;http://vpj.github.io/wallapatta/introduction.html(Wallapatta editor)&gt;&gt; creates print layouts with intelligent page breaks by trying not to place breaks at middle of content like most word processing software do.
 
- >>>
-  ^^1^^ <<http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000hB
-  (Book design: advice and examples - edwardtufte.com)>>
+ &gt;&gt;&gt;
+  ^^1^^ &lt;&lt;http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000hB
+  (Book design: advice and examples - edwardtufte.com)&gt;&gt;
 
 I built in a simple blog generator into Wallapatta, for personal use. But it's super easy for anyone who wants to give it a go.
 
 ###How to start a Wallapatta blog?
 
- >>>
-  <<<
-   <iframe src="https://ghbtns.com/github-btn.html?user=vpj&repo=wallapatta&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
+ &gt;&gt;&gt;
+  &lt;&lt;&lt;
+   &lt;iframe src="https://ghbtns.com/github-btn.html?user=vpj&repo=wallapatta&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px"&gt;&lt;/iframe&gt;
 
 
  It's pretty easy.
 
- - **Install <<https://nodejs.org/(Node.js>>
+ - **Install &lt;&lt;https://nodejs.org/(Node.js&gt;&gt;
 
-  NPM usually comes with Node.js. Visit <<https://nodejs.org/>> and see installation instructions. It's usually a download and install, unless you want it installed through a package manager like ``brew``.
+  NPM usually comes with Node.js. Visit &lt;&lt;https://nodejs.org/&gt;&gt; and see installation instructions. It's usually a download and install, unless you want it installed through a package manager like ``brew``.
 
- - **Install <<https://www.npmjs.com/package/wallapatta(Wallapatta node odule>>
+ - **Install &lt;&lt;https://www.npmjs.com/package/wallapatta(Wallapatta node odule&gt;&gt;
 
   Run the following command in command line.
 
@@ -296,13 +294,13 @@ I built in a simple blog generator into Wallapatta, for personal use. But it's s
 
   That's it and you have wallapatta installed.
 
- - **Fork the <<https://github.com/vpj/wallapatta-blog-boilerplate(boilerplate)>>
+ - **Fork the &lt;&lt;https://github.com/vpj/wallapatta-blog-boilerplate(boilerplate)&gt;&gt;
 
-  Make a fork of the git repositors on github: <<https://github.com/vpj/wallapatta-blog-boilerplate>>
+  Make a fork of the git repositors on github: &lt;&lt;https://github.com/vpj/wallapatta-blog-boilerplate&gt;&gt;
 
   This repo contains this blog post, and 3 empty blog posts, a configuration file and templates for blog.
 
-  Edit ``templates/post.coffee`` to change the post template and ``templates/blog.coffee`` to change the blog template. Compile these <<http://coffeescript.org/(coffeescript>> code to javascript by running ``coffee -c *``.
+  Edit ``templates/post.coffee`` to change the post template and ``templates/blog.coffee`` to change the blog template. Compile these &lt;&lt;http://coffeescript.org/(coffeescript&gt;&gt; code to javascript by running ``coffee -c *``.
 
   You will have to change the name of the blog, which is "Varuna Jayasiri" in the two tamplate files. And also the Google Analytics code.
 
@@ -341,7 +339,7 @@ I built in a simple blog generator into Wallapatta, for personal use. But it's s
 
    This belongs to Heading 1
 
- >>>
+ &gt;&gt;&gt;
   ###Heading 1
 
    Introduction to **Heading 1**
@@ -360,10 +358,10 @@ I built in a simple blog generator into Wallapatta, for personal use. But it's s
 
  It uses indentation to identify what belong where. Indentation is required for specifying content for components like lists, code blocks, special blocks, etc as well. So it's more of a programmer friendly syntax. Indentation helps while working with large documents because you can do stuff like **code folding**.
 
- We've changed some of the syntax from Markdown; for instance, ``<<`` and ``>>`` are used for links instead of ``[]()``, because we felt that it's a little more
+ We've changed some of the syntax from Markdown; for instance, ``&lt;&lt;`` and ``&gt;&gt;`` are used for links instead of ``[]()``, because we felt that it's a little more
  intuitive due to its resemblence with HTML tags.
 
- <<http://vpj.github.io/wallapatta/reference.html(Read the Wallapatta reference)>> for a detailed description on each component, including examples for usage.
+ &lt;&lt;http://vpj.github.io/wallapatta/reference.html(Read the Wallapatta reference)&gt;&gt; for a detailed description on each component, including examples for usage.
 </div>
      </div>
     </div>
