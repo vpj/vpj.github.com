@@ -99,6 +99,62 @@ In Google Chrome ^^1^^ when you take substrings of a larger string, the larger s
    </div>
    <div class="wallapatta ">
     <h1 class="title ">
+     <a href="weya-perf.html">
+      jsblocks, React, Angular performance compared with Weya.coffee
+     </a>
+    </h1>
+    <h3 class="date ">
+     May 27, 2015
+    </h3>
+    <div class="row ">
+     <div class="wallapatta-main nine columns ">
+      <div id="wallapatta_10000" class="article"><div id="wallapatta_10001" class="section"><div class="content"><p id="wallapatta_10002" class="paragraph"><span id="wallapatta_10048" class="text">I came across </span><a id="wallapatta_10049" class="link" href="http://jsblocks.com/">jsblock</a><span id="wallapatta_10050" class="text"> yesterday on Hacker News. They had a nice performance comparison test case set comparing jsblocks with </span><a id="wallapatta_10051" class="link" href="https://angularjs.org/">Angular</a><span id="wallapatta_10052" class="text"> and </span><a id="wallapatta_10053" class="link" href="https://facebook.github.io/react/">React</a><span id="wallapatta_10054" class="text">. It made me curious to see how the small library we use (</span><a id="wallapatta_10055" class="link" href="https://github.com/vpj/weya">Weya.coffee</a><span id="wallapatta_10056" class="text">) compares in performance with these.</span></p></div></div><div id="wallapatta_10007" class="section"><div class="content"><p id="wallapatta_10008" class="paragraph"><span id="wallapatta_10060" class="text">I ran the tests on Chrome broswer on a Macbook Air (1.6Ghz i5, 2GB). I have not altered test cases provided on </span><a id="wallapatta_10061" class="link" href="http://jsblocks.com/">jsblock</a><span id="wallapatta_10062" class="text">, and have added test cases for Weya for </span><strong id="wallapatta_10063" class="bold"><span id="wallapatta_10064" class="text">Rendering</span></strong><span id="wallapatta_10065" class="text"> and </span><strong id="wallapatta_10066" class="bold"><span id="wallapatta_10067" class="text">Syncing Changes</span></strong><span id="wallapatta_10068" class="text">., The results on Safari are not accurate in </span><em id="wallapatta_10069" class="italics"><span id="wallapatta_10070" class="text">syncing-changes</span></em><span id="wallapatta_10071" class="text"> test case, because jsblock test case use </span><code id="wallapatta_10072" class="code"><span id="wallapatta_10073" class="text">setTimeout(0)</span></code><span id="wallapatta_10074" class="text"> to resync which is called before html is actually rendered while the Weya test case use </span><code id="wallapatta_10075" class="code"><span id="wallapatta_10076" class="text">requestAnimationFrame</span></code><span id="wallapatta_10077" class="text"> which waits till it's rendered.</span></p></div></div><div id="wallapatta_10012" class="section"><h3 class="heading"><span id="wallapatta_10013" class="block"><span id="wallapatta_10080" class="text">Rendering</span></span></h3><div class="content"><table id="wallapatta_10014" class="table"><thead><tr><th colspan="1"><span id="wallapatta_10015" class="block"><span id="wallapatta_10081" class="text">Library</span></span></th><th colspan="1"><span id="wallapatta_10016" class="block"><span id="wallapatta_10082" class="text">Time (ms)</span></span></th><th colspan="1"><span id="wallapatta_10017" class="block"><span id="wallapatta_10083" class="text">Bar (shorter is better)</span></span></th></tr></thead><tbody><tr><td colspan="1"><span id="wallapatta_10018" class="block"><span id="wallapatta_10084" class="text">Weya.coffee</span></span></td><td colspan="1"><span id="wallapatta_10019" class="block"><span id="wallapatta_10085" class="text">404</span></span></td><td colspan="1"><span id="wallapatta_10020" class="block"><span id="wallapatta_10086" class="text">====</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_10021" class="block"><span id="wallapatta_10087" class="text">jsblocks</span></span></td><td colspan="1"><span id="wallapatta_10022" class="block"><span id="wallapatta_10088" class="text">801</span></span></td><td colspan="1"><span id="wallapatta_10023" class="block"><span id="wallapatta_10089" class="text">========</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_10024" class="block"><span id="wallapatta_10090" class="text">React</span></span></td><td colspan="1"><span id="wallapatta_10025" class="block"><span id="wallapatta_10091" class="text">1065</span></span></td><td colspan="1"><span id="wallapatta_10026" class="block"><span id="wallapatta_10092" class="text">==========</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_10027" class="block"><span id="wallapatta_10093" class="text">Angular</span></span></td><td colspan="1"><span id="wallapatta_10028" class="block"><span id="wallapatta_10094" class="text">2432</span></span></td><td colspan="1"><span id="wallapatta_10029" class="block"><span id="wallapatta_10095" class="text">========================</span></span></td></tr></tbody></table></div></div><div id="wallapatta_10030" class="section"><h3 class="heading"><span id="wallapatta_10031" class="block"><span id="wallapatta_10096" class="text">Syncing Changes</span></span></h3><div class="content"><table id="wallapatta_10032" class="table"><thead><tr><th colspan="1"><span id="wallapatta_10033" class="block"><span id="wallapatta_10097" class="text">Library</span></span></th><th colspan="1"><span id="wallapatta_10034" class="block"><span id="wallapatta_10098" class="text">Time (ms)</span></span></th><th colspan="1"><span id="wallapatta_10035" class="block"><span id="wallapatta_10099" class="text">Bar (shorter is better)</span></span></th></tr></thead><tbody><tr><td colspan="1"><span id="wallapatta_10036" class="block"><span id="wallapatta_10100" class="text">Weya.coffee</span></span></td><td colspan="1"><span id="wallapatta_10037" class="block"><span id="wallapatta_10101" class="text">1593</span></span></td><td colspan="1"><span id="wallapatta_10038" class="block"><span id="wallapatta_10102" class="text">========</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_10039" class="block"><span id="wallapatta_10103" class="text">jsblocks</span></span></td><td colspan="1"><span id="wallapatta_10040" class="block"><span id="wallapatta_10104" class="text">2035</span></span></td><td colspan="1"><span id="wallapatta_10041" class="block"><span id="wallapatta_10105" class="text">==========</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_10042" class="block"><span id="wallapatta_10106" class="text">React</span></span></td><td colspan="1"><span id="wallapatta_10043" class="block"><span id="wallapatta_10107" class="text">2781</span></span></td><td colspan="1"><span id="wallapatta_10044" class="block"><span id="wallapatta_10108" class="text">==============</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_10045" class="block"><span id="wallapatta_10109" class="text">Angular</span></span></td><td colspan="1"><span id="wallapatta_10046" class="block"><span id="wallapatta_10110" class="text">8081</span></span></td><td colspan="1"><span id="wallapatta_10047" class="block"><span id="wallapatta_10111" class="text">========================================</span></span></td></tr></tbody></table></div></div></div>
+     </div>
+     <div class="wallapatta-sidebar three columns ">
+      <div id="wallapatta_10003" class="sidenote"><div id="wallapatta_10004" class="section"><div class="content"><p id="wallapatta_10005" class="paragraph"><span id="wallapatta_10057" class="text">Weya.coffee is more of a rendering tool than a a framework. The main difference between Weya and other frameworks is that instead of writing logic inside html, markup is written in coffeescript. Weya comes with a router and a base class inspired by </span><a id="wallapatta_10058" class="link" href="http://backbonejs.org/">backbone.js</a><span id="wallapatta_10059" class="text">.</span></p></div></div><div id="wallapatta_10006" class="html"><iframe src="https://ghbtns.com/github-btn.html?user=vpj&amp;repo=weya&amp;type=star&amp;count=true&amp;size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
+</div></div><div id="wallapatta_10009" class="sidenote"><div id="wallapatta_10010" class="section"><div class="content"><p id="wallapatta_10011" class="paragraph"><strong id="wallapatta_10078" class="bold"><a id="wallapatta_10079" class="link" href="http://vpj.github.io/jsblocks-performance.zip">Download the performance test cases</a></strong></p></div></div></div>
+     </div>
+     <div style="display:none;">
+      <div class='wallapatta-code'>I came across &lt;&lt;http://jsblocks.com/(jsblock)&gt;&gt; yesterday on Hacker News. They had a nice performance comparison test case set comparing jsblocks with &lt;&lt;https://angularjs.org/(Angular)&gt;&gt; and &lt;&lt;https://facebook.github.io/react/(React)&gt;&gt;. It made me curious to see how the small library we use (&lt;&lt;https://github.com/vpj/weya(Weya.coffee)&gt;&gt;) compares in performance with these.
+
+&gt;&gt;&gt;
+ Weya.coffee is more of a rendering tool than a a framework. The main difference between Weya and other frameworks is that instead of writing logic inside html, markup is written in coffeescript. Weya comes with a router and a base class inspired by &lt;&lt;http://backbonejs.org/(backbone.js)&gt;&gt;.
+
+ &lt;&lt;&lt;
+  &lt;iframe src="https://ghbtns.com/github-btn.html?user=vpj&repo=weya&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px"&gt;&lt;/iframe&gt;
+
+I ran the tests on Chrome broswer on a Macbook Air (1.6Ghz i5, 2GB). I have not altered test cases provided on &lt;&lt;http://jsblocks.com/(jsblock)&gt;&gt;, and have added test cases for Weya for **Rendering** and **Syncing Changes**., The results on Safari are not accurate in --syncing-changes-- test case, because jsblock test case use ``setTimeout(0)`` to resync which is called before html is actually rendered while the Weya test case use ``requestAnimationFrame`` which waits till it's rendered.
+
+&gt;&gt;&gt;
+ **&lt;&lt;http://vpj.github.io/jsblocks-performance.zip(Download the performance test cases)&gt;&gt;
+
+
+### Rendering
+
+ |||
+  Library | Time (ms) |Bar (shorter is better)
+  ===
+  Weya.coffee | 404 | ====
+  jsblocks | 801 | ========
+  React | 1065 | ==========
+  Angular | 2432 | ========================
+
+### Syncing Changes
+
+ |||
+  Library | Time (ms) | Bar (shorter is better)
+  ===
+  Weya.coffee | 1593 | ========
+  jsblocks | 2035 | ==========
+  React | 2781 | ==============
+  Angular | 8081 | ========================================
+
+</div>
+     </div>
+    </div>
+   </div>
+   <div class="wallapatta ">
+    <h1 class="title ">
      <a href="cellular-start.html">
       Small data preparation
      </a>
@@ -108,8 +164,8 @@ In Google Chrome ^^1^^ when you take substrings of a larger string, the larger s
     </h3>
     <div class="row ">
      <div class="wallapatta-main nine columns ">
-      <div id="wallapatta_10000" class="article"><div id="wallapatta_10001" class="html"><iframe width="550" height="310" src="https://www.youtube.com/embed/AcSIzSQIDQ8?autoplay=0" frameborder="0" allowfullscreen=""></iframe>
-</div><div id="wallapatta_10005" class="section"><div class="content"><p id="wallapatta_10006" class="paragraph"><span id="wallapatta_10020" class="text">One of the biggest </span><strong id="wallapatta_10021" class="bold"><span id="wallapatta_10022" class="text">small data</span></strong><span id="wallapatta_10023" class="text"> problems, is that data is structured in different ways. Some legacy systems give out reports in the formats like below.</span></p></div></div><pre id="wallapatta_10007" class="codeBlock"><code class="nohighlight">SUPPLIER STATEMENT                         38 November 2011
+      <div id="wallapatta_20000" class="article"><div id="wallapatta_20001" class="html"><iframe width="550" height="310" src="https://www.youtube.com/embed/AcSIzSQIDQ8?autoplay=0" frameborder="0" allowfullscreen=""></iframe>
+</div><div id="wallapatta_20005" class="section"><div class="content"><p id="wallapatta_20006" class="paragraph"><span id="wallapatta_20020" class="text">One of the biggest </span><strong id="wallapatta_20021" class="bold"><span id="wallapatta_20022" class="text">small data</span></strong><span id="wallapatta_20023" class="text"> problems, is that data is structured in different ways. Some legacy systems give out reports in the formats like below.</span></p></div></div><pre id="wallapatta_20007" class="codeBlock"><code class="nohighlight">SUPPLIER STATEMENT                         38 November 2011
 
 Supplier   B0001   SupplierX Corp
                    51, AAA STREET, BBB
@@ -148,11 +204,11 @@ DATE     REF.No.        DESCRIPTION       DEBIT      CREDIT
 
 31/03/11                Balance C/F                3,500.00
 
-Contd. ......</code></pre><div id="wallapatta_10008" class="section"><div class="content"><p id="wallapatta_10009" class="paragraph"><span id="wallapatta_10024" class="text">Getting this into a spreadsheet or a database table to analyse it is not easy. So I started a project to help transform data in various report formats into simple tables and export as comma-separated files.</span></p></div></div><div id="wallapatta_10010" class="section"><div class="content"><p id="wallapatta_10011" class="paragraph"><span id="wallapatta_10025" class="text">The project is called </span><strong id="wallapatta_10026" class="bold"><a id="wallapatta_10027" class="link" href="http://vpj.github.io/cellular/">cellular</a></strong><span id="wallapatta_10028" class="text">, and it is still in the early stages. I thought of writing about it to get ideas and suggestions. It has a simple user interface with the table on the left side with a sidepane on right side.</span></p></div></div></div>
+Contd. ......</code></pre><div id="wallapatta_20008" class="section"><div class="content"><p id="wallapatta_20009" class="paragraph"><span id="wallapatta_20024" class="text">Getting this into a spreadsheet or a database table to analyse it is not easy. So I started a project to help transform data in various report formats into simple tables and export as comma-separated files.</span></p></div></div><div id="wallapatta_20010" class="section"><div class="content"><p id="wallapatta_20011" class="paragraph"><span id="wallapatta_20025" class="text">The project is called </span><strong id="wallapatta_20026" class="bold"><a id="wallapatta_20027" class="link" href="http://vpj.github.io/cellular/">cellular</a></strong><span id="wallapatta_20028" class="text">, and it is still in the early stages. I thought of writing about it to get ideas and suggestions. It has a simple user interface with the table on the left side with a sidepane on right side.</span></p></div></div></div>
      </div>
      <div class="wallapatta-sidebar three columns ">
-      <div id="wallapatta_10002" class="sidenote"><div id="wallapatta_10003" class="section"><div class="content"><p id="wallapatta_10004" class="paragraph"><span id="wallapatta_10016" class="text">Here's a small screen cast of using </span><strong id="wallapatta_10017" class="bold"><span id="wallapatta_10018" class="text">cellular</span></strong><span id="wallapatta_10019" class="text"> to transform the below report.</span></p></div></div></div><div id="wallapatta_10012" class="sidenote"><div id="wallapatta_10013" class="html"><iframe src="https://ghbtns.com/github-btn.html?user=vpj&amp;repo=cellular&amp;type=star&amp;count=true&amp;size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
-</div><div id="wallapatta_10014" class="section"><h3 class="heading"><span id="wallapatta_10015" class="block"><strong id="wallapatta_10029" class="bold"><a id="wallapatta_10030" class="link" href="http://vpj.github.io/cellular/">demo</a></strong></span></h3><div class="content"></div></div></div>
+      <div id="wallapatta_20002" class="sidenote"><div id="wallapatta_20003" class="section"><div class="content"><p id="wallapatta_20004" class="paragraph"><span id="wallapatta_20016" class="text">Here's a small screen cast of using </span><strong id="wallapatta_20017" class="bold"><span id="wallapatta_20018" class="text">cellular</span></strong><span id="wallapatta_20019" class="text"> to transform the below report.</span></p></div></div></div><div id="wallapatta_20012" class="sidenote"><div id="wallapatta_20013" class="html"><iframe src="https://ghbtns.com/github-btn.html?user=vpj&amp;repo=cellular&amp;type=star&amp;count=true&amp;size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
+</div><div id="wallapatta_20014" class="section"><h3 class="heading"><span id="wallapatta_20015" class="block"><strong id="wallapatta_20029" class="bold"><a id="wallapatta_20030" class="link" href="http://vpj.github.io/cellular/">demo</a></strong></span></h3><div class="content"></div></div></div>
      </div>
      <div style="display:none;">
       <div class='wallapatta-code'>&lt;&lt;&lt;
@@ -218,150 +274,6 @@ The project is called **&lt;&lt;http://vpj.github.io/cellular/(cellular)&gt;&gt;
 
  ###**&lt;&lt;http://vpj.github.io/cellular/(demo)&gt;&gt;**
 
-</div>
-     </div>
-    </div>
-   </div>
-   <div class="wallapatta ">
-    <h1 class="title ">
-     <a href="wallapatta.html">
-      Codename: Wallapatta
-     </a>
-    </h1>
-    <h3 class="date ">
-     May 18, 2015
-    </h3>
-    <div class="row ">
-     <div class="wallapatta-main nine columns ">
-      <div id="wallapatta_20000" class="article"><div id="wallapatta_20001" class="section"><div class="content"><p id="wallapatta_20002" class="paragraph"><span id="wallapatta_20081" class="text">I just started moving my blog from </span><a id="wallapatta_20082" class="link" href="http://svbtle.com">Svbtle</a><span id="wallapatta_20083" class="text"> to a static blog generated that I created. It is based on </span><a id="wallapatta_20084" class="link" href="http://vpj.github.io/wallapatta/introduction.html">Wallapatta</a><span id="wallapatta_20085" class="text">. I wanted to get into svbtle when </span><a id="wallapatta_20086" class="link" href="http://dcurt.is/codename-svbtle">Dustin started it</a><span id="wallapatta_20087" class="text">, and got invite a little before they opened it to the public. And it's sad to part ways.</span></p></div></div><div id="wallapatta_20006" class="section"><div class="content"><p id="wallapatta_20007" class="paragraph"><span id="wallapatta_20093" class="text">Wallapatta is a </span><a id="wallapatta_20094" class="link" href="http://en.wikipedia.org/wiki/Markdown">Markdown</a><span id="wallapatta_20095" class="text"> like syntax that can create documents with layouts inspired by handouts of Edward R. Tufte</span><sup id="wallapatta_20096" class="superScript"><span id="wallapatta_20097" class="text">1</span></sup><span id="wallapatta_20098" class="text">. We created it to use for documents. The two great things about Wallapatta is that it creates documents with </span><strong id="wallapatta_20099" class="bold"><span id="wallapatta_20100" class="text">sidenotes</span></strong><span id="wallapatta_20101" class="text"> and </span><strong id="wallapatta_20102" class="bold"><span id="wallapatta_20103" class="text">create print frindly documents</span></strong><span id="wallapatta_20104" class="text"> - </span><a id="wallapatta_20105" class="link" href="http://vpj.github.io/wallapatta/introduction.html">Wallapatta editor</a><span id="wallapatta_20106" class="text"> creates print layouts with intelligent page breaks by trying not to place breaks at middle of content like most word processing software do.</span></p></div></div><div id="wallapatta_20011" class="section"><div class="content"><p id="wallapatta_20012" class="paragraph"><span id="wallapatta_20111" class="text">I built in a simple blog generator into Wallapatta, for personal use. But it's super easy for anyone who wants to give it a go.</span></p></div></div><div id="wallapatta_20013" class="section"><h3 class="heading"><span id="wallapatta_20014" class="block"><span id="wallapatta_20112" class="text">How to start a Wallapatta blog?</span></span></h3><div class="content"><div id="wallapatta_20017" class="section"><div class="content"><p id="wallapatta_20018" class="paragraph"><span id="wallapatta_20113" class="text">It's pretty easy.</span></p></div></div><ol id="wallapatta_20019" class="list"><li id="wallapatta_20020" class="list-item"><span id="wallapatta_20021" class="block"><strong id="wallapatta_20114" class="bold"><span id="wallapatta_20115" class="text">Install </span><a id="wallapatta_20116" class="link" href="https://nodejs.org/">Node.js</a></strong></span><div id="wallapatta_20022" class="section"><div class="content"><p id="wallapatta_20023" class="paragraph"><span id="wallapatta_20117" class="text">NPM usually comes with Node.js. Visit </span><a id="wallapatta_20118" class="link" href="https://nodejs.org/">https://nodejs.org/</a><span id="wallapatta_20119" class="text"> and see installation instructions. It's usually a download and install, unless you want it installed through a package manager like </span><code id="wallapatta_20120" class="code"><span id="wallapatta_20121" class="text">brew</span></code><span id="wallapatta_20122" class="text">.</span></p></div></div></li><li id="wallapatta_20024" class="list-item"><span id="wallapatta_20025" class="block"><strong id="wallapatta_20123" class="bold"><span id="wallapatta_20124" class="text">Install </span><a id="wallapatta_20125" class="link" href="https://www.npmjs.com/package/wallapatta">Wallapatta node odule</a></strong></span><div id="wallapatta_20026" class="section"><div class="content"><p id="wallapatta_20027" class="paragraph"><span id="wallapatta_20126" class="text">Run the following command in command line.</span></p></div></div><pre id="wallapatta_20028" class="codeBlock"><code class="nohighlight">npm install wallapatta -g</code></pre><div id="wallapatta_20029" class="section"><div class="content"><p id="wallapatta_20030" class="paragraph"><span id="wallapatta_20127" class="text">That's it and you have wallapatta installed.</span></p></div></div></li><li id="wallapatta_20031" class="list-item"><span id="wallapatta_20032" class="block"><strong id="wallapatta_20128" class="bold"><span id="wallapatta_20129" class="text">Fork the </span><a id="wallapatta_20130" class="link" href="https://github.com/vpj/wallapatta-blog-boilerplate">boilerplate</a></strong></span><div id="wallapatta_20033" class="section"><div class="content"><p id="wallapatta_20034" class="paragraph"><span id="wallapatta_20131" class="text">Make a fork of the git repositors on github: </span><a id="wallapatta_20132" class="link" href="https://github.com/vpj/wallapatta-blog-boilerplate">https://github.com/vpj/wallapatta-blog-boilerplate</a></p></div></div><div id="wallapatta_20035" class="section"><div class="content"><p id="wallapatta_20036" class="paragraph"><span id="wallapatta_20133" class="text">This repo contains this blog post, and 3 empty blog posts, a configuration file and templates for blog.</span></p></div></div><div id="wallapatta_20037" class="section"><div class="content"><p id="wallapatta_20038" class="paragraph"><span id="wallapatta_20134" class="text">Edit </span><code id="wallapatta_20135" class="code"><span id="wallapatta_20136" class="text">templates/post.coffee</span></code><span id="wallapatta_20137" class="text"> to change the post template and </span><code id="wallapatta_20138" class="code"><span id="wallapatta_20139" class="text">templates/blog.coffee</span></code><span id="wallapatta_20140" class="text"> to change the blog template. Compile these </span><a id="wallapatta_20141" class="link" href="http://coffeescript.org/">coffeescript</a><span id="wallapatta_20142" class="text"> code to javascript by running </span><code id="wallapatta_20143" class="code"><span id="wallapatta_20144" class="text">coffee -c *</span></code><span id="wallapatta_20145" class="text">.</span></p></div></div><div id="wallapatta_20039" class="section"><div class="content"><p id="wallapatta_20040" class="paragraph"><span id="wallapatta_20146" class="text">You will have to change the name of the blog, which is "Varuna Jayasiri" in the two tamplate files. And also the Google Analytics code.</span></p></div></div><div id="wallapatta_20041" class="section"><div class="content"><p id="wallapatta_20042" class="paragraph"><span id="wallapatta_20147" class="text">Change </span><code id="wallapatta_20148" class="code"><span id="wallapatta_20149" class="text">blog.yaml</span></code><span id="wallapatta_20150" class="text"> to edit blog configurations like the order of posts, post titles, dates, etc.</span></p></div></div></li><li id="wallapatta_20043" class="list-item"><span id="wallapatta_20044" class="block"><strong id="wallapatta_20151" class="bold"><span id="wallapatta_20152" class="text">Generate the blog</span></strong></span><pre id="wallapatta_20045" class="codeBlock"><code class="nohighlight">wallapatta --blog blog.yaml --output [output_directory] --static</code></pre><div id="wallapatta_20046" class="section"><div class="content"><p id="wallapatta_20047" class="paragraph"><span id="wallapatta_20153" class="text">The above command will create the html files on the </span><code id="wallapatta_20154" class="code"><span id="wallapatta_20155" class="text">output_directory</span></code><span id="wallapatta_20156" class="text"> provided. </span><code id="wallapatta_20157" class="code"><span id="wallapatta_20158" class="text">--static</span></code><span id="wallapatta_20159" class="text"> specifies that it should copy Wallapatta rendering tools to the folder. (You can omit this if you change the templates to get these from a CDN).</span></p></div></div><div id="wallapatta_20048" class="section"><div class="content"><p id="wallapatta_20049" class="paragraph"><code id="wallapatta_20160" class="code"><span id="wallapatta_20161" class="text">blog.css</span></code><span id="wallapatta_20162" class="text"> file on the boilerplate repository contains some css. This file is used in default templates. So you need to copy them to the </span><code id="wallapatta_20163" class="code"><span id="wallapatta_20164" class="text">output_directory</span></code><span id="wallapatta_20165" class="text">.</span></p></div></div></li><li id="wallapatta_20050" class="list-item"><span id="wallapatta_20051" class="block"><strong id="wallapatta_20166" class="bold"><span id="wallapatta_20167" class="text">That is it!</span></strong></span></li></ol></div></div><div id="wallapatta_20052" class="section"><h3 class="heading"><span id="wallapatta_20053" class="block"><span id="wallapatta_20168" class="text">What is Wallapatta syntax?</span></span></h3><div class="content"><div id="wallapatta_20054" class="section"><div class="content"><p id="wallapatta_20055" class="paragraph"><span id="wallapatta_20169" class="text">It looks like this.</span></p></div></div><pre id="wallapatta_20056" class="codeBlock"><code class="nohighlight">###Heading 1
-
- Introduction to **Heading 1**
-
- * Point one
-
-  Description about point one
-
- * Point two
-
- ####Subtopic
-
-  Subtopic content
-
- This belongs to Heading 1</code></pre><div id="wallapatta_20075" class="section"><div class="content"><p id="wallapatta_20076" class="paragraph"><span id="wallapatta_20180" class="text">It uses indentation to identify what belong where. Indentation is required for specifying content for components like lists, code blocks, special blocks, etc as well. So it's more of a programmer friendly syntax. Indentation helps while working with large documents because you can do stuff like </span><strong id="wallapatta_20181" class="bold"><span id="wallapatta_20182" class="text">code folding</span></strong><span id="wallapatta_20183" class="text">.</span></p></div></div><div id="wallapatta_20077" class="section"><div class="content"><p id="wallapatta_20078" class="paragraph"><span id="wallapatta_20184" class="text">We've changed some of the syntax from Markdown; for instance, </span><code id="wallapatta_20185" class="code"><span id="wallapatta_20186" class="text">&lt;&lt;</span></code><span id="wallapatta_20187" class="text"> and </span><code id="wallapatta_20188" class="code"><span id="wallapatta_20189" class="text">&gt;&gt;</span></code><span id="wallapatta_20190" class="text"> are used for links instead of </span><code id="wallapatta_20191" class="code"><span id="wallapatta_20192" class="text">[]()</span></code><span id="wallapatta_20193" class="text">, because we felt that it's a little more intuitive due to its resemblence with HTML tags.</span></p></div></div><div id="wallapatta_20079" class="section"><div class="content"><p id="wallapatta_20080" class="paragraph"><a id="wallapatta_20194" class="link" href="http://vpj.github.io/wallapatta/reference.html">Read the Wallapatta reference</a><span id="wallapatta_20195" class="text"> for a detailed description on each component, including examples for usage.</span></p></div></div></div></div></div>
-     </div>
-     <div class="wallapatta-sidebar three columns ">
-      <div id="wallapatta_20003" class="sidenote"><div id="wallapatta_20004" class="section"><div class="content"><p id="wallapatta_20005" class="paragraph"><span id="wallapatta_20088" class="text">"Wallapatta" is a </span><a id="wallapatta_20089" class="link" href="http://www.dwc.gov.lk/index.php/en/wildlife-news1/228-walla-patta-gyrinops-walla-the-tree-to-preserv">tree in Sri Lanka</a><span id="wallapatta_20090" class="text">, that contains </span><a id="wallapatta_20091" class="link" href="http://en.wikipedia.org/wiki/Agarwood">Agarwood</a><span id="wallapatta_20092" class="text">.</span></p></div></div></div><div id="wallapatta_20008" class="sidenote"><div id="wallapatta_20009" class="section"><div class="content"><p id="wallapatta_20010" class="paragraph"><sup id="wallapatta_20107" class="superScript"><span id="wallapatta_20108" class="text">1</span></sup><span id="wallapatta_20109" class="text"> </span><a id="wallapatta_20110" class="link" href="http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000hB">Book design: advice and examples - edwardtufte.com</a></p></div></div></div><div id="wallapatta_20015" class="sidenote"><div id="wallapatta_20016" class="html"><iframe src="https://ghbtns.com/github-btn.html?user=vpj&amp;repo=wallapatta&amp;type=star&amp;count=true&amp;size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
-
-</div></div><div id="wallapatta_20057" class="sidenote"><div id="wallapatta_20058" class="section"><h3 class="heading"><span id="wallapatta_20059" class="block"><span id="wallapatta_20170" class="text">Heading 1</span></span></h3><div class="content"><div id="wallapatta_20060" class="section"><div class="content"><p id="wallapatta_20061" class="paragraph"><span id="wallapatta_20171" class="text">Introduction to </span><strong id="wallapatta_20172" class="bold"><span id="wallapatta_20173" class="text">Heading 1</span></strong></p></div></div><ul id="wallapatta_20062" class="list"><li id="wallapatta_20063" class="list-item"><span id="wallapatta_20064" class="block"><span id="wallapatta_20174" class="text">Point one</span></span><div id="wallapatta_20065" class="section"><div class="content"><p id="wallapatta_20066" class="paragraph"><span id="wallapatta_20175" class="text">Description about point one</span></p></div></div></li><li id="wallapatta_20067" class="list-item"><span id="wallapatta_20068" class="block"><span id="wallapatta_20176" class="text">Point two</span></span></li></ul><div id="wallapatta_20069" class="section"><h4 class="heading"><span id="wallapatta_20070" class="block"><span id="wallapatta_20177" class="text">Subtopic</span></span></h4><div class="content"><div id="wallapatta_20071" class="section"><div class="content"><p id="wallapatta_20072" class="paragraph"><span id="wallapatta_20178" class="text">Subtopic content</span></p></div></div></div></div><div id="wallapatta_20073" class="section"><div class="content"><p id="wallapatta_20074" class="paragraph"><span id="wallapatta_20179" class="text">This belongs to Heading 1</span></p></div></div></div></div></div>
-     </div>
-     <div style="display:none;">
-      <div class='wallapatta-code'>I just started moving my blog from &lt;&lt;http://svbtle.com(Svbtle)&gt;&gt; to a static blog generated that I created. It is based on &lt;&lt;http://vpj.github.io/wallapatta/introduction.html(Wallapatta)&gt;&gt;. I wanted to get into svbtle when &lt;&lt;http://dcurt.is/codename-svbtle(Dustin started it)&gt;&gt;, and got invite a little before they opened it to the public. And it's sad to part ways.
-
-&gt;&gt;&gt;
- "Wallapatta" is a &lt;&lt;http://www.dwc.gov.lk/index.php/en/wildlife-news1/228-walla-patta-gyrinops-walla-the-tree-to-preserv(tree in Sri Lanka)&gt;&gt;, that contains &lt;&lt;http://en.wikipedia.org/wiki/Agarwood(Agarwood)&gt;&gt;.
-
-
-
-Wallapatta is a
-&lt;&lt;http://en.wikipedia.org/wiki/Markdown(Markdown)&gt;&gt; like syntax that can create documents with layouts
-inspired by handouts of Edward R. Tufte^^1^^. We created it to use for documents. The two great things about Wallapatta is that it creates documents with **sidenotes** and **create print frindly documents** - &lt;&lt;http://vpj.github.io/wallapatta/introduction.html(Wallapatta editor)&gt;&gt; creates print layouts with intelligent page breaks by trying not to place breaks at middle of content like most word processing software do.
-
- &gt;&gt;&gt;
-  ^^1^^ &lt;&lt;http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000hB
-  (Book design: advice and examples - edwardtufte.com)&gt;&gt;
-
-I built in a simple blog generator into Wallapatta, for personal use. But it's super easy for anyone who wants to give it a go.
-
-###How to start a Wallapatta blog?
-
- &gt;&gt;&gt;
-  &lt;&lt;&lt;
-   &lt;iframe src="https://ghbtns.com/github-btn.html?user=vpj&repo=wallapatta&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px"&gt;&lt;/iframe&gt;
-
-
- It's pretty easy.
-
- - **Install &lt;&lt;https://nodejs.org/(Node.js&gt;&gt;
-
-  NPM usually comes with Node.js. Visit &lt;&lt;https://nodejs.org/&gt;&gt; and see installation instructions. It's usually a download and install, unless you want it installed through a package manager like ``brew``.
-
- - **Install &lt;&lt;https://www.npmjs.com/package/wallapatta(Wallapatta node odule&gt;&gt;
-
-  Run the following command in command line.
-
-  ```
-   npm install wallapatta -g
-
-  That's it and you have wallapatta installed.
-
- - **Fork the &lt;&lt;https://github.com/vpj/wallapatta-blog-boilerplate(boilerplate)&gt;&gt;
-
-  Make a fork of the git repositors on github: &lt;&lt;https://github.com/vpj/wallapatta-blog-boilerplate&gt;&gt;
-
-  This repo contains this blog post, and 3 empty blog posts, a configuration file and templates for blog.
-
-  Edit ``templates/post.coffee`` to change the post template and ``templates/blog.coffee`` to change the blog template. Compile these &lt;&lt;http://coffeescript.org/(coffeescript&gt;&gt; code to javascript by running ``coffee -c *``.
-
-  You will have to change the name of the blog, which is "Varuna Jayasiri" in the two tamplate files. And also the Google Analytics code.
-
-  Change ``blog.yaml`` to edit blog configurations like the order of posts, post titles, dates, etc.
-
- - **Generate the blog
-
-  ```
-   wallapatta --blog blog.yaml --output [output_directory] --static
-
-  The above command will create the html files on the ``output_directory`` provided. ``--static`` specifies that it should copy Wallapatta rendering tools to the folder. (You can omit this if you change the templates to get these from a CDN).
-
-  ``blog.css`` file on the boilerplate repository contains some css. This file is used in default templates. So you need to copy them to the ``output_directory``.
-
- - **That is it!
-
-
-###What is Wallapatta syntax?
-
- It looks like this.
-
- ```
-  ###Heading 1
-
-   Introduction to **Heading 1**
-
-   * Point one
-
-    Description about point one
-
-   * Point two
-
-   ####Subtopic
-
-    Subtopic content
-
-   This belongs to Heading 1
-
- &gt;&gt;&gt;
-  ###Heading 1
-
-   Introduction to **Heading 1**
-
-   * Point one
-
-    Description about point one
-
-   * Point two
-
-   ####Subtopic
-
-    Subtopic content
-
-   This belongs to Heading 1
-
- It uses indentation to identify what belong where. Indentation is required for specifying content for components like lists, code blocks, special blocks, etc as well. So it's more of a programmer friendly syntax. Indentation helps while working with large documents because you can do stuff like **code folding**.
-
- We've changed some of the syntax from Markdown; for instance, ``&lt;&lt;`` and ``&gt;&gt;`` are used for links instead of ``[]()``, because we felt that it's a little more
- intuitive due to its resemblence with HTML tags.
-
- &lt;&lt;http://vpj.github.io/wallapatta/reference.html(Read the Wallapatta reference)&gt;&gt; for a detailed description on each component, including examples for usage.
 </div>
      </div>
     </div>

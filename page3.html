@@ -45,6 +45,222 @@ ga('send', 'pageview');
    </div>
    <div class="wallapatta ">
     <h1 class="title ">
+     <a href="weya.html">
+      Weya.coffee
+     </a>
+    </h1>
+    <h3 class="date ">
+     March 19, 2014
+    </h3>
+    <div class="row ">
+     <div class="wallapatta-main nine columns ">
+      <div id="wallapatta_0" class="article"><div id="wallapatta_1" class="section"><div class="content"><p id="wallapatta_2" class="paragraph"><span id="wallapatta_38" class="text">Weya.coffee is a lightweight library with no dependencies to generate DOM elements. We developed it to replace </span><a id="wallapatta_39" class="link" href="https://github.com/gradus/coffeecup">Coffeecup</a><span id="wallapatta_40" class="text"> as a client side template engine. Because of its simplicity and performance, we are also using Weya to replace DOM manipulation of </span><a id="wallapatta_41" class="link" href="http://d3js.org/">d3.js</a><span id="wallapatta_42" class="text"> in data visualizations.</span></p></div></div><div id="wallapatta_9" class="section"><div class="content"><p id="wallapatta_10" class="paragraph"><span id="wallapatta_45" class="text">Here's a small example to show the usage.</span></p></div></div><pre id="wallapatta_11" class="codeBlock"><code class="coffee">userElems = []
+Weya container, <span class="hljs-function">-&gt;</span>
+ <span class="hljs-property">@div</span> <span class="hljs-string">".users"</span>, <span class="hljs-function">-&gt;</span>
+  <span class="hljs-keyword">for</span> user, i <span class="hljs-keyword">in</span> users
+   userDiv = <span class="hljs-property">@div</span> <span class="hljs-string">'.user'</span>, <span class="hljs-attribute">on</span>: {<span class="hljs-attribute">click</span>: editUser}, <span class="hljs-function">-&gt;</span>
+    name = <span class="hljs-property">@span</span> <span class="hljs-string">".name"</span>, user.name
+    <span class="hljs-property">@span</span> <span class="hljs-string">".phone"</span>, user.phone
+    <span class="hljs-keyword">if</span> v.image?
+     <span class="hljs-property">@img</span> <span class="hljs-attribute">src</span>: user.image
+
+   userDiv.userId = i
+   userElems.push <span class="hljs-attribute">user</span>: user, <span class="hljs-attribute">name</span>: name</code></pre><div id="wallapatta_12" class="section"><div class="content"><p id="wallapatta_13" class="paragraph"><span id="wallapatta_46" class="text">The above code creates a list of users. It binds the data to the dom element </span><code id="wallapatta_47" class="code"><span id="wallapatta_48" class="text">userDiv.userId = i</span></code><span id="wallapatta_49" class="text"> and also keeps track of all the DOM elements in </span><code id="wallapatta_50" class="code"><span id="wallapatta_51" class="text">userElems</span></code><span id="wallapatta_52" class="text">. This is important if you want to manipulate the DOM without reloading the entire user list, for example if a name of a user changes you could change it with </span><code id="wallapatta_53" class="code"><span id="wallapatta_54" class="text">userElems[changedUserId].name.textContent = changedUserName</span></code><span id="wallapatta_55" class="text">.</span></p></div></div><div id="wallapatta_14" class="section"><h1 class="heading"><span id="wallapatta_15" class="block"><span id="wallapatta_56" class="text">Is it a template engine?</span></span></h1><div class="content"><div id="wallapatta_16" class="section"><div class="content"><p id="wallapatta_17" class="paragraph"><span id="wallapatta_57" class="text">Weya is quite similar to Coffeecup in terms of the syntax. But it's much faster, so it won't fail if you have lots of elements.</span></p></div></div><div id="wallapatta_21" class="section"><div class="content"><p id="wallapatta_22" class="paragraph"><span id="wallapatta_59" class="text">Also, Weya lets you register event handlers. I feel this is much cleaner than registering events later with CSS selectors, and it's easier to maintain the code since events are register within the DOM creation code.</span></p></div></div></div></div><div id="wallapatta_23" class="section"><h1 class="heading"><span id="wallapatta_24" class="block"><span id="wallapatta_60" class="text">Can it replace d3.js?</span></span></h1><div class="content"><div id="wallapatta_25" class="section"><div class="content"><p id="wallapatta_26" class="paragraph"><span id="wallapatta_61" class="text">We use weya to replace most all the d3.js DOM manipulation.</span></p></div></div><div id="wallapatta_27" class="section"><div class="content"><p id="wallapatta_28" class="paragraph"><span id="wallapatta_62" class="text">Code with Weya is simpler, shorter and nicely intended. Here's the code that draws bar chart in	</span><a id="wallapatta_63" class="link" href="http://bl.ocks.org/vpj/9636655">this example</a><span id="wallapatta_64" class="text">.</span></p></div></div><pre id="wallapatta_29" class="codeBlock"><code class="coffee">Weya svg, <span class="hljs-function">-&gt;</span>
+ <span class="hljs-keyword">for</span> d <span class="hljs-keyword">in</span> data
+  <span class="hljs-property">@g</span> <span class="hljs-string">".g"</span>, <span class="hljs-attribute">transform</span>: <span class="hljs-string">"translate(<span class="hljs-subst">#{x0 d.State}</span>,0)"</span>, <span class="hljs-function">-&gt;</span>
+   <span class="hljs-keyword">for</span> age <span class="hljs-keyword">in</span> d.ages
+    <span class="hljs-property">@rect</span>
+     <span class="hljs-attribute">width</span>: x1.rangeBand()
+     <span class="hljs-attribute">x</span>: x1 age.name
+     <span class="hljs-attribute">y</span>: y age.value
+     <span class="hljs-attribute">height</span>: height - y age.value
+     <span class="hljs-attribute">fill</span>: color age.name
+
+ <span class="hljs-keyword">for</span> d, i <span class="hljs-keyword">in</span> ageNames.slice().reverse()
+  <span class="hljs-property">@g</span> <span class="hljs-string">".legend"</span>, <span class="hljs-attribute">transform</span>: <span class="hljs-string">"translate(0,<span class="hljs-subst">#{i * <span class="hljs-number">20</span>}</span>)"</span>, <span class="hljs-function">-&gt;</span>
+   <span class="hljs-property">@rect</span> <span class="hljs-attribute">x</span>: width - <span class="hljs-number">18</span>, <span class="hljs-attribute">width</span>: <span class="hljs-number">18</span>, <span class="hljs-attribute">height</span>: <span class="hljs-number">18</span>, <span class="hljs-attribute">fill</span>: color d
+   <span class="hljs-property">@text</span>
+    <span class="hljs-attribute">x</span>: width - <span class="hljs-number">24</span>, <span class="hljs-attribute">y</span>: <span class="hljs-number">9</span>, <span class="hljs-attribute">dy</span>: <span class="hljs-string">".35em"</span>
+    <span class="hljs-attribute">style</span>: {<span class="hljs-string">'text-anchor'</span>: <span class="hljs-string">"end"</span>}, <span class="hljs-attribute">text</span>: d</code></pre><div id="wallapatta_30" class="section"><div class="content"><p id="wallapatta_31" class="paragraph"><span id="wallapatta_65" class="text">Here's the code that does the </span><a id="wallapatta_66" class="link" href="http://bl.ocks.org/mbostock/388705">same with d3.js</a><span id="wallapatta_67" class="text">.</span></p></div></div><pre id="wallapatta_32" class="codeBlock"><code class="javascript"><span class="hljs-keyword">var</span> state = svg.selectAll(<span class="hljs-string">".state"</span>)
+    .data(data)
+  .enter().append(<span class="hljs-string">"g"</span>)
+    .attr(<span class="hljs-string">"class"</span>, <span class="hljs-string">"g"</span>)
+    .attr(<span class="hljs-string">"transform"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d</span>) </span>{ <span class="hljs-keyword">return</span> <span class="hljs-string">"translate("</span> + x0(d.State) + <span class="hljs-string">",0)"</span>; });
+
+state.selectAll(<span class="hljs-string">"rect"</span>)
+    .data(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d</span>) </span>{ <span class="hljs-keyword">return</span> d.ages; })
+  .enter().append(<span class="hljs-string">"rect"</span>)
+    .attr(<span class="hljs-string">"width"</span>, x1.rangeBand())
+    .attr(<span class="hljs-string">"x"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d</span>) </span>{ <span class="hljs-keyword">return</span> x1(d.name); })
+    .attr(<span class="hljs-string">"y"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d</span>) </span>{ <span class="hljs-keyword">return</span> y(d.value); })
+    .attr(<span class="hljs-string">"height"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d</span>) </span>{ <span class="hljs-keyword">return</span> height - y(d.value); })
+    .style(<span class="hljs-string">"fill"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d</span>) </span>{ <span class="hljs-keyword">return</span> color(d.name); });
+
+<span class="hljs-keyword">var</span> legend = svg.selectAll(<span class="hljs-string">".legend"</span>)
+    .data(ageNames.slice().reverse())
+  .enter().append(<span class="hljs-string">"g"</span>)
+    .attr(<span class="hljs-string">"class"</span>, <span class="hljs-string">"legend"</span>)
+    .attr(<span class="hljs-string">"transform"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d, i</span>) </span>{ <span class="hljs-keyword">return</span> <span class="hljs-string">"translate(0,"</span> + i * <span class="hljs-number">20</span> + <span class="hljs-string">")"</span>; });
+
+legend.append(<span class="hljs-string">"rect"</span>)
+    .attr(<span class="hljs-string">"x"</span>, width - <span class="hljs-number">18</span>)
+    .attr(<span class="hljs-string">"width"</span>, <span class="hljs-number">18</span>)
+    .attr(<span class="hljs-string">"height"</span>, <span class="hljs-number">18</span>)
+    .style(<span class="hljs-string">"fill"</span>, color);
+
+legend.append(<span class="hljs-string">"text"</span>)
+    .attr(<span class="hljs-string">"x"</span>, width - <span class="hljs-number">24</span>)
+    .attr(<span class="hljs-string">"y"</span>, <span class="hljs-number">9</span>)
+    .attr(<span class="hljs-string">"dy"</span>, <span class="hljs-string">".35em"</span>)
+    .style(<span class="hljs-string">"text-anchor"</span>, <span class="hljs-string">"end"</span>)
+    .text(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d</span>) </span>{ <span class="hljs-keyword">return</span> d; });</code></pre><div id="wallapatta_33" class="section"><div class="content"><p id="wallapatta_34" class="paragraph"><span id="wallapatta_68" class="text">Another problem we solved with Weya is that d3.js draws all the elements that are represented by the data at once. And with Weya we can draw progressively - this is quite useful when you have a lot of data and you don't won't the interface to go unresponsive until everything is drawn. Here's a small example to show the point.</span></p></div></div><pre id="wallapatta_35" class="codeBlock"><code class="coffee">i = <span class="hljs-number">0</span>
+data = ...
+<span class="hljs-function">
+<span class="hljs-title">draw</span> = -&gt;</span>
+ <span class="hljs-keyword">return</span> <span class="hljs-keyword">if</span> i <span class="hljs-keyword">is</span> data.length
+
+ d = data[i]
+ Weya container, <span class="hljs-function">-&gt;</span>
+  <span class="hljs-property">@div</span> <span class="hljs-string">'.user'</span>, <span class="hljs-function">-&gt;</span>
+   ...
+
+ i++
+ requestAnimationFrame draw
+
+draw()</code></pre><div id="wallapatta_36" class="section"><div class="content"><p id="wallapatta_37" class="paragraph"><span id="wallapatta_69" class="text">The disadvantage of Weya over d3.js is that it doesn't bind data to DOM elements like d3.js does. So you can't use </span><code id="wallapatta_70" class="code"><span id="wallapatta_71" class="text">enter()</span></code><span id="wallapatta_72" class="text">, </span><code id="wallapatta_73" class="code"><span id="wallapatta_74" class="text">exit()</span></code><span id="wallapatta_75" class="text"> and updates when data changes. But most users rarely need these features. We use Weya with our own data bindings with DOM elements (as in the first example with </span><code id="wallapatta_76" class="code"><span id="wallapatta_77" class="text">userElems</span></code><span id="wallapatta_78" class="text">), and we find it simpler than </span><code id="wallapatta_79" class="code"><span id="wallapatta_80" class="text">enter()</span></code><span id="wallapatta_81" class="text"> and </span><code id="wallapatta_82" class="code"><span id="wallapatta_83" class="text">exit()</span></code><span id="wallapatta_84" class="text">.</span></p></div></div></div></div></div>
+     </div>
+     <div class="wallapatta-sidebar three columns ">
+      <div id="wallapatta_3" class="sidenote"><div id="wallapatta_4" class="html"><iframe src="https://ghbtns.com/github-btn.html?user=vpj&amp;repo=weya&amp;type=star&amp;count=true&amp;size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
+</div><div id="wallapatta_5" class="section"><div class="content"><p id="wallapatta_6" class="paragraph"><a id="wallapatta_43" class="link" href="http://jsperf.com/weya-jquery-d3-coffeecup">Performance comparison among d3, coffeecup and weya</a></p></div></div><div id="wallapatta_7" class="section"><div class="content"><p id="wallapatta_8" class="paragraph"><a id="wallapatta_44" class="link" href="http://bl.ocks.org/vpj/9636655">Bar chart example</a></p></div></div></div><div id="wallapatta_18" class="sidenote"><div id="wallapatta_19" class="section"><div class="content"><p id="wallapatta_20" class="paragraph"><a id="wallapatta_58" class="link" href="http://jsperf.com/weya-jquery-d3-coffeecup">Performance comparison among d3, coffeecup and weya</a></p></div></div></div>
+     </div>
+     <div style="display:none;">
+      <div class='wallapatta-code'>Weya.coffee is a lightweight library with no dependencies to generate DOM elements. We developed it to replace &lt;&lt;https://github.com/gradus/coffeecup(Coffeecup)&gt;&gt; as a client side template engine. Because of its simplicity and performance, we are also using Weya to replace DOM manipulation of &lt;&lt;http://d3js.org/(d3.js)&gt;&gt; in data visualizations.
+
+&gt;&gt;&gt;
+ &lt;&lt;&lt;
+  &lt;iframe src="https://ghbtns.com/github-btn.html?user=vpj&repo=weya&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px"&gt;&lt;/iframe&gt;
+
+ &lt;&lt;http://jsperf.com/weya-jquery-d3-coffeecup(Performance comparison among d3, coffeecup and weya)&gt;&gt;
+
+ &lt;&lt;http://bl.ocks.org/vpj/9636655(Bar chart example)&gt;&gt;
+
+Here's a small example to show the usage.
+
+```coffee
+ userElems = []
+ Weya container, -&gt;
+  @div ".users", -&gt;
+   for user, i in users
+    userDiv = @div '.user', on: {click: editUser}, -&gt;
+     name = @span ".name", user.name
+     @span ".phone", user.phone
+     if v.image?
+      @img src: user.image
+
+    userDiv.userId = i
+    userElems.push user: user, name: name
+
+The above code creates a list of users. It binds the data to the dom element ``userDiv.userId = i`` and also keeps track of all the DOM elements in ``userElems``. This is important if you want to manipulate the DOM without reloading the entire user list, for example if a name of a user changes you could change it with ``userElems[changedUserId].name.textContent = changedUserName``.
+
+#Is it a template engine?
+
+ Weya is quite similar to Coffeecup in terms of the syntax. But it's much faster, so it won't fail if you have lots of elements.
+
+ &gt;&gt;&gt;
+  &lt;&lt;http://jsperf.com/weya-jquery-d3-coffeecup(Performance comparison among d3, coffeecup and weya)&gt;&gt;
+
+
+ Also, Weya lets you register event handlers. I feel this is much cleaner than registering events later with CSS selectors, and it's easier to maintain the code since events are register within the DOM creation code.
+
+#Can it replace d3.js?
+
+ We use weya to replace most all the d3.js DOM manipulation.
+
+ Code with Weya is simpler, shorter and nicely intended. Here's the code that draws bar chart in	&lt;&lt;http://bl.ocks.org/vpj/9636655(this example)&gt;&gt;.
+
+ ```coffee
+  Weya svg, -&gt;
+   for d in data
+    @g ".g", transform: "translate(#{x0 d.State},0)", -&gt;
+     for age in d.ages
+      @rect
+       width: x1.rangeBand()
+       x: x1 age.name
+       y: y age.value
+       height: height - y age.value
+       fill: color age.name
+
+   for d, i in ageNames.slice().reverse()
+    @g ".legend", transform: "translate(0,#{i * 20})", -&gt;
+     @rect x: width - 18, width: 18, height: 18, fill: color d
+     @text
+      x: width - 24, y: 9, dy: ".35em"
+      style: {'text-anchor': "end"}, text: d
+
+ Here's the code that does the &lt;&lt;http://bl.ocks.org/mbostock/388705(same with d3.js)&gt;&gt;.
+
+ ```javascript
+  var state = svg.selectAll(".state")
+      .data(data)
+    .enter().append("g")
+      .attr("class", "g")
+      .attr("transform", function(d) { return "translate(" + x0(d.State) + ",0)"; });
+
+  state.selectAll("rect")
+      .data(function(d) { return d.ages; })
+    .enter().append("rect")
+      .attr("width", x1.rangeBand())
+      .attr("x", function(d) { return x1(d.name); })
+      .attr("y", function(d) { return y(d.value); })
+      .attr("height", function(d) { return height - y(d.value); })
+      .style("fill", function(d) { return color(d.name); });
+
+  var legend = svg.selectAll(".legend")
+      .data(ageNames.slice().reverse())
+    .enter().append("g")
+      .attr("class", "legend")
+      .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+  legend.append("rect")
+      .attr("x", width - 18)
+      .attr("width", 18)
+      .attr("height", 18)
+      .style("fill", color);
+
+  legend.append("text")
+      .attr("x", width - 24)
+      .attr("y", 9)
+      .attr("dy", ".35em")
+      .style("text-anchor", "end")
+      .text(function(d) { return d; });
+
+
+ Another problem we solved with Weya is that d3.js draws all the elements that are represented by the data at once. And with Weya we can draw progressively - this is quite useful when you have a lot of data and you don't won't the interface to go unresponsive until everything is drawn. Here's a small example to show the point.
+
+ ```coffee
+  i = 0
+  data = ...
+
+  draw = -&gt;
+   return if i is data.length
+
+   d = data[i]
+   Weya container, -&gt;
+    @div '.user', -&gt;
+     ...
+
+   i++
+   requestAnimationFrame draw
+
+  draw()
+
+ The disadvantage of Weya over d3.js is that it doesn't bind data to DOM elements like d3.js does. So you can't use ``enter()``, ``exit()`` and updates when data changes. But most users rarely need these features. We use Weya with our own data bindings with DOM elements (as in the first example with ``userElems``), and we find it simpler than ``enter()`` and ``exit()``.
+</div>
+     </div>
+    </div>
+   </div>
+   <div class="wallapatta ">
+    <h1 class="title ">
      <a href="underline.html">
       Visualize data tables with variable length underlines
      </a>
@@ -54,10 +270,10 @@ ga('send', 'pageview');
     </h3>
     <div class="row ">
      <div class="wallapatta-main nine columns ">
-      <div id="wallapatta_0" class="article"><div id="wallapatta_1" class="section"><div class="content"><p id="wallapatta_2" class="paragraph"><span id="wallapatta_37" class="text">Underline doesn't take away space in a table or a list of data and by varying the length of the underline you can help readers scan much faster and get an idea of the data and its distribution without having to read each number.</span></p></div></div><div id="wallapatta_3" class="section"><h2 class="heading"><span id="wallapatta_4" class="block"><span id="wallapatta_38" class="text">List</span></span></h2><div class="content"><div id="wallapatta_7" class="section"><div class="content"><p id="wallapatta_8" class="paragraph"><span id="wallapatta_39" class="text">The simplest and often the best way to show a list of numbesr is to simply list them.</span></p></div></div><div id="wallapatta_9" class="section"><div class="content"><p id="wallapatta_10" class="paragraph"><span id="wallapatta_40" class="text">However, if the reader is to find the largest value she might have to go through each number, especially if all of them have the same number of digits. Sorting by the value will help, but it doesn't work if it's on a table that is sorted by some other figure.</span></p></div></div><div id="wallapatta_11" class="section"><div class="content"><p id="wallapatta_12" class="paragraph"><span id="wallapatta_41" class="text">The line height of the list in the above figure can be reduced but a similar height can be found in most software, including spreadsheets and popular BI.</span></p></div></div></div></div><div id="wallapatta_13" class="section"><h2 class="heading"><span id="wallapatta_14" class="block"><span id="wallapatta_42" class="text">Bars</span></span></h2><div class="content"><div id="wallapatta_17" class="section"><div class="content"><p id="wallapatta_18" class="paragraph"><span id="wallapatta_43" class="text">Adding a bar, like a horizontal bar chart, helps you clearly identify the largest value, as well as get an understanding of the distribution without having to go through the numbers.</span></p></div></div><div id="wallapatta_19" class="section"><div class="content"><p id="wallapatta_20" class="paragraph"><span id="wallapatta_44" class="text">But it's taking up a lot of space - at least another column width or more if you want to make it aesthetically pleasing. Another problem is that it might distract someone trying to read through the numbers; of course, choosing a more subtle color will help in that.</span></p></div></div><div id="wallapatta_21" class="section"><div class="content"><p id="wallapatta_22" class="paragraph"><span id="wallapatta_45" class="text">Displaying text over bars reduces the space, but it makes it lot harder to read the numbers.</span></p></div></div></div></div><div id="wallapatta_25" class="section"><h2 class="heading"><span id="wallapatta_26" class="block"><span id="wallapatta_46" class="text">Underline</span></span></h2><div class="content"><div id="wallapatta_29" class="section"><div class="content"><p id="wallapatta_30" class="paragraph"><span id="wallapatta_47" class="text">Decreasing the height of the bar to a few pixels, or even a single pixel can still give the same effect as bars. Also, you can place them underneath the numbers so that it doesn't take up an extra column.</span></p></div></div><div id="wallapatta_31" class="section"><div class="content"><p id="wallapatta_32" class="paragraph"><span id="wallapatta_48" class="text">Right aligning the bars takes away the cluttered feeling.  Again, choosing a more subtle color and/or reducing the thickness of the lines will help reduce the highlighting effect.</span></p></div></div><div id="wallapatta_35" class="section"><div class="content"><p id="wallapatta_36" class="paragraph"><span id="wallapatta_49" class="text">The scale could be linear or logarithmic. A small axis could be place at the column heading to stop readers from misinterpreting.</span></p></div></div></div></div></div>
+      <div id="wallapatta_10000" class="article"><div id="wallapatta_10001" class="section"><div class="content"><p id="wallapatta_10002" class="paragraph"><span id="wallapatta_10037" class="text">Underline doesn't take away space in a table or a list of data and by varying the length of the underline you can help readers scan much faster and get an idea of the data and its distribution without having to read each number.</span></p></div></div><div id="wallapatta_10003" class="section"><h2 class="heading"><span id="wallapatta_10004" class="block"><span id="wallapatta_10038" class="text">List</span></span></h2><div class="content"><div id="wallapatta_10007" class="section"><div class="content"><p id="wallapatta_10008" class="paragraph"><span id="wallapatta_10039" class="text">The simplest and often the best way to show a list of numbesr is to simply list them.</span></p></div></div><div id="wallapatta_10009" class="section"><div class="content"><p id="wallapatta_10010" class="paragraph"><span id="wallapatta_10040" class="text">However, if the reader is to find the largest value she might have to go through each number, especially if all of them have the same number of digits. Sorting by the value will help, but it doesn't work if it's on a table that is sorted by some other figure.</span></p></div></div><div id="wallapatta_10011" class="section"><div class="content"><p id="wallapatta_10012" class="paragraph"><span id="wallapatta_10041" class="text">The line height of the list in the above figure can be reduced but a similar height can be found in most software, including spreadsheets and popular BI.</span></p></div></div></div></div><div id="wallapatta_10013" class="section"><h2 class="heading"><span id="wallapatta_10014" class="block"><span id="wallapatta_10042" class="text">Bars</span></span></h2><div class="content"><div id="wallapatta_10017" class="section"><div class="content"><p id="wallapatta_10018" class="paragraph"><span id="wallapatta_10043" class="text">Adding a bar, like a horizontal bar chart, helps you clearly identify the largest value, as well as get an understanding of the distribution without having to go through the numbers.</span></p></div></div><div id="wallapatta_10019" class="section"><div class="content"><p id="wallapatta_10020" class="paragraph"><span id="wallapatta_10044" class="text">But it's taking up a lot of space - at least another column width or more if you want to make it aesthetically pleasing. Another problem is that it might distract someone trying to read through the numbers; of course, choosing a more subtle color will help in that.</span></p></div></div><div id="wallapatta_10021" class="section"><div class="content"><p id="wallapatta_10022" class="paragraph"><span id="wallapatta_10045" class="text">Displaying text over bars reduces the space, but it makes it lot harder to read the numbers.</span></p></div></div></div></div><div id="wallapatta_10025" class="section"><h2 class="heading"><span id="wallapatta_10026" class="block"><span id="wallapatta_10046" class="text">Underline</span></span></h2><div class="content"><div id="wallapatta_10029" class="section"><div class="content"><p id="wallapatta_10030" class="paragraph"><span id="wallapatta_10047" class="text">Decreasing the height of the bar to a few pixels, or even a single pixel can still give the same effect as bars. Also, you can place them underneath the numbers so that it doesn't take up an extra column.</span></p></div></div><div id="wallapatta_10031" class="section"><div class="content"><p id="wallapatta_10032" class="paragraph"><span id="wallapatta_10048" class="text">Right aligning the bars takes away the cluttered feeling.  Again, choosing a more subtle color and/or reducing the thickness of the lines will help reduce the highlighting effect.</span></p></div></div><div id="wallapatta_10035" class="section"><div class="content"><p id="wallapatta_10036" class="paragraph"><span id="wallapatta_10049" class="text">The scale could be linear or logarithmic. A small axis could be place at the column heading to stop readers from misinterpreting.</span></p></div></div></div></div></div>
      </div>
      <div class="wallapatta-sidebar three columns ">
-      <div id="wallapatta_5" class="sidenote"><div id="wallapatta_6" class="image-container"><img class="image" src="img/underline/list.png" alt="img/underline/list.png"></div></div><div id="wallapatta_15" class="sidenote"><div id="wallapatta_16" class="image-container"><img class="image" src="img/underline/bars.png" alt="img/underline/bars.png"></div></div><div id="wallapatta_23" class="sidenote"><div id="wallapatta_24" class="image-container"><img class="image" src="img/underline/bars-text.png" alt="img/underline/bars-text.png"></div></div><div id="wallapatta_27" class="sidenote"><div id="wallapatta_28" class="image-container"><img class="image" src="img/underline/underline-left.png" alt="img/underline/underline-left.png"></div></div><div id="wallapatta_33" class="sidenote"><div id="wallapatta_34" class="image-container"><img class="image" src="img/underline/underline.png" alt="img/underline/underline.png"></div></div>
+      <div id="wallapatta_10005" class="sidenote"><div id="wallapatta_10006" class="image-container"><img class="image" src="img/underline/list.png" alt="img/underline/list.png"></div></div><div id="wallapatta_10015" class="sidenote"><div id="wallapatta_10016" class="image-container"><img class="image" src="img/underline/bars.png" alt="img/underline/bars.png"></div></div><div id="wallapatta_10023" class="sidenote"><div id="wallapatta_10024" class="image-container"><img class="image" src="img/underline/bars-text.png" alt="img/underline/bars-text.png"></div></div><div id="wallapatta_10027" class="sidenote"><div id="wallapatta_10028" class="image-container"><img class="image" src="img/underline/underline-left.png" alt="img/underline/underline-left.png"></div></div><div id="wallapatta_10033" class="sidenote"><div id="wallapatta_10034" class="image-container"><img class="image" src="img/underline/underline.png" alt="img/underline/underline.png"></div></div>
      </div>
      <div style="display:none;">
       <div class='wallapatta-code'>Underline doesn't take away space in a table or a list of data and by varying the length of the underline you can help readers scan much faster and get an idea of the data and its distribution without having to read each number.
