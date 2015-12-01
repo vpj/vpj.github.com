@@ -45,283 +45,6 @@ ga('send', 'pageview');
    </div>
    <div class="wallapatta ">
     <h1 class="title ">
-     <a href="wallapatta.html">
-      Codename: Wallapatta
-     </a>
-    </h1>
-    <h3 class="date ">
-     May 18, 2015
-    </h3>
-    <div class="row ">
-     <div class="wallapatta-main nine columns ">
-      <div id="wallapatta_0" class="article"><div id="wallapatta_1" class="section"><div class="content"><p id="wallapatta_2" class="paragraph"><span id="wallapatta_81" class="text">I just started moving my blog from </span><a id="wallapatta_82" class="link" href="http://svbtle.com">Svbtle</a><span id="wallapatta_83" class="text"> to a static blog generated that I created. It is based on </span><a id="wallapatta_84" class="link" href="http://vpj.github.io/wallapatta/introduction.html">Wallapatta</a><span id="wallapatta_85" class="text">. I wanted to get into svbtle when </span><a id="wallapatta_86" class="link" href="http://dcurt.is/codename-svbtle">Dustin started it</a><span id="wallapatta_87" class="text">, and got invite a little before they opened it to the public. And it's sad to part ways.</span></p></div></div><div id="wallapatta_6" class="section"><div class="content"><p id="wallapatta_7" class="paragraph"><span id="wallapatta_93" class="text">Wallapatta is a </span><a id="wallapatta_94" class="link" href="http://en.wikipedia.org/wiki/Markdown">Markdown</a><span id="wallapatta_95" class="text"> like syntax that can create documents with layouts inspired by handouts of Edward R. Tufte</span><sup id="wallapatta_96" class="superScript"><span id="wallapatta_97" class="text">1</span></sup><span id="wallapatta_98" class="text">. We created it to use for documents. The two great things about Wallapatta is that it creates documents with </span><strong id="wallapatta_99" class="bold"><span id="wallapatta_100" class="text">sidenotes</span></strong><span id="wallapatta_101" class="text"> and </span><strong id="wallapatta_102" class="bold"><span id="wallapatta_103" class="text">create print frindly documents</span></strong><span id="wallapatta_104" class="text"> - </span><a id="wallapatta_105" class="link" href="http://vpj.github.io/wallapatta/introduction.html">Wallapatta editor</a><span id="wallapatta_106" class="text"> creates print layouts with intelligent page breaks by trying not to place breaks at middle of content like most word processing software do.</span></p></div></div><div id="wallapatta_11" class="section"><div class="content"><p id="wallapatta_12" class="paragraph"><span id="wallapatta_111" class="text">I built in a simple blog generator into Wallapatta, for personal use. But it's super easy for anyone who wants to give it a go.</span></p></div></div><div id="wallapatta_13" class="section"><h3 class="heading"><span id="wallapatta_14" class="block"><span id="wallapatta_112" class="text">How to start a Wallapatta blog?</span></span></h3><div class="content"><div id="wallapatta_17" class="section"><div class="content"><p id="wallapatta_18" class="paragraph"><span id="wallapatta_113" class="text">It's pretty easy.</span></p></div></div><ol id="wallapatta_19" class="list"><li id="wallapatta_20" class="list-item"><span id="wallapatta_21" class="block"><strong id="wallapatta_114" class="bold"><span id="wallapatta_115" class="text">Install </span><a id="wallapatta_116" class="link" href="https://nodejs.org/">Node.js</a></strong></span><div id="wallapatta_22" class="section"><div class="content"><p id="wallapatta_23" class="paragraph"><span id="wallapatta_117" class="text">NPM usually comes with Node.js. Visit </span><a id="wallapatta_118" class="link" href="https://nodejs.org/">https://nodejs.org/</a><span id="wallapatta_119" class="text"> and see installation instructions. It's usually a download and install, unless you want it installed through a package manager like </span><code id="wallapatta_120" class="code"><span id="wallapatta_121" class="text">brew</span></code><span id="wallapatta_122" class="text">.</span></p></div></div></li><li id="wallapatta_24" class="list-item"><span id="wallapatta_25" class="block"><strong id="wallapatta_123" class="bold"><span id="wallapatta_124" class="text">Install </span><a id="wallapatta_125" class="link" href="https://www.npmjs.com/package/wallapatta">Wallapatta node odule</a></strong></span><div id="wallapatta_26" class="section"><div class="content"><p id="wallapatta_27" class="paragraph"><span id="wallapatta_126" class="text">Run the following command in command line.</span></p></div></div><pre id="wallapatta_28" class="codeBlock"><code class="nohighlight">npm install wallapatta -g</code></pre><div id="wallapatta_29" class="section"><div class="content"><p id="wallapatta_30" class="paragraph"><span id="wallapatta_127" class="text">That's it and you have wallapatta installed.</span></p></div></div></li><li id="wallapatta_31" class="list-item"><span id="wallapatta_32" class="block"><strong id="wallapatta_128" class="bold"><span id="wallapatta_129" class="text">Fork the </span><a id="wallapatta_130" class="link" href="https://github.com/vpj/wallapatta-blog-boilerplate">boilerplate</a></strong></span><div id="wallapatta_33" class="section"><div class="content"><p id="wallapatta_34" class="paragraph"><span id="wallapatta_131" class="text">Make a fork of the git repositors on github: </span><a id="wallapatta_132" class="link" href="https://github.com/vpj/wallapatta-blog-boilerplate">https://github.com/vpj/wallapatta-blog-boilerplate</a></p></div></div><div id="wallapatta_35" class="section"><div class="content"><p id="wallapatta_36" class="paragraph"><span id="wallapatta_133" class="text">This repo contains this blog post, and 3 empty blog posts, a configuration file and templates for blog.</span></p></div></div><div id="wallapatta_37" class="section"><div class="content"><p id="wallapatta_38" class="paragraph"><span id="wallapatta_134" class="text">Edit </span><code id="wallapatta_135" class="code"><span id="wallapatta_136" class="text">templates/post.coffee</span></code><span id="wallapatta_137" class="text"> to change the post template and </span><code id="wallapatta_138" class="code"><span id="wallapatta_139" class="text">templates/blog.coffee</span></code><span id="wallapatta_140" class="text"> to change the blog template. Compile these </span><a id="wallapatta_141" class="link" href="http://coffeescript.org/">coffeescript</a><span id="wallapatta_142" class="text"> code to javascript by running </span><code id="wallapatta_143" class="code"><span id="wallapatta_144" class="text">coffee -c *</span></code><span id="wallapatta_145" class="text">.</span></p></div></div><div id="wallapatta_39" class="section"><div class="content"><p id="wallapatta_40" class="paragraph"><span id="wallapatta_146" class="text">You will have to change the name of the blog, which is "Varuna Jayasiri" in the two tamplate files. And also the Google Analytics code.</span></p></div></div><div id="wallapatta_41" class="section"><div class="content"><p id="wallapatta_42" class="paragraph"><span id="wallapatta_147" class="text">Change </span><code id="wallapatta_148" class="code"><span id="wallapatta_149" class="text">blog.yaml</span></code><span id="wallapatta_150" class="text"> to edit blog configurations like the order of posts, post titles, dates, etc.</span></p></div></div></li><li id="wallapatta_43" class="list-item"><span id="wallapatta_44" class="block"><strong id="wallapatta_151" class="bold"><span id="wallapatta_152" class="text">Generate the blog</span></strong></span><pre id="wallapatta_45" class="codeBlock"><code class="nohighlight">wallapatta --blog blog.yaml --output [output_directory] --static</code></pre><div id="wallapatta_46" class="section"><div class="content"><p id="wallapatta_47" class="paragraph"><span id="wallapatta_153" class="text">The above command will create the html files on the </span><code id="wallapatta_154" class="code"><span id="wallapatta_155" class="text">output_directory</span></code><span id="wallapatta_156" class="text"> provided. </span><code id="wallapatta_157" class="code"><span id="wallapatta_158" class="text">--static</span></code><span id="wallapatta_159" class="text"> specifies that it should copy Wallapatta rendering tools to the folder. (You can omit this if you change the templates to get these from a CDN).</span></p></div></div><div id="wallapatta_48" class="section"><div class="content"><p id="wallapatta_49" class="paragraph"><code id="wallapatta_160" class="code"><span id="wallapatta_161" class="text">blog.css</span></code><span id="wallapatta_162" class="text"> file on the boilerplate repository contains some css. This file is used in default templates. So you need to copy them to the </span><code id="wallapatta_163" class="code"><span id="wallapatta_164" class="text">output_directory</span></code><span id="wallapatta_165" class="text">.</span></p></div></div></li><li id="wallapatta_50" class="list-item"><span id="wallapatta_51" class="block"><strong id="wallapatta_166" class="bold"><span id="wallapatta_167" class="text">That is it!</span></strong></span></li></ol></div></div><div id="wallapatta_52" class="section"><h3 class="heading"><span id="wallapatta_53" class="block"><span id="wallapatta_168" class="text">What is Wallapatta syntax?</span></span></h3><div class="content"><div id="wallapatta_54" class="section"><div class="content"><p id="wallapatta_55" class="paragraph"><span id="wallapatta_169" class="text">It looks like this.</span></p></div></div><pre id="wallapatta_56" class="codeBlock"><code class="nohighlight">###Heading 1
-
- Introduction to **Heading 1**
-
- * Point one
-
-  Description about point one
-
- * Point two
-
- ####Subtopic
-
-  Subtopic content
-
- This belongs to Heading 1</code></pre><div id="wallapatta_75" class="section"><div class="content"><p id="wallapatta_76" class="paragraph"><span id="wallapatta_180" class="text">It uses indentation to identify what belong where. Indentation is required for specifying content for components like lists, code blocks, special blocks, etc as well. So it's more of a programmer friendly syntax. Indentation helps while working with large documents because you can do stuff like </span><strong id="wallapatta_181" class="bold"><span id="wallapatta_182" class="text">code folding</span></strong><span id="wallapatta_183" class="text">.</span></p></div></div><div id="wallapatta_77" class="section"><div class="content"><p id="wallapatta_78" class="paragraph"><span id="wallapatta_184" class="text">We've changed some of the syntax from Markdown; for instance, </span><code id="wallapatta_185" class="code"><span id="wallapatta_186" class="text">&lt;&lt;</span></code><span id="wallapatta_187" class="text"> and </span><code id="wallapatta_188" class="code"><span id="wallapatta_189" class="text">&gt;&gt;</span></code><span id="wallapatta_190" class="text"> are used for links instead of </span><code id="wallapatta_191" class="code"><span id="wallapatta_192" class="text">[]()</span></code><span id="wallapatta_193" class="text">, because we felt that it's a little more intuitive due to its resemblence with HTML tags.</span></p></div></div><div id="wallapatta_79" class="section"><div class="content"><p id="wallapatta_80" class="paragraph"><a id="wallapatta_194" class="link" href="http://vpj.github.io/wallapatta/reference.html">Read the Wallapatta reference</a><span id="wallapatta_195" class="text"> for a detailed description on each component, including examples for usage.</span></p></div></div></div></div></div>
-     </div>
-     <div class="wallapatta-sidebar three columns ">
-      <div id="wallapatta_3" class="sidenote"><div id="wallapatta_4" class="section"><div class="content"><p id="wallapatta_5" class="paragraph"><span id="wallapatta_88" class="text">"Wallapatta" is a </span><a id="wallapatta_89" class="link" href="http://www.dwc.gov.lk/index.php/en/wildlife-news1/228-walla-patta-gyrinops-walla-the-tree-to-preserv">tree in Sri Lanka</a><span id="wallapatta_90" class="text">, that contains </span><a id="wallapatta_91" class="link" href="http://en.wikipedia.org/wiki/Agarwood">Agarwood</a><span id="wallapatta_92" class="text">.</span></p></div></div></div><div id="wallapatta_8" class="sidenote"><div id="wallapatta_9" class="section"><div class="content"><p id="wallapatta_10" class="paragraph"><sup id="wallapatta_107" class="superScript"><span id="wallapatta_108" class="text">1</span></sup><span id="wallapatta_109" class="text"> </span><a id="wallapatta_110" class="link" href="http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000hB">Book design: advice and examples - edwardtufte.com</a></p></div></div></div><div id="wallapatta_15" class="sidenote"><div id="wallapatta_16" class="html"><iframe src="https://ghbtns.com/github-btn.html?user=vpj&amp;repo=wallapatta&amp;type=star&amp;count=true&amp;size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
-
-</div></div><div id="wallapatta_57" class="sidenote"><div id="wallapatta_58" class="section"><h3 class="heading"><span id="wallapatta_59" class="block"><span id="wallapatta_170" class="text">Heading 1</span></span></h3><div class="content"><div id="wallapatta_60" class="section"><div class="content"><p id="wallapatta_61" class="paragraph"><span id="wallapatta_171" class="text">Introduction to </span><strong id="wallapatta_172" class="bold"><span id="wallapatta_173" class="text">Heading 1</span></strong></p></div></div><ul id="wallapatta_62" class="list"><li id="wallapatta_63" class="list-item"><span id="wallapatta_64" class="block"><span id="wallapatta_174" class="text">Point one</span></span><div id="wallapatta_65" class="section"><div class="content"><p id="wallapatta_66" class="paragraph"><span id="wallapatta_175" class="text">Description about point one</span></p></div></div></li><li id="wallapatta_67" class="list-item"><span id="wallapatta_68" class="block"><span id="wallapatta_176" class="text">Point two</span></span></li></ul><div id="wallapatta_69" class="section"><h4 class="heading"><span id="wallapatta_70" class="block"><span id="wallapatta_177" class="text">Subtopic</span></span></h4><div class="content"><div id="wallapatta_71" class="section"><div class="content"><p id="wallapatta_72" class="paragraph"><span id="wallapatta_178" class="text">Subtopic content</span></p></div></div></div></div><div id="wallapatta_73" class="section"><div class="content"><p id="wallapatta_74" class="paragraph"><span id="wallapatta_179" class="text">This belongs to Heading 1</span></p></div></div></div></div></div>
-     </div>
-     <div style="display:none;">
-      <div class='wallapatta-code'>I just started moving my blog from &lt;&lt;http://svbtle.com(Svbtle)&gt;&gt; to a static blog generated that I created. It is based on &lt;&lt;http://vpj.github.io/wallapatta/introduction.html(Wallapatta)&gt;&gt;. I wanted to get into svbtle when &lt;&lt;http://dcurt.is/codename-svbtle(Dustin started it)&gt;&gt;, and got invite a little before they opened it to the public. And it's sad to part ways.
-
-&gt;&gt;&gt;
- "Wallapatta" is a &lt;&lt;http://www.dwc.gov.lk/index.php/en/wildlife-news1/228-walla-patta-gyrinops-walla-the-tree-to-preserv(tree in Sri Lanka)&gt;&gt;, that contains &lt;&lt;http://en.wikipedia.org/wiki/Agarwood(Agarwood)&gt;&gt;.
-
-
-
-Wallapatta is a
-&lt;&lt;http://en.wikipedia.org/wiki/Markdown(Markdown)&gt;&gt; like syntax that can create documents with layouts
-inspired by handouts of Edward R. Tufte^^1^^. We created it to use for documents. The two great things about Wallapatta is that it creates documents with **sidenotes** and **create print frindly documents** - &lt;&lt;http://vpj.github.io/wallapatta/introduction.html(Wallapatta editor)&gt;&gt; creates print layouts with intelligent page breaks by trying not to place breaks at middle of content like most word processing software do.
-
- &gt;&gt;&gt;
-  ^^1^^ &lt;&lt;http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000hB
-  (Book design: advice and examples - edwardtufte.com)&gt;&gt;
-
-I built in a simple blog generator into Wallapatta, for personal use. But it's super easy for anyone who wants to give it a go.
-
-###How to start a Wallapatta blog?
-
- &gt;&gt;&gt;
-  &lt;&lt;&lt;
-   &lt;iframe src="https://ghbtns.com/github-btn.html?user=vpj&repo=wallapatta&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px"&gt;&lt;/iframe&gt;
-
-
- It's pretty easy.
-
- - **Install &lt;&lt;https://nodejs.org/(Node.js&gt;&gt;
-
-  NPM usually comes with Node.js. Visit &lt;&lt;https://nodejs.org/&gt;&gt; and see installation instructions. It's usually a download and install, unless you want it installed through a package manager like ``brew``.
-
- - **Install &lt;&lt;https://www.npmjs.com/package/wallapatta(Wallapatta node odule&gt;&gt;
-
-  Run the following command in command line.
-
-  ```
-   npm install wallapatta -g
-
-  That's it and you have wallapatta installed.
-
- - **Fork the &lt;&lt;https://github.com/vpj/wallapatta-blog-boilerplate(boilerplate)&gt;&gt;
-
-  Make a fork of the git repositors on github: &lt;&lt;https://github.com/vpj/wallapatta-blog-boilerplate&gt;&gt;
-
-  This repo contains this blog post, and 3 empty blog posts, a configuration file and templates for blog.
-
-  Edit ``templates/post.coffee`` to change the post template and ``templates/blog.coffee`` to change the blog template. Compile these &lt;&lt;http://coffeescript.org/(coffeescript&gt;&gt; code to javascript by running ``coffee -c *``.
-
-  You will have to change the name of the blog, which is "Varuna Jayasiri" in the two tamplate files. And also the Google Analytics code.
-
-  Change ``blog.yaml`` to edit blog configurations like the order of posts, post titles, dates, etc.
-
- - **Generate the blog
-
-  ```
-   wallapatta --blog blog.yaml --output [output_directory] --static
-
-  The above command will create the html files on the ``output_directory`` provided. ``--static`` specifies that it should copy Wallapatta rendering tools to the folder. (You can omit this if you change the templates to get these from a CDN).
-
-  ``blog.css`` file on the boilerplate repository contains some css. This file is used in default templates. So you need to copy them to the ``output_directory``.
-
- - **That is it!
-
-
-###What is Wallapatta syntax?
-
- It looks like this.
-
- ```
-  ###Heading 1
-
-   Introduction to **Heading 1**
-
-   * Point one
-
-    Description about point one
-
-   * Point two
-
-   ####Subtopic
-
-    Subtopic content
-
-   This belongs to Heading 1
-
- &gt;&gt;&gt;
-  ###Heading 1
-
-   Introduction to **Heading 1**
-
-   * Point one
-
-    Description about point one
-
-   * Point two
-
-   ####Subtopic
-
-    Subtopic content
-
-   This belongs to Heading 1
-
- It uses indentation to identify what belong where. Indentation is required for specifying content for components like lists, code blocks, special blocks, etc as well. So it's more of a programmer friendly syntax. Indentation helps while working with large documents because you can do stuff like **code folding**.
-
- We've changed some of the syntax from Markdown; for instance, ``&lt;&lt;`` and ``&gt;&gt;`` are used for links instead of ``[]()``, because we felt that it's a little more
- intuitive due to its resemblence with HTML tags.
-
- &lt;&lt;http://vpj.github.io/wallapatta/reference.html(Read the Wallapatta reference)&gt;&gt; for a detailed description on each component, including examples for usage.
-</div>
-     </div>
-    </div>
-   </div>
-   <div class="wallapatta ">
-    <h1 class="title ">
-     <a href="node_shm.html">
-      Shared memory with Node.js
-     </a>
-    </h1>
-    <h3 class="date ">
-     May 13, 2015
-    </h3>
-    <div class="row ">
-     <div class="wallapatta-main nine columns ">
-      <div id="wallapatta_10000" class="article"><div id="wallapatta_10001" class="section"><div class="content"><p id="wallapatta_10002" class="paragraph"><span id="wallapatta_10092" class="text">This is more like a tutorial on writing a simple node.js add-on to share memory among node.js processes.</span></p></div></div><div id="wallapatta_10003" class="section"><div class="content"><p id="wallapatta_10004" class="paragraph"><span id="wallapatta_10093" class="text">One of the limitations of node.js/io.js is that they are single threaded. Only way to use multiple cores in the processor is to run multiple processes</span><sup id="wallapatta_10094" class="superScript"><span id="wallapatta_10095" class="text">1</span></sup><span id="wallapatta_10096" class="text">. But then you are working on different memory spaces. So it doesn't help if you want multiple processes working on  the same memory block. This is required in memory intensive tasks that cannot be efficiently sharded.</span></p></div></div><div id="wallapatta_10008" class="section"><div class="content"><p id="wallapatta_10009" class="paragraph"><span id="wallapatta_10102" class="text">All the source code is available in </span><a id="wallapatta_10103" class="link" href="https://github.com/vpj/node_shm">Github</a><span id="wallapatta_10104" class="text">.</span></p></div></div><div id="wallapatta_10010" class="section"><h1 class="heading"><span id="wallapatta_10011" class="block"><span id="wallapatta_10105" class="text">Node addon</span></span></h1><div class="content"><div id="wallapatta_10012" class="section"><div class="content"><p id="wallapatta_10013" class="paragraph"><span id="wallapatta_10106" class="text">You need </span><code id="wallapatta_10107" class="code"><span id="wallapatta_10108" class="text">node-gyp</span></code><span id="wallapatta_10109" class="text"> installed to build the node module.</span></p></div></div><pre id="wallapatta_10014" class="codeBlock"><code class="nohighlight">npm install node-gyp -g</code></pre><div id="wallapatta_10015" class="section"><div class="content"><p id="wallapatta_10016" class="paragraph"><span id="wallapatta_10110" class="text">I think the node.js version matters as the addon api has changed. I was working on node </span><em id="wallapatta_10111" class="italics"><span id="wallapatta_10112" class="text">0.12.2</span></em><span id="wallapatta_10113" class="text">, when I tested this out.</span></p></div></div><div id="wallapatta_10017" class="section"><div class="content"><p id="wallapatta_10018" class="paragraph"><code id="wallapatta_10114" class="code"><span id="wallapatta_10115" class="text">binding.gyp</span></code><span id="wallapatta_10116" class="text"> is required by node-gyp to build the addon.</span></p></div></div><div id="wallapatta_10019" class="section"><div class="content"><p id="wallapatta_10020" class="paragraph"><span id="wallapatta_10117" class="text">Then comes </span><code id="wallapatta_10118" class="code"><span id="wallapatta_10119" class="text">shm_addon.cpp</span></code><span id="wallapatta_10120" class="text">. This is a very basic addon that has one export </span><code id="wallapatta_10121" class="code"><span id="wallapatta_10122" class="text">createSHM</span></code><span id="wallapatta_10123" class="text">, which creates a shared memory block of 800,000 bytes (attaches if exists) with read &amp; write permission to all users</span><sup id="wallapatta_10124" class="superScript"><span id="wallapatta_10125" class="text">2</span></sup><span id="wallapatta_10126" class="text">.</span></p></div></div><div id="wallapatta_10024" class="section"><div class="content"><p id="wallapatta_10025" class="paragraph"><span id="wallapatta_10140" class="text">Shared memory is allocated with </span><code id="wallapatta_10141" class="code"><span id="wallapatta_10142" class="text">shmget</span></code><span id="wallapatta_10143" class="text"> and attached to the address space of the process with </span><code id="wallapatta_10144" class="code"><span id="wallapatta_10145" class="text">shmat</span></code><span id="wallapatta_10146" class="text">.</span></p></div></div><pre id="wallapatta_10026" class="codeBlock"><code class="cpp">shmid = shmget( key, MEM, IPC_CREAT | <span class="hljs-number">0666</span> );
-data = (<span class="hljs-keyword">char</span> *)shmat( shmid, <span class="hljs-literal">NULL</span>, <span class="hljs-number">0</span> );</code></pre><div id="wallapatta_10027" class="section"><div class="content"><p id="wallapatta_10028" class="paragraph"><span id="wallapatta_10147" class="text">It keeps a pointer to the memory block and returns it if </span><code id="wallapatta_10148" class="code"><span id="wallapatta_10149" class="text">createSHM</span></code><span id="wallapatta_10150" class="text"> is called twice by the same node.js program</span><sup id="wallapatta_10151" class="superScript"><span id="wallapatta_10152" class="text">3</span></sup><span id="wallapatta_10153" class="text">. </span><code id="wallapatta_10154" class="code"><span id="wallapatta_10155" class="text">createSHM</span></code><span id="wallapatta_10156" class="text"> returns an </span><code id="wallapatta_10157" class="code"><span id="wallapatta_10158" class="text">ArrayBuffer</span></code><span id="wallapatta_10159" class="text">, initialized with the pointer to the shared memory.</span></p></div></div><pre id="wallapatta_10032" class="codeBlock"><code class="cpp">Local&lt;ArrayBuffer&gt; buffer = ArrayBuffer::New(isolate, (<span class="hljs-keyword">void</span> *)data, MEM);</code></pre><div id="wallapatta_10033" class="section"><div class="content"><p id="wallapatta_10034" class="paragraph"><span id="wallapatta_10174" class="text">The node module </span><code id="wallapatta_10175" class="code"><span id="wallapatta_10176" class="text">shm_addon</span></code><span id="wallapatta_10177" class="text"> is built with node-gyp with following commands.</span></p></div></div><pre id="wallapatta_10035" class="codeBlock"><code class="nohighlight">node-gyp configure
-node-gyp build</code></pre><div id="wallapatta_10036" class="section"><div class="content"><p id="wallapatta_10037" class="paragraph"><span id="wallapatta_10178" class="text">The node addon will be created in </span><code id="wallapatta_10179" class="code"><span id="wallapatta_10180" class="text">build/Release/shm_addon.node</span></code><span id="wallapatta_10181" class="text">.</span></p></div></div></div></div><div id="wallapatta_10038" class="section"><h1 class="heading"><span id="wallapatta_10039" class="block"><span id="wallapatta_10182" class="text">Parent and child programs</span></span></h1><div class="content"><div id="wallapatta_10040" class="section"><div class="content"><p id="wallapatta_10041" class="paragraph"><span id="wallapatta_10183" class="text">This is a simple counting problem to illustrate how shared memory can be used. We will populate the array of 200,000 32-bit integers with the sequence </span><code id="wallapatta_10184" class="code"><span id="wallapatta_10185" class="text">0,1,2,...998,999,0,1,2,..998,999,0,1,2,...</span></code><span id="wallapatta_10186" class="text">. So there are 200 positions with each integer between 0 and 999. Each of the child programs (workers) will count the number of occurrences of each integer between 0 and 999 by inefficiently traversing the array a 1,000 times.</span></p></div></div><div id="wallapatta_10045" class="section"><div class="content"><p id="wallapatta_10046" class="paragraph"><code id="wallapatta_10190" class="code"><span id="wallapatta_10191" class="text">spawn.coffee</span></code><span id="wallapatta_10192" class="text"> is the parent program that starts the child processes. </span><code id="wallapatta_10193" class="code"><span id="wallapatta_10194" class="text">child.coffee</span></code><span id="wallapatta_10195" class="text"> is the child program.</span></p></div></div><div id="wallapatta_10047" class="section"><div class="content"><p id="wallapatta_10048" class="paragraph"><span id="wallapatta_10196" class="text">Shared memory is attached by parent program and child program by calling the node addon.</span></p></div></div><pre id="wallapatta_10049" class="codeBlock"><code class="coffee">shm = <span class="hljs-built_in">require</span> <span class="hljs-string">'./build/Release/shm_addon'</span>
-a = <span class="hljs-keyword">new</span> Int32Array shm.createSHM()</code></pre><div id="wallapatta_10050" class="section"><div class="content"><p id="wallapatta_10051" class="paragraph"><span id="wallapatta_10197" class="text">We are calculating the time taken for the child processes to count. Time it takes for processes to get spawn and exit is excluded. Therefore the child processes start counting when they receive something in the </span><em id="wallapatta_10198" class="italics"><span id="wallapatta_10199" class="text">standard input</span></em><span id="wallapatta_10200" class="text">. Number of child processes can be set with </span><code id="wallapatta_10201" class="code"><span id="wallapatta_10202" class="text">CHILDREN</span></code><span id="wallapatta_10203" class="text">.</span></p></div></div><pre id="wallapatta_10052" class="codeBlock"><code class="coffee">process.stdin.<span class="hljs-literal">on</span> <span class="hljs-string">'data'</span>, <span class="hljs-function"><span class="hljs-params">(msg)</span> -&gt;</span>
-start()</code></pre><div id="wallapatta_10053" class="section"><div class="content"><p id="wallapatta_10054" class="paragraph"><span id="wallapatta_10204" class="text">Running </span><code id="wallapatta_10205" class="code"><span id="wallapatta_10206" class="text">coffee spawn.coffee</span></code><span id="wallapatta_10207" class="text"> will start processes and do the counting and show the time it took to complete.</span></p></div></div><div id="wallapatta_10055" class="section"><div class="content"><p id="wallapatta_10056" class="paragraph"><span id="wallapatta_10208" class="text">You can take a look at shared memory allocated by running command </span><code id="wallapatta_10209" class="code"><span id="wallapatta_10210" class="text">ipcs</span></code><span id="wallapatta_10211" class="text">.</span></p></div></div><pre id="wallapatta_10057" class="codeBlock"><code class="nohighlight">IPC status from &lt;running system&gt; as of Tue Apr 14 13:58:16 IST 2015
-T     ID     KEY        MODE       OWNER    GROUP
-Shared Memory:
-m  65536 0x000019a5 --rw-rw-rw- varunajayasiri    staff
-m  65537 0x000019a4 --rw-rw-rw- varunajayasiri    staff
-m  65538 0x000019a2 --rw-rw-rw- varunajayasiri    staff</code></pre></div></div><div id="wallapatta_10058" class="section"><h1 class="heading"><span id="wallapatta_10059" class="block"><span id="wallapatta_10212" class="text">Results</span></span></h1><div class="content"><div id="wallapatta_10060" class="section"><div class="content"><p id="wallapatta_10061" class="paragraph"><code id="wallapatta_10213" class="code"><span id="wallapatta_10214" class="text">bench.coffee</span></code><span id="wallapatta_10215" class="text"> was used to find the time a single process takes to count.</span></p></div></div><div id="wallapatta_10062" class="section"><div class="content"><p id="wallapatta_10063" class="paragraph"><a id="wallapatta_10216" class="link" href="https://twitter.com/chethiyaa">@chethiyaa</a><span id="wallapatta_10217" class="text"> did some testing on a </span><strong id="wallapatta_10218" class="bold"><span id="wallapatta_10219" class="text">quad core i7</span></strong><span id="wallapatta_10220" class="text">.</span></p></div></div><table id="wallapatta_10064" class="table"><thead><tr><th colspan="1"><span id="wallapatta_10065" class="block"><span id="wallapatta_10221" class="text"># children</span></span></th><th colspan="1"><span id="wallapatta_10066" class="block"><span id="wallapatta_10222" class="text">single process (ms)</span></span></th><th colspan="2"><span id="wallapatta_10067" class="block"><span id="wallapatta_10223" class="text">multi process (ms)</span></span></th></tr></thead><tbody><tr><td colspan="1"><span id="wallapatta_10068" class="block"><span id="wallapatta_10224" class="text">1</span></span></td><td colspan="1"><span id="wallapatta_10069" class="block"><span id="wallapatta_10225" class="text">398</span></span></td><td colspan="2"><span id="wallapatta_10070" class="block"><span id="wallapatta_10226" class="text">430</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_10071" class="block"><span id="wallapatta_10227" class="text">2</span></span></td><td colspan="1"><span id="wallapatta_10072" class="block"><span id="wallapatta_10228" class="text">782</span></span></td><td colspan="2"><span id="wallapatta_10073" class="block"><span id="wallapatta_10229" class="text">394</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_10074" class="block"><span id="wallapatta_10230" class="text">4</span></span></td><td colspan="1"><span id="wallapatta_10075" class="block"><span id="wallapatta_10231" class="text">1626</span></span></td><td colspan="2"><span id="wallapatta_10076" class="block"><span id="wallapatta_10232" class="text">415</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_10077" class="block"><span id="wallapatta_10233" class="text">8</span></span></td><td colspan="1"><span id="wallapatta_10078" class="block"><span id="wallapatta_10234" class="text">3300</span></span></td><td colspan="2"><span id="wallapatta_10079" class="block"><span id="wallapatta_10235" class="text">799</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_10080" class="block"><span id="wallapatta_10236" class="text">16</span></span></td><td colspan="1"><span id="wallapatta_10081" class="block"><span id="wallapatta_10237" class="text">6285</span></span></td><td colspan="2"><span id="wallapatta_10082" class="block"><span id="wallapatta_10238" class="text">1594</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_10083" class="block"><span id="wallapatta_10239" class="text">32</span></span></td><td colspan="1"><span id="wallapatta_10084" class="block"></span></td><td colspan="2"><span id="wallapatta_10085" class="block"><span id="wallapatta_10240" class="text">3183</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_10086" class="block"><span id="wallapatta_10241" class="text">64</span></span></td><td colspan="1"><span id="wallapatta_10087" class="block"></span></td><td colspan="2"><span id="wallapatta_10088" class="block"><span id="wallapatta_10242" class="text">6372</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_10089" class="block"><span id="wallapatta_10243" class="text">128</span></span></td><td colspan="1"><span id="wallapatta_10090" class="block"></span></td><td colspan="2"><span id="wallapatta_10091" class="block"><span id="wallapatta_10244" class="text">13049</span></span></td></tr></tbody></table></div></div></div>
-     </div>
-     <div class="wallapatta-sidebar three columns ">
-      <div id="wallapatta_10005" class="sidenote"><div id="wallapatta_10006" class="section"><div class="content"><p id="wallapatta_10007" class="paragraph"><sup id="wallapatta_10097" class="superScript"><span id="wallapatta_10098" class="text">1</span></sup><span id="wallapatta_10099" class="text"> Node modules like </span><a id="wallapatta_10100" class="link" href="http://adambom.github.io/parallel.js/">parallel.js</a><span id="wallapatta_10101" class="text"> fork new processes when on node  and use web workers on browser.</span></p></div></div></div><div id="wallapatta_10021" class="sidenote"><div id="wallapatta_10022" class="section"><div class="content"><p id="wallapatta_10023" class="paragraph"><sup id="wallapatta_10127" class="superScript"><span id="wallapatta_10128" class="text">2</span></sup><span id="wallapatta_10129" class="text"> </span><code id="wallapatta_10130" class="code"><span id="wallapatta_10131" class="text">shmget</span></code><span id="wallapatta_10132" class="text"> (</span><a id="wallapatta_10133" class="link" href="http://man7.org/linux/man-pages/man2/shmget.2.html">documentation</a><span id="wallapatta_10134" class="text">) allocates shared memory and </span><code id="wallapatta_10135" class="code"><span id="wallapatta_10136" class="text">shmat</span></code><span id="wallapatta_10137" class="text"> (</span><a id="wallapatta_10138" class="link" href="http://man7.org/linux/man-pages/man2/shmat.2.html">documentation</a><span id="wallapatta_10139" class="text">) attaches the shared memory block.</span></p></div></div></div><div id="wallapatta_10029" class="sidenote"><div id="wallapatta_10030" class="section"><div class="content"><p id="wallapatta_10031" class="paragraph"><sup id="wallapatta_10160" class="superScript"><span id="wallapatta_10161" class="text">3</span></sup><span id="wallapatta_10162" class="text"> Since the </span><code id="wallapatta_10163" class="code"><span id="wallapatta_10164" class="text">ArrayBuffer</span></code><span id="wallapatta_10165" class="text"> is constructed with a memory pointer, it will be </span><code id="wallapatta_10166" class="code"><span id="wallapatta_10167" class="text">external</span></code><span id="wallapatta_10168" class="text">. That is the memory will not be garbage collected and the addon will have to free the memory. Here's the </span><strong id="wallapatta_10169" class="bold"><span id="wallapatta_10170" class="text">v8</span></strong><span id="wallapatta_10171" class="text"> documentation to </span><a id="wallapatta_10172" class="link" href="http://bespin.cz/~ondras/html/classv8_1_1ArrayBuffer.html">ArrayBuffer</a><span id="wallapatta_10173" class="text">.</span></p></div></div></div><div id="wallapatta_10042" class="sidenote"><div id="wallapatta_10043" class="section"><div class="content"><p id="wallapatta_10044" class="paragraph"><span id="wallapatta_10187" class="text">Shared memory limits are quite small by default. So trying to allocate a lot of shared memory will give errors. This </span><a id="wallapatta_10188" class="link" href="http://seriousbirder.com/blogs/linux-understanding-shmmax-and-shmall-settings/">article</a><span id="wallapatta_10189" class="text"> gives details on changing and viewing these settings.</span></p></div></div></div>
-     </div>
-     <div style="display:none;">
-      <div class='wallapatta-code'>
-This is more like a tutorial on writing a simple node.js add-on to share memory among node.js processes.
-
-One of the limitations of node.js/io.js is that they are single threaded. Only way to use multiple cores in the processor is to run multiple processes^^1^^. But then you are working on different memory spaces. So it doesn't help if you want multiple processes working on  the same memory block. This is required in memory intensive tasks that cannot be efficiently sharded.
-
-&gt;&gt;&gt;
- ^^1^^ Node modules like &lt;&lt;http://adambom.github.io/parallel.js/(parallel.js)&gt;&gt; fork new processes when on node  and use web workers on browser.
-
-All the source code is available in &lt;&lt;https://github.com/vpj/node_shm(Github)&gt;&gt;.
-
-#Node addon
-
- You need ``node-gyp`` installed to build the node module.
-
- ```
-  npm install node-gyp -g
-
- I think the node.js version matters as the addon api has changed. I was working on node --0.12.2--, when I tested this out.
-
- ``binding.gyp`` is required by node-gyp to build the addon.
-
- Then comes ``shm_addon.cpp``. This is a very basic addon that has one export ``createSHM``, which creates a shared memory block of 800,000 bytes (attaches if exists) with read & write permission to all users^^2^^.
-
- &gt;&gt;&gt;
-  ^^2^^ ``shmget`` (&lt;&lt;http://man7.org/linux/man-pages/man2/shmget.2.html(documentation)&gt;&gt;) allocates shared memory and ``shmat`` (&lt;&lt;http://man7.org/linux/man-pages/man2/shmat.2.html(documentation)&gt;&gt;) attaches the shared memory block.
-
-
- Shared memory is allocated with ``shmget`` and attached to the address space of the process with ``shmat``.
-
- ```cpp
-  shmid = shmget( key, MEM, IPC_CREAT | 0666 );
-  data = (char *)shmat( shmid, NULL, 0 );
-
- It keeps a pointer to the memory block and returns it if ``createSHM`` is called twice by the same node.js program^^3^^. ``createSHM`` returns an ``ArrayBuffer``, initialized with the pointer to the shared memory.
-
- &gt;&gt;&gt;
-  ^^3^^ Since the ``ArrayBuffer`` is constructed with a memory pointer, it will be ``external``. That is the memory will not be garbage collected and the addon will have to free the memory. Here's the **v8** documentation to &lt;&lt;http://bespin.cz/~ondras/html/classv8_1_1ArrayBuffer.html(ArrayBuffer)&gt;&gt;.
-
- ```cpp
-  Local&lt;ArrayBuffer&gt; buffer = ArrayBuffer::New(isolate, (void *)data, MEM);
-
- The node module ``shm_addon`` is built with node-gyp with following commands.
-
- ```
-  node-gyp configure
-  node-gyp build
-
- The node addon will be created in ``build/Release/shm_addon.node``.
-
-#Parent and child programs
-
- This is a simple counting problem to illustrate how shared memory can be used. We will populate the array of 200,000 32-bit integers with the sequence
- ``0,1,2,...998,999,0,1,2,..998,999,0,1,2,...``. So there are 200 positions with each integer between 0 and 999. Each of the child programs (workers) will count the number of occurrences of each integer between 0 and 999 by inefficiently traversing the array a 1,000 times.
-
- &gt;&gt;&gt;
-  Shared memory limits are quite small by default. So trying to allocate a lot of shared memory will give errors. This &lt;&lt;http://seriousbirder.com/blogs/linux-understanding-shmmax-and-shmall-settings/(article)&gt;&gt; gives details on changing and viewing these settings.
-
-
- ``spawn.coffee`` is the parent program that starts the child processes. ``child.coffee`` is the child program.
-
- Shared memory is attached by parent program and child program by calling the node addon.
-
- ```coffee
-  shm = require './build/Release/shm_addon'
-  a = new Int32Array shm.createSHM()
-
- We are calculating the time taken for the child processes to count. Time it takes for processes to get spawn and exit is excluded. Therefore the child processes start counting when they receive something in the --standard input--. Number of child processes can be set with ``CHILDREN``.
-
- ```coffee
-  process.stdin.on 'data', (msg) -&gt;
-  start()
-
- Running ``coffee spawn.coffee`` will start processes and do the counting and show the time it took to complete.
-
- You can take a look at shared memory allocated by running command ``ipcs``.
-
- ```
-  IPC status from &lt;running system&gt; as of Tue Apr 14 13:58:16 IST 2015
-  T     ID     KEY        MODE       OWNER    GROUP
-  Shared Memory:
-  m  65536 0x000019a5 --rw-rw-rw- varunajayasiri    staff
-  m  65537 0x000019a4 --rw-rw-rw- varunajayasiri    staff
-  m  65538 0x000019a2 --rw-rw-rw- varunajayasiri    staff
-
-#Results
-
- ``bench.coffee`` was used to find the time a single process takes to count.
-
- &lt;&lt;https://twitter.com/chethiyaa(@chethiyaa)&gt;&gt; did some testing on a **quad core i7**.
-
-
- |||
-  | # children | single process (ms) | multi process (ms) |
-  ===
-  | 1 | 398 | 430 |
-  | 2 | 782 | 394 |
-  | 4 | 1626 | 415 |
-  | 8 | 3300 | 799 |
-  | 16 | 6285 | 1594 |
-  | 32 | | 3183 |
-  | 64 | | 6372 |
-  | 128	 | | 13049 |
-
-</div>
-     </div>
-    </div>
-   </div>
-   <div class="wallapatta ">
-    <h1 class="title ">
      <a href="dark_light.html">
       Black or White
      </a>
@@ -329,17 +52,18 @@ All the source code is available in &lt;&lt;https://github.com/vpj/node_shm(Gith
     <h3 class="date ">
      July 27, 2014
     </h3>
-    <div class="row ">
+    <div class="post-paginated ">
      <div class="wallapatta-main nine columns ">
-      <div id="wallapatta_20000" class="article"><div id="wallapatta_20001" class="section"><div class="content"><p id="wallapatta_20002" class="paragraph"><span id="wallapatta_20046" class="text">Which background is better? Most text editors and document readers have light backgrounds. But there's a lot of programmers who use dark backgrounds. And there are a some analytics and dashboard applications with dark backgrounds.</span></p></div></div><div id="wallapatta_20003" class="image-container"><img class="image" src="img/dark.png" alt="img/dark.png"></div><div id="wallapatta_20004" class="section"><div class="content"><p id="wallapatta_20005" class="paragraph"><span id="wallapatta_20047" class="text">Stephan Few has criticized using dark backgrounds for dashboards in his book </span><a id="wallapatta_20048" class="link" href="http://www.amazon.com/Information-Dashboard-Design-At-Glance/dp/1938377001">Information Dashboard Design</a><span id="wallapatta_20049" class="text">, citing an image of </span><a id="wallapatta_20050" class="link" href="http://roambi.com">Roambi</a><span id="wallapatta_20051" class="text">. By the way, Roambi later moved to a white background and then brought back the option of dark backgrounds.</span></p></div></div><div id="wallapatta_20006" class="special"><div id="wallapatta_20007" class="section"><div class="content"><p id="wallapatta_20008" class="paragraph"><span id="wallapatta_20052" class="text">Have you noticed that many business intelligence (BI) software companies have introduced black screens as the standard for mobile devices? Is this because mobile devices work better with black screens? If you look for the research, as I have, it isn’t likely that you’ll find any.</span></p></div></div><div id="wallapatta_20009" class="section"><div class="content"><p id="wallapatta_20010" class="paragraph"><span id="wallapatta_20053" class="text">No one seems to question the efficacy of light backgrounds for reading text. Why the difference? Text and graphics both involve objects that are constructed of lines and filled in areas of color. Do they differ in a way that demands a different background color? I don’t think so.</span></p></div></div></div><div id="wallapatta_20014" class="section"><div class="content"><p id="wallapatta_20015" class="paragraph"><span id="wallapatta_20056" class="text">In the above article he discusses arguments by vendors who use dark backgrounds. Most of the arguments he has considered are technical (battery saving, sunlight reflection) and doesn't discuss which is better if technology wasn't a constraint. I feel the discussion is biased towards light backgrounds.</span></p></div></div><div id="wallapatta_20016" class="section"><div class="content"><p id="wallapatta_20017" class="paragraph"><span id="wallapatta_20057" class="text">The article is based on the idea that because white backgrounds are used in editors and readers for a long time, it is better to stick to it until there is solid evidence that dark backgrounds are better.</span></p></div></div><div id="wallapatta_20018" class="section"><div class="content"><p id="wallapatta_20019" class="paragraph"><span id="wallapatta_20058" class="text">Editing and reading software use white backgrounds to mimic paper. Paper is whitish and has been there for centuries. However that was probably because of technological limitations on paper and ink colors. It was not a decision based evidence that white backgrounds are perceptually better.</span></p></div></div><div id="wallapatta_20020" class="section"><div class="content"><p id="wallapatta_20021" class="paragraph"><span id="wallapatta_20059" class="text">Edward Tufte has brought it up in one of his discussions.</span></p></div></div><div id="wallapatta_20022" class="special"><div id="wallapatta_20023" class="section"><div class="content"><p id="wallapatta_20024" class="paragraph"><span id="wallapatta_20060" class="text">The usual metaphor for screens (projection and computer) these days seems to be black type on a white background, that is, a paper metaphor. This sometimes results in video glare, with lots of rays coming from the background. Sometimes the old fashioned computer screen seems less tiring, showing lit-up text on a dead backround.</span></p></div></div></div><div id="wallapatta_20028" class="section"><div class="content"><p id="wallapatta_20029" class="paragraph"><span id="wallapatta_20063" class="text">Then he continues to discuss why his website has a light background.</span></p></div></div><div id="wallapatta_20030" class="special"><div id="wallapatta_20031" class="section"><div class="content"><p id="wallapatta_20032" class="paragraph"><span id="wallapatta_20064" class="text">But my metaphor here is paper, like a book. If reproduced on a dark background, my images (which are generally very light in value) would come blaring and glaring out of the dark surround.</span></p></div></div><div id="wallapatta_20033" class="section"><div class="content"><p id="wallapatta_20034" class="paragraph"><span id="wallapatta_20065" class="text">Light backgrounds produce video glare. So turn the screen brightness at night and after working many hours at the computer. It is often useful to dull down the electric-blue white of the computer screen with a soft background tone, as done here.</span></p></div></div></div><div id="wallapatta_20038" class="section"><div class="content"><p id="wallapatta_20039" class="paragraph"><span id="wallapatta_20068" class="text">I feel what needs to be considered is how people use your application. If they switch between your application and other applications with light backgrounds (e.g. websites, editors, physical paper), then you should consider a light background. It won't happen the other way around often since majority of software uses light backgrounds, with the exception of photo editors.</span></p></div></div><div id="wallapatta_20040" class="section"><div class="content"><p id="wallapatta_20041" class="paragraph"><span id="wallapatta_20069" class="text">If the software is used in isolation, dark or light wouldn't make a big difference. Then the factors such as device, power consumption, coolness (aesthetics) and glare can be considered.</span></p></div></div><div id="wallapatta_20042" class="image-container"><img class="image" src="img/light.png" alt="img/light.png"></div></div>
+      <div id="wallapatta_0" class="article"><div id="wallapatta_1" class="section"><div class="content"><p id="wallapatta_2" class="paragraph"><span id="wallapatta_49" class="text">Which background is better? Most text editors and document readers have light backgrounds. But there's a lot of programmers who use dark backgrounds. And there are a some analytics and dashboard applications with dark backgrounds.</span></p></div></div><div id="wallapatta_3" class="full"><div id="wallapatta_5" class="image-container"><img class="image" src="img/dark.png" alt="img/dark.png"></div></div><div id="wallapatta_6" class="section"><div class="content"><p id="wallapatta_7" class="paragraph"><span id="wallapatta_50" class="text">Stephan Few has criticized using dark backgrounds for dashboards in his book </span><a id="wallapatta_51" class="link" href="http://www.amazon.com/Information-Dashboard-Design-At-Glance/dp/1938377001">Information Dashboard Design</a><span id="wallapatta_52" class="text">, citing an image of </span><a id="wallapatta_53" class="link" href="http://roambi.com">Roambi</a><span id="wallapatta_54" class="text">. By the way, Roambi later moved to a white background and then brought back the option of dark backgrounds.</span></p></div></div><div id="wallapatta_8" class="special"><div id="wallapatta_9" class="section"><div class="content"><p id="wallapatta_10" class="paragraph"><span id="wallapatta_55" class="text">Have you noticed that many business intelligence (BI) software companies have introduced black screens as the standard for mobile devices? Is this because mobile devices work better with black screens? If you look for the research, as I have, it isn’t likely that you’ll find any.</span></p></div></div><div id="wallapatta_11" class="section"><div class="content"><p id="wallapatta_12" class="paragraph"><span id="wallapatta_56" class="text">No one seems to question the efficacy of light backgrounds for reading text. Why the difference? Text and graphics both involve objects that are constructed of lines and filled in areas of color. Do they differ in a way that demands a different background color? I don’t think so.</span></p></div></div></div><div id="wallapatta_16" class="section"><div class="content"><p id="wallapatta_17" class="paragraph"><span id="wallapatta_59" class="text">In the above article he discusses arguments by vendors who use dark backgrounds. Most of the arguments he has considered are technical (battery saving, sunlight reflection) and doesn't discuss which is better if technology wasn't a constraint. I feel the discussion is biased towards light backgrounds.</span></p></div></div><div id="wallapatta_18" class="section"><div class="content"><p id="wallapatta_19" class="paragraph"><span id="wallapatta_60" class="text">The article is based on the idea that because white backgrounds are used in editors and readers for a long time, it is better to stick to it until there is solid evidence that dark backgrounds are better.</span></p></div></div><div id="wallapatta_20" class="section"><div class="content"><p id="wallapatta_21" class="paragraph"><span id="wallapatta_61" class="text">Editing and reading software use white backgrounds to mimic paper. Paper is whitish and has been there for centuries. However that was probably because of technological limitations on paper and ink colors. It was not a decision based evidence that white backgrounds are perceptually better.</span></p></div></div><div id="wallapatta_22" class="section"><div class="content"><p id="wallapatta_23" class="paragraph"><span id="wallapatta_62" class="text">Edward Tufte has brought it up in one of his discussions.</span></p></div></div><div id="wallapatta_24" class="special"><div id="wallapatta_25" class="section"><div class="content"><p id="wallapatta_26" class="paragraph"><span id="wallapatta_63" class="text">The usual metaphor for screens (projection and computer) these days seems to be black type on a white background, that is, a paper metaphor. This sometimes results in video glare, with lots of rays coming from the background. Sometimes the old fashioned computer screen seems less tiring, showing lit-up text on a dead backround.</span></p></div></div></div><div id="wallapatta_30" class="section"><div class="content"><p id="wallapatta_31" class="paragraph"><span id="wallapatta_66" class="text">Then he continues to discuss why his website has a light background.</span></p></div></div><div id="wallapatta_32" class="special"><div id="wallapatta_33" class="section"><div class="content"><p id="wallapatta_34" class="paragraph"><span id="wallapatta_67" class="text">But my metaphor here is paper, like a book. If reproduced on a dark background, my images (which are generally very light in value) would come blaring and glaring out of the dark surround.</span></p></div></div><div id="wallapatta_35" class="section"><div class="content"><p id="wallapatta_36" class="paragraph"><span id="wallapatta_68" class="text">Light backgrounds produce video glare. So turn the screen brightness at night and after working many hours at the computer. It is often useful to dull down the electric-blue white of the computer screen with a soft background tone, as done here.</span></p></div></div></div><div id="wallapatta_40" class="section"><div class="content"><p id="wallapatta_41" class="paragraph"><span id="wallapatta_71" class="text">I feel what needs to be considered is how people use your application. If they switch between your application and other applications with light backgrounds (e.g. websites, editors, physical paper), then you should consider a light background. It won't happen the other way around often since majority of software uses light backgrounds, with the exception of photo editors.</span></p></div></div><div id="wallapatta_42" class="section"><div class="content"><p id="wallapatta_43" class="paragraph"><span id="wallapatta_72" class="text">If the software is used in isolation, dark or light wouldn't make a big difference. Then the factors such as device, power consumption, coolness (aesthetics) and glare can be considered.</span></p></div></div><div id="wallapatta_44" class="full"><div id="wallapatta_46" class="image-container"><img class="image" src="img/light.png" alt="img/light.png"></div><div id="wallapatta_47" class="section"><div class="content"><p id="wallapatta_48" class="paragraph"><em id="wallapatta_73" class="italics"><span id="wallapatta_74" class="text">These dark and light screenshots are still WIP. We were trying different backgrounds to see which is better. When placed inside this blog, the screenshot with light background looks a lot better because of the surrounding.*</span></em></p></div></div></div></div>
      </div>
      <div class="wallapatta-sidebar three columns ">
-      <div id="wallapatta_20011" class="sidenote"><div id="wallapatta_20012" class="section"><div class="content"><p id="wallapatta_20013" class="paragraph"><strong id="wallapatta_20054" class="bold"><a id="wallapatta_20055" class="link" href="http://www.perceptualedge.com/blog/?p=1445">Stephan Few</a></strong></p></div></div></div><div id="wallapatta_20025" class="sidenote"><div id="wallapatta_20026" class="section"><div class="content"><p id="wallapatta_20027" class="paragraph"><strong id="wallapatta_20061" class="bold"><a id="wallapatta_20062" class="link" href="http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=000082">Edward Tufte</a></strong></p></div></div></div><div id="wallapatta_20035" class="sidenote"><div id="wallapatta_20036" class="section"><div class="content"><p id="wallapatta_20037" class="paragraph"><strong id="wallapatta_20066" class="bold"><a id="wallapatta_20067" class="link" href="http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000M0">Edward Tufte</a></strong></p></div></div></div><div id="wallapatta_20043" class="sidenote"><div id="wallapatta_20044" class="section"><div class="content"><p id="wallapatta_20045" class="paragraph"><span id="wallapatta_20070" class="text">There dark and light screenshots are still WIP. We were trying different backgrounds to see which is better. When placed inside this blog, the screenshot with light background looks a lot better because of the surrounding.*</span></p></div></div></div>
+      <div id="wallapatta_4" class="sidenote"></div><div id="wallapatta_13" class="sidenote"><div id="wallapatta_14" class="section"><div class="content"><p id="wallapatta_15" class="paragraph"><strong id="wallapatta_57" class="bold"><a id="wallapatta_58" class="link" href="http://www.perceptualedge.com/blog/?p=1445">Stephan Few</a></strong></p></div></div></div><div id="wallapatta_27" class="sidenote"><div id="wallapatta_28" class="section"><div class="content"><p id="wallapatta_29" class="paragraph"><strong id="wallapatta_64" class="bold"><a id="wallapatta_65" class="link" href="http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=000082">Edward Tufte</a></strong></p></div></div></div><div id="wallapatta_37" class="sidenote"><div id="wallapatta_38" class="section"><div class="content"><p id="wallapatta_39" class="paragraph"><strong id="wallapatta_69" class="bold"><a id="wallapatta_70" class="link" href="http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000M0">Edward Tufte</a></strong></p></div></div></div><div id="wallapatta_45" class="sidenote"></div>
      </div>
      <div style="display:none;">
       <div class='wallapatta-code'>Which background is better? Most text editors and document readers have light backgrounds. But there's a lot of programmers who use dark backgrounds. And there are a some analytics and dashboard applications with dark backgrounds.
 
-!img/dark.png
+&lt;!&gt;
+ !img/dark.png
 
 Stephan Few has criticized using dark backgrounds for dashboards in his book &lt;&lt;http://www.amazon.com/Information-Dashboard-Design-At-Glance/dp/1938377001(Information Dashboard Design)&gt;&gt;, citing an image of &lt;&lt;http://roambi.com(Roambi)&gt;&gt;. By the way, Roambi later moved to a white background and then brought back the option of dark backgrounds.
 
@@ -379,10 +103,511 @@ I feel what needs to be considered is how people use your application. If they s
 
 If the software is used in isolation, dark or light wouldn't make a big difference. Then the factors such as device, power consumption, coolness (aesthetics) and glare can be considered.
 
-!img/light.png
+&lt;!&gt;
+ !img/light.png
+
+ --These dark and light screenshots are still WIP. We were trying different backgrounds to see which is better. When placed inside this blog, the screenshot with light background looks a lot better because of the surrounding.*</div>
+     </div>
+     <div class="overlay ">
+      
+     </div>
+    </div>
+   </div>
+   <div class="wallapatta ">
+    <h1 class="title ">
+     <a href="seo.html">
+      SEO Crap
+     </a>
+    </h1>
+    <h3 class="date ">
+     July 27, 2014
+    </h3>
+    <div class="post-paginated ">
+     <div class="wallapatta-main nine columns ">
+      <div id="wallapatta_10000" class="article"><div id="wallapatta_10001" class="section"><div class="content"><p id="wallapatta_10002" class="paragraph"><a id="wallapatta_10028" class="link" href="http://www.forbes.com/sites/jaysondemers/2013/11/13/is-seo-dead/">SEO is dead</a><span id="wallapatta_10029" class="text"> - at least much different from what it was known to be. But there are a plenty of consultants who market SEO, as if it is something that is hard to get right. Many organizations fall for it.</span></p></div></div><div id="wallapatta_10003" class="section"><div class="content"><p id="wallapatta_10004" class="paragraph"><span id="wallapatta_10030" class="text">Search engines do not want to show web sites with some special SEO sauce to be on top. They want websites that people look for.</span></p></div></div><div id="wallapatta_10005" class="section"><div class="content"><p id="wallapatta_10006" class="paragraph"><span id="wallapatta_10031" class="text">There were days when you could use neat little tricks (link farms, etc) to go higher on search results.  This was possible because it is hard for an algorithm to figure out what's better content. Now search engine algorithms have gotten better and they don't fall for these tricks.</span></p></div></div><div id="wallapatta_10007" class="special"><div id="wallapatta_10008" class="section"><div class="content"><p id="wallapatta_10009" class="paragraph"><span id="wallapatta_10032" class="text">Yet I knew from experience that the real secret to SEO was not about tricks but about making your site the best it could be for your users while keeping the search engines in mind. It was true when I started doing SEO and it’s true now. Doing that always, always, always works to bring more targeted search engine traffic to your website. But, sadly, the tricks that the other SEO people were doing and writing about also worked, albeit temporarily.</span></p></div></div><div id="wallapatta_10010" class="section"><div class="content"><p id="wallapatta_10011" class="paragraph"><a id="wallapatta_10033" class="link" href="http://whatdidyoudowithjill.com/leaving-seo-post/">Jill Whalen</a><span id="wallapatta_10034" class="text"> </span><a id="wallapatta_10035" class="link" href="http://en.wikipedia.org/wiki/Jill_Whalen">SEO Consultant</a></p></div></div></div><div id="wallapatta_10012" class="section"><div class="content"><p id="wallapatta_10013" class="paragraph"><span id="wallapatta_10036" class="text">So as long as your website</span></p><ol id="wallapatta_10014" class="list"><li id="wallapatta_10015" class="list-item"><span id="wallapatta_10016" class="block"><span id="wallapatta_10037" class="text">has good content which people like,</span></span></li><li id="wallapatta_10017" class="list-item"><span id="wallapatta_10018" class="block"><span id="wallapatta_10038" class="text">is accessible to internet users,</span></span></li><li id="wallapatta_10019" class="list-item"><span id="wallapatta_10020" class="block"><span id="wallapatta_10039" class="text">uses proper HTML syntax, and</span></span></li><li id="wallapatta_10021" class="list-item"><span id="wallapatta_10022" class="block"><a id="wallapatta_10040" class="link" href="https://support.google.com/webmasters/answer/182072?hl=en">is crawlable</a></span></li></ol></div></div><div id="wallapatta_10026" class="section"><div class="content"><p id="wallapatta_10027" class="paragraph"><span id="wallapatta_10043" class="text">you don't have to worry about getting consultancy for SEO. If your web developer can't get 2, 3 and 4 right, you should get a better developer; often it requires effort to get those wrong.</span></p></div></div></div>
+     </div>
+     <div class="wallapatta-sidebar three columns ">
+      <div id="wallapatta_10023" class="sidenote"><div id="wallapatta_10024" class="section"><div class="content"><p id="wallapatta_10025" class="paragraph"><a id="wallapatta_10041" class="link" href="https://static.googleusercontent.com/external_content/untrusted_dlcp/www.google.com/en//webmasters/docs/search-engine-optimization-starter-guide.pdf">This document</a><span id="wallapatta_10042" class="text"> by Google is a pretty good guide about these stuff.</span></p></div></div></div>
+     </div>
+     <div style="display:none;">
+      <div class='wallapatta-code'>&lt;&lt;http://www.forbes.com/sites/jaysondemers/2013/11/13/is-seo-dead/(SEO is dead)&gt;&gt; - at least much different from what it was known to be. But there are a plenty of consultants who market SEO, as if it is something that is hard to get right. Many organizations fall for it.
+
+Search engines do not want to show web sites with some special SEO sauce to be on top. They want websites that people look for.
+
+There were days when you could use neat little tricks (link farms, etc) to go higher on search results.  This was possible because it is hard for an algorithm to figure out what's better content. Now search engine algorithms have gotten better and they don't fall for these tricks.
+
++++
+ Yet I knew from experience that the real secret to SEO was not about tricks but about making your site the best it could be for your users while keeping the search engines in mind. It was true when I started doing SEO and it’s true now. Doing that always, always, always works to bring more targeted search engine traffic to your website. But, sadly, the tricks that the other SEO people were doing and writing about also worked, albeit temporarily.
+
+ &lt;&lt;http://whatdidyoudowithjill.com/leaving-seo-post/(Jill Whalen)&gt;&gt; &lt;&lt;http://en.wikipedia.org/wiki/Jill_Whalen(SEO Consultant)&gt;&gt;
+
+So as long as your website
+
+ - has good content which people like,
+ - is accessible to internet users,
+ - uses proper HTML syntax, and
+ - &lt;&lt;https://support.google.com/webmasters/answer/182072?hl=en(is crawlable)&gt;&gt;
 
 &gt;&gt;&gt;
- There dark and light screenshots are still WIP. We were trying different backgrounds to see which is better. When placed inside this blog, the screenshot with light background looks a lot better because of the surrounding.*</div>
+ &lt;&lt;https://static.googleusercontent.com/external_content/untrusted_dlcp/www.google.com/en//webmasters/docs/search-engine-optimization-starter-guide.pdf(This document)&gt;&gt; by Google is a pretty good guide about these stuff.
+
+you don't have to worry about getting consultancy for SEO. If your web developer can't get 2, 3 and 4 right, you should get a better developer; often it requires effort to get those wrong.
+
+</div>
+     </div>
+     <div class="overlay ">
+      
+     </div>
+    </div>
+   </div>
+   <div class="wallapatta ">
+    <h1 class="title ">
+     <a href="html_animation.html">
+      2 to 10 times faster HTML animations
+     </a>
+    </h1>
+    <h3 class="date ">
+     May 10, 2014
+    </h3>
+    <div class="post-paginated ">
+     <div class="wallapatta-main nine columns ">
+      <div id="wallapatta_20000" class="article"><div id="wallapatta_20001" class="section"><div class="content"><p id="wallapatta_20002" class="paragraph"><span id="wallapatta_20034" class="text">When animating/moving HTML elements, setting their position with </span><code id="wallapatta_20035" class="code"><span id="wallapatta_20036" class="text">-webkit-transform: matrix3d()</span></code><span id="wallapatta_20037" class="text"> gives two to ten times faster frame rates compared to </span><code id="wallapatta_20038" class="code"><span id="wallapatta_20039" class="text">top</span></code><span id="wallapatta_20040" class="text">/</span><code id="wallapatta_20041" class="code"><span id="wallapatta_20042" class="text">left</span></code><span id="wallapatta_20043" class="text"> or </span><code id="wallapatta_20044" class="code"><span id="wallapatta_20045" class="text">-webkit-transform: matrix()</span></code><span id="wallapatta_20046" class="text">. On mobile devices you can observe native app like performance with </span><code id="wallapatta_20047" class="code"><span id="wallapatta_20048" class="text">transform: matrix3d</span></code><span id="wallapatta_20049" class="text">.</span></p></div></div><div id="wallapatta_20003" class="section"><h2 class="heading"><span id="wallapatta_20004" class="block"><span id="wallapatta_20050" class="text">Demo</span></span></h2><div class="content"></div></div><div id="wallapatta_20010" class="section"><div class="content"><p id="wallapatta_20011" class="paragraph"><span id="wallapatta_20053" class="text">It moves a panel that contains 10,000 </span><code id="wallapatta_20054" class="code"><span id="wallapatta_20055" class="text">div</span></code><span id="wallapatta_20056" class="text"> elements. On my macbook air running chrome, </span><code id="wallapatta_20057" class="code"><span id="wallapatta_20058" class="text">transform:matrix3d</span></code><span id="wallapatta_20059" class="text"> gives 30 - 40 fps while </span><code id="wallapatta_20060" class="code"><span id="wallapatta_20061" class="text">position:top/left</span></code><span id="wallapatta_20062" class="text"> and </span><code id="wallapatta_20063" class="code"><span id="wallapatta_20064" class="text">transform:matrix</span></code><span id="wallapatta_20065" class="text"> gives 10-15 fps. You can check the frame rate by selecting </span><strong id="wallapatta_20066" class="bold"><span id="wallapatta_20067" class="text">Show FPS meter</span></strong><span id="wallapatta_20068" class="text"> on </span><strong id="wallapatta_20069" class="bold"><span id="wallapatta_20070" class="text">Rendering</span></strong><span id="wallapatta_20071" class="text"> tab of chrome developer tools.</span></p></div></div><div id="wallapatta_20012" class="section"><div class="content"><p id="wallapatta_20013" class="paragraph"><span id="wallapatta_20072" class="text">The following image shows snapshot of frames timeline with </span><code id="wallapatta_20073" class="code"><span id="wallapatta_20074" class="text">top</span></code><span id="wallapatta_20075" class="text">/</span><code id="wallapatta_20076" class="code"><span id="wallapatta_20077" class="text">left</span></code><span id="wallapatta_20078" class="text">.</span></p></div></div><div id="wallapatta_20014" class="image-container"><img class="image" src="img/transform/topleft.png" alt="Timeline for top/left"></div><div id="wallapatta_20015" class="section"><div class="content"><p id="wallapatta_20016" class="paragraph"><span id="wallapatta_20079" class="text">This is the snapshot of frames timeline with </span><code id="wallapatta_20080" class="code"><span id="wallapatta_20081" class="text">transform:matrix3d</span></code><span id="wallapatta_20082" class="text">.</span></p></div></div><div id="wallapatta_20017" class="image-container"><img class="image" src="img/transform/matrix3d.png" alt="Timeline for transform:matrix3d"></div><div id="wallapatta_20018" class="section"><div class="content"><p id="wallapatta_20019" class="paragraph"><code id="wallapatta_20083" class="code"><span id="wallapatta_20084" class="text">transform: matrix3d</span></code><span id="wallapatta_20085" class="text"> takes out the paint operation which gives increased frame.</span></p></div></div><div id="wallapatta_20020" class="special"><div id="wallapatta_20021" class="section"><div class="content"><p id="wallapatta_20022" class="paragraph"><span id="wallapatta_20086" class="text">The 3d translation layers offer a way of pre-blitting all the stuff inside the DOM element into a layer, which is therefore available for direct blitting operations inside the render tree. Well, at least that's the conceptual idea behind.</span></p></div></div><div id="wallapatta_20023" class="section"><div class="content"><p id="wallapatta_20024" class="paragraph"><strong id="wallapatta_20087" class="bold"><span id="wallapatta_20088" class="text">martensms</span></strong><span id="wallapatta_20089" class="text"> on </span><a id="wallapatta_20090" class="link" href="http://www.html5gamedevs.com/topic/171-myth-busting-the-html5-performance-of-transformtranslate-vs-topleft/">html5gamedevs.com</a></p></div></div></div><div id="wallapatta_20025" class="section"><div class="content"><p id="wallapatta_20026" class="paragraph"><span id="wallapatta_20091" class="text">The frame rates with </span><code id="wallapatta_20092" class="code"><span id="wallapatta_20093" class="text">transform:matrix3d</span></code><span id="wallapatta_20094" class="text"> becomes about </span><em id="wallapatta_20095" class="italics"><span id="wallapatta_20096" class="text">10 times</span></em><span id="wallapatta_20097" class="text"> higher than other methods as the content of the panel which moves gets heavier. I tried with about a 1,000 small SVG graphs with 1,000 data points.</span></p></div></div><div id="wallapatta_20027" class="section"><div class="content"><p id="wallapatta_20028" class="paragraph"><span id="wallapatta_20098" class="text">Most of the discussions I found on the internet were comparing </span><code id="wallapatta_20099" class="code"><span id="wallapatta_20100" class="text">top</span></code><span id="wallapatta_20101" class="text">/</span><code id="wallapatta_20102" class="code"><span id="wallapatta_20103" class="text">left</span></code><span id="wallapatta_20104" class="text"> to </span><code id="wallapatta_20105" class="code"><span id="wallapatta_20106" class="text">transform: matrix</span></code><span id="wallapatta_20107" class="text"> or </span><code id="wallapatta_20108" class="code"><span id="wallapatta_20109" class="text">transform: translate</span></code><span id="wallapatta_20110" class="text"> </span><sup id="wallapatta_20111" class="superScript"><span id="wallapatta_20112" class="text">1, 2</span></sup><span id="wallapatta_20113" class="text">, but not so much information about using </span><code id="wallapatta_20114" class="code"><span id="wallapatta_20115" class="text">transform: matrix3d</span></code><span id="wallapatta_20116" class="text">.</span></p></div></div></div>
+     </div>
+     <div class="wallapatta-sidebar three columns ">
+      <div id="wallapatta_20005" class="sidenote"><div id="wallapatta_20006" class="section"><div class="content"><p id="wallapatta_20007" class="paragraph"><a id="wallapatta_20051" class="link" href="http://bl.ocks.org/vpj/c5468e4593319009320e">Demo 1</a></p></div></div><div id="wallapatta_20008" class="section"><div class="content"><p id="wallapatta_20009" class="paragraph"><a id="wallapatta_20052" class="link" href="http://bl.ocks.org/vpj/c5468e4593319009320e">Demo 2</a></p></div></div></div><div id="wallapatta_20029" class="sidenote"><div id="wallapatta_20030" class="section"><div class="content"><p id="wallapatta_20031" class="paragraph"><sup id="wallapatta_20117" class="superScript"><span id="wallapatta_20118" class="text">1</span></sup><span id="wallapatta_20119" class="text"> An old discussion on Hacker News about </span><code id="wallapatta_20120" class="code"><span id="wallapatta_20121" class="text">transform: translate</span></code><span id="wallapatta_20122" class="text"> and </span><code id="wallapatta_20123" class="code"><span id="wallapatta_20124" class="text">top</span></code><span id="wallapatta_20125" class="text">/</span><code id="wallapatta_20126" class="code"><span id="wallapatta_20127" class="text">left</span></code><span id="wallapatta_20128" class="text"> (3d transformations are not considered) </span><a id="wallapatta_20129" class="link" href="https://news.ycombinator.com/item?id=5301731">Myth busting the HTML5 performance of transform:translate vs. top/left</a></p></div></div><div id="wallapatta_20032" class="section"><div class="content"><p id="wallapatta_20033" class="paragraph"><sup id="wallapatta_20130" class="superScript"><span id="wallapatta_20131" class="text">2</span></sup><span id="wallapatta_20132" class="text"> Some other advantages of using </span><code id="wallapatta_20133" class="code"><span id="wallapatta_20134" class="text">transform</span></code><span id="wallapatta_20135" class="text"> </span><a id="wallapatta_20136" class="link" href="http://www.paulirish.com/2012/why-moving-elements-with-translate-is-better-than-posabs-topleft/">Why Moving Elements With Translate</a></p></div></div></div>
+     </div>
+     <div style="display:none;">
+      <div class='wallapatta-code'>When animating/moving HTML elements, setting their position with ``-webkit-transform: matrix3d()`` gives two to ten times faster frame rates compared to ``top``/``left`` or ``-webkit-transform: matrix()``. On mobile devices you can observe native app like performance with ``transform: matrix3d``.
+
+##Demo
+
+ &gt;&gt;&gt;
+  &lt;&lt;http://bl.ocks.org/vpj/c5468e4593319009320e(Demo 1)&gt;&gt;
+
+  &lt;&lt;http://bl.ocks.org/vpj/c5468e4593319009320e(Demo 2)&gt;&gt;
+
+It moves a panel that contains 10,000 ``div`` elements. On my macbook air running chrome, ``transform:matrix3d`` gives 30 - 40 fps while ``position:top/left`` and ``transform:matrix`` gives 10-15 fps. You can check the frame rate by selecting **Show FPS meter** on **Rendering** tab of chrome developer tools.
+
+The following image shows snapshot of frames timeline with ``top``/``left``.
+
+!img/transform/topleft.png(Timeline for top/left)
+
+This is the snapshot of frames timeline with ``transform:matrix3d``.
+
+!img/transform/matrix3d.png(Timeline for transform:matrix3d)
+
+``transform: matrix3d`` takes out the paint operation which gives increased frame.
+
++++
+ The 3d translation layers offer a way of pre-blitting all the stuff inside the DOM element into a layer, which is therefore available for direct blitting operations inside the render tree. Well, at least that's the conceptual idea behind.
+
+ **martensms** on &lt;&lt;http://www.html5gamedevs.com/topic/171-myth-busting-the-html5-performance-of-transformtranslate-vs-topleft/(html5gamedevs.com)&gt;&gt;
+
+The frame rates with ``transform:matrix3d`` becomes about --10 times-- higher than other methods as the content of the panel which moves gets heavier. I tried with about a 1,000 small SVG graphs with 1,000 data points.
+
+Most of the discussions I found on the internet were comparing ``top``/``left`` to ``transform: matrix`` or ``transform: translate`` ^^1, 2^^, but not so much information about using ``transform: matrix3d``.
+
+&gt;&gt;&gt;
+ ^^1^^ An old discussion on Hacker News about ``transform: translate`` and ``top``/``left`` (3d transformations are not considered) &lt;&lt;https://news.ycombinator.com/item?id=5301731(Myth busting the HTML5 performance of transform:translate vs. top/left)&gt;&gt;
+
+ ^^2^^ Some other advantages of using ``transform`` &lt;&lt;http://www.paulirish.com/2012/why-moving-elements-with-translate-is-better-than-posabs-topleft/(Why Moving Elements With Translate() Is Better Than Pos:abs Top/left)&gt;&gt;
+</div>
+     </div>
+     <div class="overlay ">
+      
+     </div>
+    </div>
+   </div>
+   <div class="wallapatta ">
+    <h1 class="title ">
+     <a href="weya.html">
+      Weya.coffee
+     </a>
+    </h1>
+    <h3 class="date ">
+     March 19, 2014
+    </h3>
+    <div class="post-paginated ">
+     <div class="wallapatta-main nine columns ">
+      <div id="wallapatta_30000" class="article"><div id="wallapatta_30001" class="section"><div class="content"><p id="wallapatta_30002" class="paragraph"><span id="wallapatta_30038" class="text">Weya.coffee is a lightweight library with no dependencies to generate DOM elements. We developed it to replace </span><a id="wallapatta_30039" class="link" href="https://github.com/gradus/coffeecup">Coffeecup</a><span id="wallapatta_30040" class="text"> as a client side template engine. Because of its simplicity and performance, we are also using Weya to replace DOM manipulation of </span><a id="wallapatta_30041" class="link" href="http://d3js.org/">d3.js</a><span id="wallapatta_30042" class="text"> in data visualizations.</span></p></div></div><div id="wallapatta_30009" class="section"><div class="content"><p id="wallapatta_30010" class="paragraph"><span id="wallapatta_30045" class="text">Here's a small example to show the usage.</span></p></div></div><pre id="wallapatta_30011" class="codeBlock"><code class="coffee">userElems = []
+Weya container, <span class="hljs-function">-&gt;</span>
+ <span class="hljs-property">@div</span> <span class="hljs-string">".users"</span>, <span class="hljs-function">-&gt;</span>
+  <span class="hljs-keyword">for</span> user, i <span class="hljs-keyword">in</span> users
+   userDiv = <span class="hljs-property">@div</span> <span class="hljs-string">'.user'</span>, <span class="hljs-attribute">on</span>: {<span class="hljs-attribute">click</span>: editUser}, <span class="hljs-function">-&gt;</span>
+    name = <span class="hljs-property">@span</span> <span class="hljs-string">".name"</span>, user.name
+    <span class="hljs-property">@span</span> <span class="hljs-string">".phone"</span>, user.phone
+    <span class="hljs-keyword">if</span> v.image?
+     <span class="hljs-property">@img</span> <span class="hljs-attribute">src</span>: user.image
+
+   userDiv.userId = i
+   userElems.push <span class="hljs-attribute">user</span>: user, <span class="hljs-attribute">name</span>: name</code></pre><div id="wallapatta_30012" class="section"><div class="content"><p id="wallapatta_30013" class="paragraph"><span id="wallapatta_30046" class="text">The above code creates a list of users. It binds the data to the dom element </span><code id="wallapatta_30047" class="code"><span id="wallapatta_30048" class="text">userDiv.userId = i</span></code><span id="wallapatta_30049" class="text"> and also keeps track of all the DOM elements in </span><code id="wallapatta_30050" class="code"><span id="wallapatta_30051" class="text">userElems</span></code><span id="wallapatta_30052" class="text">. This is important if you want to manipulate the DOM without reloading the entire user list, for example if a name of a user changes you could change it with </span><code id="wallapatta_30053" class="code"><span id="wallapatta_30054" class="text">userElems[changedUserId].name.textContent = changedUserName</span></code><span id="wallapatta_30055" class="text">.</span></p></div></div><div id="wallapatta_30014" class="section"><h1 class="heading"><span id="wallapatta_30015" class="block"><span id="wallapatta_30056" class="text">Is it a template engine?</span></span></h1><div class="content"><div id="wallapatta_30016" class="section"><div class="content"><p id="wallapatta_30017" class="paragraph"><span id="wallapatta_30057" class="text">Weya is quite similar to Coffeecup in terms of the syntax. But it's much faster, so it won't fail if you have lots of elements.</span></p></div></div><div id="wallapatta_30021" class="section"><div class="content"><p id="wallapatta_30022" class="paragraph"><span id="wallapatta_30059" class="text">Also, Weya lets you register event handlers. I feel this is much cleaner than registering events later with CSS selectors, and it's easier to maintain the code since events are register within the DOM creation code.</span></p></div></div></div></div><div id="wallapatta_30023" class="section"><h1 class="heading"><span id="wallapatta_30024" class="block"><span id="wallapatta_30060" class="text">Can it replace d3.js?</span></span></h1><div class="content"><div id="wallapatta_30025" class="section"><div class="content"><p id="wallapatta_30026" class="paragraph"><span id="wallapatta_30061" class="text">We use weya to replace most all the d3.js DOM manipulation.</span></p></div></div><div id="wallapatta_30027" class="section"><div class="content"><p id="wallapatta_30028" class="paragraph"><span id="wallapatta_30062" class="text">Code with Weya is simpler, shorter and nicely intended. Here's the code that draws bar chart in	</span><a id="wallapatta_30063" class="link" href="http://bl.ocks.org/vpj/9636655">this example</a><span id="wallapatta_30064" class="text">.</span></p></div></div><pre id="wallapatta_30029" class="codeBlock"><code class="coffee">Weya svg, <span class="hljs-function">-&gt;</span>
+ <span class="hljs-keyword">for</span> d <span class="hljs-keyword">in</span> data
+  <span class="hljs-property">@g</span> <span class="hljs-string">".g"</span>, <span class="hljs-attribute">transform</span>: <span class="hljs-string">"translate(<span class="hljs-subst">#{x0 d.State}</span>,0)"</span>, <span class="hljs-function">-&gt;</span>
+   <span class="hljs-keyword">for</span> age <span class="hljs-keyword">in</span> d.ages
+    <span class="hljs-property">@rect</span>
+     <span class="hljs-attribute">width</span>: x1.rangeBand()
+     <span class="hljs-attribute">x</span>: x1 age.name
+     <span class="hljs-attribute">y</span>: y age.value
+     <span class="hljs-attribute">height</span>: height - y age.value
+     <span class="hljs-attribute">fill</span>: color age.name
+
+ <span class="hljs-keyword">for</span> d, i <span class="hljs-keyword">in</span> ageNames.slice().reverse()
+  <span class="hljs-property">@g</span> <span class="hljs-string">".legend"</span>, <span class="hljs-attribute">transform</span>: <span class="hljs-string">"translate(0,<span class="hljs-subst">#{i * <span class="hljs-number">20</span>}</span>)"</span>, <span class="hljs-function">-&gt;</span>
+   <span class="hljs-property">@rect</span> <span class="hljs-attribute">x</span>: width - <span class="hljs-number">18</span>, <span class="hljs-attribute">width</span>: <span class="hljs-number">18</span>, <span class="hljs-attribute">height</span>: <span class="hljs-number">18</span>, <span class="hljs-attribute">fill</span>: color d
+   <span class="hljs-property">@text</span>
+    <span class="hljs-attribute">x</span>: width - <span class="hljs-number">24</span>, <span class="hljs-attribute">y</span>: <span class="hljs-number">9</span>, <span class="hljs-attribute">dy</span>: <span class="hljs-string">".35em"</span>
+    <span class="hljs-attribute">style</span>: {<span class="hljs-string">'text-anchor'</span>: <span class="hljs-string">"end"</span>}, <span class="hljs-attribute">text</span>: d</code></pre><div id="wallapatta_30030" class="section"><div class="content"><p id="wallapatta_30031" class="paragraph"><span id="wallapatta_30065" class="text">Here's the code that does the </span><a id="wallapatta_30066" class="link" href="http://bl.ocks.org/mbostock/388705">same with d3.js</a><span id="wallapatta_30067" class="text">.</span></p></div></div><pre id="wallapatta_30032" class="codeBlock"><code class="javascript"><span class="hljs-keyword">var</span> state = svg.selectAll(<span class="hljs-string">".state"</span>)
+    .data(data)
+  .enter().append(<span class="hljs-string">"g"</span>)
+    .attr(<span class="hljs-string">"class"</span>, <span class="hljs-string">"g"</span>)
+    .attr(<span class="hljs-string">"transform"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d</span>) </span>{ <span class="hljs-keyword">return</span> <span class="hljs-string">"translate("</span> + x0(d.State) + <span class="hljs-string">",0)"</span>; });
+
+state.selectAll(<span class="hljs-string">"rect"</span>)
+    .data(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d</span>) </span>{ <span class="hljs-keyword">return</span> d.ages; })
+  .enter().append(<span class="hljs-string">"rect"</span>)
+    .attr(<span class="hljs-string">"width"</span>, x1.rangeBand())
+    .attr(<span class="hljs-string">"x"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d</span>) </span>{ <span class="hljs-keyword">return</span> x1(d.name); })
+    .attr(<span class="hljs-string">"y"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d</span>) </span>{ <span class="hljs-keyword">return</span> y(d.value); })
+    .attr(<span class="hljs-string">"height"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d</span>) </span>{ <span class="hljs-keyword">return</span> height - y(d.value); })
+    .style(<span class="hljs-string">"fill"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d</span>) </span>{ <span class="hljs-keyword">return</span> color(d.name); });
+
+<span class="hljs-keyword">var</span> legend = svg.selectAll(<span class="hljs-string">".legend"</span>)
+    .data(ageNames.slice().reverse())
+  .enter().append(<span class="hljs-string">"g"</span>)
+    .attr(<span class="hljs-string">"class"</span>, <span class="hljs-string">"legend"</span>)
+    .attr(<span class="hljs-string">"transform"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d, i</span>) </span>{ <span class="hljs-keyword">return</span> <span class="hljs-string">"translate(0,"</span> + i * <span class="hljs-number">20</span> + <span class="hljs-string">")"</span>; });
+
+legend.append(<span class="hljs-string">"rect"</span>)
+    .attr(<span class="hljs-string">"x"</span>, width - <span class="hljs-number">18</span>)
+    .attr(<span class="hljs-string">"width"</span>, <span class="hljs-number">18</span>)
+    .attr(<span class="hljs-string">"height"</span>, <span class="hljs-number">18</span>)
+    .style(<span class="hljs-string">"fill"</span>, color);
+
+legend.append(<span class="hljs-string">"text"</span>)
+    .attr(<span class="hljs-string">"x"</span>, width - <span class="hljs-number">24</span>)
+    .attr(<span class="hljs-string">"y"</span>, <span class="hljs-number">9</span>)
+    .attr(<span class="hljs-string">"dy"</span>, <span class="hljs-string">".35em"</span>)
+    .style(<span class="hljs-string">"text-anchor"</span>, <span class="hljs-string">"end"</span>)
+    .text(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d</span>) </span>{ <span class="hljs-keyword">return</span> d; });</code></pre><div id="wallapatta_30033" class="section"><div class="content"><p id="wallapatta_30034" class="paragraph"><span id="wallapatta_30068" class="text">Another problem we solved with Weya is that d3.js draws all the elements that are represented by the data at once. And with Weya we can draw progressively - this is quite useful when you have a lot of data and you don't won't the interface to go unresponsive until everything is drawn. Here's a small example to show the point.</span></p></div></div><pre id="wallapatta_30035" class="codeBlock"><code class="coffee">i = <span class="hljs-number">0</span>
+data = ...
+<span class="hljs-function">
+<span class="hljs-title">draw</span> = -&gt;</span>
+ <span class="hljs-keyword">return</span> <span class="hljs-keyword">if</span> i <span class="hljs-keyword">is</span> data.length
+
+ d = data[i]
+ Weya container, <span class="hljs-function">-&gt;</span>
+  <span class="hljs-property">@div</span> <span class="hljs-string">'.user'</span>, <span class="hljs-function">-&gt;</span>
+   ...
+
+ i++
+ requestAnimationFrame draw
+
+draw()</code></pre><div id="wallapatta_30036" class="section"><div class="content"><p id="wallapatta_30037" class="paragraph"><span id="wallapatta_30069" class="text">The disadvantage of Weya over d3.js is that it doesn't bind data to DOM elements like d3.js does. So you can't use </span><code id="wallapatta_30070" class="code"><span id="wallapatta_30071" class="text">enter()</span></code><span id="wallapatta_30072" class="text">, </span><code id="wallapatta_30073" class="code"><span id="wallapatta_30074" class="text">exit()</span></code><span id="wallapatta_30075" class="text"> and updates when data changes. But most users rarely need these features. We use Weya with our own data bindings with DOM elements (as in the first example with </span><code id="wallapatta_30076" class="code"><span id="wallapatta_30077" class="text">userElems</span></code><span id="wallapatta_30078" class="text">), and we find it simpler than </span><code id="wallapatta_30079" class="code"><span id="wallapatta_30080" class="text">enter()</span></code><span id="wallapatta_30081" class="text"> and </span><code id="wallapatta_30082" class="code"><span id="wallapatta_30083" class="text">exit()</span></code><span id="wallapatta_30084" class="text">.</span></p></div></div></div></div></div>
+     </div>
+     <div class="wallapatta-sidebar three columns ">
+      <div id="wallapatta_30003" class="sidenote"><div id="wallapatta_30004" class="html"><iframe src="https://ghbtns.com/github-btn.html?user=vpj&amp;repo=weya&amp;type=star&amp;count=true&amp;size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
+</div><div id="wallapatta_30005" class="section"><div class="content"><p id="wallapatta_30006" class="paragraph"><a id="wallapatta_30043" class="link" href="http://jsperf.com/weya-jquery-d3-coffeecup">Performance comparison among d3, coffeecup and weya</a></p></div></div><div id="wallapatta_30007" class="section"><div class="content"><p id="wallapatta_30008" class="paragraph"><a id="wallapatta_30044" class="link" href="http://bl.ocks.org/vpj/9636655">Bar chart example</a></p></div></div></div><div id="wallapatta_30018" class="sidenote"><div id="wallapatta_30019" class="section"><div class="content"><p id="wallapatta_30020" class="paragraph"><a id="wallapatta_30058" class="link" href="http://jsperf.com/weya-jquery-d3-coffeecup">Performance comparison among d3, coffeecup and weya</a></p></div></div></div>
+     </div>
+     <div style="display:none;">
+      <div class='wallapatta-code'>Weya.coffee is a lightweight library with no dependencies to generate DOM elements. We developed it to replace &lt;&lt;https://github.com/gradus/coffeecup(Coffeecup)&gt;&gt; as a client side template engine. Because of its simplicity and performance, we are also using Weya to replace DOM manipulation of &lt;&lt;http://d3js.org/(d3.js)&gt;&gt; in data visualizations.
+
+&gt;&gt;&gt;
+ &lt;&lt;&lt;
+  &lt;iframe src="https://ghbtns.com/github-btn.html?user=vpj&repo=weya&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px"&gt;&lt;/iframe&gt;
+
+ &lt;&lt;http://jsperf.com/weya-jquery-d3-coffeecup(Performance comparison among d3, coffeecup and weya)&gt;&gt;
+
+ &lt;&lt;http://bl.ocks.org/vpj/9636655(Bar chart example)&gt;&gt;
+
+Here's a small example to show the usage.
+
+```coffee
+ userElems = []
+ Weya container, -&gt;
+  @div ".users", -&gt;
+   for user, i in users
+    userDiv = @div '.user', on: {click: editUser}, -&gt;
+     name = @span ".name", user.name
+     @span ".phone", user.phone
+     if v.image?
+      @img src: user.image
+
+    userDiv.userId = i
+    userElems.push user: user, name: name
+
+The above code creates a list of users. It binds the data to the dom element ``userDiv.userId = i`` and also keeps track of all the DOM elements in ``userElems``. This is important if you want to manipulate the DOM without reloading the entire user list, for example if a name of a user changes you could change it with ``userElems[changedUserId].name.textContent = changedUserName``.
+
+#Is it a template engine?
+
+ Weya is quite similar to Coffeecup in terms of the syntax. But it's much faster, so it won't fail if you have lots of elements.
+
+ &gt;&gt;&gt;
+  &lt;&lt;http://jsperf.com/weya-jquery-d3-coffeecup(Performance comparison among d3, coffeecup and weya)&gt;&gt;
+
+
+ Also, Weya lets you register event handlers. I feel this is much cleaner than registering events later with CSS selectors, and it's easier to maintain the code since events are register within the DOM creation code.
+
+#Can it replace d3.js?
+
+ We use weya to replace most all the d3.js DOM manipulation.
+
+ Code with Weya is simpler, shorter and nicely intended. Here's the code that draws bar chart in	&lt;&lt;http://bl.ocks.org/vpj/9636655(this example)&gt;&gt;.
+
+ ```coffee
+  Weya svg, -&gt;
+   for d in data
+    @g ".g", transform: "translate(#{x0 d.State},0)", -&gt;
+     for age in d.ages
+      @rect
+       width: x1.rangeBand()
+       x: x1 age.name
+       y: y age.value
+       height: height - y age.value
+       fill: color age.name
+
+   for d, i in ageNames.slice().reverse()
+    @g ".legend", transform: "translate(0,#{i * 20})", -&gt;
+     @rect x: width - 18, width: 18, height: 18, fill: color d
+     @text
+      x: width - 24, y: 9, dy: ".35em"
+      style: {'text-anchor': "end"}, text: d
+
+ Here's the code that does the &lt;&lt;http://bl.ocks.org/mbostock/388705(same with d3.js)&gt;&gt;.
+
+ ```javascript
+  var state = svg.selectAll(".state")
+      .data(data)
+    .enter().append("g")
+      .attr("class", "g")
+      .attr("transform", function(d) { return "translate(" + x0(d.State) + ",0)"; });
+
+  state.selectAll("rect")
+      .data(function(d) { return d.ages; })
+    .enter().append("rect")
+      .attr("width", x1.rangeBand())
+      .attr("x", function(d) { return x1(d.name); })
+      .attr("y", function(d) { return y(d.value); })
+      .attr("height", function(d) { return height - y(d.value); })
+      .style("fill", function(d) { return color(d.name); });
+
+  var legend = svg.selectAll(".legend")
+      .data(ageNames.slice().reverse())
+    .enter().append("g")
+      .attr("class", "legend")
+      .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+  legend.append("rect")
+      .attr("x", width - 18)
+      .attr("width", 18)
+      .attr("height", 18)
+      .style("fill", color);
+
+  legend.append("text")
+      .attr("x", width - 24)
+      .attr("y", 9)
+      .attr("dy", ".35em")
+      .style("text-anchor", "end")
+      .text(function(d) { return d; });
+
+
+ Another problem we solved with Weya is that d3.js draws all the elements that are represented by the data at once. And with Weya we can draw progressively - this is quite useful when you have a lot of data and you don't won't the interface to go unresponsive until everything is drawn. Here's a small example to show the point.
+
+ ```coffee
+  i = 0
+  data = ...
+
+  draw = -&gt;
+   return if i is data.length
+
+   d = data[i]
+   Weya container, -&gt;
+    @div '.user', -&gt;
+     ...
+
+   i++
+   requestAnimationFrame draw
+
+  draw()
+
+ The disadvantage of Weya over d3.js is that it doesn't bind data to DOM elements like d3.js does. So you can't use ``enter()``, ``exit()`` and updates when data changes. But most users rarely need these features. We use Weya with our own data bindings with DOM elements (as in the first example with ``userElems``), and we find it simpler than ``enter()`` and ``exit()``.
+</div>
+     </div>
+     <div class="overlay ">
+      
+     </div>
+    </div>
+   </div>
+   <div class="wallapatta ">
+    <h1 class="title ">
+     <a href="libraries.html">
+      People who are really serious about software should write their libraries
+     </a>
+    </h1>
+    <h3 class="date ">
+     February 19, 2014
+    </h3>
+    <div class="post-paginated ">
+     <div class="wallapatta-main nine columns ">
+      <div id="wallapatta_40000" class="article"><div id="wallapatta_40001" class="section"><div class="content"><p id="wallapatta_40002" class="paragraph"><span id="wallapatta_40085" class="text">We have been using a lot of tools and libraries in our software, and have replaced a number of them with our code. Libraries makes it easy to get things done, and to ship early. But from my experience, having a third-party library or a tool dominate a core part of your software is not a good idea.</span></p></div></div><div id="wallapatta_40003" class="special"><div id="wallapatta_40004" class="section"><div class="content"><p id="wallapatta_40005" class="paragraph"><span id="wallapatta_40086" class="text">People who are really serious about software should make their own hardware.</span></p></div></div><div id="wallapatta_40006" class="section"><div class="content"><p id="wallapatta_40007" class="paragraph"><strong id="wallapatta_40087" class="bold"><span id="wallapatta_40088" class="text">- Alan Kay</span></strong></p></div></div></div><div id="wallapatta_40008" class="section"><div class="content"><p id="wallapatta_40009" class="paragraph"><span id="wallapatta_40089" class="text">We have moved away from a number of libraries (and frameworks and platforms) over the last couple of years. This may sound like a lot of hate, but it is not so. We still love those libraries and use them on a lot of smaller projects. But when your product grows and you want to mold it the way you want, sometimes libraries stand in your way. Some of the decisions we made could be wrong because we didn't understand the library properly. But we spent a lot of time trying to stick to those libraries before replacing them.</span></p></div></div><div id="wallapatta_40010" class="section"><div class="content"><p id="wallapatta_40011" class="paragraph"><span id="wallapatta_40090" class="text">Writing your code instead of using libraries takes a lot of weight off the product. Most of these libraries are written by really good programmers to be used in a wide range of scenarios, and there is a pretty good chance that you won't need them all. So getting inspiration from them and writing your own stuff will make the software lighter while making things work the way you want. A lot of programmers are likely to write their own code to replace libraries at some point, and that is probably why there are a number of libraries doing almost exact same thing in slightly different ways.</span></p></div></div><div id="wallapatta_40012" class="section"><div class="content"><p id="wallapatta_40013" class="paragraph"><span id="wallapatta_40091" class="text">One of the traps you can fall into when writing our own code is that you might just end up reinventing the wheel. There is a chance that you replace a well written library with a small piece of code initially, but with time end up improving your code to do exactly the same thing the library you threw away did.</span></p></div></div><div id="wallapatta_40014" class="section"><h3 class="heading"><span id="wallapatta_40015" class="block"><span id="wallapatta_40092" class="text">jqPlot</span></span></h3><div class="content"><div id="wallapatta_40019" class="section"><div class="content"><p id="wallapatta_40020" class="paragraph"><span id="wallapatta_40094" class="text">Our first release of </span><a id="wallapatta_40095" class="link" href="http://www.forestpin.com">Forestpin</a><span id="wallapatta_40096" class="text"> used jqPlot for most of our charts. Some not-so-ordinary visualizations were made with </span><a id="wallapatta_40097" class="link" href="http://mbostock.github.io/protovis/">protovis</a><sup id="wallapatta_40098" class="superScript"><span id="wallapatta_40099" class="text">1</span></sup><span id="wallapatta_40100" class="text">. jqPlot helped us quickly develop a product (MVP) to show potential customers, but introduced a lot of constraints. We made some changes to jqPlot to customize some of the charts, but it wasn't enough. The next version of Forestpin used </span><a id="wallapatta_40101" class="link" href="http://d3js.org/">d3.js</a><span id="wallapatta_40102" class="text"> for all the visualizations</span><sup id="wallapatta_40103" class="superScript"><span id="wallapatta_40104" class="text">2</span></sup><span id="wallapatta_40105" class="text">, which gave us more control. We never used jqPlot any project, thereafter.</span></p></div></div></div></div><div id="wallapatta_40026" class="section"><h3 class="heading"><span id="wallapatta_40027" class="block"><span id="wallapatta_40114" class="text">Backbone.js</span></span></h3><div class="content"><div id="wallapatta_40031" class="section"><div class="content"><p id="wallapatta_40032" class="paragraph"><span id="wallapatta_40116" class="text">Backbone was used at </span><a id="wallapatta_40117" class="link" href="http://www.forestpin.com">Forestpin</a><span id="wallapatta_40118" class="text"> as well as at </span><a id="wallapatta_40119" class="link" href="http://www.nearby.lk/">nearby.lk</a><span id="wallapatta_40120" class="text">. What triggered us to code a replacement for Backbone was that it didn't save states in HTML5 history</span><sup id="wallapatta_40121" class="superScript"><span id="wallapatta_40122" class="text">3</span></sup><span id="wallapatta_40123" class="text">. We weren't using most of the features of Backbone too, so the replacement, </span><a id="wallapatta_40124" class="link" href="https://github.com/vpj/sweet">Sweet.js</a><span id="wallapatta_40125" class="text">, was much simpler. We plan on making Sweet.js independent from jQuery and Underscore.js, and also renaming it so that it doesn't get confused with </span><a id="wallapatta_40126" class="link" href="http://sweetjs.org/">Mozilla's Sweet.js</a><span id="wallapatta_40127" class="text">.</span></p></div></div></div></div><div id="wallapatta_40036" class="section"><h3 class="heading"><span id="wallapatta_40037" class="block"><span id="wallapatta_40132" class="text">Database</span></span></h3><div class="content"></div></div><div id="wallapatta_40038" class="section"><div class="content"><p id="wallapatta_40039" class="paragraph"><span id="wallapatta_40133" class="text">Forestpin Enterprise used a custom in-memory data store built ground up at Forestpin from the early days. The data store was a core part of the Forestpin product, and we gained a lot of performance by doing most of the calculations within the database itself.</span></p></div></div><div id="wallapatta_40040" class="section"><h3 class="heading"><span id="wallapatta_40041" class="block"><span id="wallapatta_40134" class="text">jQuery Mobile</span></span></h3><div class="content"><div id="wallapatta_40045" class="section"><div class="content"><p id="wallapatta_40046" class="paragraph"><a id="wallapatta_40136" class="link" href="http://www.nearby.lk/">nearby.lk</a><span id="wallapatta_40137" class="text"> decided to drop jQuery mobile after an year with it. Adopting jQuery mobile was a bad decision. It was very heavy</span><sup id="wallapatta_40138" class="superScript"><span id="wallapatta_40139" class="text">4</span></sup><span id="wallapatta_40140" class="text"> and was not developed to be used for apps like nearby.lk. jQuery mobile is super easy to be implemented for a web site with server generated HTML pages, but ours had a lot of dynamically generated pages and we spent quite sometime getting jQuery mobile to work.</span></p></div></div></div></div><div id="wallapatta_40050" class="section"><h3 class="heading"><span id="wallapatta_40051" class="block"><span id="wallapatta_40144" class="text">Google App Engine</span></span></h3><div class="content"><div id="wallapatta_40055" class="section"><div class="content"><p id="wallapatta_40056" class="paragraph"><a id="wallapatta_40146" class="link" href="http://www.nearby.lk/">nearby.lk</a><span id="wallapatta_40147" class="text"> was hosted on Google App engine for an year and a half and we moved to Amazon</span><sup id="wallapatta_40148" class="superScript"><span id="wallapatta_40149" class="text">5</span></sup><span id="wallapatta_40150" class="text">.</span></p></div></div></div></div><div id="wallapatta_40060" class="section"><h3 class="heading"><span id="wallapatta_40061" class="block"><span id="wallapatta_40155" class="text">d3.js</span></span></h3><div class="content"><div id="wallapatta_40065" class="section"><div class="content"><p id="wallapatta_40066" class="paragraph"><span id="wallapatta_40157" class="text">At Forestpin, we use d3 for all our visualizations and some tables - whenever data is connected to the DOM. We also introduced </span><a id="wallapatta_40158" class="link" href="d3_helpers.html">CoffeeScript helpers</a><span id="wallapatta_40159" class="text"> to simplify D3.js DOM manipulation code.</span></p></div></div><div id="wallapatta_40067" class="section"><div class="content"><p id="wallapatta_40068" class="paragraph"><span id="wallapatta_40160" class="text">We came across some requirements which were hard to tackle with D3.js. One was adding DOM elements progressively. For example, when you are drawing a matrix with a large number of small rectangles. if you draw all if it at once, the user will see nothing for a while and everything will appear at once. But it would have been more user friendly, if elements were added progressively. Then the user will see sets of rectangles appearing in short intervals, as if it was an intended animation. The total time for all rectangles to appear might be slightly longer, but the user will feel otherwise. We couldn't find a neat way to do this with D3.js.</span></p></div></div><div id="wallapatta_40069" class="section"><div class="content"><p id="wallapatta_40070" class="paragraph"><span id="wallapatta_40161" class="text">Another problem was that we couldn't move a particular DOM element across parent elements easily. For instance, if you want to show controls like the action links beneath the focused tweet in the twitter timeline, you should either have hidden action links on each tweet. or redraw action links when the focus changes, or have the action links on a different layer and move it. The first two options are not efficient and the third is tricky. The easiest is to have a DOM element removed and inserted to the focused tweet when the focus changes. This option, although probably not as efficient as the third option, is simpler and faster than the first two</span><sup id="wallapatta_40162" class="superScript"><span id="wallapatta_40163" class="text">6</span></sup><span id="wallapatta_40164" class="text">.</span></p></div></div><div id="wallapatta_40074" class="section"><div class="content"><p id="wallapatta_40075" class="paragraph"><span id="wallapatta_40169" class="text">There were a few similar issues so we thought of going for native Javascript code for DOM manipulation, and wrote a small library with an interface similar to  </span><a id="wallapatta_40170" class="link" href="d3_helpers.html">CoffeeScript helpers for d3.js</a><span id="wallapatta_40171" class="text">. We will continue to use D3.js for scales, csv parsing, etc.</span></p></div></div></div></div><div id="wallapatta_40076" class="section"><h3 class="heading"><span id="wallapatta_40077" class="block"><span id="wallapatta_40172" class="text">jQuery</span></span></h3><div class="content"><div id="wallapatta_40078" class="section"><div class="content"><p id="wallapatta_40079" class="paragraph"><span id="wallapatta_40173" class="text">jQuery is used for selectors, events and Ajax. The dependency on jQuery is becoming less and less. Using pure Javascript is not that complicated and it is much faster</span><sup id="wallapatta_40174" class="superScript"><span id="wallapatta_40175" class="text">7</span></sup><span id="wallapatta_40176" class="text">.</span></p></div></div></div></div><div id="wallapatta_40083" class="section"><div class="content"><p id="wallapatta_40084" class="paragraph"><span id="wallapatta_40178" class="text">Although we've been moving away from a lot of libraries and tools, there is still a number of libraries we use. We use them because they make the development process easier, but only as long as they don't constraint us from building what we want to build.</span></p></div></div></div>
+     </div>
+     <div class="wallapatta-sidebar three columns ">
+      <div id="wallapatta_40016" class="sidenote"><div id="wallapatta_40017" class="section"><div class="content"><p id="wallapatta_40018" class="paragraph"><a id="wallapatta_40093" class="link" href="http://www.jqplot.com/">jqPlot</a></p></div></div></div><div id="wallapatta_40021" class="sidenote"><div id="wallapatta_40022" class="section"><div class="content"><p id="wallapatta_40023" class="paragraph"><sup id="wallapatta_40106" class="superScript"><span id="wallapatta_40107" class="text">1</span></sup><span id="wallapatta_40108" class="text"> Protovis was the predecessor of </span><a id="wallapatta_40109" class="link" href="http://d3js.org/">d3.js</a></p></div></div><div id="wallapatta_40024" class="section"><div class="content"><p id="wallapatta_40025" class="paragraph"><sup id="wallapatta_40110" class="superScript"><span id="wallapatta_40111" class="text">2</span></sup><span id="wallapatta_40112" class="text"> </span><a id="wallapatta_40113" class="link" href="forestpin_2014.html">Forestpin Redesign</a></p></div></div></div><div id="wallapatta_40028" class="sidenote"><div id="wallapatta_40029" class="section"><div class="content"><p id="wallapatta_40030" class="paragraph"><a id="wallapatta_40115" class="link" href="http://backbonejs.org/">Backbone.js</a></p></div></div></div><div id="wallapatta_40033" class="sidenote"><div id="wallapatta_40034" class="section"><div class="content"><p id="wallapatta_40035" class="paragraph"><sup id="wallapatta_40128" class="superScript"><span id="wallapatta_40129" class="text">3</span></sup><span id="wallapatta_40130" class="text"> </span><a id="wallapatta_40131" class="link" href="http://chrisawren.com/posts/Implementing-microstates-in-Backbone-js">Implementing microstates in Backbone.js</a></p></div></div></div><div id="wallapatta_40042" class="sidenote"><div id="wallapatta_40043" class="section"><div class="content"><p id="wallapatta_40044" class="paragraph"><a id="wallapatta_40135" class="link" href="http://jquerymobile.com/">jQuery Mobile</a></p></div></div></div><div id="wallapatta_40047" class="sidenote"><div id="wallapatta_40048" class="section"><div class="content"><p id="wallapatta_40049" class="paragraph"><sup id="wallapatta_40141" class="superScript"><span id="wallapatta_40142" class="text">4</span></sup><span id="wallapatta_40143" class="text"> Newer versions on jQuery Mobile seem to be lighter</span></p></div></div></div><div id="wallapatta_40052" class="sidenote"><div id="wallapatta_40053" class="section"><div class="content"><p id="wallapatta_40054" class="paragraph"><a id="wallapatta_40145" class="link" href="https://developers.google.com/appengine/">Google App Engine]</a></p></div></div></div><div id="wallapatta_40057" class="sidenote"><div id="wallapatta_40058" class="section"><div class="content"><p id="wallapatta_40059" class="paragraph"><sup id="wallapatta_40151" class="superScript"><span id="wallapatta_40152" class="text">5</span></sup><span id="wallapatta_40153" class="text"> </span><a id="wallapatta_40154" class="link" href="app_engine.html">Moving from Google App Engine to Amazon EC2</a></p></div></div></div><div id="wallapatta_40062" class="sidenote"><div id="wallapatta_40063" class="section"><div class="content"><p id="wallapatta_40064" class="paragraph"><a id="wallapatta_40156" class="link" href="http://d3js.org/">d3.js</a></p></div></div></div><div id="wallapatta_40071" class="sidenote"><div id="wallapatta_40072" class="section"><div class="content"><p id="wallapatta_40073" class="paragraph"><sup id="wallapatta_40165" class="superScript"><span id="wallapatta_40166" class="text">6</span></sup><span id="wallapatta_40167" class="text"> </span><a id="wallapatta_40168" class="link" href="http://jsperf.com/moving-children/2">jsPerf</a></p></div></div></div><div id="wallapatta_40080" class="sidenote"><div id="wallapatta_40081" class="section"><div class="content"><p id="wallapatta_40082" class="paragraph"><a id="wallapatta_40177" class="link" href="http://vanilla-js.com/">VanillaJS</a></p></div></div></div>
+     </div>
+     <div style="display:none;">
+      <div class='wallapatta-code'>///People who are really serious about software should at least write their own libraries
+
+We have been using a lot of tools and libraries in our software, and have replaced a number of them with our code. Libraries makes it easy to get things done, and to ship early. But from my experience, having a third-party library or a tool dominate a core part of your software is not a good idea.
+
++++
+ People who are really serious about software should make their own hardware.
+
+ **- Alan Kay**
+
+We have moved away from a number of libraries (and frameworks and platforms) over the last couple of years. This may sound like a lot of hate, but it is not so. We still love those libraries and use them on a lot of smaller projects. But when your product grows and you want to mold it the way you want, sometimes libraries stand in your way. Some of the decisions we made could be wrong because we didn't understand the library properly. But we spent a lot of time trying to stick to those libraries before replacing them.
+
+Writing your code instead of using libraries takes a lot of weight off the product. Most of these libraries are written by really good programmers to be used in a wide range of scenarios, and there is a pretty good chance that you won't need them all. So getting inspiration from them and writing your own stuff will make the software lighter while making things work the way you want. A lot of programmers are likely to write their own code to replace libraries at some point, and that is probably why there are a number of libraries doing almost exact same thing in slightly different ways.
+
+One of the traps you can fall into when writing our own code is that you might just end up reinventing the wheel. There is a chance that you replace a well written library with a small piece of code initially, but with time end up improving your code to do exactly the same thing the library you threw away did.
+
+###jqPlot
+
+ &gt;&gt;&gt;
+  &lt;&lt;http://www.jqplot.com/(jqPlot)&gt;&gt;
+
+ Our first release of &lt;&lt;http://www.forestpin.com(Forestpin)&gt;&gt; used jqPlot for most of our charts. Some not-so-ordinary visualizations were made with &lt;&lt;http://mbostock.github.io/protovis/(protovis)&gt;&gt;^^1^^. jqPlot helped us quickly develop a product (MVP) to show potential customers, but introduced a lot of constraints. We made some changes to jqPlot to customize some of the charts, but it wasn't enough. The next version of Forestpin used &lt;&lt;http://d3js.org/(d3.js)&gt;&gt; for all the visualizations^^2^^, which gave us more control. We never used jqPlot any project, thereafter.
+
+ &gt;&gt;&gt;
+  ^^1^^ Protovis was the predecessor of &lt;&lt;http://d3js.org/(d3.js)&gt;&gt;
+
+  ^^2^^ &lt;&lt;forestpin_2014.html(Forestpin Redesign)&gt;&gt;
+
+###Backbone.js
+
+ &gt;&gt;&gt;
+  &lt;&lt;http://backbonejs.org/(Backbone.js)&gt;&gt;
+
+ Backbone was used at &lt;&lt;http://www.forestpin.com(Forestpin)&gt;&gt; as well as at &lt;&lt;http://www.nearby.lk/(nearby.lk)&gt;&gt;. What triggered us to code a replacement for Backbone was that it didn't save states in HTML5 history^^3^^. We weren't using most of the features of Backbone too, so the replacement, &lt;&lt;https://github.com/vpj/sweet(Sweet.js)&gt;&gt;, was much simpler. We plan on making Sweet.js independent from jQuery and Underscore.js, and also renaming it so that it doesn't get confused with &lt;&lt;http://sweetjs.org/(Mozilla's Sweet.js)&gt;&gt;.
+
+ &gt;&gt;&gt;
+  ^^3^^ &lt;&lt;http://chrisawren.com/posts/Implementing-microstates-in-Backbone-js(Implementing microstates in Backbone.js)&gt;&gt;
+
+###Database
+Forestpin Enterprise used a custom in-memory data store built ground up at Forestpin from the early days. The data store was a core part of the Forestpin product, and we gained a lot of performance by doing most of the calculations within the database itself.
+
+###jQuery Mobile
+
+ &gt;&gt;&gt;
+  &lt;&lt;http://jquerymobile.com/(jQuery Mobile)&gt;&gt;
+
+ &lt;&lt;http://www.nearby.lk/(nearby.lk)&gt;&gt; decided to drop jQuery mobile after an year with it. Adopting jQuery mobile was a bad decision. It was very heavy^^4^^ and was not developed to be used for apps like nearby.lk. jQuery mobile is super easy to be implemented for a web site with server generated HTML pages, but ours had a lot of dynamically generated pages and we spent quite sometime getting jQuery mobile to work.
+
+ &gt;&gt;&gt;
+  ^^4^^ Newer versions on jQuery Mobile seem to be lighter
+
+###Google App Engine
+
+ &gt;&gt;&gt;
+  &lt;&lt;https://developers.google.com/appengine/(Google App Engine])&gt;&gt;
+
+ &lt;&lt;http://www.nearby.lk/(nearby.lk)&gt;&gt; was hosted on Google App engine for an year and a half and we moved to Amazon^^5^^.
+
+ &gt;&gt;&gt;
+  ^^5^^ &lt;&lt;app_engine.html(Moving from Google App Engine to Amazon EC2)&gt;&gt;
+
+###d3.js
+
+ &gt;&gt;&gt;
+  &lt;&lt;http://d3js.org/(d3.js)&gt;&gt;
+
+ At Forestpin, we use d3 for all our visualizations and some tables - whenever data is connected to the DOM. We also introduced &lt;&lt;d3_helpers.html(CoffeeScript helpers)&gt;&gt; to simplify D3.js DOM manipulation code.
+
+ We came across some requirements which were hard to tackle with D3.js. One was adding DOM elements progressively. For example, when you are drawing a matrix with a large number of small rectangles. if you draw all if it at once, the user will see nothing for a while and everything will appear at once. But it would have been more user friendly, if elements were added progressively. Then the user will see sets of rectangles appearing in short intervals, as if it was an intended animation. The total time for all rectangles to appear might be slightly longer, but the user will feel otherwise. We couldn't find a neat way to do this with D3.js.
+
+ Another problem was that we couldn't move a particular DOM element across parent elements easily. For instance, if you want to show controls like the action links beneath the focused tweet in the twitter timeline, you should either have hidden action links on each tweet. or redraw action links when the focus changes, or have the action links on a different layer and move it. The first two options are not efficient and the third is tricky. The easiest is to have a DOM element removed and inserted to the focused tweet when the focus changes. This option, although probably not as efficient as the third option, is simpler and faster than the first two^^6^^.
+
+ &gt;&gt;&gt;
+  ^^6^^ &lt;&lt;http://jsperf.com/moving-children/2(jsPerf)&gt;&gt;
+
+ There were a few similar issues so we thought of going for native Javascript code for DOM manipulation, and wrote a small library with an interface similar to  &lt;&lt;d3_helpers.html(CoffeeScript helpers for d3.js)&gt;&gt;. We will continue to use D3.js for scales, csv parsing, etc.
+
+###jQuery
+
+ jQuery is used for selectors, events and Ajax. The dependency on jQuery is becoming less and less. Using pure Javascript is not that complicated and it is much faster^^7^^.
+
+ &gt;&gt;&gt;
+  &lt;&lt;http://vanilla-js.com/(VanillaJS)&gt;&gt;
+
+Although we've been moving away from a lot of libraries and tools, there is still a number of libraries we use. We use them because they make the development process easier, but only as long as they don't constraint us from building what we want to build.</div>
+     </div>
+     <div class="overlay ">
+      
+     </div>
+    </div>
+   </div>
+   <div class="wallapatta ">
+    <h1 class="title ">
+     <a href="facebook.html">
+      We stopped advertising on Facebook
+     </a>
+    </h1>
+    <h3 class="date ">
+     December 30, 2013
+    </h3>
+    <div class="post-paginated ">
+     <div class="wallapatta-main nine columns ">
+      <div id="wallapatta_50000" class="article"><div id="wallapatta_50001" class="section"><h3 class="heading"><span id="wallapatta_50002" class="block"><span id="wallapatta_50042" class="text">Or, How to get Facebook "likes"?</span></span></h3><div class="content"></div></div><div id="wallapatta_50006" class="section"><div class="content"><p id="wallapatta_50007" class="paragraph"><a id="wallapatta_50045" class="link" href="http://www.nearby.lk">nearby.lk</a><span id="wallapatta_50046" class="text"> stopped advertising on Facebook to get Facebook "likes", because we felt that it was a giant fruitless scheme of making Facebook rich. Most of the "likes" on Facebook are useless, they are basically random clicks, which adds no value to anybody, and you need to pay Facebook for that. By the way, this may not be the case with advertising for *Clicks to Website*, *Website Conversions*, etc. - I don't have experience with those.</span></p></div></div><div id="wallapatta_50008" class="section"><div class="content"><p id="wallapatta_50009" class="paragraph"><a id="wallapatta_50047" class="link" href="https://www.facebook.com/www.nearby.lk">We got on Facebook</a><span id="wallapatta_50048" class="text"> when one of our employees created a fan page for the company, which we later made our official page. Facebook advertising was important for us to get awareness and to build reputation - so that our clients know we are popular because a lot of people like us on Facebook.</span></p></div></div><div id="wallapatta_50010" class="section"><div class="content"><p id="wallapatta_50011" class="paragraph"><span id="wallapatta_50049" class="text">It didn't take us long to realize that the first goal is never met because we got almost no traffic to </span><a id="wallapatta_50050" class="link" href="http://www.nearby.lk">nearby.lk</a><span id="wallapatta_50051" class="text"> from Facebook; it was way lower than the number of likes we were getting. What we expected was the other way around - lots people visiting the site and a few "liking" us. </span><strong id="wallapatta_50052" class="bold"><span id="wallapatta_50053" class="text">"Like" never meant like, it meant click.</span></strong><span id="wallapatta_50054" class="text"> People who "liked" probably didn't even know what they clicked, so it didn't do any marketing for us. Also, more "likes" didn't mean that there was a large set of users who would see our updates, since most of these people have liked hundreds of pages.</span></p></div></div><div id="wallapatta_50012" class="section"><div class="content"><p id="wallapatta_50013" class="paragraph"><span id="wallapatta_50055" class="text">Our second goal, building a reputation, a public available figure to show we are popular, was met. And it still works, because most people don't know how Facebook "likes" work. </span><strong id="wallapatta_50056" class="bold"><span id="wallapatta_50057" class="text">They believe we have a lot of likes because we have a great product and people like it. But there's absolutely no dwirelationship between the two.</span></strong></p></div></div><div id="wallapatta_50014" class="section"><div class="content"><p id="wallapatta_50015" class="paragraph"><span id="wallapatta_50058" class="text">State Department has spent $630,000 on Facebook</span><sup id="wallapatta_50059" class="superScript"><span id="wallapatta_50060" class="text">1, 2</span></sup><span id="wallapatta_50061" class="text">.</span></p><div id="wallapatta_50021" class="special"><div id="wallapatta_50022" class="section"><div class="content"><p id="wallapatta_50023" class="paragraph"><span id="wallapatta_50070" class="text">"Many in the bureau criticize the advertising campaigns as ‘buying fans' who may have once clicked on an ad or ‘liked' a photo but have no real interest in the topic and have never engaged further," reads the Inspector General report.</span></p></div></div></div></div></div><div id="wallapatta_50024" class="section"><div class="content"><p id="wallapatta_50025" class="paragraph"><em id="wallapatta_50071" class="italics"><span id="wallapatta_50072" class="text">At least they got their "likes" from homeland.</span></em></p></div></div><div id="wallapatta_50026" class="section"><div class="content"><p id="wallapatta_50027" class="paragraph"><span id="wallapatta_50073" class="text">When we launched a prototype </span><a id="wallapatta_50074" class="link" href="http://www.nearby.in">nearby.in</a><span id="wallapatta_50075" class="text"> with attractions in India, we advertised on Facebook targeting India. With a bit of research while doing that, we realized how most companies in Sri Lanka, which has almost nothing to do with foreign countries, get Facebook likes from countries other than Sri Lanka. They simply advertise targeting other countries, especially developing countries with large populations. And it is cheaper.</span></p></div></div><div id="wallapatta_50031" class="section"><div class="content"><p id="wallapatta_50032" class="paragraph"><span id="wallapatta_50079" class="text">For instance the page </span><a id="wallapatta_50080" class="link" href="https://www.facebook.com/FYI.SriLanka">FYI - Sri Lanka Mobile Directory</a><span id="wallapatta_50081" class="text"> probably, as its name implies, has nothing to do with Turkey.</span></p></div></div><div id="wallapatta_50033" class="image-container"><img class="image" src="http://vpj.github.io/images/posts/fb/city.png" alt="http://vpj.github.io/images/posts/fb/city.png"></div><div id="wallapatta_50034" class="section"><div class="content"><p id="wallapatta_50035" class="paragraph"><span id="wallapatta_50082" class="text">Not all companies are stupid enough to let others see their likes are useless. They spread it among a number of countries, while putting a little extra advertising in homeland, so that the most popular country remains to be homeland. To see how they do it you need to go create an ad yourself.</span></p></div></div><div id="wallapatta_50039" class="image-container"><img class="image" src="http://vpj.github.io/images/posts/fb/ad.png" alt="http://vpj.github.io/images/posts/fb/ad.png"></div><div id="wallapatta_50040" class="section"><div class="content"><p id="wallapatta_50041" class="paragraph"><span id="wallapatta_50084" class="text">So it's all about a race to get more </span><em id="wallapatta_50085" class="italics"><span id="wallapatta_50086" class="text">likes</span></em><span id="wallapatta_50087" class="text">, not creating a product that people </span><em id="wallapatta_50088" class="italics"><span id="wallapatta_50089" class="text">like</span></em><span id="wallapatta_50090" class="text">. And since these are not genuine likes, number of likes in Facebook becomes just a figure of how much money you can waste on Facebook; that is exchanging your money for Facebook "likes" which has no meaning.</span></p></div></div></div>
+     </div>
+     <div class="wallapatta-sidebar three columns ">
+      <div id="wallapatta_50003" class="sidenote"><div id="wallapatta_50004" class="section"><div class="content"><p id="wallapatta_50005" class="paragraph"><strong id="wallapatta_50043" class="bold"><a id="wallapatta_50044" class="link" href="https://news.ycombinator.com/item?id=7036205">Hacker News discussion</a></strong></p></div></div></div><div id="wallapatta_50016" class="sidenote"><div id="wallapatta_50017" class="section"><div class="content"><p id="wallapatta_50018" class="paragraph"><sup id="wallapatta_50062" class="superScript"><span id="wallapatta_50063" class="text">1</span></sup><span id="wallapatta_50064" class="text"> </span><a id="wallapatta_50065" class="link" href="http://thecable.foreignpolicy.com/posts/2013/07/02/omg_state_department_dropped_630000_on_facebook_likes">foreignpolicy.com</a></p></div></div><div id="wallapatta_50019" class="section"><div class="content"><p id="wallapatta_50020" class="paragraph"><sup id="wallapatta_50066" class="superScript"><span id="wallapatta_50067" class="text">2</span></sup><span id="wallapatta_50068" class="text"> </span><a id="wallapatta_50069" class="link" href="http://washingtonexaminer.com/article/2532629">washingtonexaminer.com</a></p></div></div></div><div id="wallapatta_50028" class="sidenote"><div id="wallapatta_50029" class="section"><div class="content"><p id="wallapatta_50030" class="paragraph"><span id="wallapatta_50076" class="text">We didn't work on </span><a id="wallapatta_50077" class="link" href="http://www.nearby.in">nearby.in</a><span id="wallapatta_50078" class="text"> after launch, it still running our old system.</span></p></div></div></div><div id="wallapatta_50036" class="sidenote"><div id="wallapatta_50037" class="section"><div class="content"><p id="wallapatta_50038" class="paragraph"><span id="wallapatta_50083" class="text">I'm not sure how accurate the figures provided by Facebook are, but I'm guessing it should be at least approximately correct.*</span></p></div></div></div>
+     </div>
+     <div style="display:none;">
+      <div class='wallapatta-code'>###Or, How to get Facebook "likes"?
+
+ &gt;&gt;&gt;
+  **&lt;&lt;https://news.ycombinator.com/item?id=7036205(Hacker News discussion)&gt;&gt;
+
+&lt;&lt;http://www.nearby.lk(nearby.lk)&gt;&gt; stopped advertising on Facebook to get Facebook "likes", because we felt that it was a giant fruitless scheme of making Facebook rich. Most of the "likes" on Facebook are useless, they are basically random clicks, which adds no value to anybody, and you need to pay Facebook for that. By the way, this may not be the case with advertising for *Clicks to Website*, *Website Conversions*, etc. - I don't have experience with those.
+
+&lt;&lt;https://www.facebook.com/www.nearby.lk(We got on Facebook)&gt;&gt; when one of our employees created a fan page for the company, which we later made our official page. Facebook advertising was important for us to get awareness and to build reputation - so that our clients know we are popular because a lot of people like us on Facebook.
+
+It didn't take us long to realize that the first goal is never met because we got almost no traffic to &lt;&lt;http://www.nearby.lk(nearby.lk&gt;&gt; from Facebook; it was way lower than the number of likes we were getting. What we expected was the other way around - lots people visiting the site and a few "liking" us. **"Like" never meant like, it meant click.** People who "liked" probably didn't even know what they clicked, so it didn't do any marketing for us. Also, more "likes" didn't mean that there was a large set of users who would see our updates, since most of these people have liked hundreds of pages.
+
+Our second goal, building a reputation, a public available figure to show we are popular, was met. And it still works, because most people don't know how Facebook "likes" work. **They believe we have a lot of likes because we have a great product and people like it. But there's absolutely no dwirelationship between the two.**
+
+State Department has spent $630,000 on Facebook^^1, 2^^.
+
+ &gt;&gt;&gt;
+  ^^1^^ &lt;&lt;http://thecable.foreignpolicy.com/posts/2013/07/02/omg_state_department_dropped_630000_on_facebook_likes(foreignpolicy.com)&gt;&gt;
+
+  ^^2^^ &lt;&lt;http://washingtonexaminer.com/article/2532629(washingtonexaminer.com)&gt;&gt;
+
+ +++
+  "Many in the bureau criticize the advertising campaigns as ‘buying fans' who may have once clicked on an ad or ‘liked' a photo but have no real interest in the topic and have never engaged further," reads the Inspector General report.
+
+
+--At least they got their "likes" from homeland.
+
+When we launched a prototype &lt;&lt;http://www.nearby.in(nearby.in)&gt;&gt; with attractions in India, we advertised on Facebook targeting India. With a bit of research while doing that, we realized how most companies in Sri Lanka, which has almost nothing to do with foreign countries, get Facebook likes from countries other than Sri Lanka. They simply advertise targeting other countries, especially developing countries with large populations. And it is cheaper.
+
+ &gt;&gt;&gt;
+  We didn't work on &lt;&lt;http://www.nearby.in(nearby.in)&gt;&gt; after launch, it still running our old system.
+
+For instance the page &lt;&lt;https://www.facebook.com/FYI.SriLanka(FYI - Sri Lanka Mobile Directory)&gt;&gt; probably, as its name implies, has nothing to do with Turkey.
+
+!http://vpj.github.io/images/posts/fb/city.png
+
+Not all companies are stupid enough to let others see their likes are useless. They spread it among a number of countries, while putting a little extra advertising in homeland, so that the most popular country remains to be homeland. To see how they do it you need to go create an ad yourself.
+
+ &gt;&gt;&gt;
+  I'm not sure how accurate the figures provided by Facebook are, but I'm guessing it should be at least approximately correct.*
+
+!http://vpj.github.io/images/posts/fb/ad.png
+
+So it's all about a race to get more --likes--, not creating a product that people --like--. And since these are not genuine likes, number of likes in Facebook becomes just a figure of how much money you can waste on Facebook; that is exchanging your money for Facebook "likes" which has no meaning.
+</div>
+     </div>
+     <div class="overlay ">
+      
      </div>
     </div>
    </div>

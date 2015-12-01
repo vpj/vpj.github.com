@@ -1,0 +1,412 @@
+<!DOCTYPE html><html>
+ <head>
+  <meta charset="utf-8">
+  </meta>
+  <title>
+   Passing File Descriptors Between Processes Using Sendmsg() and Recvmsg()
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </meta>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  </meta>
+  <link href="http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900" rel="stylesheet" type="text/css">
+  </link>
+  <link href="lib/skeleton/css/skeleton.css" rel="stylesheet">
+  </link>
+  <link href="lib/highlightjs/styles/default.css" rel="stylesheet">
+  </link>
+  <link href="css/style.css" rel="stylesheet">
+  </link>
+  <link href="blog.css" rel="stylesheet">
+  </link>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-44255805-1', 'auto');
+ga('send', 'pageview');
+  </script>
+ </head>
+ <body>
+  <div class="container wallapatta-container ">
+   <div class="header ">
+    <h1>
+     <a href="index.html">
+      VARUNA JAYASIRI
+     </a>
+    </h1>
+    <a class="button " href="https://www.twitter.com/vpj">
+     @vpj
+    </a>
+   </div>
+   <div class="wallapatta ">
+    <h1 class="title ">
+     Passing File Descriptors Between Processes Using Sendmsg() and Recvmsg()
+    </h1>
+    <h3 class="date ">
+     January 11, 2011
+    </h3>
+    <div style="margin-bottom:30px;">
+     <a class="twitter-share-button " href="https://twitter.com/share" data-via="vpj" data-size="large">
+      Tweet
+     </a>
+     <script>
+      !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+     </script>
+    </div>
+    <div class="row ">
+     <div class="wallapatta-main nine columns ">
+      <div id="wallapatta_0" class="article"><div id="wallapatta_1" class="section"><div class="content"><p id="wallapatta_2" class="paragraph"><span id="wallapatta_26" class="text">Using this technique you can pass file descriptors between processes using </span><code id="wallapatta_27" class="code"><span id="wallapatta_28" class="text">sendmsg()</span></code><span id="wallapatta_29" class="text"> and </span><code id="wallapatta_30" class="code"><span id="wallapatta_31" class="text">recvmsg()</span></code><span id="wallapatta_32" class="text"> functions using UNIX Domain Protocol. Any descriptor can be passed using this method not just a file descriptor.</span></p></div></div><div id="wallapatta_3" class="section"><div class="content"><p id="wallapatta_4" class="paragraph"><span id="wallapatta_33" class="text">This is quite useful when you want to balance load in a multi-core system. Other way of passing file descriptors is by forking the process, but in this case you can pass file descriptors between different processes at anytime.</span></p></div></div><div id="wallapatta_5" class="section"><h2 class="heading"><span id="wallapatta_6" class="block"><span id="wallapatta_34" class="text">Creating the UNIX Domain Protocol server</span></span></h2><div class="content"></div></div><div id="wallapatta_7" class="section"><div class="content"><p id="wallapatta_8" class="paragraph"><code id="wallapatta_35" class="code"><span id="wallapatta_36" class="text">SOCKET_PATH</span></code><span id="wallapatta_37" class="text"> was set to </span><code id="wallapatta_38" class="code"><span id="wallapatta_39" class="text">/tmp/unix_socket</span></code></p></div></div><pre id="wallapatta_9" class="codeBlock"><code class="c">   <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">create_server</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">struct</span> sockaddr_un addr;
+    <span class="hljs-keyword">int</span> fd;
+
+    <span class="hljs-keyword">if</span> ((fd = socket(AF_LOCAL, SOCK_STREAM, <span class="hljs-number">0</span>)) &lt; <span class="hljs-number">0</span>) {
+     log_error(<span class="hljs-string">"Failed to create server socket"</span>);
+     <span class="hljs-keyword">return</span> fd;
+    }
+
+    <span class="hljs-built_in">memset</span>(&amp;addr, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(addr));
+
+    addr.sun_family = AF_LOCAL;
+    unlink(SOCKET_PATH);
+    <span class="hljs-built_in">strcpy</span>(addr.sun_path, SOCKET_PATH);
+
+    <span class="hljs-keyword">if</span> (bind(fd, (<span class="hljs-keyword">struct</span> sockaddr *) &amp;(addr),
+                                 <span class="hljs-keyword">sizeof</span>(addr)) &lt; <span class="hljs-number">0</span>) {
+     log_error(<span class="hljs-string">"Failed to bind server socket"</span>);
+     <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;
+    }
+
+    <span class="hljs-keyword">if</span> (listen(fd, MAX_PENDING) &lt; <span class="hljs-number">0</span>) {
+     log_error(<span class="hljs-string">"Failed to listen on server socket"</span>);
+     <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;
+    }
+
+    setnonblocking(fd);
+
+    <span class="hljs-comment">/* Add handler to handle events on fd */</span>
+
+    <span class="hljs-keyword">return</span> fd;
+   }</code></pre><div id="wallapatta_10" class="section"><div class="content"><p id="wallapatta_11" class="paragraph"><span id="wallapatta_40" class="text">I used epoll for handling events, so adding a handler was something like this.</span></p></div></div><pre id="wallapatta_12" class="codeBlock"><code class="c">   hash_set(ioloop-&gt;handlers, fd, handler);
+
+   e.data.fd = fd;
+   e.events = EPOLLIN;
+
+   <span class="hljs-keyword">if</span>(epoll_ctl(ioloop-&gt;epfd, EPOLL_CTL_ADD, fd, &amp;e) &lt; <span class="hljs-number">0</span>) {
+    log_error(<span class="hljs-string">"Failed to insert handler to epoll"</span>);
+    <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;
+   }</code></pre><div id="wallapatta_13" class="section"><div class="content"><p id="wallapatta_14" class="paragraph"><span id="wallapatta_41" class="text">Connections to the server should be accepted with accept() similar to TCP sockets.</span></p></div></div><div id="wallapatta_15" class="section"><h2 class="heading"><span id="wallapatta_16" class="block"><span id="wallapatta_42" class="text">Connecting to the server</span></span></h2><div class="content"></div></div><pre id="wallapatta_17" class="codeBlock"><code class="c">   <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">connect_server</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">struct</span> sockaddr_un addr;
+    <span class="hljs-keyword">int</span> fd;
+
+    <span class="hljs-keyword">if</span> ((fd = socket(AF_LOCAL, SOCK_STREAM, <span class="hljs-number">0</span>)) &lt; <span class="hljs-number">0</span>) {
+     log_error(<span class="hljs-string">"Failed to create client socket"</span>);
+     <span class="hljs-keyword">return</span> fd;
+    }
+
+    <span class="hljs-built_in">memset</span>(&amp;addr, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(addr));
+
+    addr.sun_family = AF_LOCAL;
+    <span class="hljs-built_in">strcpy</span>(addr.sun_path, SOCKET_PATH);
+
+    <span class="hljs-keyword">if</span> (connect(fd,
+                (<span class="hljs-keyword">struct</span> sockaddr *) &amp;(addr),
+                <span class="hljs-keyword">sizeof</span>(addr)) &lt; <span class="hljs-number">0</span>) {
+     log_error(<span class="hljs-string">"Failed to connect to server"</span>);
+     <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;
+    }
+
+    setnonblocking(fd);
+
+    <span class="hljs-comment">/* Add handler to handle events */</span>
+
+    <span class="hljs-keyword">return</span> fd;
+   }</code></pre><div id="wallapatta_18" class="section"><div class="content"><p id="wallapatta_19" class="paragraph"><span id="wallapatta_43" class="text">I was adding </span><code id="wallapatta_44" class="code"><span id="wallapatta_45" class="text">EPOLLOUT</span></code><span id="wallapatta_46" class="text"> listener to the socket whenever there were file descriptors to be passed to the other process.</span></p></div></div><div id="wallapatta_20" class="section"><h2 class="heading"><span id="wallapatta_21" class="block"><span id="wallapatta_47" class="text">Receiving a file descriptor</span></span></h2><div class="content"></div></div><pre id="wallapatta_22" class="codeBlock"><code class="c">   <span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span>
+   <span class="hljs-title">recv_file_descriptor</span><span class="hljs-params">(
+     <span class="hljs-keyword">int</span> socket)</span> <span class="hljs-comment">/* Socket from which the file descriptor is read */</span>
+   </span>{
+    <span class="hljs-keyword">int</span> sent_fd;
+    <span class="hljs-keyword">struct</span> msghdr message;
+    <span class="hljs-keyword">struct</span> iovec iov[<span class="hljs-number">1</span>];
+    <span class="hljs-keyword">struct</span> cmsghdr *control_message = <span class="hljs-literal">NULL</span>;
+    <span class="hljs-keyword">char</span> ctrl_buf[CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>))];
+    <span class="hljs-keyword">char</span> data[<span class="hljs-number">1</span>];
+    <span class="hljs-keyword">int</span> res;
+
+    <span class="hljs-built_in">memset</span>(&amp;message, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">struct</span> msghdr));
+    <span class="hljs-built_in">memset</span>(ctrl_buf, <span class="hljs-number">0</span>, CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>)));
+
+    <span class="hljs-comment">/* For the dummy data */</span>
+    iov[<span class="hljs-number">0</span>].iov_base = data;
+    iov[<span class="hljs-number">0</span>].iov_len = <span class="hljs-keyword">sizeof</span>(data);
+
+    message.msg_name = <span class="hljs-literal">NULL</span>;
+    message.msg_namelen = <span class="hljs-number">0</span>;
+    message.msg_control = ctrl_buf;
+    message.msg_controllen = CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
+    message.msg_iov = iov;
+    message.msg_iovlen = <span class="hljs-number">1</span>;
+
+    <span class="hljs-keyword">if</span>((res = recvmsg(socket, &amp;message, <span class="hljs-number">0</span>)) &lt;= <span class="hljs-number">0</span>)
+     <span class="hljs-keyword">return</span> res;
+
+    <span class="hljs-comment">/* Iterate through header to find if there is a file descriptor */</span>
+    <span class="hljs-keyword">for</span>(control_message = CMSG_FIRSTHDR(&amp;message);
+        control_message != <span class="hljs-literal">NULL</span>;
+        control_message = CMSG_NXTHDR(&amp;message,
+                                      control_message))
+    {
+     <span class="hljs-keyword">if</span>( (control_message-&gt;cmsg_level == SOL_SOCKET) &amp;&amp;
+         (control_message-&gt;cmsg_type == SCM_RIGHTS) )
+     {
+      <span class="hljs-keyword">return</span> *((<span class="hljs-keyword">int</span> *) CMSG_DATA(control_message));
+     }
+    }
+
+    <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;
+   }</code></pre><div id="wallapatta_23" class="section"><h2 class="heading"><span id="wallapatta_24" class="block"><span id="wallapatta_48" class="text">Sending a file descriptor</span></span></h2><div class="content"></div></div><pre id="wallapatta_25" class="codeBlock"><code class="c">   <span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span>
+   <span class="hljs-title">send_file_descriptor</span><span class="hljs-params">(
+     <span class="hljs-keyword">int</span> socket, <span class="hljs-comment">/* Socket through which the file descriptor is passed */</span>
+     <span class="hljs-keyword">int</span> fd_to_send)</span> <span class="hljs-comment">/* File descriptor to be passed, could be another socket */</span>
+   </span>{
+    <span class="hljs-keyword">struct</span> msghdr message;
+    <span class="hljs-keyword">struct</span> iovec iov[<span class="hljs-number">1</span>];
+    <span class="hljs-keyword">struct</span> cmsghdr *control_message = <span class="hljs-literal">NULL</span>;
+    <span class="hljs-keyword">char</span> ctrl_buf[CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>))];
+    <span class="hljs-keyword">char</span> data[<span class="hljs-number">1</span>];
+
+    <span class="hljs-built_in">memset</span>(&amp;message, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">struct</span> msghdr));
+    <span class="hljs-built_in">memset</span>(ctrl_buf, <span class="hljs-number">0</span>, CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>)));
+
+    <span class="hljs-comment">/* We are passing at least one byte of data so that recvmsg() will not return 0 */</span>
+    data[<span class="hljs-number">0</span>] = <span class="hljs-string">' '</span>;
+    iov[<span class="hljs-number">0</span>].iov_base = data;
+    iov[<span class="hljs-number">0</span>].iov_len = <span class="hljs-keyword">sizeof</span>(data);
+
+    message.msg_name = <span class="hljs-literal">NULL</span>;
+    message.msg_namelen = <span class="hljs-number">0</span>;
+    message.msg_iov = iov;
+    message.msg_iovlen = <span class="hljs-number">1</span>;
+    message.msg_controllen =  CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
+    message.msg_control = ctrl_buf;
+
+    control_message = CMSG_FIRSTHDR(&amp;message);
+    control_message-&gt;cmsg_level = SOL_SOCKET;
+    control_message-&gt;cmsg_type = SCM_RIGHTS;
+    control_message-&gt;cmsg_len = CMSG_LEN(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
+
+    *((<span class="hljs-keyword">int</span> *) CMSG_DATA(control_message)) = fd_to_send;
+
+    <span class="hljs-keyword">return</span> sendmsg(socket, &amp;message, <span class="hljs-number">0</span>);
+   }</code></pre></div>
+     </div>
+     <div class="wallapatta-sidebar three columns ">
+      
+     </div>
+     <div style="display:none;">
+      <div class='wallapatta-code'>///Passing File Descriptors Between Processes Using Sendmsg() and Recvmsg()
+
+Using this technique you can pass file descriptors between processes using ``sendmsg()`` and ``recvmsg()`` functions using UNIX Domain Protocol. Any descriptor can be passed using this method not just a file descriptor.
+
+This is quite useful when you want to balance load in a multi-core system. Other way of passing file descriptors is by forking the process, but in this case you can pass file descriptors between different processes at anytime.
+
+## Creating the UNIX Domain Protocol server
+
+``SOCKET_PATH`` was set to ``/tmp/unix_socket``
+
+```c
+    int create_server() {
+     struct sockaddr_un addr;
+     int fd;
+
+     if ((fd = socket(AF_LOCAL, SOCK_STREAM, 0)) &lt; 0) {
+      log_error("Failed to create server socket");
+      return fd;
+     }
+
+     memset(&addr, 0, sizeof(addr));
+
+     addr.sun_family = AF_LOCAL;
+     unlink(SOCKET_PATH);
+     strcpy(addr.sun_path, SOCKET_PATH);
+
+     if (bind(fd, (struct sockaddr *) &(addr),
+                                  sizeof(addr)) &lt; 0) {
+      log_error("Failed to bind server socket");
+      return -1;
+     }
+
+     if (listen(fd, MAX_PENDING) &lt; 0) {
+      log_error("Failed to listen on server socket");
+      return -1;
+     }
+
+     setnonblocking(fd);
+
+     /* Add handler to handle events on fd */
+
+     return fd;
+    }
+
+I used epoll for handling events, so adding a handler was something like this.
+
+```c
+    hash_set(ioloop-&gt;handlers, fd, handler);
+
+    e.data.fd = fd;
+    e.events = EPOLLIN;
+
+    if(epoll_ctl(ioloop-&gt;epfd, EPOLL_CTL_ADD, fd, &e) &lt; 0) {
+     log_error("Failed to insert handler to epoll");
+     return -1;
+    }
+
+Connections to the server should be accepted with accept() similar to TCP sockets.
+
+## Connecting to the server
+
+```c
+    int connect_server() {
+     struct sockaddr_un addr;
+     int fd;
+
+     if ((fd = socket(AF_LOCAL, SOCK_STREAM, 0)) &lt; 0) {
+      log_error("Failed to create client socket");
+      return fd;
+     }
+
+     memset(&addr, 0, sizeof(addr));
+
+     addr.sun_family = AF_LOCAL;
+     strcpy(addr.sun_path, SOCKET_PATH);
+
+     if (connect(fd,
+                 (struct sockaddr *) &(addr),
+                 sizeof(addr)) &lt; 0) {
+      log_error("Failed to connect to server");
+      return -1;
+     }
+
+     setnonblocking(fd);
+
+     /* Add handler to handle events */
+
+     return fd;
+    }
+
+I was adding ``EPOLLOUT`` listener to the socket whenever there were file descriptors to be passed to the other process.
+
+## Receiving a file descriptor
+
+```c
+    static int
+    recv_file_descriptor(
+      int socket) /* Socket from which the file descriptor is read */
+    {
+     int sent_fd;
+     struct msghdr message;
+     struct iovec iov[1];
+     struct cmsghdr *control_message = NULL;
+     char ctrl_buf[CMSG_SPACE(sizeof(int))];
+     char data[1];
+     int res;
+
+     memset(&message, 0, sizeof(struct msghdr));
+     memset(ctrl_buf, 0, CMSG_SPACE(sizeof(int)));
+
+     /* For the dummy data */
+     iov[0].iov_base = data;
+     iov[0].iov_len = sizeof(data);
+
+     message.msg_name = NULL;
+     message.msg_namelen = 0;
+     message.msg_control = ctrl_buf;
+     message.msg_controllen = CMSG_SPACE(sizeof(int));
+     message.msg_iov = iov;
+     message.msg_iovlen = 1;
+
+     if((res = recvmsg(socket, &message, 0)) &lt;= 0)
+      return res;
+
+     /* Iterate through header to find if there is a file descriptor */
+     for(control_message = CMSG_FIRSTHDR(&message);
+         control_message != NULL;
+         control_message = CMSG_NXTHDR(&message,
+                                       control_message))
+     {
+      if( (control_message-&gt;cmsg_level == SOL_SOCKET) &&
+          (control_message-&gt;cmsg_type == SCM_RIGHTS) )
+      {
+       return *((int *) CMSG_DATA(control_message));
+      }
+     }
+
+     return -1;
+    }
+
+
+## Sending a file descriptor
+
+```c
+    static int
+    send_file_descriptor(
+      int socket, /* Socket through which the file descriptor is passed */
+      int fd_to_send) /* File descriptor to be passed, could be another socket */
+    {
+     struct msghdr message;
+     struct iovec iov[1];
+     struct cmsghdr *control_message = NULL;
+     char ctrl_buf[CMSG_SPACE(sizeof(int))];
+     char data[1];
+
+     memset(&message, 0, sizeof(struct msghdr));
+     memset(ctrl_buf, 0, CMSG_SPACE(sizeof(int)));
+
+     /* We are passing at least one byte of data so that recvmsg() will not return 0 */
+     data[0] = ' ';
+     iov[0].iov_base = data;
+     iov[0].iov_len = sizeof(data);
+
+     message.msg_name = NULL;
+     message.msg_namelen = 0;
+     message.msg_iov = iov;
+     message.msg_iovlen = 1;
+     message.msg_controllen =  CMSG_SPACE(sizeof(int));
+     message.msg_control = ctrl_buf;
+
+     control_message = CMSG_FIRSTHDR(&message);
+     control_message-&gt;cmsg_level = SOL_SOCKET;
+     control_message-&gt;cmsg_type = SCM_RIGHTS;
+     control_message-&gt;cmsg_len = CMSG_LEN(sizeof(int));
+
+     *((int *) CMSG_DATA(control_message)) = fd_to_send;
+
+     return sendmsg(socket, &message, 0);
+    }
+</div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script src="lib/highlightjs/highlight.pack.js">
+  </script>
+  <script src="lib/weya/weya.js">
+  </script>
+  <script src="lib/weya/base.js">
+  </script>
+  <script src="lib/mod/mod.js">
+  </script>
+  <script src="js/static.js?v=9">
+  </script>
+  <script src="js/parser.js?v=9">
+  </script>
+  <script src="js/reader.js?v=9">
+  </script>
+  <script src="js/nodes.js?v=9">
+  </script>
+  <script src="js/render.js?v=9">
+  </script>
+ </body>
+</html>

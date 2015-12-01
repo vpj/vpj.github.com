@@ -1,0 +1,174 @@
+<!DOCTYPE html><html>
+ <head>
+  <meta charset="utf-8">
+  </meta>
+  <title>
+   People who are really serious about software should write their libraries
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </meta>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  </meta>
+  <link href="http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900" rel="stylesheet" type="text/css">
+  </link>
+  <link href="lib/skeleton/css/skeleton.css" rel="stylesheet">
+  </link>
+  <link href="lib/highlightjs/styles/default.css" rel="stylesheet">
+  </link>
+  <link href="css/style.css" rel="stylesheet">
+  </link>
+  <link href="blog.css" rel="stylesheet">
+  </link>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-44255805-1', 'auto');
+ga('send', 'pageview');
+  </script>
+ </head>
+ <body>
+  <div class="container wallapatta-container ">
+   <div class="header ">
+    <h1>
+     <a href="index.html">
+      VARUNA JAYASIRI
+     </a>
+    </h1>
+    <a class="button " href="https://www.twitter.com/vpj">
+     @vpj
+    </a>
+   </div>
+   <div class="wallapatta ">
+    <h1 class="title ">
+     People who are really serious about software should write their libraries
+    </h1>
+    <h3 class="date ">
+     February 19, 2014
+    </h3>
+    <div style="margin-bottom:30px;">
+     <a class="twitter-share-button " href="https://twitter.com/share" data-via="vpj" data-size="large">
+      Tweet
+     </a>
+     <script>
+      !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+     </script>
+    </div>
+    <div class="row ">
+     <div class="wallapatta-main nine columns ">
+      <div id="wallapatta_0" class="article"><div id="wallapatta_1" class="section"><div class="content"><p id="wallapatta_2" class="paragraph"><span id="wallapatta_85" class="text">We have been using a lot of tools and libraries in our software, and have replaced a number of them with our code. Libraries makes it easy to get things done, and to ship early. But from my experience, having a third-party library or a tool dominate a core part of your software is not a good idea.</span></p></div></div><div id="wallapatta_3" class="special"><div id="wallapatta_4" class="section"><div class="content"><p id="wallapatta_5" class="paragraph"><span id="wallapatta_86" class="text">People who are really serious about software should make their own hardware.</span></p></div></div><div id="wallapatta_6" class="section"><div class="content"><p id="wallapatta_7" class="paragraph"><strong id="wallapatta_87" class="bold"><span id="wallapatta_88" class="text">- Alan Kay</span></strong></p></div></div></div><div id="wallapatta_8" class="section"><div class="content"><p id="wallapatta_9" class="paragraph"><span id="wallapatta_89" class="text">We have moved away from a number of libraries (and frameworks and platforms) over the last couple of years. This may sound like a lot of hate, but it is not so. We still love those libraries and use them on a lot of smaller projects. But when your product grows and you want to mold it the way you want, sometimes libraries stand in your way. Some of the decisions we made could be wrong because we didn't understand the library properly. But we spent a lot of time trying to stick to those libraries before replacing them.</span></p></div></div><div id="wallapatta_10" class="section"><div class="content"><p id="wallapatta_11" class="paragraph"><span id="wallapatta_90" class="text">Writing your code instead of using libraries takes a lot of weight off the product. Most of these libraries are written by really good programmers to be used in a wide range of scenarios, and there is a pretty good chance that you won't need them all. So getting inspiration from them and writing your own stuff will make the software lighter while making things work the way you want. A lot of programmers are likely to write their own code to replace libraries at some point, and that is probably why there are a number of libraries doing almost exact same thing in slightly different ways.</span></p></div></div><div id="wallapatta_12" class="section"><div class="content"><p id="wallapatta_13" class="paragraph"><span id="wallapatta_91" class="text">One of the traps you can fall into when writing our own code is that you might just end up reinventing the wheel. There is a chance that you replace a well written library with a small piece of code initially, but with time end up improving your code to do exactly the same thing the library you threw away did.</span></p></div></div><div id="wallapatta_14" class="section"><h3 class="heading"><span id="wallapatta_15" class="block"><span id="wallapatta_92" class="text">jqPlot</span></span></h3><div class="content"><div id="wallapatta_19" class="section"><div class="content"><p id="wallapatta_20" class="paragraph"><span id="wallapatta_94" class="text">Our first release of </span><a id="wallapatta_95" class="link" href="http://www.forestpin.com">Forestpin</a><span id="wallapatta_96" class="text"> used jqPlot for most of our charts. Some not-so-ordinary visualizations were made with </span><a id="wallapatta_97" class="link" href="http://mbostock.github.io/protovis/">protovis</a><sup id="wallapatta_98" class="superScript"><span id="wallapatta_99" class="text">1</span></sup><span id="wallapatta_100" class="text">. jqPlot helped us quickly develop a product (MVP) to show potential customers, but introduced a lot of constraints. We made some changes to jqPlot to customize some of the charts, but it wasn't enough. The next version of Forestpin used </span><a id="wallapatta_101" class="link" href="http://d3js.org/">d3.js</a><span id="wallapatta_102" class="text"> for all the visualizations</span><sup id="wallapatta_103" class="superScript"><span id="wallapatta_104" class="text">2</span></sup><span id="wallapatta_105" class="text">, which gave us more control. We never used jqPlot any project, thereafter.</span></p></div></div></div></div><div id="wallapatta_26" class="section"><h3 class="heading"><span id="wallapatta_27" class="block"><span id="wallapatta_114" class="text">Backbone.js</span></span></h3><div class="content"><div id="wallapatta_31" class="section"><div class="content"><p id="wallapatta_32" class="paragraph"><span id="wallapatta_116" class="text">Backbone was used at </span><a id="wallapatta_117" class="link" href="http://www.forestpin.com">Forestpin</a><span id="wallapatta_118" class="text"> as well as at </span><a id="wallapatta_119" class="link" href="http://www.nearby.lk/">nearby.lk</a><span id="wallapatta_120" class="text">. What triggered us to code a replacement for Backbone was that it didn't save states in HTML5 history</span><sup id="wallapatta_121" class="superScript"><span id="wallapatta_122" class="text">3</span></sup><span id="wallapatta_123" class="text">. We weren't using most of the features of Backbone too, so the replacement, </span><a id="wallapatta_124" class="link" href="https://github.com/vpj/sweet">Sweet.js</a><span id="wallapatta_125" class="text">, was much simpler. We plan on making Sweet.js independent from jQuery and Underscore.js, and also renaming it so that it doesn't get confused with </span><a id="wallapatta_126" class="link" href="http://sweetjs.org/">Mozilla's Sweet.js</a><span id="wallapatta_127" class="text">.</span></p></div></div></div></div><div id="wallapatta_36" class="section"><h3 class="heading"><span id="wallapatta_37" class="block"><span id="wallapatta_132" class="text">Database</span></span></h3><div class="content"></div></div><div id="wallapatta_38" class="section"><div class="content"><p id="wallapatta_39" class="paragraph"><span id="wallapatta_133" class="text">Forestpin Enterprise used a custom in-memory data store built ground up at Forestpin from the early days. The data store was a core part of the Forestpin product, and we gained a lot of performance by doing most of the calculations within the database itself.</span></p></div></div><div id="wallapatta_40" class="section"><h3 class="heading"><span id="wallapatta_41" class="block"><span id="wallapatta_134" class="text">jQuery Mobile</span></span></h3><div class="content"><div id="wallapatta_45" class="section"><div class="content"><p id="wallapatta_46" class="paragraph"><a id="wallapatta_136" class="link" href="http://www.nearby.lk/">nearby.lk</a><span id="wallapatta_137" class="text"> decided to drop jQuery mobile after an year with it. Adopting jQuery mobile was a bad decision. It was very heavy</span><sup id="wallapatta_138" class="superScript"><span id="wallapatta_139" class="text">4</span></sup><span id="wallapatta_140" class="text"> and was not developed to be used for apps like nearby.lk. jQuery mobile is super easy to be implemented for a web site with server generated HTML pages, but ours had a lot of dynamically generated pages and we spent quite sometime getting jQuery mobile to work.</span></p></div></div></div></div><div id="wallapatta_50" class="section"><h3 class="heading"><span id="wallapatta_51" class="block"><span id="wallapatta_144" class="text">Google App Engine</span></span></h3><div class="content"><div id="wallapatta_55" class="section"><div class="content"><p id="wallapatta_56" class="paragraph"><a id="wallapatta_146" class="link" href="http://www.nearby.lk/">nearby.lk</a><span id="wallapatta_147" class="text"> was hosted on Google App engine for an year and a half and we moved to Amazon</span><sup id="wallapatta_148" class="superScript"><span id="wallapatta_149" class="text">5</span></sup><span id="wallapatta_150" class="text">.</span></p></div></div></div></div><div id="wallapatta_60" class="section"><h3 class="heading"><span id="wallapatta_61" class="block"><span id="wallapatta_155" class="text">d3.js</span></span></h3><div class="content"><div id="wallapatta_65" class="section"><div class="content"><p id="wallapatta_66" class="paragraph"><span id="wallapatta_157" class="text">At Forestpin, we use d3 for all our visualizations and some tables - whenever data is connected to the DOM. We also introduced </span><a id="wallapatta_158" class="link" href="d3_helpers.html">CoffeeScript helpers</a><span id="wallapatta_159" class="text"> to simplify D3.js DOM manipulation code.</span></p></div></div><div id="wallapatta_67" class="section"><div class="content"><p id="wallapatta_68" class="paragraph"><span id="wallapatta_160" class="text">We came across some requirements which were hard to tackle with D3.js. One was adding DOM elements progressively. For example, when you are drawing a matrix with a large number of small rectangles. if you draw all if it at once, the user will see nothing for a while and everything will appear at once. But it would have been more user friendly, if elements were added progressively. Then the user will see sets of rectangles appearing in short intervals, as if it was an intended animation. The total time for all rectangles to appear might be slightly longer, but the user will feel otherwise. We couldn't find a neat way to do this with D3.js.</span></p></div></div><div id="wallapatta_69" class="section"><div class="content"><p id="wallapatta_70" class="paragraph"><span id="wallapatta_161" class="text">Another problem was that we couldn't move a particular DOM element across parent elements easily. For instance, if you want to show controls like the action links beneath the focused tweet in the twitter timeline, you should either have hidden action links on each tweet. or redraw action links when the focus changes, or have the action links on a different layer and move it. The first two options are not efficient and the third is tricky. The easiest is to have a DOM element removed and inserted to the focused tweet when the focus changes. This option, although probably not as efficient as the third option, is simpler and faster than the first two</span><sup id="wallapatta_162" class="superScript"><span id="wallapatta_163" class="text">6</span></sup><span id="wallapatta_164" class="text">.</span></p></div></div><div id="wallapatta_74" class="section"><div class="content"><p id="wallapatta_75" class="paragraph"><span id="wallapatta_169" class="text">There were a few similar issues so we thought of going for native Javascript code for DOM manipulation, and wrote a small library with an interface similar to  </span><a id="wallapatta_170" class="link" href="d3_helpers.html">CoffeeScript helpers for d3.js</a><span id="wallapatta_171" class="text">. We will continue to use D3.js for scales, csv parsing, etc.</span></p></div></div></div></div><div id="wallapatta_76" class="section"><h3 class="heading"><span id="wallapatta_77" class="block"><span id="wallapatta_172" class="text">jQuery</span></span></h3><div class="content"><div id="wallapatta_78" class="section"><div class="content"><p id="wallapatta_79" class="paragraph"><span id="wallapatta_173" class="text">jQuery is used for selectors, events and Ajax. The dependency on jQuery is becoming less and less. Using pure Javascript is not that complicated and it is much faster</span><sup id="wallapatta_174" class="superScript"><span id="wallapatta_175" class="text">7</span></sup><span id="wallapatta_176" class="text">.</span></p></div></div></div></div><div id="wallapatta_83" class="section"><div class="content"><p id="wallapatta_84" class="paragraph"><span id="wallapatta_178" class="text">Although we've been moving away from a lot of libraries and tools, there is still a number of libraries we use. We use them because they make the development process easier, but only as long as they don't constraint us from building what we want to build.</span></p></div></div></div>
+     </div>
+     <div class="wallapatta-sidebar three columns ">
+      <div id="wallapatta_16" class="sidenote"><div id="wallapatta_17" class="section"><div class="content"><p id="wallapatta_18" class="paragraph"><a id="wallapatta_93" class="link" href="http://www.jqplot.com/">jqPlot</a></p></div></div></div><div id="wallapatta_21" class="sidenote"><div id="wallapatta_22" class="section"><div class="content"><p id="wallapatta_23" class="paragraph"><sup id="wallapatta_106" class="superScript"><span id="wallapatta_107" class="text">1</span></sup><span id="wallapatta_108" class="text"> Protovis was the predecessor of </span><a id="wallapatta_109" class="link" href="http://d3js.org/">d3.js</a></p></div></div><div id="wallapatta_24" class="section"><div class="content"><p id="wallapatta_25" class="paragraph"><sup id="wallapatta_110" class="superScript"><span id="wallapatta_111" class="text">2</span></sup><span id="wallapatta_112" class="text"> </span><a id="wallapatta_113" class="link" href="forestpin_2014.html">Forestpin Redesign</a></p></div></div></div><div id="wallapatta_28" class="sidenote"><div id="wallapatta_29" class="section"><div class="content"><p id="wallapatta_30" class="paragraph"><a id="wallapatta_115" class="link" href="http://backbonejs.org/">Backbone.js</a></p></div></div></div><div id="wallapatta_33" class="sidenote"><div id="wallapatta_34" class="section"><div class="content"><p id="wallapatta_35" class="paragraph"><sup id="wallapatta_128" class="superScript"><span id="wallapatta_129" class="text">3</span></sup><span id="wallapatta_130" class="text"> </span><a id="wallapatta_131" class="link" href="http://chrisawren.com/posts/Implementing-microstates-in-Backbone-js">Implementing microstates in Backbone.js</a></p></div></div></div><div id="wallapatta_42" class="sidenote"><div id="wallapatta_43" class="section"><div class="content"><p id="wallapatta_44" class="paragraph"><a id="wallapatta_135" class="link" href="http://jquerymobile.com/">jQuery Mobile</a></p></div></div></div><div id="wallapatta_47" class="sidenote"><div id="wallapatta_48" class="section"><div class="content"><p id="wallapatta_49" class="paragraph"><sup id="wallapatta_141" class="superScript"><span id="wallapatta_142" class="text">4</span></sup><span id="wallapatta_143" class="text"> Newer versions on jQuery Mobile seem to be lighter</span></p></div></div></div><div id="wallapatta_52" class="sidenote"><div id="wallapatta_53" class="section"><div class="content"><p id="wallapatta_54" class="paragraph"><a id="wallapatta_145" class="link" href="https://developers.google.com/appengine/">Google App Engine]</a></p></div></div></div><div id="wallapatta_57" class="sidenote"><div id="wallapatta_58" class="section"><div class="content"><p id="wallapatta_59" class="paragraph"><sup id="wallapatta_151" class="superScript"><span id="wallapatta_152" class="text">5</span></sup><span id="wallapatta_153" class="text"> </span><a id="wallapatta_154" class="link" href="app_engine.html">Moving from Google App Engine to Amazon EC2</a></p></div></div></div><div id="wallapatta_62" class="sidenote"><div id="wallapatta_63" class="section"><div class="content"><p id="wallapatta_64" class="paragraph"><a id="wallapatta_156" class="link" href="http://d3js.org/">d3.js</a></p></div></div></div><div id="wallapatta_71" class="sidenote"><div id="wallapatta_72" class="section"><div class="content"><p id="wallapatta_73" class="paragraph"><sup id="wallapatta_165" class="superScript"><span id="wallapatta_166" class="text">6</span></sup><span id="wallapatta_167" class="text"> </span><a id="wallapatta_168" class="link" href="http://jsperf.com/moving-children/2">jsPerf</a></p></div></div></div><div id="wallapatta_80" class="sidenote"><div id="wallapatta_81" class="section"><div class="content"><p id="wallapatta_82" class="paragraph"><a id="wallapatta_177" class="link" href="http://vanilla-js.com/">VanillaJS</a></p></div></div></div>
+     </div>
+     <div style="display:none;">
+      <div class='wallapatta-code'>///People who are really serious about software should at least write their own libraries
+
+We have been using a lot of tools and libraries in our software, and have replaced a number of them with our code. Libraries makes it easy to get things done, and to ship early. But from my experience, having a third-party library or a tool dominate a core part of your software is not a good idea.
+
++++
+ People who are really serious about software should make their own hardware.
+
+ **- Alan Kay**
+
+We have moved away from a number of libraries (and frameworks and platforms) over the last couple of years. This may sound like a lot of hate, but it is not so. We still love those libraries and use them on a lot of smaller projects. But when your product grows and you want to mold it the way you want, sometimes libraries stand in your way. Some of the decisions we made could be wrong because we didn't understand the library properly. But we spent a lot of time trying to stick to those libraries before replacing them.
+
+Writing your code instead of using libraries takes a lot of weight off the product. Most of these libraries are written by really good programmers to be used in a wide range of scenarios, and there is a pretty good chance that you won't need them all. So getting inspiration from them and writing your own stuff will make the software lighter while making things work the way you want. A lot of programmers are likely to write their own code to replace libraries at some point, and that is probably why there are a number of libraries doing almost exact same thing in slightly different ways.
+
+One of the traps you can fall into when writing our own code is that you might just end up reinventing the wheel. There is a chance that you replace a well written library with a small piece of code initially, but with time end up improving your code to do exactly the same thing the library you threw away did.
+
+###jqPlot
+
+ &gt;&gt;&gt;
+  &lt;&lt;http://www.jqplot.com/(jqPlot)&gt;&gt;
+
+ Our first release of &lt;&lt;http://www.forestpin.com(Forestpin)&gt;&gt; used jqPlot for most of our charts. Some not-so-ordinary visualizations were made with &lt;&lt;http://mbostock.github.io/protovis/(protovis)&gt;&gt;^^1^^. jqPlot helped us quickly develop a product (MVP) to show potential customers, but introduced a lot of constraints. We made some changes to jqPlot to customize some of the charts, but it wasn't enough. The next version of Forestpin used &lt;&lt;http://d3js.org/(d3.js)&gt;&gt; for all the visualizations^^2^^, which gave us more control. We never used jqPlot any project, thereafter.
+
+ &gt;&gt;&gt;
+  ^^1^^ Protovis was the predecessor of &lt;&lt;http://d3js.org/(d3.js)&gt;&gt;
+
+  ^^2^^ &lt;&lt;forestpin_2014.html(Forestpin Redesign)&gt;&gt;
+
+###Backbone.js
+
+ &gt;&gt;&gt;
+  &lt;&lt;http://backbonejs.org/(Backbone.js)&gt;&gt;
+
+ Backbone was used at &lt;&lt;http://www.forestpin.com(Forestpin)&gt;&gt; as well as at &lt;&lt;http://www.nearby.lk/(nearby.lk)&gt;&gt;. What triggered us to code a replacement for Backbone was that it didn't save states in HTML5 history^^3^^. We weren't using most of the features of Backbone too, so the replacement, &lt;&lt;https://github.com/vpj/sweet(Sweet.js)&gt;&gt;, was much simpler. We plan on making Sweet.js independent from jQuery and Underscore.js, and also renaming it so that it doesn't get confused with &lt;&lt;http://sweetjs.org/(Mozilla's Sweet.js)&gt;&gt;.
+
+ &gt;&gt;&gt;
+  ^^3^^ &lt;&lt;http://chrisawren.com/posts/Implementing-microstates-in-Backbone-js(Implementing microstates in Backbone.js)&gt;&gt;
+
+###Database
+Forestpin Enterprise used a custom in-memory data store built ground up at Forestpin from the early days. The data store was a core part of the Forestpin product, and we gained a lot of performance by doing most of the calculations within the database itself.
+
+###jQuery Mobile
+
+ &gt;&gt;&gt;
+  &lt;&lt;http://jquerymobile.com/(jQuery Mobile)&gt;&gt;
+
+ &lt;&lt;http://www.nearby.lk/(nearby.lk)&gt;&gt; decided to drop jQuery mobile after an year with it. Adopting jQuery mobile was a bad decision. It was very heavy^^4^^ and was not developed to be used for apps like nearby.lk. jQuery mobile is super easy to be implemented for a web site with server generated HTML pages, but ours had a lot of dynamically generated pages and we spent quite sometime getting jQuery mobile to work.
+
+ &gt;&gt;&gt;
+  ^^4^^ Newer versions on jQuery Mobile seem to be lighter
+
+###Google App Engine
+
+ &gt;&gt;&gt;
+  &lt;&lt;https://developers.google.com/appengine/(Google App Engine])&gt;&gt;
+
+ &lt;&lt;http://www.nearby.lk/(nearby.lk)&gt;&gt; was hosted on Google App engine for an year and a half and we moved to Amazon^^5^^.
+
+ &gt;&gt;&gt;
+  ^^5^^ &lt;&lt;app_engine.html(Moving from Google App Engine to Amazon EC2)&gt;&gt;
+
+###d3.js
+
+ &gt;&gt;&gt;
+  &lt;&lt;http://d3js.org/(d3.js)&gt;&gt;
+
+ At Forestpin, we use d3 for all our visualizations and some tables - whenever data is connected to the DOM. We also introduced &lt;&lt;d3_helpers.html(CoffeeScript helpers)&gt;&gt; to simplify D3.js DOM manipulation code.
+
+ We came across some requirements which were hard to tackle with D3.js. One was adding DOM elements progressively. For example, when you are drawing a matrix with a large number of small rectangles. if you draw all if it at once, the user will see nothing for a while and everything will appear at once. But it would have been more user friendly, if elements were added progressively. Then the user will see sets of rectangles appearing in short intervals, as if it was an intended animation. The total time for all rectangles to appear might be slightly longer, but the user will feel otherwise. We couldn't find a neat way to do this with D3.js.
+
+ Another problem was that we couldn't move a particular DOM element across parent elements easily. For instance, if you want to show controls like the action links beneath the focused tweet in the twitter timeline, you should either have hidden action links on each tweet. or redraw action links when the focus changes, or have the action links on a different layer and move it. The first two options are not efficient and the third is tricky. The easiest is to have a DOM element removed and inserted to the focused tweet when the focus changes. This option, although probably not as efficient as the third option, is simpler and faster than the first two^^6^^.
+
+ &gt;&gt;&gt;
+  ^^6^^ &lt;&lt;http://jsperf.com/moving-children/2(jsPerf)&gt;&gt;
+
+ There were a few similar issues so we thought of going for native Javascript code for DOM manipulation, and wrote a small library with an interface similar to  &lt;&lt;d3_helpers.html(CoffeeScript helpers for d3.js)&gt;&gt;. We will continue to use D3.js for scales, csv parsing, etc.
+
+###jQuery
+
+ jQuery is used for selectors, events and Ajax. The dependency on jQuery is becoming less and less. Using pure Javascript is not that complicated and it is much faster^^7^^.
+
+ &gt;&gt;&gt;
+  &lt;&lt;http://vanilla-js.com/(VanillaJS)&gt;&gt;
+
+Although we've been moving away from a lot of libraries and tools, there is still a number of libraries we use. We use them because they make the development process easier, but only as long as they don't constraint us from building what we want to build.</div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script src="lib/highlightjs/highlight.pack.js">
+  </script>
+  <script src="lib/weya/weya.js">
+  </script>
+  <script src="lib/weya/base.js">
+  </script>
+  <script src="lib/mod/mod.js">
+  </script>
+  <script src="js/static.js?v=9">
+  </script>
+  <script src="js/parser.js?v=9">
+  </script>
+  <script src="js/reader.js?v=9">
+  </script>
+  <script src="js/nodes.js?v=9">
+  </script>
+  <script src="js/render.js?v=9">
+  </script>
+ </body>
+</html>

@@ -1,0 +1,797 @@
+<!DOCTYPE html><html>
+ <head>
+  <meta charset="utf-8">
+  </meta>
+  <title>
+   Varuna Jayasiri
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </meta>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  </meta>
+  <link href="http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900" rel="stylesheet" type="text/css">
+  </link>
+  <link href="lib/skeleton/css/skeleton.css" rel="stylesheet">
+  </link>
+  <link href="lib/highlightjs/styles/default.css" rel="stylesheet">
+  </link>
+  <link href="css/style.css" rel="stylesheet">
+  </link>
+  <link href="css/paginate.css" rel="stylesheet">
+  </link>
+  <link href="blog.css" rel="stylesheet">
+  </link>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-44255805-1', 'auto');
+ga('send', 'pageview');
+  </script>
+ </head>
+ <body>
+  <div class="container wallapatta-container ">
+   <div class="header ">
+    <h1>
+     <a href="index.html">
+      VARUNA JAYASIRI
+     </a>
+    </h1>
+    <a class="button " href="https://www.twitter.com/vpj">
+     @vpj
+    </a>
+   </div>
+   <div class="wallapatta ">
+    <h1 class="title ">
+     <a href="forestpin_2014.html">
+      Forestpin Enterprise Redesign
+     </a>
+    </h1>
+    <h3 class="date ">
+     November 27, 2013
+    </h3>
+    <div class="post-paginated ">
+     <div class="wallapatta-main nine columns ">
+      <div id="wallapatta_0" class="article"><div id="wallapatta_1" class="section"><div class="content"><p id="wallapatta_2" class="paragraph"><span id="wallapatta_51" class="text">We released the new version of </span><a id="wallapatta_52" class="link" href="http://www.forestpin.com/">Forestpin Enterprise</a><span id="wallapatta_53" class="text"> last week. The new version is a complete rewrite of both the backend and UI. The backend was rewritten to be faster and to introduce a bunch of new features and analytics. The user interface was redesigned to be much more user friendly and also with focus on mobile devices such as tablets.</span></p></div></div><div id="wallapatta_3" class="section"><div class="content"><p id="wallapatta_4" class="paragraph"><span id="wallapatta_54" class="text">Teachings of visualizations experts such as Edward Tufte, Stephan Few and Naomi Robbins were followed during the user interface redesign. We have also changed the way we presented the results of analyses that existed in previous version as well. The images below are screenshots of the new version vs. the previous version and what made us make the changes.</span></p></div></div><div id="wallapatta_5" class="section"><h1 class="heading"><span id="wallapatta_6" class="block"><span id="wallapatta_55" class="text">Benford's Law Analysis</span></span></h1><div class="content"><div id="wallapatta_7" class="full"><div id="wallapatta_9" class="image-container"><img class="image" src="img/forestpin_2014/2013-benford.png" alt="Benford's Law Analysis - Old"></div></div><div id="wallapatta_10" class="section"><div class="content"><p id="wallapatta_11" class="paragraph"><span id="wallapatta_56" class="text">In the previous version you could only see the distribution of number of transactions for each first two digit combination, whereas in the new version we display the distribution of the sum of values by first two digits. We are using the concept of </span><strong id="wallapatta_57" class="bold"><span id="wallapatta_58" class="text">top-down</span></strong><span id="wallapatta_59" class="text"> graphs to show two different related values, so that the users can come to better conclusions.</span></p></div></div><div id="wallapatta_12" class="full"><div id="wallapatta_14" class="image-container"><img class="image" src="img/forestpin_2014/2014-benford.png" alt="Benford's Law Analysis - Redesign"></div></div><div id="wallapatta_15" class="section"><div class="content"><p id="wallapatta_16" class="paragraph"><span id="wallapatta_60" class="text">For instance, with this top down display one can easily figure out that the spike in summation test at 29 (the downward orange bar)  is due to a set of large valued transaction and not because there is a high number of transactions with FTD 29 (no spike in frequency distribution). Also we have colored the bars with a range of colors, unlike 3 colors in older version, to indicate the deviation. This makes it very easy to spot the red flags.</span></p></div></div></div></div><div id="wallapatta_17" class="section"><h1 class="heading"><span id="wallapatta_18" class="block"><span id="wallapatta_61" class="text">Duplicates Analysis</span></span></h1><div class="content"><div id="wallapatta_19" class="full"><div id="wallapatta_21" class="image-container"><img class="image" src="img/forestpin_2014/2013-duplicates.png" alt="Duplicates Analysis - Old"></div></div><div id="wallapatta_22" class="section"><div class="content"><p id="wallapatta_23" class="paragraph"><span id="wallapatta_62" class="text">Many found the duplicates analysis in our previous version very useful; they also found the visualization very pretty. Still it could be improved. In the redesign, we have introduced a column on the left hand side to show the details (value, number of repetitions,  average date, etc) about possible duplicated transactions. This is very useful to spot suspicious duplicates if you are familiar with numbers and the transaction values look odd. For instance, although you can infer the rough amount value from the position of the bubble you will have to select the bubble to find the exact amount.</span></p></div></div><div id="wallapatta_24" class="full"><div id="wallapatta_26" class="image-container"><img class="image" src="img/forestpin_2014/2014-duplicates.png" alt="" style="max-width: Duplicates Analysis - Redesign%;"></div></div><div id="wallapatta_27" class="section"><div class="content"><p id="wallapatta_28" class="paragraph"><span id="wallapatta_63" class="text">Moreover, as you can see, we have also introduced sorting which is very useful in analysis duplicates, with our backend rewrite you can sort duplicates by different attributes almost instantaneously.</span></p></div></div></div></div><div id="wallapatta_29" class="section"><h1 class="heading"><span id="wallapatta_30" class="block"><span id="wallapatta_64" class="text">Account Based Analysis / Relative Size Factor Analysis</span></span></h1><div class="content"><div id="wallapatta_31" class="full"><div id="wallapatta_33" class="image-container"><img class="image" src="img/forestpin_2014/2013-rsf.png" alt="RSF Analysis - Old"></div></div><div id="wallapatta_34" class="section"><div class="content"><p id="wallapatta_35" class="paragraph"><span id="wallapatta_65" class="text">The above visualization shows vendors with highest relative size factor; that is vendors with unusually large payments. The graph is in log scale with bottom being the average transaction value for each vendor and top being highest transaction value; therefore, the height of the bar is proportional to the log of RSF.</span></p></div></div><div id="wallapatta_36" class="full"><div id="wallapatta_38" class="image-container"><img class="image" src="img/forestpin_2014/2014-group.png" alt="Account Based Analysis - Redesign"></div></div><div id="wallapatta_39" class="section"><div class="content"><p id="wallapatta_40" class="paragraph"><span id="wallapatta_66" class="text">With the redesign, we display results of all analysis for each vendor in a table with inline visualizations. This easily beats what we had in previous version, because now the user is presented clearly with lot more information. The user can sort by results from any analysis to quickly find the red flags.</span></p></div></div></div></div><div id="wallapatta_41" class="section"><h1 class="heading"><span id="wallapatta_42" class="block"><span id="wallapatta_67" class="text">Timeseries Analysis</span></span></h1><div class="content"><div id="wallapatta_43" class="full"><div id="wallapatta_45" class="image-container"><img class="image" src="img/forestpin_2014/2013-timeseries.png" alt="Timeseries Analysis - Old"></div></div><div id="wallapatta_46" class="section"><div class="content"><p id="wallapatta_47" class="paragraph"><span id="wallapatta_68" class="text">This compares the predicted pattern with actual data to show whether there is a deviation. In the new version, we've taken this to whole new level with a beautiful bar graph by using color to indicate the deviation. With this design even someone with absolutely no knowledge of the dataset would be able to identify the troubling months.</span></p></div></div><div id="wallapatta_48" class="full"><div id="wallapatta_50" class="image-container"><img class="image" src="img/forestpin_2014/2014-timeseries-correlation.png" alt="Timeseries Analysis - Redesign"></div></div></div></div></div>
+     </div>
+     <div class="wallapatta-sidebar three columns ">
+      <div id="wallapatta_8" class="sidenote"></div><div id="wallapatta_13" class="sidenote"></div><div id="wallapatta_20" class="sidenote"></div><div id="wallapatta_25" class="sidenote"></div><div id="wallapatta_32" class="sidenote"></div><div id="wallapatta_37" class="sidenote"></div><div id="wallapatta_44" class="sidenote"></div><div id="wallapatta_49" class="sidenote"></div>
+     </div>
+     <div style="display:none;">
+      <div class='wallapatta-code'>///Forestpin Enterprise Redesign
+
+We released the new version of &lt;&lt;http://www.forestpin.com/(Forestpin Enterprise&gt;&gt; last week. The new version is a complete rewrite of both the backend and UI. The backend was rewritten to be faster and to introduce a bunch of new features and analytics. The user interface was redesigned to be much more user friendly and also with focus on mobile devices such as tablets.
+
+Teachings of visualizations experts such as Edward Tufte, Stephan Few and Naomi Robbins were followed during the user interface redesign. We have also changed the way we presented the results of analyses that existed in previous version as well. The images below are screenshots of the new version vs. the previous version and what made us make the changes.
+
+#Benford's Law Analysis
+
+ &lt;!&gt;
+  !img/forestpin_2014/2013-benford.png(Benford's Law Analysis - Old)
+
+ In the previous version you could only see the distribution of number of transactions for each first two digit combination, whereas in the new version we display the distribution of the sum of values by first two digits. We are using the concept of **top-down** graphs to show two different related values, so that the users can come to better conclusions.
+
+ &lt;!&gt;
+  !img/forestpin_2014/2014-benford.png(Benford's Law Analysis - Redesign)
+
+ For instance, with this top down display one can easily figure out that the spike in summation test at 29 (the downward orange bar)  is due to a set of large valued transaction and not because there is a high number of transactions with FTD 29 (no spike in frequency distribution).
+ Also we have colored the bars with a range of colors, unlike 3 colors in older version, to indicate the deviation. This makes it very easy to spot the red flags.
+
+#Duplicates Analysis
+
+ &lt;!&gt;
+  !img/forestpin_2014/2013-duplicates.png(Duplicates Analysis - Old)
+
+ Many found the duplicates analysis in our previous version very useful; they also found the visualization very pretty. Still it could be improved. In the redesign, we have introduced a column on the left hand side to show the details (value, number of repetitions,  average date, etc) about possible duplicated transactions. This is very useful to spot suspicious duplicates if you are familiar with numbers and the transaction values look odd. For instance, although you can infer the rough amount value from the position of the bubble you will have to select the bubble to find the exact amount.
+
+ &lt;!&gt;
+  !img/forestpin_2014/2014-duplicates.png((Duplicates Analysis - Redesign)
+
+ Moreover, as you can see, we have also introduced sorting which is very useful in analysis duplicates, with our backend rewrite you can sort duplicates by different attributes almost instantaneously.
+
+#Account Based Analysis / Relative Size Factor Analysis
+
+ &lt;!&gt;
+  !img/forestpin_2014/2013-rsf.png(RSF Analysis - Old)
+
+ The above visualization shows vendors with highest relative size factor; that is vendors with unusually large payments. The graph is in log scale with bottom being the average transaction value for each vendor and top being highest transaction value; therefore, the height of the bar is proportional to the log of RSF.
+
+ &lt;!&gt;
+  !img/forestpin_2014/2014-group.png(Account Based Analysis - Redesign)
+
+ With the redesign, we display results of all analysis for each vendor in a table with inline visualizations. This easily beats what we had in previous version, because now the user is presented clearly with lot more information. The user can sort by results from any analysis to quickly find the red flags.
+
+#Timeseries Analysis
+
+ &lt;!&gt;
+  !img/forestpin_2014/2013-timeseries.png(Timeseries Analysis - Old)
+
+ This compares the predicted pattern with actual data to show whether there is a deviation. In the new version, we've taken this to whole new level with a beautiful bar graph by using color to indicate the deviation. With this design even someone with absolutely no knowledge of the dataset would be able to identify the troubling months.
+
+ &lt;!&gt;
+  !img/forestpin_2014/2014-timeseries-correlation.png(Timeseries Analysis - Redesign)
+</div>
+     </div>
+     <div class="overlay ">
+      
+     </div>
+    </div>
+   </div>
+   <div class="wallapatta ">
+    <h1 class="title ">
+     <a href="sendmsg.html">
+      Passing File Descriptors Between Processes Using Sendmsg() and Recvmsg()
+     </a>
+    </h1>
+    <h3 class="date ">
+     January 11, 2011
+    </h3>
+    <div class="post-paginated ">
+     <div class="wallapatta-main nine columns ">
+      <div id="wallapatta_10000" class="article"><div id="wallapatta_10001" class="section"><div class="content"><p id="wallapatta_10002" class="paragraph"><span id="wallapatta_10026" class="text">Using this technique you can pass file descriptors between processes using </span><code id="wallapatta_10027" class="code"><span id="wallapatta_10028" class="text">sendmsg()</span></code><span id="wallapatta_10029" class="text"> and </span><code id="wallapatta_10030" class="code"><span id="wallapatta_10031" class="text">recvmsg()</span></code><span id="wallapatta_10032" class="text"> functions using UNIX Domain Protocol. Any descriptor can be passed using this method not just a file descriptor.</span></p></div></div><div id="wallapatta_10003" class="section"><div class="content"><p id="wallapatta_10004" class="paragraph"><span id="wallapatta_10033" class="text">This is quite useful when you want to balance load in a multi-core system. Other way of passing file descriptors is by forking the process, but in this case you can pass file descriptors between different processes at anytime.</span></p></div></div><div id="wallapatta_10005" class="section"><h2 class="heading"><span id="wallapatta_10006" class="block"><span id="wallapatta_10034" class="text">Creating the UNIX Domain Protocol server</span></span></h2><div class="content"></div></div><div id="wallapatta_10007" class="section"><div class="content"><p id="wallapatta_10008" class="paragraph"><code id="wallapatta_10035" class="code"><span id="wallapatta_10036" class="text">SOCKET_PATH</span></code><span id="wallapatta_10037" class="text"> was set to </span><code id="wallapatta_10038" class="code"><span id="wallapatta_10039" class="text">/tmp/unix_socket</span></code></p></div></div><pre id="wallapatta_10009" class="codeBlock"><code class="c">   <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">create_server</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">struct</span> sockaddr_un addr;
+    <span class="hljs-keyword">int</span> fd;
+
+    <span class="hljs-keyword">if</span> ((fd = socket(AF_LOCAL, SOCK_STREAM, <span class="hljs-number">0</span>)) &lt; <span class="hljs-number">0</span>) {
+     log_error(<span class="hljs-string">"Failed to create server socket"</span>);
+     <span class="hljs-keyword">return</span> fd;
+    }
+
+    <span class="hljs-built_in">memset</span>(&amp;addr, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(addr));
+
+    addr.sun_family = AF_LOCAL;
+    unlink(SOCKET_PATH);
+    <span class="hljs-built_in">strcpy</span>(addr.sun_path, SOCKET_PATH);
+
+    <span class="hljs-keyword">if</span> (bind(fd, (<span class="hljs-keyword">struct</span> sockaddr *) &amp;(addr),
+                                 <span class="hljs-keyword">sizeof</span>(addr)) &lt; <span class="hljs-number">0</span>) {
+     log_error(<span class="hljs-string">"Failed to bind server socket"</span>);
+     <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;
+    }
+
+    <span class="hljs-keyword">if</span> (listen(fd, MAX_PENDING) &lt; <span class="hljs-number">0</span>) {
+     log_error(<span class="hljs-string">"Failed to listen on server socket"</span>);
+     <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;
+    }
+
+    setnonblocking(fd);
+
+    <span class="hljs-comment">/* Add handler to handle events on fd */</span>
+
+    <span class="hljs-keyword">return</span> fd;
+   }</code></pre><div id="wallapatta_10010" class="section"><div class="content"><p id="wallapatta_10011" class="paragraph"><span id="wallapatta_10040" class="text">I used epoll for handling events, so adding a handler was something like this.</span></p></div></div><pre id="wallapatta_10012" class="codeBlock"><code class="c">   hash_set(ioloop-&gt;handlers, fd, handler);
+
+   e.data.fd = fd;
+   e.events = EPOLLIN;
+
+   <span class="hljs-keyword">if</span>(epoll_ctl(ioloop-&gt;epfd, EPOLL_CTL_ADD, fd, &amp;e) &lt; <span class="hljs-number">0</span>) {
+    log_error(<span class="hljs-string">"Failed to insert handler to epoll"</span>);
+    <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;
+   }</code></pre><div id="wallapatta_10013" class="section"><div class="content"><p id="wallapatta_10014" class="paragraph"><span id="wallapatta_10041" class="text">Connections to the server should be accepted with accept() similar to TCP sockets.</span></p></div></div><div id="wallapatta_10015" class="section"><h2 class="heading"><span id="wallapatta_10016" class="block"><span id="wallapatta_10042" class="text">Connecting to the server</span></span></h2><div class="content"></div></div><pre id="wallapatta_10017" class="codeBlock"><code class="c">   <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">connect_server</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">struct</span> sockaddr_un addr;
+    <span class="hljs-keyword">int</span> fd;
+
+    <span class="hljs-keyword">if</span> ((fd = socket(AF_LOCAL, SOCK_STREAM, <span class="hljs-number">0</span>)) &lt; <span class="hljs-number">0</span>) {
+     log_error(<span class="hljs-string">"Failed to create client socket"</span>);
+     <span class="hljs-keyword">return</span> fd;
+    }
+
+    <span class="hljs-built_in">memset</span>(&amp;addr, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(addr));
+
+    addr.sun_family = AF_LOCAL;
+    <span class="hljs-built_in">strcpy</span>(addr.sun_path, SOCKET_PATH);
+
+    <span class="hljs-keyword">if</span> (connect(fd,
+                (<span class="hljs-keyword">struct</span> sockaddr *) &amp;(addr),
+                <span class="hljs-keyword">sizeof</span>(addr)) &lt; <span class="hljs-number">0</span>) {
+     log_error(<span class="hljs-string">"Failed to connect to server"</span>);
+     <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;
+    }
+
+    setnonblocking(fd);
+
+    <span class="hljs-comment">/* Add handler to handle events */</span>
+
+    <span class="hljs-keyword">return</span> fd;
+   }</code></pre><div id="wallapatta_10018" class="section"><div class="content"><p id="wallapatta_10019" class="paragraph"><span id="wallapatta_10043" class="text">I was adding </span><code id="wallapatta_10044" class="code"><span id="wallapatta_10045" class="text">EPOLLOUT</span></code><span id="wallapatta_10046" class="text"> listener to the socket whenever there were file descriptors to be passed to the other process.</span></p></div></div><div id="wallapatta_10020" class="section"><h2 class="heading"><span id="wallapatta_10021" class="block"><span id="wallapatta_10047" class="text">Receiving a file descriptor</span></span></h2><div class="content"></div></div><pre id="wallapatta_10022" class="codeBlock"><code class="c">   <span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span>
+   <span class="hljs-title">recv_file_descriptor</span><span class="hljs-params">(
+     <span class="hljs-keyword">int</span> socket)</span> <span class="hljs-comment">/* Socket from which the file descriptor is read */</span>
+   </span>{
+    <span class="hljs-keyword">int</span> sent_fd;
+    <span class="hljs-keyword">struct</span> msghdr message;
+    <span class="hljs-keyword">struct</span> iovec iov[<span class="hljs-number">1</span>];
+    <span class="hljs-keyword">struct</span> cmsghdr *control_message = <span class="hljs-literal">NULL</span>;
+    <span class="hljs-keyword">char</span> ctrl_buf[CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>))];
+    <span class="hljs-keyword">char</span> data[<span class="hljs-number">1</span>];
+    <span class="hljs-keyword">int</span> res;
+
+    <span class="hljs-built_in">memset</span>(&amp;message, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">struct</span> msghdr));
+    <span class="hljs-built_in">memset</span>(ctrl_buf, <span class="hljs-number">0</span>, CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>)));
+
+    <span class="hljs-comment">/* For the dummy data */</span>
+    iov[<span class="hljs-number">0</span>].iov_base = data;
+    iov[<span class="hljs-number">0</span>].iov_len = <span class="hljs-keyword">sizeof</span>(data);
+
+    message.msg_name = <span class="hljs-literal">NULL</span>;
+    message.msg_namelen = <span class="hljs-number">0</span>;
+    message.msg_control = ctrl_buf;
+    message.msg_controllen = CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
+    message.msg_iov = iov;
+    message.msg_iovlen = <span class="hljs-number">1</span>;
+
+    <span class="hljs-keyword">if</span>((res = recvmsg(socket, &amp;message, <span class="hljs-number">0</span>)) &lt;= <span class="hljs-number">0</span>)
+     <span class="hljs-keyword">return</span> res;
+
+    <span class="hljs-comment">/* Iterate through header to find if there is a file descriptor */</span>
+    <span class="hljs-keyword">for</span>(control_message = CMSG_FIRSTHDR(&amp;message);
+        control_message != <span class="hljs-literal">NULL</span>;
+        control_message = CMSG_NXTHDR(&amp;message,
+                                      control_message))
+    {
+     <span class="hljs-keyword">if</span>( (control_message-&gt;cmsg_level == SOL_SOCKET) &amp;&amp;
+         (control_message-&gt;cmsg_type == SCM_RIGHTS) )
+     {
+      <span class="hljs-keyword">return</span> *((<span class="hljs-keyword">int</span> *) CMSG_DATA(control_message));
+     }
+    }
+
+    <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;
+   }</code></pre><div id="wallapatta_10023" class="section"><h2 class="heading"><span id="wallapatta_10024" class="block"><span id="wallapatta_10048" class="text">Sending a file descriptor</span></span></h2><div class="content"></div></div><pre id="wallapatta_10025" class="codeBlock"><code class="c">   <span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span>
+   <span class="hljs-title">send_file_descriptor</span><span class="hljs-params">(
+     <span class="hljs-keyword">int</span> socket, <span class="hljs-comment">/* Socket through which the file descriptor is passed */</span>
+     <span class="hljs-keyword">int</span> fd_to_send)</span> <span class="hljs-comment">/* File descriptor to be passed, could be another socket */</span>
+   </span>{
+    <span class="hljs-keyword">struct</span> msghdr message;
+    <span class="hljs-keyword">struct</span> iovec iov[<span class="hljs-number">1</span>];
+    <span class="hljs-keyword">struct</span> cmsghdr *control_message = <span class="hljs-literal">NULL</span>;
+    <span class="hljs-keyword">char</span> ctrl_buf[CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>))];
+    <span class="hljs-keyword">char</span> data[<span class="hljs-number">1</span>];
+
+    <span class="hljs-built_in">memset</span>(&amp;message, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">struct</span> msghdr));
+    <span class="hljs-built_in">memset</span>(ctrl_buf, <span class="hljs-number">0</span>, CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>)));
+
+    <span class="hljs-comment">/* We are passing at least one byte of data so that recvmsg() will not return 0 */</span>
+    data[<span class="hljs-number">0</span>] = <span class="hljs-string">' '</span>;
+    iov[<span class="hljs-number">0</span>].iov_base = data;
+    iov[<span class="hljs-number">0</span>].iov_len = <span class="hljs-keyword">sizeof</span>(data);
+
+    message.msg_name = <span class="hljs-literal">NULL</span>;
+    message.msg_namelen = <span class="hljs-number">0</span>;
+    message.msg_iov = iov;
+    message.msg_iovlen = <span class="hljs-number">1</span>;
+    message.msg_controllen =  CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
+    message.msg_control = ctrl_buf;
+
+    control_message = CMSG_FIRSTHDR(&amp;message);
+    control_message-&gt;cmsg_level = SOL_SOCKET;
+    control_message-&gt;cmsg_type = SCM_RIGHTS;
+    control_message-&gt;cmsg_len = CMSG_LEN(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
+
+    *((<span class="hljs-keyword">int</span> *) CMSG_DATA(control_message)) = fd_to_send;
+
+    <span class="hljs-keyword">return</span> sendmsg(socket, &amp;message, <span class="hljs-number">0</span>);
+   }</code></pre></div>
+     </div>
+     <div class="wallapatta-sidebar three columns ">
+      
+     </div>
+     <div style="display:none;">
+      <div class='wallapatta-code'>///Passing File Descriptors Between Processes Using Sendmsg() and Recvmsg()
+
+Using this technique you can pass file descriptors between processes using ``sendmsg()`` and ``recvmsg()`` functions using UNIX Domain Protocol. Any descriptor can be passed using this method not just a file descriptor.
+
+This is quite useful when you want to balance load in a multi-core system. Other way of passing file descriptors is by forking the process, but in this case you can pass file descriptors between different processes at anytime.
+
+## Creating the UNIX Domain Protocol server
+
+``SOCKET_PATH`` was set to ``/tmp/unix_socket``
+
+```c
+    int create_server() {
+     struct sockaddr_un addr;
+     int fd;
+
+     if ((fd = socket(AF_LOCAL, SOCK_STREAM, 0)) &lt; 0) {
+      log_error("Failed to create server socket");
+      return fd;
+     }
+
+     memset(&addr, 0, sizeof(addr));
+
+     addr.sun_family = AF_LOCAL;
+     unlink(SOCKET_PATH);
+     strcpy(addr.sun_path, SOCKET_PATH);
+
+     if (bind(fd, (struct sockaddr *) &(addr),
+                                  sizeof(addr)) &lt; 0) {
+      log_error("Failed to bind server socket");
+      return -1;
+     }
+
+     if (listen(fd, MAX_PENDING) &lt; 0) {
+      log_error("Failed to listen on server socket");
+      return -1;
+     }
+
+     setnonblocking(fd);
+
+     /* Add handler to handle events on fd */
+
+     return fd;
+    }
+
+I used epoll for handling events, so adding a handler was something like this.
+
+```c
+    hash_set(ioloop-&gt;handlers, fd, handler);
+
+    e.data.fd = fd;
+    e.events = EPOLLIN;
+
+    if(epoll_ctl(ioloop-&gt;epfd, EPOLL_CTL_ADD, fd, &e) &lt; 0) {
+     log_error("Failed to insert handler to epoll");
+     return -1;
+    }
+
+Connections to the server should be accepted with accept() similar to TCP sockets.
+
+## Connecting to the server
+
+```c
+    int connect_server() {
+     struct sockaddr_un addr;
+     int fd;
+
+     if ((fd = socket(AF_LOCAL, SOCK_STREAM, 0)) &lt; 0) {
+      log_error("Failed to create client socket");
+      return fd;
+     }
+
+     memset(&addr, 0, sizeof(addr));
+
+     addr.sun_family = AF_LOCAL;
+     strcpy(addr.sun_path, SOCKET_PATH);
+
+     if (connect(fd,
+                 (struct sockaddr *) &(addr),
+                 sizeof(addr)) &lt; 0) {
+      log_error("Failed to connect to server");
+      return -1;
+     }
+
+     setnonblocking(fd);
+
+     /* Add handler to handle events */
+
+     return fd;
+    }
+
+I was adding ``EPOLLOUT`` listener to the socket whenever there were file descriptors to be passed to the other process.
+
+## Receiving a file descriptor
+
+```c
+    static int
+    recv_file_descriptor(
+      int socket) /* Socket from which the file descriptor is read */
+    {
+     int sent_fd;
+     struct msghdr message;
+     struct iovec iov[1];
+     struct cmsghdr *control_message = NULL;
+     char ctrl_buf[CMSG_SPACE(sizeof(int))];
+     char data[1];
+     int res;
+
+     memset(&message, 0, sizeof(struct msghdr));
+     memset(ctrl_buf, 0, CMSG_SPACE(sizeof(int)));
+
+     /* For the dummy data */
+     iov[0].iov_base = data;
+     iov[0].iov_len = sizeof(data);
+
+     message.msg_name = NULL;
+     message.msg_namelen = 0;
+     message.msg_control = ctrl_buf;
+     message.msg_controllen = CMSG_SPACE(sizeof(int));
+     message.msg_iov = iov;
+     message.msg_iovlen = 1;
+
+     if((res = recvmsg(socket, &message, 0)) &lt;= 0)
+      return res;
+
+     /* Iterate through header to find if there is a file descriptor */
+     for(control_message = CMSG_FIRSTHDR(&message);
+         control_message != NULL;
+         control_message = CMSG_NXTHDR(&message,
+                                       control_message))
+     {
+      if( (control_message-&gt;cmsg_level == SOL_SOCKET) &&
+          (control_message-&gt;cmsg_type == SCM_RIGHTS) )
+      {
+       return *((int *) CMSG_DATA(control_message));
+      }
+     }
+
+     return -1;
+    }
+
+
+## Sending a file descriptor
+
+```c
+    static int
+    send_file_descriptor(
+      int socket, /* Socket through which the file descriptor is passed */
+      int fd_to_send) /* File descriptor to be passed, could be another socket */
+    {
+     struct msghdr message;
+     struct iovec iov[1];
+     struct cmsghdr *control_message = NULL;
+     char ctrl_buf[CMSG_SPACE(sizeof(int))];
+     char data[1];
+
+     memset(&message, 0, sizeof(struct msghdr));
+     memset(ctrl_buf, 0, CMSG_SPACE(sizeof(int)));
+
+     /* We are passing at least one byte of data so that recvmsg() will not return 0 */
+     data[0] = ' ';
+     iov[0].iov_base = data;
+     iov[0].iov_len = sizeof(data);
+
+     message.msg_name = NULL;
+     message.msg_namelen = 0;
+     message.msg_iov = iov;
+     message.msg_iovlen = 1;
+     message.msg_controllen =  CMSG_SPACE(sizeof(int));
+     message.msg_control = ctrl_buf;
+
+     control_message = CMSG_FIRSTHDR(&message);
+     control_message-&gt;cmsg_level = SOL_SOCKET;
+     control_message-&gt;cmsg_type = SCM_RIGHTS;
+     control_message-&gt;cmsg_len = CMSG_LEN(sizeof(int));
+
+     *((int *) CMSG_DATA(control_message)) = fd_to_send;
+
+     return sendmsg(socket, &message, 0);
+    }
+</div>
+     </div>
+     <div class="overlay ">
+      
+     </div>
+    </div>
+   </div>
+   <div class="wallapatta ">
+    <h1 class="title ">
+     <a href="epoll.html">
+      TCP Echo Server Example in C++ Using Epoll
+     </a>
+    </h1>
+    <h3 class="date ">
+     January 2, 2011
+    </h3>
+    <div class="post-paginated ">
+     <div class="wallapatta-main nine columns ">
+      <div id="wallapatta_20000" class="article"><div id="wallapatta_20001" class="section"><div class="content"><p id="wallapatta_20002" class="paragraph"><span id="wallapatta_20027" class="text">This example is a simple server which accepts connections and echos whatever data sent to the server. This example also demonstrates the use of </span><strong id="wallapatta_20028" class="bold"><span id="wallapatta_20029" class="text">epoll</span></strong><span id="wallapatta_20030" class="text">, which is efficient than </span><strong id="wallapatta_20031" class="bold"><span id="wallapatta_20032" class="text">poll</span></strong><span id="wallapatta_20033" class="text">. In epoll unlike poll all events that need to be monitored are not passed everytime the wait call is made. Epoll uses event registration where events to be watched can be added, modified or removed. This makes it efficient when there are a large number of events to be watched.</span></p></div></div><div id="wallapatta_20003" class="section"><h2 class="heading"><span id="wallapatta_20004" class="block"><span id="wallapatta_20034" class="text">IOLoop</span></span></h2><div class="content"><div id="wallapatta_20005" class="section"><div class="content"><p id="wallapatta_20006" class="paragraph"><span id="wallapatta_20035" class="text">In this example the class IOLoop will deal with epoll interface and it will invoke relevant handlers based on events occurred.</span></p></div></div><pre id="wallapatta_20007" class="codeBlock"><code class="c"><span class="hljs-keyword">class</span> IOLoop {
+...
+ <span class="hljs-function"><span class="hljs-keyword">static</span> IOLoop * <span class="hljs-title">getInstance</span><span class="hljs-params">()</span></span>;
+
+ IOLoop() {
+  <span class="hljs-keyword">this</span>-&gt;epfd = epoll_create(<span class="hljs-keyword">this</span>-&gt;EPOLL_EVENTS);
+
+  <span class="hljs-keyword">if</span>(<span class="hljs-keyword">this</span>-&gt;epfd &lt; <span class="hljs-number">0</span>) {
+   log_error(<span class="hljs-string">"Failed to create epoll"</span>);
+   <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);
+  }
+...
+ }
+
+ <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">start</span><span class="hljs-params">()</span> </span>{
+  <span class="hljs-keyword">for</span>(;;) {
+   <span class="hljs-keyword">int</span> nfds = epoll_wait(<span class="hljs-keyword">this</span>-&gt;epfd, <span class="hljs-keyword">this</span>-&gt;events, <span class="hljs-keyword">this</span>-&gt;MAX_EVENTS, -<span class="hljs-number">1</span> <span class="hljs-comment">/* Timeout */</span>);
+
+   <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; nfds; ++i) {
+    <span class="hljs-keyword">int</span> fd = <span class="hljs-keyword">this</span>-&gt;events[i].data.fd;
+    Handler *h = handlers[fd];
+    h-&gt;handle(<span class="hljs-keyword">this</span>-&gt;events[i]);
+   }
+  }
+ }
+
+ <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">addHandler</span><span class="hljs-params">(<span class="hljs-keyword">int</span> fd, Handler *handler, <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> events)</span> </span>{
+  handlers[fd] = handler;
+  epoll_event e;
+  e.data.fd = fd;
+  e.events = events;
+
+  <span class="hljs-keyword">if</span>(epoll_ctl(<span class="hljs-keyword">this</span>-&gt;epfd, EPOLL_CTL_ADD, fd, &amp;e) &lt; <span class="hljs-number">0</span>) {
+   log_error(<span class="hljs-string">"Failed to insert handler to epoll"</span>);
+  }
+ }
+
+ <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">modifyHandler</span><span class="hljs-params">(<span class="hljs-keyword">int</span> fd, <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> events)</span></span>;
+
+ <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">removeHandler</span><span class="hljs-params">(<span class="hljs-keyword">int</span> fd)</span></span>;
+};</code></pre><div id="wallapatta_20008" class="section"><div class="content"><p id="wallapatta_20009" class="paragraph"><span id="wallapatta_20036" class="text">Handlers used in this example are ServerHandler and EchoHandler which derive from class Handler. Handlers have a member function handle which handles the event occurred.</span></p></div></div></div></div><div id="wallapatta_20010" class="section"><h2 class="heading"><span id="wallapatta_20011" class="block"><span id="wallapatta_20037" class="text">ServerHandler</span></span></h2><div class="content"><div id="wallapatta_20012" class="section"><div class="content"><p id="wallapatta_20013" class="paragraph"><span id="wallapatta_20038" class="text">ServerHandler will create a server socket and handle in coming connections</span></p></div></div><pre id="wallapatta_20014" class="codeBlock"><code class="c"><span class="hljs-keyword">class</span> ServerHandler : Handler {
+...
+
+ ServerHandler(<span class="hljs-keyword">int</span> port) {
+  <span class="hljs-built_in">memset</span>(&amp;addr, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(addr));
+
+  <span class="hljs-keyword">if</span> ((fd = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) &lt; <span class="hljs-number">0</span>) {
+   log_error(<span class="hljs-string">"Failed to create server socket"</span>);
+   <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);
+  }
+
+  addr.sin_family = AF_INET;
+  addr.sin_addr.s_addr = htonl(INADDR_ANY);
+  addr.sin_port = htons(port);
+
+  <span class="hljs-keyword">if</span> (bind(fd, (<span class="hljs-keyword">struct</span> sockaddr *) &amp;addr,
+                               <span class="hljs-keyword">sizeof</span>(addr)) &lt; <span class="hljs-number">0</span>) {
+   log_error(<span class="hljs-string">"Failed to bind server socket"</span>);
+   <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);
+  }
+
+  <span class="hljs-keyword">if</span> (listen(fd, MAX_PENDING) &lt; <span class="hljs-number">0</span>) {
+   log_error(<span class="hljs-string">"Failed to listen on server socket"</span>);
+   <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);
+  }
+  setnonblocking(fd);
+
+  IOLoop::getInstance()-&gt;addHandler(fd, <span class="hljs-keyword">this</span>, EPOLLIN);
+ }
+
+ <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-keyword">int</span> <span class="hljs-title">handle</span><span class="hljs-params">(epoll_event e)</span> </span>{
+  sockaddr_in client_addr;
+  <span class="hljs-keyword">socklen_t</span> ca_len = <span class="hljs-keyword">sizeof</span>(client_addr);
+
+  <span class="hljs-keyword">int</span> client = accept(fd, (<span class="hljs-keyword">struct</span> sockaddr *) &amp;client_addr,
+                  &amp;ca_len);
+
+  <span class="hljs-keyword">if</span>(client &lt; <span class="hljs-number">0</span>) {
+   log_error(<span class="hljs-string">"Error accepting connection"</span>);
+   <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;
+  }
+
+  <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"Client connected: "</span> &lt;&lt; inet_ntoa(client_addr.sin_addr) &lt;&lt; endl;
+  <span class="hljs-keyword">new</span> EchoHandler(client, client_addr);
+  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+ }
+};</code></pre></div></div><div id="wallapatta_20015" class="section"><h2 class="heading"><span id="wallapatta_20016" class="block"><span id="wallapatta_20039" class="text">Set Non-blocking</span></span></h2><div class="content"><div id="wallapatta_20017" class="section"><div class="content"><p id="wallapatta_20018" class="paragraph"><span id="wallapatta_20040" class="text">Function setnonblocking sets the file descriptor setting to non-clocking.</span></p></div></div><pre id="wallapatta_20019" class="codeBlock"><code class="c">flags = fcntl(fd, F_GETFL, <span class="hljs-number">0</span>);
+fcntl(fd, F_SETFL, flags | O_NONBLOCK);</code></pre></div></div><div id="wallapatta_20020" class="section"><h2 class="heading"><span id="wallapatta_20021" class="block"><span id="wallapatta_20041" class="text">EchoHandler:handle</span></span></h2><div class="content"><div id="wallapatta_20022" class="section"><div class="content"><p id="wallapatta_20023" class="paragraph"><span id="wallapatta_20042" class="text">EchoHandler will write whatever it reads from the socket</span></p></div></div><pre id="wallapatta_20024" class="codeBlock"><code class="c"><span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-keyword">int</span> <span class="hljs-title">handle</span><span class="hljs-params">(epoll_event e)</span> </span>{
+ <span class="hljs-keyword">if</span>(e.events &amp; EPOLLHUP) {
+  IOLoop::getInstance()-&gt;removeHandler(fd);
+  <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;
+ }
+
+ <span class="hljs-keyword">if</span>(e.events &amp; EPOLLERR) {
+  <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;
+ }
+
+ <span class="hljs-keyword">if</span>(e.events &amp; EPOLLOUT) {
+  <span class="hljs-keyword">if</span>(received &gt; <span class="hljs-number">0</span>) {
+   <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"Writing: "</span> &lt;&lt; buffer &lt;&lt; endl;
+   <span class="hljs-keyword">if</span> (send(fd, buffer, received, <span class="hljs-number">0</span>) != received) {
+    log_error(<span class="hljs-string">"Error writing to socket"</span>);
+   }
+  }
+
+  IOLoop::getInstance()-&gt;modifyHandler(fd, EPOLLIN);
+ }
+
+ <span class="hljs-keyword">if</span>(e.events &amp; EPOLLIN) {
+  <span class="hljs-keyword">if</span> ((received = recv(fd, buffer, BUFFER_SIZE, <span class="hljs-number">0</span>)) &lt; <span class="hljs-number">0</span>) {
+   log_error(<span class="hljs-string">"Error reading from socket"</span>);
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(received &gt; <span class="hljs-number">0</span>) {
+   buffer[received] = <span class="hljs-number">0</span>;
+   <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"Reading: "</span> &lt;&lt; buffer &lt;&lt; endl;
+  }
+
+  <span class="hljs-keyword">if</span>(received &gt; <span class="hljs-number">0</span>) {
+   IOLoop::getInstance()-&gt;modifyHandler(fd, EPOLLOUT);
+  } <span class="hljs-keyword">else</span> {
+   IOLoop::getInstance()-&gt;removeHandler(fd);
+  }
+ }
+
+ <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre></div></div><div id="wallapatta_20025" class="section"><div class="content"><p id="wallapatta_20026" class="paragraph"><span id="wallapatta_20043" class="text">Error checking in this code is minimal so it will probably fail unexpectedly in certain scenarios which I have not come across yet. And please leave a comment if you do find any errors or if there are things that could be improved.</span></p></div></div></div>
+     </div>
+     <div class="wallapatta-sidebar three columns ">
+      
+     </div>
+     <div style="display:none;">
+      <div class='wallapatta-code'>///TCP Echo Server Example in C++ Using Epoll
+
+This example is a simple server which accepts connections and echos whatever data sent to the server. This example also demonstrates the use of **epoll**, which is efficient than **poll**.
+In epoll unlike poll all events that need to be monitored are not passed everytime the wait call is made. Epoll uses event registration where events to be watched can be added, modified or removed. This makes it efficient when there are a large number of events to be watched.
+
+##IOLoop
+ In this example the class IOLoop will deal with epoll interface and it will invoke relevant handlers based on events occurred.
+
+ ```c
+  class IOLoop {
+  ...
+   static IOLoop * getInstance();
+
+   IOLoop() {
+    this-&gt;epfd = epoll_create(this-&gt;EPOLL_EVENTS);
+
+    if(this-&gt;epfd &lt; 0) {
+     log_error("Failed to create epoll");
+     exit(1);
+    }
+  ...
+   }
+
+   void start() {
+    for(;;) {
+     int nfds = epoll_wait(this-&gt;epfd, this-&gt;events, this-&gt;MAX_EVENTS, -1 /* Timeout */);
+
+     for(int i = 0; i &lt; nfds; ++i) {
+      int fd = this-&gt;events[i].data.fd;
+      Handler *h = handlers[fd];
+      h-&gt;handle(this-&gt;events[i]);
+     }
+    }
+   }
+
+   void addHandler(int fd, Handler *handler, unsigned int events) {
+    handlers[fd] = handler;
+    epoll_event e;
+    e.data.fd = fd;
+    e.events = events;
+
+    if(epoll_ctl(this-&gt;epfd, EPOLL_CTL_ADD, fd, &e) &lt; 0) {
+     log_error("Failed to insert handler to epoll");
+    }
+   }
+
+   void modifyHandler(int fd, unsigned int events);
+
+   void removeHandler(int fd);
+  };
+
+ Handlers used in this example are ServerHandler and EchoHandler which derive from class Handler. Handlers have a member function handle which handles the event occurred.
+
+## ServerHandler
+ ServerHandler will create a server socket and handle in coming connections
+
+ ```c
+  class ServerHandler : Handler {
+  ...
+
+   ServerHandler(int port) {
+    memset(&addr, 0, sizeof(addr));
+
+    if ((fd = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) &lt; 0) {
+     log_error("Failed to create server socket");
+     exit(1);
+    }
+
+    addr.sin_family = AF_INET;
+    addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    addr.sin_port = htons(port);
+
+    if (bind(fd, (struct sockaddr *) &addr,
+                                 sizeof(addr)) &lt; 0) {
+     log_error("Failed to bind server socket");
+     exit(1);
+    }
+
+    if (listen(fd, MAX_PENDING) &lt; 0) {
+     log_error("Failed to listen on server socket");
+     exit(1);
+    }
+    setnonblocking(fd);
+
+    IOLoop::getInstance()-&gt;addHandler(fd, this, EPOLLIN);
+   }
+
+   virtual int handle(epoll_event e) {
+    sockaddr_in client_addr;
+    socklen_t ca_len = sizeof(client_addr);
+
+    int client = accept(fd, (struct sockaddr *) &client_addr,
+                    &ca_len);
+
+    if(client &lt; 0) {
+     log_error("Error accepting connection");
+     return -1;
+    }
+
+    cout &lt;&lt; "Client connected: " &lt;&lt; inet_ntoa(client_addr.sin_addr) &lt;&lt; endl;
+    new EchoHandler(client, client_addr);
+    return 0;
+   }
+  };
+
+## Set Non-blocking
+ Function setnonblocking sets the file descriptor setting to non-clocking.
+
+ ```c
+  flags = fcntl(fd, F_GETFL, 0);
+  fcntl(fd, F_SETFL, flags | O_NONBLOCK);
+
+## EchoHandler:handle
+
+ EchoHandler will write whatever it reads from the socket
+
+ ```c
+  virtual int handle(epoll_event e) {
+   if(e.events & EPOLLHUP) {
+    IOLoop::getInstance()-&gt;removeHandler(fd);
+    return -1;
+   }
+
+   if(e.events & EPOLLERR) {
+    return -1;
+   }
+
+   if(e.events & EPOLLOUT) {
+    if(received &gt; 0) {
+     cout &lt;&lt; "Writing: " &lt;&lt; buffer &lt;&lt; endl;
+     if (send(fd, buffer, received, 0) != received) {
+      log_error("Error writing to socket");
+     }
+    }
+
+    IOLoop::getInstance()-&gt;modifyHandler(fd, EPOLLIN);
+   }
+
+   if(e.events & EPOLLIN) {
+    if ((received = recv(fd, buffer, BUFFER_SIZE, 0)) &lt; 0) {
+     log_error("Error reading from socket");
+    } else if(received &gt; 0) {
+     buffer[received] = 0;
+     cout &lt;&lt; "Reading: " &lt;&lt; buffer &lt;&lt; endl;
+    }
+
+    if(received &gt; 0) {
+     IOLoop::getInstance()-&gt;modifyHandler(fd, EPOLLOUT);
+    } else {
+     IOLoop::getInstance()-&gt;removeHandler(fd);
+    }
+   }
+
+   return 0;
+  }
+
+Error checking in this code is minimal so it will probably fail unexpectedly in certain scenarios which I have not come across yet. And please leave a comment if you do find any errors or if there are things that could be improved.
+</div>
+     </div>
+     <div class="overlay ">
+      
+     </div>
+    </div>
+   </div>
+   <div class="paginate ">
+    <a class="prev-page button " href="page3.html">
+     prev
+    </a>
+   </div>
+  </div>
+  <script src="lib/highlightjs/highlight.pack.js">
+  </script>
+  <script src="lib/weya/weya.js">
+  </script>
+  <script src="lib/weya/base.js">
+  </script>
+  <script src="lib/mod/mod.js">
+  </script>
+  <script src="js/static.js?v=9">
+  </script>
+  <script src="js/parser.js?v=9">
+  </script>
+  <script src="js/reader.js?v=9">
+  </script>
+  <script src="js/nodes.js?v=9">
+  </script>
+  <script src="js/render.js?v=9">
+  </script>
+ </body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html><html>
+ <head>
+  <meta charset="utf-8">
+  </meta>
+  <title>
+   Coffeescript Macros
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </meta>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  </meta>
+  <link href="http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900" rel="stylesheet" type="text/css">
+  </link>
+  <link href="lib/skeleton/css/skeleton.css" rel="stylesheet">
+  </link>
+  <link href="lib/highlightjs/styles/default.css" rel="stylesheet">
+  </link>
+  <link href="css/style.css" rel="stylesheet">
+  </link>
+  <link href="blog.css" rel="stylesheet">
+  </link>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-44255805-1', 'auto');
+ga('send', 'pageview');
+  </script>
+ </head>
+ <body>
+  <div class="container wallapatta-container ">
+   <div class="header ">
+    <h1>
+     <a href="index.html">
+      VARUNA JAYASIRI
+     </a>
+    </h1>
+    <a class="button " href="https://www.twitter.com/vpj">
+     @vpj
+    </a>
+   </div>
+   <div class="wallapatta ">
+    <h1 class="title ">
+     Coffeescript Macros
+    </h1>
+    <h3 class="date ">
+     December 9, 2013
+    </h3>
+    <div style="margin-bottom:30px;">
+     <a class="twitter-share-button " href="https://twitter.com/share" data-via="vpj" data-size="large">
+      Tweet
+     </a>
+     <script>
+      !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+     </script>
+    </div>
+    <div class="row ">
+     <div class="wallapatta-main nine columns ">
+      <div id="wallapatta_0" class="article"><div id="wallapatta_1" class="section"><div class="content"><p id="wallapatta_2" class="paragraph"><span id="wallapatta_27" class="text">Anyone who programs in C uses pre-processor macros to keep the code clean, maintainable and sometimes to improve run-time performance. You can use the same C pre-processor to include macros in [Coffeescript](http://coffeescript.org/) or Javascript code, and it is easy!</span></p></div></div><div id="wallapatta_3" class="section"><div class="content"><p id="wallapatta_4" class="paragraph"><span id="wallapatta_28" class="text">The coffeescript file needs to be renamed with `.c` extension before running it thrrough `gcc`; otherwise, it gives a warning and doesn't run the pre-processor. There may be some option to force it compile without checking the extension.</span></p></div></div><pre id="wallapatta_5" class="codeBlock"><code class="bash">cp [source.coffe] [source.c]
+gcc -E [source.c] &gt; [processed.coffee]</code></pre><div id="wallapatta_6" class="section"><h2 class="heading"><span id="wallapatta_7" class="block"><span id="wallapatta_29" class="text">Examples</span></span></h2><div class="content"><div id="wallapatta_8" class="section"><h3 class="heading"><span id="wallapatta_9" class="block"><span id="wallapatta_30" class="text">Improve performance</span></span></h3><div class="content"><div id="wallapatta_10" class="section"><div class="content"><p id="wallapatta_11" class="paragraph"><span id="wallapatta_31" class="text">This is the code with macros. It compares the time taken to calculate the sum of squares, using `function`s and macros.</span></p></div></div><pre id="wallapatta_12" class="codeBlock"><code class="coffeescript"><span class="hljs-function"><span class="hljs-title">square</span> = <span class="hljs-params">(x)</span> -&gt;</span> x * x
+
+<span class="hljs-comment">#define SQUARE(x) (x * x)</span>
+
+total = <span class="hljs-number">0</span>
+<span class="hljs-built_in">console</span>.time <span class="hljs-string">"no macro"</span>
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> [<span class="hljs-number">0.</span>.<span class="hljs-number">.100000</span>]
+ total += square i
+<span class="hljs-built_in">console</span>.timeEnd <span class="hljs-string">"no macro"</span>
+<span class="hljs-built_in">console</span>.log <span class="hljs-string">"Total <span class="hljs-subst">#{total}</span>"</span>
+
+total = <span class="hljs-number">0</span>
+
+<span class="hljs-built_in">console</span>.time <span class="hljs-string">"macro"</span>
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> [<span class="hljs-number">0.</span>.<span class="hljs-number">.100000</span>]
+ total += SQUARE(i)
+
+<span class="hljs-built_in">console</span>.timeEnd <span class="hljs-string">"macro"</span>
+<span class="hljs-built_in">console</span>.log <span class="hljs-string">"Total <span class="hljs-subst">#{total}</span>"</span></code></pre><div id="wallapatta_13" class="section"><div class="content"><p id="wallapatta_14" class="paragraph"><span id="wallapatta_32" class="text">Compiled code:</span></p></div></div><pre id="wallapatta_15" class="codeBlock"><code class="javascript"># <span class="hljs-number">1</span> <span class="hljs-string">"macro.c"</span>
+# <span class="hljs-number">1</span> <span class="hljs-string">"&lt;built-in&gt;"</span>
+# <span class="hljs-number">1</span> <span class="hljs-string">"&lt;command-line&gt;"</span>
+# <span class="hljs-number">1</span> <span class="hljs-string">"macro.c"</span>
+
+square = (x) -&gt; x * x
+
+total = <span class="hljs-number">0</span>
+<span class="hljs-built_in">console</span>.time <span class="hljs-string">"no macro"</span>
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> [<span class="hljs-number">0.</span>.<span class="hljs-number">.100000</span>]
+ total += square i
+<span class="hljs-built_in">console</span>.timeEnd <span class="hljs-string">"no macro"</span>
+<span class="hljs-built_in">console</span>.log <span class="hljs-string">"Total #{total}"</span>
+
+total = <span class="hljs-number">0</span>
+
+<span class="hljs-built_in">console</span>.time <span class="hljs-string">"macro"</span>
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> [<span class="hljs-number">0.</span>.<span class="hljs-number">.100000</span>]
+ total += (i * i)
+
+<span class="hljs-built_in">console</span>.timeEnd <span class="hljs-string">"macro"</span>
+<span class="hljs-built_in">console</span>.log <span class="hljs-string">"Total #{total}"</span></code></pre><div id="wallapatta_16" class="section"><div class="content"><p id="wallapatta_17" class="paragraph"><span id="wallapatta_33" class="text">Output:</span></p></div></div><pre id="wallapatta_18" class="codeBlock"><code class="nohighlight">no macro: 2ms
+Total 333328333350000
+macro: 1ms
+Total 333328333350000</code></pre></div></div><div id="wallapatta_19" class="section"><h3 class="heading"><span id="wallapatta_20" class="block"><span id="wallapatta_34" class="text">Debugging</span></span></h3><div class="content"><div id="wallapatta_21" class="section"><div class="content"><p id="wallapatta_22" class="paragraph"><span id="wallapatta_35" class="text">You can use you favorite DEBUG macro to define LOGS, and even `</span><sub id="wallapatta_36" class="subScript"><span id="wallapatta_37" class="text">LINE</span></sub><span id="wallapatta_38" class="text">` and `</span><sub id="wallapatta_39" class="subScript"><span id="wallapatta_40" class="text">FILE</span></sub><span id="wallapatta_41" class="text">`</span></p></div></div><pre id="wallapatta_23" class="codeBlock"><code class="coffeescript"><span class="hljs-comment">#define DEBUG</span>
+
+<span class="hljs-comment">#ifdef DEBUG</span>
+<span class="hljs-comment">#define LOG(x) console.log __LINE__ + ": " + (x)</span>
+<span class="hljs-comment">#else</span>
+<span class="hljs-comment">#define LOG(x)</span>
+<span class="hljs-comment">#endif</span>
+
+n = <span class="hljs-number">3</span>
+LOG(<span class="hljs-string">"Root of <span class="hljs-subst">#{n}</span> = <span class="hljs-subst">#{Math.sqrt(n)}</span>"</span>)</code></pre><div id="wallapatta_24" class="section"><div class="content"><p id="wallapatta_25" class="paragraph"><span id="wallapatta_42" class="text">There is a slight problem because `#` is used for comments in Coffeescript. All you need to do is to use `##` instead of a single `#` when you want to add a comment.</span></p></div></div><pre id="wallapatta_26" class="codeBlock"><code class="coffeescript"><span class="hljs-comment">#define DEBUG</span>
+
+<span class="hljs-comment">##This is a comment</span>
+
+<span class="hljs-comment">#ifdef DEBUG</span>
+<span class="hljs-comment">## Define LOG macro</span>
+<span class="hljs-comment">## Print line number</span>
+<span class="hljs-comment">#define LOG(x) console.log __LINE__ + ": " + (x)</span>
+<span class="hljs-comment">#else</span>
+<span class="hljs-comment">#define LOG(x)</span>
+<span class="hljs-comment">#endif</span>
+
+n = <span class="hljs-number">3</span>
+LOG(<span class="hljs-string">"Root of <span class="hljs-subst">#{n}</span> = <span class="hljs-subst">#{Math.sqrt(n)}</span>"</span>)</code></pre></div></div></div></div></div>
+     </div>
+     <div class="wallapatta-sidebar three columns ">
+      
+     </div>
+     <div style="display:none;">
+      <div class='wallapatta-code'>///Coffeescript and C Macros: Clean and Fast
+
+Anyone who programs in C uses pre-processor macros to keep the code clean, maintainable and sometimes to improve run-time performance. You can use the same C pre-processor to include macros in [Coffeescript](http://coffeescript.org/) or Javascript code, and it is easy!
+
+The coffeescript file needs to be renamed with `.c` extension before running it thrrough `gcc`; otherwise, it gives a warning and doesn't run the pre-processor. There may be some option to force it compile without checking the extension.
+
+```bash
+ cp [source.coffe] [source.c]
+ gcc -E [source.c] &gt; [processed.coffee]
+
+## Examples
+
+ ### Improve performance
+
+  This is the code with macros. It compares the time taken to calculate the sum of squares, using `function`s and macros.
+
+  ```coffeescript
+   square = (x) -&gt; x * x
+
+   #define SQUARE(x) (x * x)
+
+   total = 0
+   console.time "no macro"
+   for i in [0...100000]
+    total += square i
+   console.timeEnd "no macro"
+   console.log "Total #{total}"
+
+   total = 0
+
+   console.time "macro"
+   for i in [0...100000]
+    total += SQUARE(i)
+
+   console.timeEnd "macro"
+   console.log "Total #{total}"
+
+  Compiled code:
+
+  ```javascript
+   # 1 "macro.c"
+   # 1 "&lt;built-in&gt;"
+   # 1 "&lt;command-line&gt;"
+   # 1 "macro.c"
+
+   square = (x) -&gt; x * x
+
+   total = 0
+   console.time "no macro"
+   for i in [0...100000]
+    total += square i
+   console.timeEnd "no macro"
+   console.log "Total #{total}"
+
+   total = 0
+
+   console.time "macro"
+   for i in [0...100000]
+    total += (i * i)
+
+   console.timeEnd "macro"
+   console.log "Total #{total}"
+
+  Output:
+
+  ```
+   no macro: 2ms
+   Total 333328333350000
+   macro: 1ms
+   Total 333328333350000
+
+ ### Debugging
+
+  You can use you favorite DEBUG macro to define LOGS, and even `__LINE__` and `__FILE__`
+
+  ```coffeescript
+   #define DEBUG
+
+   #ifdef DEBUG
+   #define LOG(x) console.log __LINE__ + ": " + (x)
+   #else
+   #define LOG(x)
+   #endif
+
+   n = 3
+   LOG("Root of #{n} = #{Math.sqrt(n)}")
+
+  There is a slight problem because `#` is used for comments in Coffeescript. All you need to do is to use `##` instead of a single `#` when you want to add a comment.
+
+  ```coffeescript
+   #define DEBUG
+
+   ##This is a comment
+
+   #ifdef DEBUG
+   ## Define LOG macro
+   ## Print line number
+   #define LOG(x) console.log __LINE__ + ": " + (x)
+   #else
+   #define LOG(x)
+   #endif
+
+   n = 3
+   LOG("Root of #{n} = #{Math.sqrt(n)}")
+</div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script src="lib/highlightjs/highlight.pack.js">
+  </script>
+  <script src="lib/weya/weya.js">
+  </script>
+  <script src="lib/weya/base.js">
+  </script>
+  <script src="lib/mod/mod.js">
+  </script>
+  <script src="js/static.js?v=9">
+  </script>
+  <script src="js/parser.js?v=9">
+  </script>
+  <script src="js/reader.js?v=9">
+  </script>
+  <script src="js/nodes.js?v=9">
+  </script>
+  <script src="js/render.js?v=9">
+  </script>
+ </body>
+</html>

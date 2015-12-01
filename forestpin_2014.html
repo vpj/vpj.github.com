@@ -1,0 +1,143 @@
+<!DOCTYPE html><html>
+ <head>
+  <meta charset="utf-8">
+  </meta>
+  <title>
+   Forestpin Enterprise Redesign
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </meta>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  </meta>
+  <link href="http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900" rel="stylesheet" type="text/css">
+  </link>
+  <link href="lib/skeleton/css/skeleton.css" rel="stylesheet">
+  </link>
+  <link href="lib/highlightjs/styles/default.css" rel="stylesheet">
+  </link>
+  <link href="css/style.css" rel="stylesheet">
+  </link>
+  <link href="blog.css" rel="stylesheet">
+  </link>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-44255805-1', 'auto');
+ga('send', 'pageview');
+  </script>
+ </head>
+ <body>
+  <div class="container wallapatta-container ">
+   <div class="header ">
+    <h1>
+     <a href="index.html">
+      VARUNA JAYASIRI
+     </a>
+    </h1>
+    <a class="button " href="https://www.twitter.com/vpj">
+     @vpj
+    </a>
+   </div>
+   <div class="wallapatta ">
+    <h1 class="title ">
+     Forestpin Enterprise Redesign
+    </h1>
+    <h3 class="date ">
+     November 27, 2013
+    </h3>
+    <div style="margin-bottom:30px;">
+     <a class="twitter-share-button " href="https://twitter.com/share" data-via="vpj" data-size="large">
+      Tweet
+     </a>
+     <script>
+      !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+     </script>
+    </div>
+    <div class="row ">
+     <div class="wallapatta-main nine columns ">
+      <div id="wallapatta_0" class="article"><div id="wallapatta_1" class="section"><div class="content"><p id="wallapatta_2" class="paragraph"><span id="wallapatta_51" class="text">We released the new version of </span><a id="wallapatta_52" class="link" href="http://www.forestpin.com/">Forestpin Enterprise</a><span id="wallapatta_53" class="text"> last week. The new version is a complete rewrite of both the backend and UI. The backend was rewritten to be faster and to introduce a bunch of new features and analytics. The user interface was redesigned to be much more user friendly and also with focus on mobile devices such as tablets.</span></p></div></div><div id="wallapatta_3" class="section"><div class="content"><p id="wallapatta_4" class="paragraph"><span id="wallapatta_54" class="text">Teachings of visualizations experts such as Edward Tufte, Stephan Few and Naomi Robbins were followed during the user interface redesign. We have also changed the way we presented the results of analyses that existed in previous version as well. The images below are screenshots of the new version vs. the previous version and what made us make the changes.</span></p></div></div><div id="wallapatta_5" class="section"><h1 class="heading"><span id="wallapatta_6" class="block"><span id="wallapatta_55" class="text">Benford's Law Analysis</span></span></h1><div class="content"><div id="wallapatta_7" class="full"><div id="wallapatta_9" class="image-container"><img class="image" src="img/forestpin_2014/2013-benford.png" alt="Benford's Law Analysis - Old"></div></div><div id="wallapatta_10" class="section"><div class="content"><p id="wallapatta_11" class="paragraph"><span id="wallapatta_56" class="text">In the previous version you could only see the distribution of number of transactions for each first two digit combination, whereas in the new version we display the distribution of the sum of values by first two digits. We are using the concept of </span><strong id="wallapatta_57" class="bold"><span id="wallapatta_58" class="text">top-down</span></strong><span id="wallapatta_59" class="text"> graphs to show two different related values, so that the users can come to better conclusions.</span></p></div></div><div id="wallapatta_12" class="full"><div id="wallapatta_14" class="image-container"><img class="image" src="img/forestpin_2014/2014-benford.png" alt="Benford's Law Analysis - Redesign"></div></div><div id="wallapatta_15" class="section"><div class="content"><p id="wallapatta_16" class="paragraph"><span id="wallapatta_60" class="text">For instance, with this top down display one can easily figure out that the spike in summation test at 29 (the downward orange bar)  is due to a set of large valued transaction and not because there is a high number of transactions with FTD 29 (no spike in frequency distribution). Also we have colored the bars with a range of colors, unlike 3 colors in older version, to indicate the deviation. This makes it very easy to spot the red flags.</span></p></div></div></div></div><div id="wallapatta_17" class="section"><h1 class="heading"><span id="wallapatta_18" class="block"><span id="wallapatta_61" class="text">Duplicates Analysis</span></span></h1><div class="content"><div id="wallapatta_19" class="full"><div id="wallapatta_21" class="image-container"><img class="image" src="img/forestpin_2014/2013-duplicates.png" alt="Duplicates Analysis - Old"></div></div><div id="wallapatta_22" class="section"><div class="content"><p id="wallapatta_23" class="paragraph"><span id="wallapatta_62" class="text">Many found the duplicates analysis in our previous version very useful; they also found the visualization very pretty. Still it could be improved. In the redesign, we have introduced a column on the left hand side to show the details (value, number of repetitions,  average date, etc) about possible duplicated transactions. This is very useful to spot suspicious duplicates if you are familiar with numbers and the transaction values look odd. For instance, although you can infer the rough amount value from the position of the bubble you will have to select the bubble to find the exact amount.</span></p></div></div><div id="wallapatta_24" class="full"><div id="wallapatta_26" class="image-container"><img class="image" src="img/forestpin_2014/2014-duplicates.png" alt="" style="max-width: Duplicates Analysis - Redesign%;"></div></div><div id="wallapatta_27" class="section"><div class="content"><p id="wallapatta_28" class="paragraph"><span id="wallapatta_63" class="text">Moreover, as you can see, we have also introduced sorting which is very useful in analysis duplicates, with our backend rewrite you can sort duplicates by different attributes almost instantaneously.</span></p></div></div></div></div><div id="wallapatta_29" class="section"><h1 class="heading"><span id="wallapatta_30" class="block"><span id="wallapatta_64" class="text">Account Based Analysis / Relative Size Factor Analysis</span></span></h1><div class="content"><div id="wallapatta_31" class="full"><div id="wallapatta_33" class="image-container"><img class="image" src="img/forestpin_2014/2013-rsf.png" alt="RSF Analysis - Old"></div></div><div id="wallapatta_34" class="section"><div class="content"><p id="wallapatta_35" class="paragraph"><span id="wallapatta_65" class="text">The above visualization shows vendors with highest relative size factor; that is vendors with unusually large payments. The graph is in log scale with bottom being the average transaction value for each vendor and top being highest transaction value; therefore, the height of the bar is proportional to the log of RSF.</span></p></div></div><div id="wallapatta_36" class="full"><div id="wallapatta_38" class="image-container"><img class="image" src="img/forestpin_2014/2014-group.png" alt="Account Based Analysis - Redesign"></div></div><div id="wallapatta_39" class="section"><div class="content"><p id="wallapatta_40" class="paragraph"><span id="wallapatta_66" class="text">With the redesign, we display results of all analysis for each vendor in a table with inline visualizations. This easily beats what we had in previous version, because now the user is presented clearly with lot more information. The user can sort by results from any analysis to quickly find the red flags.</span></p></div></div></div></div><div id="wallapatta_41" class="section"><h1 class="heading"><span id="wallapatta_42" class="block"><span id="wallapatta_67" class="text">Timeseries Analysis</span></span></h1><div class="content"><div id="wallapatta_43" class="full"><div id="wallapatta_45" class="image-container"><img class="image" src="img/forestpin_2014/2013-timeseries.png" alt="Timeseries Analysis - Old"></div></div><div id="wallapatta_46" class="section"><div class="content"><p id="wallapatta_47" class="paragraph"><span id="wallapatta_68" class="text">This compares the predicted pattern with actual data to show whether there is a deviation. In the new version, we've taken this to whole new level with a beautiful bar graph by using color to indicate the deviation. With this design even someone with absolutely no knowledge of the dataset would be able to identify the troubling months.</span></p></div></div><div id="wallapatta_48" class="full"><div id="wallapatta_50" class="image-container"><img class="image" src="img/forestpin_2014/2014-timeseries-correlation.png" alt="Timeseries Analysis - Redesign"></div></div></div></div></div>
+     </div>
+     <div class="wallapatta-sidebar three columns ">
+      <div id="wallapatta_8" class="sidenote"></div><div id="wallapatta_13" class="sidenote"></div><div id="wallapatta_20" class="sidenote"></div><div id="wallapatta_25" class="sidenote"></div><div id="wallapatta_32" class="sidenote"></div><div id="wallapatta_37" class="sidenote"></div><div id="wallapatta_44" class="sidenote"></div><div id="wallapatta_49" class="sidenote"></div>
+     </div>
+     <div style="display:none;">
+      <div class='wallapatta-code'>///Forestpin Enterprise Redesign
+
+We released the new version of &lt;&lt;http://www.forestpin.com/(Forestpin Enterprise&gt;&gt; last week. The new version is a complete rewrite of both the backend and UI. The backend was rewritten to be faster and to introduce a bunch of new features and analytics. The user interface was redesigned to be much more user friendly and also with focus on mobile devices such as tablets.
+
+Teachings of visualizations experts such as Edward Tufte, Stephan Few and Naomi Robbins were followed during the user interface redesign. We have also changed the way we presented the results of analyses that existed in previous version as well. The images below are screenshots of the new version vs. the previous version and what made us make the changes.
+
+#Benford's Law Analysis
+
+ &lt;!&gt;
+  !img/forestpin_2014/2013-benford.png(Benford's Law Analysis - Old)
+
+ In the previous version you could only see the distribution of number of transactions for each first two digit combination, whereas in the new version we display the distribution of the sum of values by first two digits. We are using the concept of **top-down** graphs to show two different related values, so that the users can come to better conclusions.
+
+ &lt;!&gt;
+  !img/forestpin_2014/2014-benford.png(Benford's Law Analysis - Redesign)
+
+ For instance, with this top down display one can easily figure out that the spike in summation test at 29 (the downward orange bar)  is due to a set of large valued transaction and not because there is a high number of transactions with FTD 29 (no spike in frequency distribution).
+ Also we have colored the bars with a range of colors, unlike 3 colors in older version, to indicate the deviation. This makes it very easy to spot the red flags.
+
+#Duplicates Analysis
+
+ &lt;!&gt;
+  !img/forestpin_2014/2013-duplicates.png(Duplicates Analysis - Old)
+
+ Many found the duplicates analysis in our previous version very useful; they also found the visualization very pretty. Still it could be improved. In the redesign, we have introduced a column on the left hand side to show the details (value, number of repetitions,  average date, etc) about possible duplicated transactions. This is very useful to spot suspicious duplicates if you are familiar with numbers and the transaction values look odd. For instance, although you can infer the rough amount value from the position of the bubble you will have to select the bubble to find the exact amount.
+
+ &lt;!&gt;
+  !img/forestpin_2014/2014-duplicates.png((Duplicates Analysis - Redesign)
+
+ Moreover, as you can see, we have also introduced sorting which is very useful in analysis duplicates, with our backend rewrite you can sort duplicates by different attributes almost instantaneously.
+
+#Account Based Analysis / Relative Size Factor Analysis
+
+ &lt;!&gt;
+  !img/forestpin_2014/2013-rsf.png(RSF Analysis - Old)
+
+ The above visualization shows vendors with highest relative size factor; that is vendors with unusually large payments. The graph is in log scale with bottom being the average transaction value for each vendor and top being highest transaction value; therefore, the height of the bar is proportional to the log of RSF.
+
+ &lt;!&gt;
+  !img/forestpin_2014/2014-group.png(Account Based Analysis - Redesign)
+
+ With the redesign, we display results of all analysis for each vendor in a table with inline visualizations. This easily beats what we had in previous version, because now the user is presented clearly with lot more information. The user can sort by results from any analysis to quickly find the red flags.
+
+#Timeseries Analysis
+
+ &lt;!&gt;
+  !img/forestpin_2014/2013-timeseries.png(Timeseries Analysis - Old)
+
+ This compares the predicted pattern with actual data to show whether there is a deviation. In the new version, we've taken this to whole new level with a beautiful bar graph by using color to indicate the deviation. With this design even someone with absolutely no knowledge of the dataset would be able to identify the troubling months.
+
+ &lt;!&gt;
+  !img/forestpin_2014/2014-timeseries-correlation.png(Timeseries Analysis - Redesign)
+</div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script src="lib/highlightjs/highlight.pack.js">
+  </script>
+  <script src="lib/weya/weya.js">
+  </script>
+  <script src="lib/weya/base.js">
+  </script>
+  <script src="lib/mod/mod.js">
+  </script>
+  <script src="js/static.js?v=9">
+  </script>
+  <script src="js/parser.js?v=9">
+  </script>
+  <script src="js/reader.js?v=9">
+  </script>
+  <script src="js/nodes.js?v=9">
+  </script>
+  <script src="js/render.js?v=9">
+  </script>
+ </body>
+</html>

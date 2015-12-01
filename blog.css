@@ -15,7 +15,7 @@
 }
 
 h1.title {
- margin-top: 100px;
+ margin-top: 50px;
  font-weight: bold;
 }
 
@@ -28,4 +28,20 @@ h3.date {
  color: #777;
  font-weight: bold;
  font-size: 2rem;
+}
+
+.post-paginated {
+ height: 300px;
+ overflow: hidden;
+ position: relative;
+}
+
+.overlay {
+ position:absolute;
+ top:0;
+ left:0;
+ right:0;
+ bottom:0;
+ background: url(img/paginate_bg.png);
+ z-index:9999;
 }

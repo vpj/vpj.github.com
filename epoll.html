@@ -1,0 +1,372 @@
+<!DOCTYPE html><html>
+ <head>
+  <meta charset="utf-8">
+  </meta>
+  <title>
+   TCP Echo Server Example in C++ Using Epoll
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </meta>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  </meta>
+  <link href="http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900" rel="stylesheet" type="text/css">
+  </link>
+  <link href="lib/skeleton/css/skeleton.css" rel="stylesheet">
+  </link>
+  <link href="lib/highlightjs/styles/default.css" rel="stylesheet">
+  </link>
+  <link href="css/style.css" rel="stylesheet">
+  </link>
+  <link href="blog.css" rel="stylesheet">
+  </link>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-44255805-1', 'auto');
+ga('send', 'pageview');
+  </script>
+ </head>
+ <body>
+  <div class="container wallapatta-container ">
+   <div class="header ">
+    <h1>
+     <a href="index.html">
+      VARUNA JAYASIRI
+     </a>
+    </h1>
+    <a class="button " href="https://www.twitter.com/vpj">
+     @vpj
+    </a>
+   </div>
+   <div class="wallapatta ">
+    <h1 class="title ">
+     TCP Echo Server Example in C++ Using Epoll
+    </h1>
+    <h3 class="date ">
+     January 2, 2011
+    </h3>
+    <div style="margin-bottom:30px;">
+     <a class="twitter-share-button " href="https://twitter.com/share" data-via="vpj" data-size="large">
+      Tweet
+     </a>
+     <script>
+      !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+     </script>
+    </div>
+    <div class="row ">
+     <div class="wallapatta-main nine columns ">
+      <div id="wallapatta_0" class="article"><div id="wallapatta_1" class="section"><div class="content"><p id="wallapatta_2" class="paragraph"><span id="wallapatta_27" class="text">This example is a simple server which accepts connections and echos whatever data sent to the server. This example also demonstrates the use of </span><strong id="wallapatta_28" class="bold"><span id="wallapatta_29" class="text">epoll</span></strong><span id="wallapatta_30" class="text">, which is efficient than </span><strong id="wallapatta_31" class="bold"><span id="wallapatta_32" class="text">poll</span></strong><span id="wallapatta_33" class="text">. In epoll unlike poll all events that need to be monitored are not passed everytime the wait call is made. Epoll uses event registration where events to be watched can be added, modified or removed. This makes it efficient when there are a large number of events to be watched.</span></p></div></div><div id="wallapatta_3" class="section"><h2 class="heading"><span id="wallapatta_4" class="block"><span id="wallapatta_34" class="text">IOLoop</span></span></h2><div class="content"><div id="wallapatta_5" class="section"><div class="content"><p id="wallapatta_6" class="paragraph"><span id="wallapatta_35" class="text">In this example the class IOLoop will deal with epoll interface and it will invoke relevant handlers based on events occurred.</span></p></div></div><pre id="wallapatta_7" class="codeBlock"><code class="c"><span class="hljs-keyword">class</span> IOLoop {
+...
+ <span class="hljs-function"><span class="hljs-keyword">static</span> IOLoop * <span class="hljs-title">getInstance</span><span class="hljs-params">()</span></span>;
+
+ IOLoop() {
+  <span class="hljs-keyword">this</span>-&gt;epfd = epoll_create(<span class="hljs-keyword">this</span>-&gt;EPOLL_EVENTS);
+
+  <span class="hljs-keyword">if</span>(<span class="hljs-keyword">this</span>-&gt;epfd &lt; <span class="hljs-number">0</span>) {
+   log_error(<span class="hljs-string">"Failed to create epoll"</span>);
+   <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);
+  }
+...
+ }
+
+ <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">start</span><span class="hljs-params">()</span> </span>{
+  <span class="hljs-keyword">for</span>(;;) {
+   <span class="hljs-keyword">int</span> nfds = epoll_wait(<span class="hljs-keyword">this</span>-&gt;epfd, <span class="hljs-keyword">this</span>-&gt;events, <span class="hljs-keyword">this</span>-&gt;MAX_EVENTS, -<span class="hljs-number">1</span> <span class="hljs-comment">/* Timeout */</span>);
+
+   <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; nfds; ++i) {
+    <span class="hljs-keyword">int</span> fd = <span class="hljs-keyword">this</span>-&gt;events[i].data.fd;
+    Handler *h = handlers[fd];
+    h-&gt;handle(<span class="hljs-keyword">this</span>-&gt;events[i]);
+   }
+  }
+ }
+
+ <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">addHandler</span><span class="hljs-params">(<span class="hljs-keyword">int</span> fd, Handler *handler, <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> events)</span> </span>{
+  handlers[fd] = handler;
+  epoll_event e;
+  e.data.fd = fd;
+  e.events = events;
+
+  <span class="hljs-keyword">if</span>(epoll_ctl(<span class="hljs-keyword">this</span>-&gt;epfd, EPOLL_CTL_ADD, fd, &amp;e) &lt; <span class="hljs-number">0</span>) {
+   log_error(<span class="hljs-string">"Failed to insert handler to epoll"</span>);
+  }
+ }
+
+ <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">modifyHandler</span><span class="hljs-params">(<span class="hljs-keyword">int</span> fd, <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> events)</span></span>;
+
+ <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">removeHandler</span><span class="hljs-params">(<span class="hljs-keyword">int</span> fd)</span></span>;
+};</code></pre><div id="wallapatta_8" class="section"><div class="content"><p id="wallapatta_9" class="paragraph"><span id="wallapatta_36" class="text">Handlers used in this example are ServerHandler and EchoHandler which derive from class Handler. Handlers have a member function handle which handles the event occurred.</span></p></div></div></div></div><div id="wallapatta_10" class="section"><h2 class="heading"><span id="wallapatta_11" class="block"><span id="wallapatta_37" class="text">ServerHandler</span></span></h2><div class="content"><div id="wallapatta_12" class="section"><div class="content"><p id="wallapatta_13" class="paragraph"><span id="wallapatta_38" class="text">ServerHandler will create a server socket and handle in coming connections</span></p></div></div><pre id="wallapatta_14" class="codeBlock"><code class="c"><span class="hljs-keyword">class</span> ServerHandler : Handler {
+...
+
+ ServerHandler(<span class="hljs-keyword">int</span> port) {
+  <span class="hljs-built_in">memset</span>(&amp;addr, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(addr));
+
+  <span class="hljs-keyword">if</span> ((fd = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) &lt; <span class="hljs-number">0</span>) {
+   log_error(<span class="hljs-string">"Failed to create server socket"</span>);
+   <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);
+  }
+
+  addr.sin_family = AF_INET;
+  addr.sin_addr.s_addr = htonl(INADDR_ANY);
+  addr.sin_port = htons(port);
+
+  <span class="hljs-keyword">if</span> (bind(fd, (<span class="hljs-keyword">struct</span> sockaddr *) &amp;addr,
+                               <span class="hljs-keyword">sizeof</span>(addr)) &lt; <span class="hljs-number">0</span>) {
+   log_error(<span class="hljs-string">"Failed to bind server socket"</span>);
+   <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);
+  }
+
+  <span class="hljs-keyword">if</span> (listen(fd, MAX_PENDING) &lt; <span class="hljs-number">0</span>) {
+   log_error(<span class="hljs-string">"Failed to listen on server socket"</span>);
+   <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);
+  }
+  setnonblocking(fd);
+
+  IOLoop::getInstance()-&gt;addHandler(fd, <span class="hljs-keyword">this</span>, EPOLLIN);
+ }
+
+ <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-keyword">int</span> <span class="hljs-title">handle</span><span class="hljs-params">(epoll_event e)</span> </span>{
+  sockaddr_in client_addr;
+  <span class="hljs-keyword">socklen_t</span> ca_len = <span class="hljs-keyword">sizeof</span>(client_addr);
+
+  <span class="hljs-keyword">int</span> client = accept(fd, (<span class="hljs-keyword">struct</span> sockaddr *) &amp;client_addr,
+                  &amp;ca_len);
+
+  <span class="hljs-keyword">if</span>(client &lt; <span class="hljs-number">0</span>) {
+   log_error(<span class="hljs-string">"Error accepting connection"</span>);
+   <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;
+  }
+
+  <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"Client connected: "</span> &lt;&lt; inet_ntoa(client_addr.sin_addr) &lt;&lt; endl;
+  <span class="hljs-keyword">new</span> EchoHandler(client, client_addr);
+  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+ }
+};</code></pre></div></div><div id="wallapatta_15" class="section"><h2 class="heading"><span id="wallapatta_16" class="block"><span id="wallapatta_39" class="text">Set Non-blocking</span></span></h2><div class="content"><div id="wallapatta_17" class="section"><div class="content"><p id="wallapatta_18" class="paragraph"><span id="wallapatta_40" class="text">Function setnonblocking sets the file descriptor setting to non-clocking.</span></p></div></div><pre id="wallapatta_19" class="codeBlock"><code class="c">flags = fcntl(fd, F_GETFL, <span class="hljs-number">0</span>);
+fcntl(fd, F_SETFL, flags | O_NONBLOCK);</code></pre></div></div><div id="wallapatta_20" class="section"><h2 class="heading"><span id="wallapatta_21" class="block"><span id="wallapatta_41" class="text">EchoHandler:handle</span></span></h2><div class="content"><div id="wallapatta_22" class="section"><div class="content"><p id="wallapatta_23" class="paragraph"><span id="wallapatta_42" class="text">EchoHandler will write whatever it reads from the socket</span></p></div></div><pre id="wallapatta_24" class="codeBlock"><code class="c"><span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-keyword">int</span> <span class="hljs-title">handle</span><span class="hljs-params">(epoll_event e)</span> </span>{
+ <span class="hljs-keyword">if</span>(e.events &amp; EPOLLHUP) {
+  IOLoop::getInstance()-&gt;removeHandler(fd);
+  <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;
+ }
+
+ <span class="hljs-keyword">if</span>(e.events &amp; EPOLLERR) {
+  <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;
+ }
+
+ <span class="hljs-keyword">if</span>(e.events &amp; EPOLLOUT) {
+  <span class="hljs-keyword">if</span>(received &gt; <span class="hljs-number">0</span>) {
+   <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"Writing: "</span> &lt;&lt; buffer &lt;&lt; endl;
+   <span class="hljs-keyword">if</span> (send(fd, buffer, received, <span class="hljs-number">0</span>) != received) {
+    log_error(<span class="hljs-string">"Error writing to socket"</span>);
+   }
+  }
+
+  IOLoop::getInstance()-&gt;modifyHandler(fd, EPOLLIN);
+ }
+
+ <span class="hljs-keyword">if</span>(e.events &amp; EPOLLIN) {
+  <span class="hljs-keyword">if</span> ((received = recv(fd, buffer, BUFFER_SIZE, <span class="hljs-number">0</span>)) &lt; <span class="hljs-number">0</span>) {
+   log_error(<span class="hljs-string">"Error reading from socket"</span>);
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(received &gt; <span class="hljs-number">0</span>) {
+   buffer[received] = <span class="hljs-number">0</span>;
+   <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"Reading: "</span> &lt;&lt; buffer &lt;&lt; endl;
+  }
+
+  <span class="hljs-keyword">if</span>(received &gt; <span class="hljs-number">0</span>) {
+   IOLoop::getInstance()-&gt;modifyHandler(fd, EPOLLOUT);
+  } <span class="hljs-keyword">else</span> {
+   IOLoop::getInstance()-&gt;removeHandler(fd);
+  }
+ }
+
+ <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre></div></div><div id="wallapatta_25" class="section"><div class="content"><p id="wallapatta_26" class="paragraph"><span id="wallapatta_43" class="text">Error checking in this code is minimal so it will probably fail unexpectedly in certain scenarios which I have not come across yet. And please leave a comment if you do find any errors or if there are things that could be improved.</span></p></div></div></div>
+     </div>
+     <div class="wallapatta-sidebar three columns ">
+      
+     </div>
+     <div style="display:none;">
+      <div class='wallapatta-code'>///TCP Echo Server Example in C++ Using Epoll
+
+This example is a simple server which accepts connections and echos whatever data sent to the server. This example also demonstrates the use of **epoll**, which is efficient than **poll**.
+In epoll unlike poll all events that need to be monitored are not passed everytime the wait call is made. Epoll uses event registration where events to be watched can be added, modified or removed. This makes it efficient when there are a large number of events to be watched.
+
+##IOLoop
+ In this example the class IOLoop will deal with epoll interface and it will invoke relevant handlers based on events occurred.
+
+ ```c
+  class IOLoop {
+  ...
+   static IOLoop * getInstance();
+
+   IOLoop() {
+    this-&gt;epfd = epoll_create(this-&gt;EPOLL_EVENTS);
+
+    if(this-&gt;epfd &lt; 0) {
+     log_error("Failed to create epoll");
+     exit(1);
+    }
+  ...
+   }
+
+   void start() {
+    for(;;) {
+     int nfds = epoll_wait(this-&gt;epfd, this-&gt;events, this-&gt;MAX_EVENTS, -1 /* Timeout */);
+
+     for(int i = 0; i &lt; nfds; ++i) {
+      int fd = this-&gt;events[i].data.fd;
+      Handler *h = handlers[fd];
+      h-&gt;handle(this-&gt;events[i]);
+     }
+    }
+   }
+
+   void addHandler(int fd, Handler *handler, unsigned int events) {
+    handlers[fd] = handler;
+    epoll_event e;
+    e.data.fd = fd;
+    e.events = events;
+
+    if(epoll_ctl(this-&gt;epfd, EPOLL_CTL_ADD, fd, &e) &lt; 0) {
+     log_error("Failed to insert handler to epoll");
+    }
+   }
+
+   void modifyHandler(int fd, unsigned int events);
+
+   void removeHandler(int fd);
+  };
+
+ Handlers used in this example are ServerHandler and EchoHandler which derive from class Handler. Handlers have a member function handle which handles the event occurred.
+
+## ServerHandler
+ ServerHandler will create a server socket and handle in coming connections
+
+ ```c
+  class ServerHandler : Handler {
+  ...
+
+   ServerHandler(int port) {
+    memset(&addr, 0, sizeof(addr));
+
+    if ((fd = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) &lt; 0) {
+     log_error("Failed to create server socket");
+     exit(1);
+    }
+
+    addr.sin_family = AF_INET;
+    addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    addr.sin_port = htons(port);
+
+    if (bind(fd, (struct sockaddr *) &addr,
+                                 sizeof(addr)) &lt; 0) {
+     log_error("Failed to bind server socket");
+     exit(1);
+    }
+
+    if (listen(fd, MAX_PENDING) &lt; 0) {
+     log_error("Failed to listen on server socket");
+     exit(1);
+    }
+    setnonblocking(fd);
+
+    IOLoop::getInstance()-&gt;addHandler(fd, this, EPOLLIN);
+   }
+
+   virtual int handle(epoll_event e) {
+    sockaddr_in client_addr;
+    socklen_t ca_len = sizeof(client_addr);
+
+    int client = accept(fd, (struct sockaddr *) &client_addr,
+                    &ca_len);
+
+    if(client &lt; 0) {
+     log_error("Error accepting connection");
+     return -1;
+    }
+
+    cout &lt;&lt; "Client connected: " &lt;&lt; inet_ntoa(client_addr.sin_addr) &lt;&lt; endl;
+    new EchoHandler(client, client_addr);
+    return 0;
+   }
+  };
+
+## Set Non-blocking
+ Function setnonblocking sets the file descriptor setting to non-clocking.
+
+ ```c
+  flags = fcntl(fd, F_GETFL, 0);
+  fcntl(fd, F_SETFL, flags | O_NONBLOCK);
+
+## EchoHandler:handle
+
+ EchoHandler will write whatever it reads from the socket
+
+ ```c
+  virtual int handle(epoll_event e) {
+   if(e.events & EPOLLHUP) {
+    IOLoop::getInstance()-&gt;removeHandler(fd);
+    return -1;
+   }
+
+   if(e.events & EPOLLERR) {
+    return -1;
+   }
+
+   if(e.events & EPOLLOUT) {
+    if(received &gt; 0) {
+     cout &lt;&lt; "Writing: " &lt;&lt; buffer &lt;&lt; endl;
+     if (send(fd, buffer, received, 0) != received) {
+      log_error("Error writing to socket");
+     }
+    }
+
+    IOLoop::getInstance()-&gt;modifyHandler(fd, EPOLLIN);
+   }
+
+   if(e.events & EPOLLIN) {
+    if ((received = recv(fd, buffer, BUFFER_SIZE, 0)) &lt; 0) {
+     log_error("Error reading from socket");
+    } else if(received &gt; 0) {
+     buffer[received] = 0;
+     cout &lt;&lt; "Reading: " &lt;&lt; buffer &lt;&lt; endl;
+    }
+
+    if(received &gt; 0) {
+     IOLoop::getInstance()-&gt;modifyHandler(fd, EPOLLOUT);
+    } else {
+     IOLoop::getInstance()-&gt;removeHandler(fd);
+    }
+   }
+
+   return 0;
+  }
+
+Error checking in this code is minimal so it will probably fail unexpectedly in certain scenarios which I have not come across yet. And please leave a comment if you do find any errors or if there are things that could be improved.
+</div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script src="lib/highlightjs/highlight.pack.js">
+  </script>
+  <script src="lib/weya/weya.js">
+  </script>
+  <script src="lib/weya/base.js">
+  </script>
+  <script src="lib/mod/mod.js">
+  </script>
+  <script src="js/static.js?v=9">
+  </script>
+  <script src="js/parser.js?v=9">
+  </script>
+  <script src="js/reader.js?v=9">
+  </script>
+  <script src="js/nodes.js?v=9">
+  </script>
+  <script src="js/render.js?v=9">
+  </script>
+ </body>
+</html>
