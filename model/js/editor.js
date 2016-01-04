@@ -163,7 +163,7 @@
         this.editor.setSize(null, (height - 100) + "px");
         this.elems.structured.style.height = (height - 100) + "px";
         this.elems.preview.style.maxHeight = (height - 50) + "px";
-        this.editor.setValue('');
+        this.editor.setValue('{}');
         return window.addEventListener('resize', this.on.resize);
       });
 
