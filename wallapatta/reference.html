@@ -87,13 +87,13 @@ Paragraph2</code></pre></div></div><div id="wallapatta_11" class="section"><h2 c
  H = <span class="hljs-number">13</span>
  order = [<span class="hljs-number">2</span>, <span class="hljs-number">4</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">3</span>]
  heights = (H * Math.pow G, i <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> order)
- <span class="hljs-property">@svg</span> <span class="hljs-attribute">width</span>: <span class="hljs-number">250</span>, <span class="hljs-attribute">height</span>: <span class="hljs-number">250</span>, <span class="hljs-function">-&gt;</span>
-  <span class="hljs-property">@g</span> <span class="hljs-attribute">transform</span>: <span class="hljs-string">"translate(2, 154)"</span>, <span class="hljs-function">-&gt;</span>
+ @svg width: <span class="hljs-number">250</span>, height: <span class="hljs-number">250</span>, <span class="hljs-function">-&gt;</span>
+  @g transform: <span class="hljs-string">"translate(2, 154)"</span>, <span class="hljs-function">-&gt;</span>
    <span class="hljs-keyword">for</span> h, i <span class="hljs-keyword">in</span> heights
-    <span class="hljs-property">@g</span> <span class="hljs-string">".bar"</span>, <span class="hljs-attribute">transform</span>: <span class="hljs-string">"translate(<span class="hljs-subst">#{i * <span class="hljs-number">50</span>}</span>, 0)"</span>, <span class="hljs-function">-&gt;</span>
-     <span class="hljs-property">@rect</span> <span class="hljs-attribute">y</span>: -h * G, <span class="hljs-attribute">width</span>: <span class="hljs-number">46</span>, <span class="hljs-attribute">height</span>: h * G, <span class="hljs-attribute">fill</span>: <span class="hljs-string">'#4a4a4a'</span>
-     <span class="hljs-property">@rect</span> <span class="hljs-attribute">width</span>: <span class="hljs-number">30.67</span>, <span class="hljs-attribute">height</span>: h,<span class="hljs-attribute">fill</span>: <span class="hljs-string">'#98ff98'</span>
-     <span class="hljs-property">@rect</span> <span class="hljs-attribute">x</span>: <span class="hljs-number">30.67</span>, <span class="hljs-attribute">width</span>: <span class="hljs-number">15.33</span>, <span class="hljs-attribute">height</span>: h, <span class="hljs-attribute">fill</span>: <span class="hljs-string">'#8bea8b'</span></code></pre><div id="wallapatta_153" class="html"><svg width="250" height="250">
+    @g <span class="hljs-string">".bar"</span>, transform: <span class="hljs-string">"translate(<span class="hljs-subst">#{i * <span class="hljs-number">50</span>}</span>, 0)"</span>, <span class="hljs-function">-&gt;</span>
+     @rect y: -h * G, width: <span class="hljs-number">46</span>, height: h * G, fill: <span class="hljs-string">'#4a4a4a'</span>
+     @rect width: <span class="hljs-number">30.67</span>, height: h,fill: <span class="hljs-string">'#98ff98'</span>
+     @rect x: <span class="hljs-number">30.67</span>, width: <span class="hljs-number">15.33</span>, height: h, fill: <span class="hljs-string">'#8bea8b'</span></code></pre><div id="wallapatta_153" class="html"><svg width="250" height="250">
  <g transform="translate(2, 154)">
   <g class="bar " transform="translate(0, 0)">
    <rect y="-55.06541341600001" width="46" height="55.06541341600001" fill="#4a4a4a">

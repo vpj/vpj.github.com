@@ -261,40 +261,48 @@
       };
 
       Render.prototype.addPageBackground = function(H, W, elem) {
-        var y;
+        var pg, y, y2;
         y = this.getOffsetTop(elem, document.body);
-        return Weya({
+        pg = null;
+        Weya({
           elem: this.elems.pageBackgrounds
         }, function() {
-          return this.div(".page-background", "", {
+          return pg = this.div(".page-background", "", {
             style: {
-              top: y + "px",
-              left: "0",
+              'margin-top': "0",
               height: H + "px",
               width: W + "px"
             }
           });
         });
+        y2 = this.getOffsetTop(pg, document.body);
+        return pg.style.marginTop = (y - y2) + "px";
+      };
+
+      Render.prototype.setPageBackgrounds = function(elem) {
+        return this.elems.pageBackgrounds = elem;
       };
 
       Render.prototype.setPages = function(H, W) {
-        var elem, emptyPages, found, i, m, n, node, pos, results;
+        var elem, emptyPages, found, i, m, n, node, pageNo, pos, results;
         this.pageHeight = H;
         this.mainNodes = this.getMainNodes();
         this.sidenoteMap = this.getSidenoteMap();
         this.calculatePageBreaks();
-        if (this.elems.pageBackgrounds != null) {
-          document.body.removeChild(this.elems.pageBackgrounds);
+        if (this.elems.pageBackgrounds == null) {
+          Weya({
+            elem: document.body,
+            context: this
+          }, function() {
+            return this.$.elems.pageBackgrounds = this.div(".page-backgrounds", '');
+          });
         }
-        Weya({
-          elem: document.body,
-          context: this
-        }, function() {
-          return this.$.elems.pageBackgrounds = this.div(".page-backgrounds", '');
-        });
+        this.elems.pageBackgrounds.innerHTML = '';
         n = START;
         pos = 0;
         emptyPages = [];
+        this.pageNumbers = [];
+        pageNo = 0;
         results = [];
         while (n < this.mainNodes.length) {
           i = this.nextBreak[n];
@@ -307,7 +315,8 @@
           if (i == null) {
             i = this.mainNodes.length;
           }
-          found = this.setPageFill(n, i, pos, emptyPages);
+          found = this.setPageFill(n, i, pos, emptyPages, pageNo);
+          this.collectPageNumbers(n, i, pageNo);
           if (!found) {
             emptyPages.push({
               pos: pos,
@@ -320,12 +329,29 @@
           pos = this.getOffsetTop(elem, this.elems.main);
           pos += elem.offsetHeight;
           this.addPageBackground(H, W, this.map.nodes[this.mainNodes[n]].elem);
-          results.push(n = i);
+          n = i;
+          results.push(pageNo++);
         }
         return results;
       };
 
-      Render.prototype.setPageFill = function(f, t, pos, emptyPages) {
+      Render.prototype.collectPageNumbers = function(f, t, pageNo) {
+        var k, m, n, ref, ref1, results;
+        results = [];
+        for (n = k = ref = f, ref1 = t; ref <= ref1 ? k < ref1 : k > ref1; n = ref <= ref1 ? ++k : --k) {
+          m = this.mainNodes[n];
+          if (m == null) {
+            continue;
+          }
+          results.push(this.pageNumbers.push({
+            page: pageNo,
+            node: this.map.nodes[m]
+          }));
+        }
+        return results;
+      };
+
+      Render.prototype.setPageFill = function(f, t, pos, emptyPages, pageNo) {
         var elemContent, elemSidenote, fill, first, found, k, len, m, margin, n, p, s, topContent, topSidenote;
         margin = f > START;
         first = true;
@@ -333,8 +359,11 @@
         found = false;
         while (n < t) {
           m = this.mainNodes[n];
-          s = this.sidenoteMap[m];
           ++n;
+          if (m == null) {
+            continue;
+          }
+          s = this.sidenoteMap[m];
           if (s == null) {
             continue;
           }

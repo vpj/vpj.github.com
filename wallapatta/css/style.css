@@ -156,9 +156,12 @@ h1 {
     font-size: 1rem;
   }
 }
-.page-backgrounds .page-background {
+.page-backgrounds {
   position: absolute;
   z-index: -1;
+  top: 0;
+}
+.page-backgrounds .page-background {
   border: 8px solid #eee;
 }
 @media print {
