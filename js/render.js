@@ -3,8 +3,9 @@
     hasProp = {}.hasOwnProperty;
 
   Mod.require('Weya.Base', 'Wallapatta.TYPES', function(Base, TYPES) {
-    var BREAK_COST, EMPTY_PAGE_COST, FIRST_CHILD_COST, INF, PAGE_COST, PAGE_MARGIN, PREFIX, Render, START;
+    var BLOCK_LEVEL, BREAK_COST, EMPTY_PAGE_COST, INF, PAGE_COST, PAGE_MARGIN, PARENT_POSITION_COST, PREFIX, Render, SECTION_BREAK_COST, START, obj;
     PREFIX = 'wallapatta_';
+    BLOCK_LEVEL = 10;
     INF = 1e10;
     PAGE_COST = 100;
     BREAK_COST = {
@@ -20,15 +21,22 @@
       article: 0,
       table: 1500
     };
-    FIRST_CHILD_COST = 10000;
+    SECTION_BREAK_COST = (
+      obj = {
+        1: 25,
+        2: 36,
+        3: 52,
+        4: 75,
+        5: 108,
+        6: 155
+      },
+      obj["" + BLOCK_LEVEL] = 1000,
+      obj
+    );
+    PARENT_POSITION_COST = 500;
+    EMPTY_PAGE_COST = 200;
     PAGE_MARGIN = '1000px';
     START = 1;
-    EMPTY_PAGE_COST = function(filled, height) {
-      var p;
-      p = filled / height;
-      p = Math.sqrt(p);
-      return parseInt(1500 / p - 1500);
-    };
     Render = (function(superClass) {
       extend(Render, superClass);
 
@@ -42,53 +50,43 @@
         return this.sidenotes = options.sidenotes;
       });
 
-      Render.prototype._parentPositionCost = function(node) {
-        var cost, p;
-        cost = 0;
-        if (node.parent() != null) {
-          p = node.parent().getChildPosition(node);
-          p = Math.max(p, 0.01);
-          p = Math.sqrt(p);
-          cost += (FIRST_CHILD_COST / p - FIRST_CHILD_COST) / 10;
-        }
-        return cost;
+      Render.prototype._emptyPageCost = function(filled, height) {
+        var p;
+        p = filled / height;
+        p = Math.max(p, 0.01);
+        p = Math.min(1, p);
+        return EMPTY_PAGE_COST * (1 / p - 1);
+      };
+
+      Render.prototype._parentPositionCost = function(pos) {
+        var p;
+        p = pos / this.pageHeight;
+        p = Math.max(p, 0.01);
+        p = Math.min(1, p);
+        return PARENT_POSITION_COST * (1 / p - 1);
       };
 
       Render.prototype.getNodeBreakCost = function(node) {
-        var cost;
-        cost = this._parentPositionCost(node);
         if (BREAK_COST[node.type] != null) {
-          cost += BREAK_COST[node.type];
-        } else if (node.type === 'section') {
-          cost += 25 * Math.pow(1.44, node.level);
+          return BREAK_COST[node.type];
+        } else if (node.type === 'section' && (SECTION_BREAK_COST[node.level] != null)) {
+          return SECTION_BREAK_COST[node.level];
         } else {
-          throw new Error('Unknown type');
+          throw new Error("Unknown type " + node.type + " - " + node.level);
         }
-        return cost;
-      };
-
-      Render.prototype.getBreakTopCost = function(node) {
-        var cost;
-        cost = this._parentPositionCost(node);
-        cost -= this.getNodeBreakCost(node);
-        return cost;
       };
 
       Render.prototype.getBreakCost = function(node) {
-        var cost;
-        if (this.breakCostMap[node.id] != null) {
-          return this.breakCostMap[node.id];
+        var cost, parent, pos;
+        parent = node.parent();
+        cost = 0;
+        while (parent != null) {
+          cost += this.getNodeBreakCost(parent);
+          pos = (this.getOffsetTop(node.elem, this.elems.main)) - (this.getOffsetTop(parent.elem, this.elems.main));
+          cost += this._parentPositionCost(pos);
+          parent = parent.parent();
         }
-        if (node.parent() != null) {
-          cost = this.getBreakCost(node.parent(), true);
-        } else {
-          if (node.type !== 'article') {
-            throw new Error('oops');
-          }
-          cost = 0;
-        }
-        this.breakCostMap[node.id] = cost + this.getNodeBreakCost(node);
-        return this.breakCostMap[node.id];
+        return cost;
       };
 
       Render.prototype.getOffsetTop = function(elem, parent) {
@@ -163,7 +161,7 @@
           if (pos > H) {
             break;
           }
-          c = this.broken[i] + this.breakCost[i] + PAGE_COST + EMPTY_PAGE_COST(pos, H);
+          c = this.broken[i] + this.breakCost[i] + PAGE_COST + this._emptyPageCost(pos, H);
           if (this.broken[n] >= c) {
             this.broken[n] = c;
             this.nextBreak[n] = i;
@@ -198,12 +196,11 @@
           this.broken.push(INF);
           this.nextBreak.push(null);
         }
-        this.breakCostMap = {};
         this.breakCost = [];
         ref1 = this.mainNodes;
         for (l = 0, len1 = ref1.length; l < len1; l++) {
           i = ref1[l];
-          this.breakCost.push((this.getBreakCost(this.map.nodes[i])) + (this.getBreakTopCost(this.map.nodes[i])));
+          this.breakCost.push(this.getBreakCost(this.map.nodes[i]));
         }
         n = this.mainNodes.length - 1;
         results = [];
@@ -261,40 +258,48 @@
       };
 
       Render.prototype.addPageBackground = function(H, W, elem) {
-        var y;
+        var pg, y, y2;
         y = this.getOffsetTop(elem, document.body);
-        return Weya({
+        pg = null;
+        Weya({
           elem: this.elems.pageBackgrounds
         }, function() {
-          return this.div(".page-background", "", {
+          return pg = this.div(".page-background", "", {
             style: {
-              top: y + "px",
-              left: "0",
+              'margin-top': "0",
               height: H + "px",
               width: W + "px"
             }
           });
         });
+        y2 = this.getOffsetTop(pg, document.body);
+        return pg.style.marginTop = (y - y2) + "px";
+      };
+
+      Render.prototype.setPageBackgrounds = function(elem) {
+        return this.elems.pageBackgrounds = elem;
       };
 
       Render.prototype.setPages = function(H, W) {
-        var elem, emptyPages, found, i, m, n, node, pos, results;
+        var elem, emptyPages, found, i, m, n, node, pageNo, pos, results;
         this.pageHeight = H;
         this.mainNodes = this.getMainNodes();
         this.sidenoteMap = this.getSidenoteMap();
         this.calculatePageBreaks();
-        if (this.elems.pageBackgrounds != null) {
-          document.body.removeChild(this.elems.pageBackgrounds);
+        if (this.elems.pageBackgrounds == null) {
+          Weya({
+            elem: document.body,
+            context: this
+          }, function() {
+            return this.$.elems.pageBackgrounds = this.div(".page-backgrounds", '');
+          });
         }
-        Weya({
-          elem: document.body,
-          context: this
-        }, function() {
-          return this.$.elems.pageBackgrounds = this.div(".page-backgrounds", '');
-        });
+        this.elems.pageBackgrounds.innerHTML = '';
         n = START;
         pos = 0;
         emptyPages = [];
+        this.pageNumbers = [];
+        pageNo = 0;
         results = [];
         while (n < this.mainNodes.length) {
           i = this.nextBreak[n];
@@ -307,7 +312,8 @@
           if (i == null) {
             i = this.mainNodes.length;
           }
-          found = this.setPageFill(n, i, pos, emptyPages);
+          found = this.setPageFill(n, i, pos, emptyPages, pageNo);
+          this.collectPageNumbers(n, i, pageNo);
           if (!found) {
             emptyPages.push({
               pos: pos,
@@ -320,12 +326,29 @@
           pos = this.getOffsetTop(elem, this.elems.main);
           pos += elem.offsetHeight;
           this.addPageBackground(H, W, this.map.nodes[this.mainNodes[n]].elem);
-          results.push(n = i);
+          n = i;
+          results.push(pageNo++);
         }
         return results;
       };
 
-      Render.prototype.setPageFill = function(f, t, pos, emptyPages) {
+      Render.prototype.collectPageNumbers = function(f, t, pageNo) {
+        var k, m, n, ref, ref1, results;
+        results = [];
+        for (n = k = ref = f, ref1 = t; ref <= ref1 ? k < ref1 : k > ref1; n = ref <= ref1 ? ++k : --k) {
+          m = this.mainNodes[n];
+          if (m == null) {
+            continue;
+          }
+          results.push(this.pageNumbers.push({
+            page: pageNo,
+            node: this.map.nodes[m]
+          }));
+        }
+        return results;
+      };
+
+      Render.prototype.setPageFill = function(f, t, pos, emptyPages, pageNo) {
         var elemContent, elemSidenote, fill, first, found, k, len, m, margin, n, p, s, topContent, topSidenote;
         margin = f > START;
         first = true;
@@ -333,8 +356,11 @@
         found = false;
         while (n < t) {
           m = this.mainNodes[n];
-          s = this.sidenoteMap[m];
           ++n;
+          if (m == null) {
+            continue;
+          }
+          s = this.sidenoteMap[m];
           if (s == null) {
             continue;
           }

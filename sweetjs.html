@@ -59,46 +59,46 @@ ga('send', 'pageview');
     <div class="row ">
      <div class="wallapatta-main nine columns ">
       <div id="wallapatta_0" class="article"><div id="wallapatta_1" class="section"><div class="content"><p id="wallapatta_2" class="paragraph"><span id="wallapatta_21" class="text">I started working on </span><strong id="wallapatta_22" class="bold"><a id="wallapatta_23" class="link" href="https://github.com/vpj/sweet">Sweet.js</a></strong><span id="wallapatta_24" class="text"> about a month ago. It is inspired by </span><a id="wallapatta_25" class="link" href="http://backbonejs.org/">Backbone.js</a><span id="wallapatta_26" class="text">. Sweet.js supports HTML5 states, so that you don't have to go through work arounds like </span><a id="wallapatta_27" class="link" href="https://news.ycombinator.com/item?id=6872330">these</a><span id="wallapatta_28" class="text">. Sweet.js is not a MVC framework, but it has a views similar to Backbone.js, which supports inheritance without affecting events and initializations of super classes. And it's written in Coffeescript.</span></p></div></div><div id="wallapatta_6" class="section"><h2 class="heading"><span id="wallapatta_7" class="block"><span id="wallapatta_31" class="text">Router</span></span></h2><div class="content"><pre id="wallapatta_8" class="codeBlock"><code class="coffeescript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Router</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Sweet</span>.<span class="hljs-title">Router</span></span>
- <span class="hljs-property">@routes</span> <span class="hljs-comment">#You can add more routes from sub classes</span>
+ @routes <span class="hljs-comment">#You can add more routes from sub classes</span>
   <span class="hljs-string">''</span>: <span class="hljs-string">'home'</span>
   <span class="hljs-string">'search/:what'</span>: <span class="hljs-string">'results'</span>
 
- <span class="hljs-attribute">home</span>: <span class="hljs-function">-&gt;</span>
+ home: <span class="hljs-function">-&gt;</span>
   View.home()
 
- <span class="hljs-attribute">results</span>: <span class="hljs-function"><span class="hljs-params">(what)</span> -&gt;</span>
-  <span class="hljs-built_in">console</span>.log <span class="hljs-property">@getState</span>() <span class="hljs-comment">#state</span>
+ results: <span class="hljs-function"><span class="hljs-params">(what)</span> -&gt;</span>
+  <span class="hljs-built_in">console</span>.log @getState() <span class="hljs-comment">#state</span>
   View.results(what)
 
 router = <span class="hljs-keyword">new</span> Router()
-router.start <span class="hljs-attribute">pushState</span>: <span class="hljs-literal">true</span>
+router.start pushState: <span class="hljs-literal">true</span>
 
 <span class="hljs-comment">#Emulate browser back button</span>
 router.back()
 
 <span class="hljs-comment">#Whether we can go back without leaving the web app</span>
 router.canBack()</code></pre></div></div><div id="wallapatta_9" class="section"><h2 class="heading"><span id="wallapatta_10" class="block"><span id="wallapatta_32" class="text">Views</span></span></h2><div class="content"><div id="wallapatta_11" class="section"><div class="content"><p id="wallapatta_12" class="paragraph"><span id="wallapatta_33" class="text">A generic form class.</span></p></div></div><pre id="wallapatta_13" class="codeBlock"><code class="coffeescript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Form</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Sweet</span>.<span class="hljs-title">View</span></span>
- <span class="hljs-property">@events</span>
+ @events
   <span class="hljs-string">'click .cancel'</span>: <span class="hljs-string">'cancel'</span>
   <span class="hljs-string">'click .submit'</span>: <span class="hljs-string">'submit'</span>
 
- <span class="hljs-property">@initialize</span> (options) -&gt;
-  <span class="hljs-property">@model</span> = options.model
+ @initialize (options) -&gt;
+  @model = options.model
 
-<span class="hljs-attribute">cancel</span>: <span class="hljs-function"><span class="hljs-params">(e)</span> -&gt;</span>
+cancel: <span class="hljs-function"><span class="hljs-params">(e)</span> -&gt;</span>
  router.back()</code></pre><div id="wallapatta_14" class="section"><div class="content"><p id="wallapatta_15" class="paragraph"><span id="wallapatta_34" class="text">A registration form class.</span></p></div></div><pre id="wallapatta_16" class="codeBlock"><code class="coffeescript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RegistrationForm</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Sweet</span>.<span class="hljs-title">View</span></span>
  <span class="hljs-comment">#Register new events without affecting events registered in Form class</span>
- <span class="hljs-property">@events</span>
+ @events
   <span class="hljs-string">'click .checkUsername'</span>: checkUsername
 
  <span class="hljs-comment">#Both initialization functions (Form, RegistrationForm) will be called.</span>
- <span class="hljs-property">@initialize</span> (options) -&gt;
-  <span class="hljs-property">@userType</span> = options.userType
+ @initialize (options) -&gt;
+  @userType = options.userType
 
- <span class="hljs-attribute">submit</span>: <span class="hljs-function"><span class="hljs-params">(e)</span> -&gt;</span>
+ submit: <span class="hljs-function"><span class="hljs-params">(e)</span> -&gt;</span>
   <span class="hljs-comment">#Submit form</span>
 
- <span class="hljs-attribute">checkUsername</span>: <span class="hljs-function"><span class="hljs-params">(e)</span> -&gt;</span>
+ checkUsername: <span class="hljs-function"><span class="hljs-params">(e)</span> -&gt;</span>
   <span class="hljs-comment">#Check availability</span></code></pre></div></div><div id="wallapatta_17" class="section"><div class="content"><p id="wallapatta_18" class="paragraph"><span id="wallapatta_35" class="text">This is a very basic library and it will not suit you if you are looking for a MVC. I'm using this in some of my projects, so I will be maintaining it.</span></p></div></div><div id="wallapatta_19" class="section"><div class="content"><p id="wallapatta_20" class="paragraph"><span id="wallapatta_36" class="text">I'm planning to remove the dependency on jQuery and use vanilla javascript.</span></p></div></div></div>
      </div>
      <div class="wallapatta-sidebar three columns ">

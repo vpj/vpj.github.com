@@ -1,0 +1,165 @@
+<!DOCTYPE html><html>
+ <head>
+  <meta charset="utf-8">
+  </meta>
+  <title>
+   Page Breaks
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </meta>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  </meta>
+  <link href="http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900" rel="stylesheet" type="text/css">
+  </link>
+  <link href="lib/skeleton/css/skeleton.css" rel="stylesheet">
+  </link>
+  <link href="lib/highlightjs/styles/default.css" rel="stylesheet">
+  </link>
+  <link href="css/style.css" rel="stylesheet">
+  </link>
+  <link href="blog.css" rel="stylesheet">
+  </link>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-44255805-1', 'auto');
+ga('send', 'pageview');
+  </script>
+ </head>
+ <body>
+  <div class="container wallapatta-container ">
+   <div class="header ">
+    <h1>
+     <a href="index.html">
+      VARUNA JAYASIRI
+     </a>
+    </h1>
+    <a class="button " href="https://www.twitter.com/vpj">
+     @vpj
+    </a>
+   </div>
+   <div class="wallapatta ">
+    <h1 class="title ">
+     Page Breaks
+    </h1>
+    <h3 class="date ">
+     April 27, 2016
+    </h3>
+    <div style="margin-bottom:30px;">
+     <a class="twitter-share-button " href="https://twitter.com/share" data-via="vpj" data-size="large">
+      Tweet
+     </a>
+     <script>
+      !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+     </script>
+    </div>
+    <div class="row ">
+     <div class="wallapatta-main nine columns ">
+      <div id="wallapatta_0" class="article"><div id="wallapatta_1" class="section"><div class="content"><p id="wallapatta_2" class="paragraph"><em id="wallapatta_45" class="italics"><span id="wallapatta_46" class="text">How to automatically add sensible page breaks?</span></em></p></div></div><div id="wallapatta_3" class="section"><div class="content"><p id="wallapatta_4" class="paragraph"><span id="wallapatta_47" class="text">In </span><a id="wallapatta_48" class="link" href="https://github.com/vpj/wallapatta">Wallaptta</a><span id="wallapatta_49" class="text"> we model pagination as a cost minimization problem. That is, we try to find where to place page breaks so that there is no overflow and the cost is minimised. If the cost of adding a page break at a given point is know this can be easily solved with </span><em id="wallapatta_50" class="italics"><span id="wallapatta_51" class="text">dynamic programming.</span></em></p></div></div><div id="wallapatta_5" class="section"><div class="content"><p id="wallapatta_6" class="paragraph"><span id="wallapatta_52" class="text">The question is how to determine the cost of adding a page-break at a given point.</span></p></div></div><div id="wallapatta_7" class="section"><div class="content"><p id="wallapatta_8" class="paragraph"><span id="wallapatta_53" class="text">First we calculated the cost based on the type of sections we split; e.g. </span><em id="wallapatta_54" class="italics"><span id="wallapatta_55" class="text">list</span></em><span id="wallapatta_56" class="text">, </span><em id="wallapatta_57" class="italics"><span id="wallapatta_58" class="text">paragraph</span></em><span id="wallapatta_59" class="text">, </span><em id="wallapatta_60" class="italics"><span id="wallapatta_61" class="text">table</span></em><span id="wallapatta_62" class="text">, </span><em id="wallapatta_63" class="italics"><span id="wallapatta_64" class="text">between to paragraphs</span></em><span id="wallapatta_65" class="text">, </span><em id="wallapatta_66" class="italics"><span id="wallapatta_67" class="text">between two topics</span></em><span id="wallapatta_68" class="text">. This way the program would try to insert page breaks where the cost is less, like between two topics. Often inserting a page break will split multiple sections.</span></p><pre id="wallapatta_12" class="codeBlock"><code class="nohighlight">1 Item one
+2 Item two
+  &lt;&lt;&lt;&lt;&lt; Page break
+  Item two details
+3 Item three</code></pre><div id="wallapatta_13" class="section"><div class="content"><p id="wallapatta_14" class="paragraph"><span id="wallapatta_70" class="text">For instance the above page break splits a set of paragraphs as well as a list of items. It's important to know the hierarchy of the document when calculating this cost.</span></p></div></div></div></div><div id="wallapatta_15" class="section"><div class="content"><p id="wallapatta_16" class="paragraph"><span id="wallapatta_71" class="text">When we first tried with just the obove cost, it gave two main problems:</span></p><ol id="wallapatta_17" class="list"><li id="wallapatta_18" class="list-item"><span id="wallapatta_19" class="block"><em id="wallapatta_72" class="italics"><span id="wallapatta_73" class="text">Not splitting at the best points</span></em></span><div id="wallapatta_20" class="section"><div class="content"><p id="wallapatta_21" class="paragraph"><span id="wallapatta_74" class="text">e.g. when only 4 items would fit in a page</span></p><pre id="wallapatta_22" class="codeBlock"><code class="nohighlight">1. Item 1
+&lt;&lt;&lt;&lt;&lt; Page break
+2. Item 2
+3. Item 3
+4. Item 4
+5. Item 5</code></pre><div id="wallapatta_23" class="section"><div class="content"><p id="wallapatta_24" class="paragraph"><span id="wallapatta_75" class="text">The algorithm would place the break between 1 and 2, whilst the best place is between 4 and 5.</span></p></div></div></div></div></li><li id="wallapatta_25" class="list-item"><span id="wallapatta_26" class="block"><em id="wallapatta_76" class="italics"><span id="wallapatta_77" class="text">Empty space</span></em></span><div id="wallapatta_27" class="section"><div class="content"><p id="wallapatta_28" class="paragraph"><span id="wallapatta_78" class="text">Like in the above example it would leave a lot of empty space in initial pages while filling up later pages.</span></p></div></div></li></ol></div></div><div id="wallapatta_29" class="section"><div class="content"><p id="wallapatta_30" class="paragraph"><span id="wallapatta_79" class="text">The first reaction to this was to add breaks at later points if the cost is the same. This didn't work out well as there were instances where the cost of breaking at a earlier point was slightely less - </span><em id="wallapatta_80" class="italics"><span id="wallapatta_81" class="text">although the cost was less it didn't look nice.</span></em></p></div></div><div id="wallapatta_31" class="section"><div class="content"><p id="wallapatta_32" class="paragraph"><span id="wallapatta_82" class="text">So we introduced a cost based on the height of upper-part of the sections we are splitting. And another cost based on the height of the page left empty.</span></p></div></div><div id="wallapatta_36" class="section"><div class="content"><p id="wallapatta_37" class="paragraph"><span id="wallapatta_84" class="text">The cost based on height of the upper-part is an inversely proportianaly to the height; i.e. there's a very large cost if you break a section right after the start. And the cost of empty pages is also inversely proportional to the height filled with content; i.e. a large cost if only a small portion of a page is filled. </span><em id="wallapatta_85" class="italics"><span id="wallapatta_86" class="text">The empty page cost is not added for the last page.</span></em></p></div></div><div id="wallapatta_38" class="section"><div class="content"><p id="wallapatta_39" class="paragraph"><span id="wallapatta_87" class="text">This algorithm seem to give decent results so far. Here are some example</span></p><ul id="wallapatta_40" class="list"><li id="wallapatta_41" class="list-item"><span id="wallapatta_42" class="block"><a id="wallapatta_88" class="link" href="http://vpj.github.io/images/posts/page_breaks/sample_a4.pdf">A guide - A4 size</a></span></li><li id="wallapatta_43" class="list-item"><span id="wallapatta_44" class="block"><a id="wallapatta_89" class="link" href="http://vpj.github.io/images/posts/page_breaks/sample_a5.pdf">Same guide - A5 size</a></span></li></ul></div></div></div>
+     </div>
+     <div class="wallapatta-sidebar three columns ">
+      <div id="wallapatta_9" class="sidenote"><div id="wallapatta_10" class="section"><div class="content"><p id="wallapatta_11" class="paragraph"><span id="wallapatta_69" class="text">Cost based on the type of sections getting splitted</span></p></div></div></div><div id="wallapatta_33" class="sidenote"><div id="wallapatta_34" class="section"><div class="content"><p id="wallapatta_35" class="paragraph"><span id="wallapatta_83" class="text">Cost based on the height of upper-part of the sections getting splitted, and on the height of the page left empty</span></p></div></div></div>
+     </div>
+     <div style="display:none;">
+      <div class='wallapatta-code'>--How to automatically add sensible page breaks?
+
+In &lt;&lt;https://github.com/vpj/wallapatta(Wallaptta)&gt;&gt; we model pagination as a
+cost minimization problem.
+That is, we try to find where to place page breaks so that there is no overflow
+and the cost is minimised. If the cost of adding a page break at a given
+point is know this can be easily solved with --dynamic programming.
+
+The question is how to determine the cost of adding a page-break at a given point.
+
+First we calculated the cost based on the type of sections we split;
+e.g. --list--, --paragraph--, --table--, --between to paragraphs--, --between two topics--.
+This way the program would try to insert page breaks where the cost is less, like between two topics. Often inserting a page break will split multiple sections.
+
+ &gt;&gt;&gt;
+  Cost based on the type of sections getting splitted
+
+ ```
+  1 Item one
+  2 Item two
+    &lt;&lt;&lt;&lt;&lt; Page break
+    Item two details
+  3 Item three
+
+ For instance the above page break splits a set of paragraphs as well as a list of items.
+ It's important to know the hierarchy of the document when calculating this cost.
+
+When we first tried with just the obove cost, it gave two main problems:
+
+ - --Not splitting at the best points
+
+  e.g. when only 4 items would fit in a page
+
+   ```
+    1. Item 1
+    &lt;&lt;&lt;&lt;&lt; Page break
+    2. Item 2
+    3. Item 3
+    4. Item 4
+    5. Item 5
+
+   The algorithm would place the break between 1 and 2, whilst the best place is between 4 and 5.
+
+ - --Empty space
+
+  Like in the above example it would leave a lot of empty space in initial pages while filling up later pages.
+
+The first reaction to this was to add breaks at later points if the cost is the same.
+This didn't work out well as there were instances where the cost of breaking
+at a earlier point was slightely less - --although the cost was less it didn't look nice.
+
+So we introduced a cost based on the height of upper-part of the sections we are
+splitting. And another cost based on the height of the page left empty.
+
+ &gt;&gt;&gt;
+  Cost based on the height of upper-part of the sections getting splitted,
+  and on the height of the page left empty
+
+The cost based on height of the upper-part is an inversely proportianaly to the height;
+i.e. there's a very large cost if you break a section right after the start.
+And the cost of empty pages is also inversely proportional to the height filled with content; i.e. a large cost if only a small portion of a page is filled. --The empty page cost is not added for the last page.
+
+This algorithm seem to give decent results so far. Here are some example
+
+ * &lt;&lt;http://vpj.github.io/images/posts/page_breaks/sample_a4.pdf(A guide - A4 size)&gt;&gt;
+ * &lt;&lt;http://vpj.github.io/images/posts/page_breaks/sample_a5.pdf(Same guide - A5 size)&gt;&gt;</div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script src="lib/highlightjs/highlight.pack.js">
+  </script>
+  <script src="lib/weya/weya.js">
+  </script>
+  <script src="lib/weya/base.js">
+  </script>
+  <script src="lib/mod/mod.js">
+  </script>
+  <script src="js/static.js?v=9">
+  </script>
+  <script src="js/parser.js?v=9">
+  </script>
+  <script src="js/reader.js?v=9">
+  </script>
+  <script src="js/nodes.js?v=9">
+  </script>
+  <script src="js/render.js?v=9">
+  </script>
+ </body>
+</html>

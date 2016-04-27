@@ -25,7 +25,7 @@
                     }
                   });
                 });
-                return this.div(function() {
+                this.div(function() {
                   this.i(".fa.fa-header", {
                     on: {
                       click: this.$.on.header
@@ -96,6 +96,11 @@
                       click: this.$.on.sidenote
                     }
                   });
+                });
+                return this.$.elems.pickMediaDialog = this.div(".pick-media-dialog", {
+                  on: {
+                    click: this.$.on.pickMediaClick
+                  }
                 });
               });
               return this.$.elems.textarea = this.textarea(".editor", {
@@ -210,7 +215,7 @@
       });
 
       Editor.listen('inlineMedia', function() {
-        return this.wrapSelection('[[', ']]');
+        return this.pickMediaDialog();
       });
 
       Editor.listen('superscript', function() {
@@ -399,7 +404,8 @@
         this.editor.setSize(null, (height - 100) + "px");
         this.elems.preview.style.maxHeight = (height - 50) + "px";
         this.editor.setValue(Sample);
-        return window.addEventListener('resize', this.on.resize);
+        window.addEventListener('resize', this.on.resize);
+        return window.requestAnimationFrame(this._onRendered);
       });
 
       Editor.listen('resize', function() {
@@ -409,7 +415,8 @@
         return this.elems.preview.style.maxHeight = (height - 50) + "px";
       });
 
-      Editor.prototype.render = function() {
+      Editor.prototype.render = function(callback) {
+        this._onRendered = callback;
         this.elems.container = document.body;
         Weya({
           elem: this.elems.container,
@@ -418,12 +425,59 @@
         return window.requestAnimationFrame(this.on.setupEditor);
       };
 
+      Editor.prototype.setResources = function(resources) {
+        return this._resources = resources;
+      };
+
+      Editor.listen('pickMediaClick', function(e) {
+        var n, path;
+        this.elems.pickMediaDialog.style.display = 'none';
+        n = e.target;
+        path = null;
+        while (n) {
+          if (n._path != null) {
+            path = n._path;
+            break;
+          }
+          n = e.parentNode;
+        }
+        if (path == null) {
+          return this.wrapSelection('[[', ']]');
+        }
+        return this.wrapSelection("[[" + path + "]]", '');
+      });
+
+      Editor.prototype.pickMediaDialog = function() {
+        var resources, s;
+        s = this.editor.getSelection();
+        if (s.trim() !== '') {
+          return this.wrapSelection('[[', ']]');
+        }
+        this.elems.pickMediaDialog.style.display = 'block';
+        this.elems.pickMediaDialog.innerHTML = '';
+        resources = this._resources;
+        return Weya({
+          elem: this.elems.pickMediaDialog
+        }, function() {
+          var d, j, len, path, results;
+          this.div('Blank');
+          results = [];
+          for (j = 0, len = resources.length; j < len; j++) {
+            path = resources[j];
+            d = this.div(path);
+            results.push(d._path = path);
+          }
+          return results;
+        });
+      };
+
       return Editor;
 
     })(Base);
     EDITOR = new Editor;
-    EDITOR.render();
-    return Mod.set('Editor', EDITOR);
+    return EDITOR.render(function() {
+      return Mod.set('Editor', EDITOR);
+    });
   });
 
 }).call(this);
