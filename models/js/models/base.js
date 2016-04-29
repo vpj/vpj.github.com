@@ -167,6 +167,8 @@
         'html': 'Render html',
         'template': 'Render template',
         'toJSON': 'To JSON',
+        'toJSONFull': 'To JSON Full',
+        'isDefault': 'Is default value',
         'edit': 'Render editor',
         'valueChanged': 'A property value change event'
       });
