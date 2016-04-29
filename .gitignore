@@ -37,7 +37,6 @@ Icon?
 Thumbs.db
 node_modules
 build
-samples
 blog
 npm
 build.*

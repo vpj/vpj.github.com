@@ -45,6 +45,246 @@ ga('send', 'pageview');
    </div>
    <div class="wallapatta ">
     <h1 class="title ">
+     <a href="models.html">
+      nearby.lk data models library
+     </a>
+    </h1>
+    <h3 class="date ">
+     April 29, 2016
+    </h3>
+    <div class="row ">
+     <div class="wallapatta-main nine columns ">
+      <div id="wallapatta_0" class="article"><div id="wallapatta_1" class="section"><div class="content"><p id="wallapatta_2" class="paragraph"><span id="wallapatta_56" class="text">We did a rewrite of the </span><a id="wallapatta_57" class="link" href="http://nearby.lk">nearby.lk</a><span id="wallapatta_58" class="text"> data model library, and we decided to open source the core of it. It supports JSON or YAML data files, and parses them based on a specification (like a schema).</span></p></div></div><div id="wallapatta_5" class="section"><div class="content"><p id="wallapatta_6" class="paragraph"><span id="wallapatta_59" class="text">The specification is a coffeescript class with a render function. The editor checks the input against the specification and uses the render function to show the parsed input. The editor can either work in YAML mode (plain YAML input) or form input mode (user fills up a form). It can handle quite complex data models.</span></p></div></div><div id="wallapatta_7" class="section"><div class="content"><p id="wallapatta_8" class="paragraph"><span id="wallapatta_60" class="text">Here's the editor accepting (and rendering a resume). Click </span><span id="wallapatta_61" class="html"><i class="fa fa-table"></i></span><span id="wallapatta_62" class="text"> to go to form mode.</span></p></div></div><div id="wallapatta_9" class="full"><div id="wallapatta_11" class="html"><iframe src="http://vpj.github.io/models/" width="100%" height="500px" style="outline:none;border:1px solid #eee"></iframe>
+</div></div><div id="wallapatta_12" class="section"><div class="content"><p id="wallapatta_13" class="paragraph"><span id="wallapatta_63" class="text">This is the class for the </span><strong id="wallapatta_64" class="bold"><span id="wallapatta_65" class="text">Resume</span></strong><span id="wallapatta_66" class="text"> example.</span></p></div></div><pre id="wallapatta_14" class="codeBlock"><code class="coffee"> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Resume</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Base</span></span>
+  @extend()</code></pre><div id="wallapatta_15" class="section"><div class="content"><p id="wallapatta_16" class="paragraph"><span id="wallapatta_67" class="text">Set the type of the model.</span></p></div></div><pre id="wallapatta_17" class="codeBlock"><code class="coffee">  type: <span class="hljs-string">'Resume'</span></code></pre><div id="wallapatta_18" class="section"><div class="content"><p id="wallapatta_19" class="paragraph"><span id="wallapatta_68" class="text">Define properties. The type of the property is determined based on the property parameters. It defaults to </span><em id="wallapatta_69" class="italics"><span id="wallapatta_70" class="text">Value</span></em><span id="wallapatta_71" class="text"> property.</span></p></div></div><pre id="wallapatta_20" class="codeBlock"><code class="coffee">  @property <span class="hljs-string">'name'</span>, {}
+  ...</code></pre><div id="wallapatta_21" class="section"><div class="content"><p id="wallapatta_22" class="paragraph"><code id="wallapatta_72" class="code"><span id="wallapatta_73" class="text">oneof</span></code><span id="wallapatta_74" class="text"> specifies that the property is one of the models specified.</span></p></div></div><pre id="wallapatta_23" class="codeBlock"><code class="coffee">  @property <span class="hljs-string">'address'</span>,
+   oneof: [<span class="hljs-string">'Null'</span>, <span class="hljs-string">'Address'</span>]</code></pre><div id="wallapatta_24" class="section"><div class="content"><p id="wallapatta_25" class="paragraph"><span id="wallapatta_75" class="text">This is a list of values. </span><code id="wallapatta_76" class="code"><span id="wallapatta_77" class="text">rows</span></code><span id="wallapatta_78" class="text"> and </span><code id="wallapatta_79" class="code"><span id="wallapatta_80" class="text">columns</span></code><span id="wallapatta_81" class="text"> are schema paramters for values.</span></p></div></div><pre id="wallapatta_26" class="codeBlock"><code class="coffee">  @property <span class="hljs-string">'statement'</span>,
+   list:
+    rows: <span class="hljs-number">3</span>
+    columns: <span class="hljs-number">50</span></code></pre><div id="wallapatta_27" class="section"><div class="content"><p id="wallapatta_28" class="paragraph"><span id="wallapatta_82" class="text">This property is a list of other models.</span></p></div></div><pre id="wallapatta_29" class="codeBlock"><code class="coffee">  @property <span class="hljs-string">'timeline'</span>,
+   list:
+    oneof: [<span class="hljs-string">'Experience'</span>, <span class="hljs-string">'Education'</span>, <span class="hljs-string">'Recognition'</span>]
+    defaultValues: <span class="hljs-function">-&gt;</span> {from: <span class="hljs-string">'2010'</span>, to: <span class="hljs-string">'2020'</span>}
+
+  ...</code></pre><div id="wallapatta_30" class="section"><div class="content"><p id="wallapatta_31" class="paragraph"><span id="wallapatta_83" class="text">These are some private functions of the </span><strong id="wallapatta_84" class="bold"><span id="wallapatta_85" class="text">Resume</span></strong><span id="wallapatta_86" class="text"> model.</span></p></div></div><pre id="wallapatta_32" class="codeBlock"><code class="coffee">  _education: <span class="hljs-function">-&gt;</span>
+   res = (e <span class="hljs-keyword">for</span> e <span class="hljs-keyword">in</span> @_values.timeline <span class="hljs-keyword">when</span> e.type <span class="hljs-keyword">is</span> <span class="hljs-string">'Education'</span>)
+   res.sort (x, y) -&gt; y._values.from - x._values.from
+
+  ...</code></pre><div id="wallapatta_33" class="section"><div class="content"><p id="wallapatta_34" class="paragraph"><span id="wallapatta_87" class="text">This is the template to render the output.</span></p></div></div><pre id="wallapatta_35" class="codeBlock"><code class="coffee">  template: <span class="hljs-function"><span class="hljs-params">(self)</span> -&gt;</span>
+   values = self._values
+   education = self._education()
+   experience = self._experience()
+   recognitions = self._recognitions()
+
+   @div <span class="hljs-string">".resume"</span>, <span class="hljs-function">-&gt;</span>
+    @div <span class="hljs-string">".row"</span>, <span class="hljs-function">-&gt;</span>
+     @div <span class="hljs-string">".six.columns"</span>, <span class="hljs-function">-&gt;</span>
+      @div <span class="hljs-string">".name"</span>, <span class="hljs-string">"<span class="hljs-subst">#{values.name}</span>"</span>
+      @div <span class="hljs-string">".role"</span>, <span class="hljs-string">"<span class="hljs-subst">#{values.role}</span>"</span>
+      <span class="hljs-keyword">if</span> values.website <span class="hljs-keyword">isnt</span> <span class="hljs-string">''</span>
+       @div <span class="hljs-string">".website"</span>, <span class="hljs-function">-&gt;</span>
+        @a href: <span class="hljs-string">"<span class="hljs-subst">#{values.website}</span>"</span>, <span class="hljs-string">"<span class="hljs-subst">#{values.website}</span>"</span>
+
+     <span class="hljs-keyword">if</span> values.address.type <span class="hljs-keyword">isnt</span> <span class="hljs-string">'Null'</span>
+      @div <span class="hljs-string">".three.columns.address"</span>, <span class="hljs-function">-&gt;</span>
+       values.address.weya <span class="hljs-keyword">this</span>
+
+     ...</code></pre><div id="wallapatta_36" class="section"><div class="content"><p id="wallapatta_37" class="paragraph"><span id="wallapatta_88" class="text">New properties (e.g. image uploads) can be defined similarly.</span></p></div></div><div id="wallapatta_38" class="section"><h2 class="heading"><span id="wallapatta_39" class="block"><span id="wallapatta_89" class="text">Why did we need this?</span></span></h2><div class="content"><div id="wallapatta_40" class="section"><div class="content"><p id="wallapatta_41" class="paragraph"><span id="wallapatta_90" class="text">On </span><a id="wallapatta_91" class="link" href="http://www.nearby.lk">nearby.lk</a><span id="wallapatta_92" class="text">, we have local business information. Initially it was basic information like contact numbers, a small description, etc. Later, more details needed to be included. Also, the page structures </span><a id="wallapatta_93" class="link" href="http://www.laundromat.lk/">differed</a><span id="wallapatta_94" class="text"> based on the </span><a id="wallapatta_95" class="link" href="http://www.nearby.lk/templeoftooth">type of location</a><span id="wallapatta_96" class="text">. We didn't want to have the content in free flow. It's easier to make mistakes and not have uniform style with free text content. Also you can do a much better search with structured content.</span></p></div></div></div></div><div id="wallapatta_42" class="section"><div class="content"><p id="wallapatta_43" class="paragraph"><a id="wallapatta_97" class="link" href="http://www.nearby.lk">nearby.lk</a><span id="wallapatta_98" class="text"> is not yet running this rewritten library. A little more work needs to be done to integrate this with the nearby search engine.</span></p></div></div><div id="wallapatta_44" class="section"><h2 class="heading"><span id="wallapatta_45" class="block"><span id="wallapatta_99" class="text">How to use it?</span></span></h2><div class="content"><div id="wallapatta_46" class="section"><div class="content"><p id="wallapatta_47" class="paragraph"><a id="wallapatta_100" class="link" href="https://github.com/vpj/models/tree/master/js/samples">These samples</a><span id="wallapatta_101" class="text"> show the classes for Resume example.</span></p></div></div><div id="wallapatta_48" class="section"><div class="content"><p id="wallapatta_49" class="paragraph"><span id="wallapatta_102" class="text">The library depends on </span><a id="wallapatta_103" class="link" href="https://github.com/vpj/weya">Weya</a><span id="wallapatta_104" class="text"> and </span><a id="wallapatta_105" class="link" href="https://github.com/vpj/mod">Mod</a><span id="wallapatta_106" class="text"> libraries for rendering and module management.</span></p></div></div><div id="wallapatta_50" class="section"><h3 class="heading"><span id="wallapatta_51" class="block"><span id="wallapatta_107" class="text">Embedding the editor</span></span></h3><div class="content"><pre id="wallapatta_52" class="codeBlock"><code class="coffee">Mod.<span class="hljs-built_in">require</span> <span class="hljs-string">'Models.Editor'</span>, <span class="hljs-function"><span class="hljs-params">(Editor)</span> -&gt;</span>
+ editor = <span class="hljs-keyword">new</span> Editor
+  model: <span class="hljs-string">'Resume'</span> <span class="hljs-comment">#Base model name</span>
+ editor.render element,
+  width: width
+  height: height
+  onRendered
+<span class="hljs-function"> <span class="hljs-title">onRendered</span> = -&gt;</span>
+  editor.yaml() <span class="hljs-comment">#yaml edit mode</span>
+  editor.structured() <span class="hljs-comment">#structured edit mode</span>
+  editor.resize  <span class="hljs-comment">#resize editor</span>
+   width: width
+   height: height
+  editor.getModel() <span class="hljs-comment">#return model object</span>
+  <span class="hljs-comment">#returns json object omiting default values</span>
+  editor.getModel().getJSON()
+  <span class="hljs-comment">#returns full json object</span>
+  editor.getModel().getJSONFull()
+  editor.setJSON jsonObject <span class="hljs-comment">#set json object content</span></code></pre></div></div><div id="wallapatta_53" class="section"><h3 class="heading"><span id="wallapatta_54" class="block"><span id="wallapatta_108" class="text">Using models</span></span></h3><div class="content"><pre id="wallapatta_55" class="codeBlock"><code class="coffee">Mod.<span class="hljs-built_in">require</span> <span class="hljs-string">'Models.Models'</span>, <span class="hljs-function"><span class="hljs-params">(Models)</span> -&gt;</span>
+ ModelClass = Models.get <span class="hljs-string">'Resume'</span>
+ model = <span class="hljs-keyword">new</span> ModelClass
+ <span class="hljs-comment">#parse json object</span>
+ results = ModelClass.parse jsonObject
+ <span class="hljs-comment">#results.score = How maching it was [0..1]</span>
+ <span class="hljs-comment">#results.errors = List of errors when parsing</span>
+ <span class="hljs-comment">#results.value = model</span>
+ <span class="hljs-comment">#returns json object omiting default values</span>
+ model.getJSON()
+ <span class="hljs-comment">#returns full json object</span>
+ model.getJSONFull()
+ model.render element
+ model.html() <span class="hljs-comment">#returns html</span></code></pre></div></div></div></div></div>
+     </div>
+     <div class="wallapatta-sidebar three columns ">
+      <div id="wallapatta_3" class="sidenote"><div id="wallapatta_4" class="html"><iframe src="https://ghbtns.com/github-btn.html?user=vpj&amp;repo=models&amp;type=star&amp;count=true&amp;size=large" frameborder="0" scrolling="0" width="160px" height="30px" <="" iframe="">
+</iframe></div></div><div id="wallapatta_10" class="sidenote"></div>
+     </div>
+     <div style="display:none;">
+      <div class='wallapatta-code'>We did a rewrite of the &lt;&lt;http://nearby.lk(nearby.lk)&gt;&gt; data model library, and we decided to open source the core of it.
+It supports JSON or YAML data files, and parses them based on a specification (like a schema).
+
+&gt;&gt;&gt;
+ &lt;&lt;&lt;
+  &lt;iframe src="https://ghbtns.com/github-btn.html?user=vpj&repo=models&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px"
+  &lt;/iframe&gt;
+
+The specification is a coffeescript class with a render function.
+The editor checks the input against the specification and uses the render function to show the parsed input. The editor can either work in YAML mode (plain YAML input) or form input mode (user fills up a form). It can handle quite complex data models.
+
+Here's the editor accepting (and rendering a resume). Click &lt;-&lt;i class="fa fa-table" /&gt;-&gt; to go to form mode.
+
+&lt;!&gt;
+ &lt;&lt;&lt;
+  &lt;iframe src="http://vpj.github.io/models/" width="100%" height="500px"
+   style="outline:none;border:1px solid #eee"&gt;&lt;/iframe&gt;
+
+This is the class for the **Resume** example.
+
+```coffee
+  class Resume extends Base
+   @extend()
+
+Set the type of the model.
+
+```coffee
+   type: 'Resume'
+
+Define properties. The type of the property is determined based on the property parameters. It defaults to --Value-- property.
+
+```coffee
+   @property 'name', {}
+   ...
+
+``oneof`` specifies that the property is one of the models specified.
+
+```coffee
+   @property 'address',
+    oneof: ['Null', 'Address']
+
+This is a list of values.
+``rows`` and ``columns`` are schema paramters for values.
+
+```coffee
+   @property 'statement',
+    list:
+     rows: 3
+     columns: 50
+
+This property is a list of other models.
+
+```coffee
+   @property 'timeline',
+    list:
+     oneof: ['Experience', 'Education', 'Recognition']
+     defaultValues: -&gt; {from: '2010', to: '2020'}
+
+   ...
+
+These are some private functions of the **Resume** model.
+
+```coffee
+   _education: -&gt;
+    res = (e for e in @_values.timeline when e.type is 'Education')
+    res.sort (x, y) -&gt; y._values.from - x._values.from
+
+   ...
+
+This is the template to render the output.
+
+```coffee
+   template: (self) -&gt;
+    values = self._values
+    education = self._education()
+    experience = self._experience()
+    recognitions = self._recognitions()
+
+    @div ".resume", -&gt;
+     @div ".row", -&gt;
+      @div ".six.columns", -&gt;
+       @div ".name", "#{values.name}"
+       @div ".role", "#{values.role}"
+       if values.website isnt ''
+        @div ".website", -&gt;
+         @a href: "#{values.website}", "#{values.website}"
+
+      if values.address.type isnt 'Null'
+       @div ".three.columns.address", -&gt;
+        values.address.weya this
+
+      ...
+
+New properties (e.g. image uploads) can be defined similarly.
+
+##Why did we need this?
+
+ On &lt;&lt;http://www.nearby.lk(nearby.lk)&gt;&gt;, we have local business information.
+ Initially it was basic information like contact numbers, a small description, etc.
+ Later, more details needed to be included. Also, the page structures &lt;&lt;http://www.laundromat.lk/(differed)&gt;&gt; based on the &lt;&lt;http://www.nearby.lk/templeoftooth(type of location)&gt;&gt;.
+ We didn't want to have the content in free flow. It's easier to make mistakes and not have uniform style with free text content.
+ Also you can do a much better search with structured content.
+
+&lt;&lt;http://www.nearby.lk(nearby.lk)&gt;&gt; is not yet running this rewritten library. A little more work needs to be done to integrate this with the nearby search engine.
+
+##How to use it?
+
+ &lt;&lt;https://github.com/vpj/models/tree/master/js/samples(These samples)&gt;&gt; show the classes for Resume example.
+
+ The library depends on &lt;&lt;https://github.com/vpj/weya(Weya)&gt;&gt; and &lt;&lt;https://github.com/vpj/mod(Mod)&gt;&gt; libraries for rendering and module management.
+
+ ###Embedding the editor
+
+  ```coffee
+   Mod.require 'Models.Editor', (Editor) -&gt;
+    editor = new Editor
+     model: 'Resume' #Base model name
+    editor.render element,
+     width: width
+     height: height
+     onRendered
+    onRendered = -&gt;
+     editor.yaml() #yaml edit mode
+     editor.structured() #structured edit mode
+     editor.resize  #resize editor
+      width: width
+      height: height
+     editor.getModel() #return model object
+     #returns json object omiting default values
+     editor.getModel().getJSON()
+     #returns full json object
+     editor.getModel().getJSONFull()
+     editor.setJSON jsonObject #set json object content
+
+ ###Using models
+
+  ```coffee
+   Mod.require 'Models.Models', (Models) -&gt;
+    ModelClass = Models.get 'Resume'
+    model = new ModelClass
+    #parse json object
+    results = ModelClass.parse jsonObject
+    #results.score = How maching it was [0..1]
+    #results.errors = List of errors when parsing
+    #results.value = model
+    #returns json object omiting default values
+    model.getJSON()
+    #returns full json object
+    model.getJSONFull()
+    model.render element
+    model.html() #returns html
+
+</div>
+     </div>
+    </div>
+   </div>
+   <div class="wallapatta ">
+    <h1 class="title ">
      <a href="page_breaks.html">
       Page Breaks
      </a>
@@ -54,19 +294,19 @@ ga('send', 'pageview');
     </h3>
     <div class="row ">
      <div class="wallapatta-main nine columns ">
-      <div id="wallapatta_0" class="article"><div id="wallapatta_1" class="section"><div class="content"><p id="wallapatta_2" class="paragraph"><em id="wallapatta_45" class="italics"><span id="wallapatta_46" class="text">How to automatically add sensible page breaks?</span></em></p></div></div><div id="wallapatta_3" class="section"><div class="content"><p id="wallapatta_4" class="paragraph"><span id="wallapatta_47" class="text">In </span><a id="wallapatta_48" class="link" href="https://github.com/vpj/wallapatta">Wallaptta</a><span id="wallapatta_49" class="text"> we model pagination as a cost minimization problem. That is, we try to find where to place page breaks so that there is no overflow and the cost is minimised. If the cost of adding a page break at a given point is know this can be easily solved with </span><em id="wallapatta_50" class="italics"><span id="wallapatta_51" class="text">dynamic programming.</span></em></p></div></div><div id="wallapatta_5" class="section"><div class="content"><p id="wallapatta_6" class="paragraph"><span id="wallapatta_52" class="text">The question is how to determine the cost of adding a page-break at a given point.</span></p></div></div><div id="wallapatta_7" class="section"><div class="content"><p id="wallapatta_8" class="paragraph"><span id="wallapatta_53" class="text">First we calculated the cost based on the type of sections we split; e.g. </span><em id="wallapatta_54" class="italics"><span id="wallapatta_55" class="text">list</span></em><span id="wallapatta_56" class="text">, </span><em id="wallapatta_57" class="italics"><span id="wallapatta_58" class="text">paragraph</span></em><span id="wallapatta_59" class="text">, </span><em id="wallapatta_60" class="italics"><span id="wallapatta_61" class="text">table</span></em><span id="wallapatta_62" class="text">, </span><em id="wallapatta_63" class="italics"><span id="wallapatta_64" class="text">between to paragraphs</span></em><span id="wallapatta_65" class="text">, </span><em id="wallapatta_66" class="italics"><span id="wallapatta_67" class="text">between two topics</span></em><span id="wallapatta_68" class="text">. This way the program would try to insert page breaks where the cost is less, like between two topics. Often inserting a page break will split multiple sections.</span></p><pre id="wallapatta_12" class="codeBlock"><code class="nohighlight">1 Item one
+      <div id="wallapatta_10000" class="article"><div id="wallapatta_10001" class="section"><div class="content"><p id="wallapatta_10002" class="paragraph"><em id="wallapatta_10045" class="italics"><span id="wallapatta_10046" class="text">How to automatically add sensible page breaks?</span></em></p></div></div><div id="wallapatta_10003" class="section"><div class="content"><p id="wallapatta_10004" class="paragraph"><span id="wallapatta_10047" class="text">In </span><a id="wallapatta_10048" class="link" href="https://github.com/vpj/wallapatta">Wallaptta</a><span id="wallapatta_10049" class="text"> we model pagination as a cost minimization problem. That is, we try to find where to place page breaks so that there is no overflow and the cost is minimised. If the cost of adding a page break at a given point is know this can be easily solved with </span><em id="wallapatta_10050" class="italics"><span id="wallapatta_10051" class="text">dynamic programming.</span></em></p></div></div><div id="wallapatta_10005" class="section"><div class="content"><p id="wallapatta_10006" class="paragraph"><span id="wallapatta_10052" class="text">The question is how to determine the cost of adding a page-break at a given point.</span></p></div></div><div id="wallapatta_10007" class="section"><div class="content"><p id="wallapatta_10008" class="paragraph"><span id="wallapatta_10053" class="text">First we calculated the cost based on the type of sections we split; e.g. </span><em id="wallapatta_10054" class="italics"><span id="wallapatta_10055" class="text">list</span></em><span id="wallapatta_10056" class="text">, </span><em id="wallapatta_10057" class="italics"><span id="wallapatta_10058" class="text">paragraph</span></em><span id="wallapatta_10059" class="text">, </span><em id="wallapatta_10060" class="italics"><span id="wallapatta_10061" class="text">table</span></em><span id="wallapatta_10062" class="text">, </span><em id="wallapatta_10063" class="italics"><span id="wallapatta_10064" class="text">between to paragraphs</span></em><span id="wallapatta_10065" class="text">, </span><em id="wallapatta_10066" class="italics"><span id="wallapatta_10067" class="text">between two topics</span></em><span id="wallapatta_10068" class="text">. This way the program would try to insert page breaks where the cost is less, like between two topics. Often inserting a page break will split multiple sections.</span></p><pre id="wallapatta_10012" class="codeBlock"><code class="nohighlight">1 Item one
 2 Item two
   &lt;&lt;&lt;&lt;&lt; Page break
   Item two details
-3 Item three</code></pre><div id="wallapatta_13" class="section"><div class="content"><p id="wallapatta_14" class="paragraph"><span id="wallapatta_70" class="text">For instance the above page break splits a set of paragraphs as well as a list of items. It's important to know the hierarchy of the document when calculating this cost.</span></p></div></div></div></div><div id="wallapatta_15" class="section"><div class="content"><p id="wallapatta_16" class="paragraph"><span id="wallapatta_71" class="text">When we first tried with just the obove cost, it gave two main problems:</span></p><ol id="wallapatta_17" class="list"><li id="wallapatta_18" class="list-item"><span id="wallapatta_19" class="block"><em id="wallapatta_72" class="italics"><span id="wallapatta_73" class="text">Not splitting at the best points</span></em></span><div id="wallapatta_20" class="section"><div class="content"><p id="wallapatta_21" class="paragraph"><span id="wallapatta_74" class="text">e.g. when only 4 items would fit in a page</span></p><pre id="wallapatta_22" class="codeBlock"><code class="nohighlight">1. Item 1
+3 Item three</code></pre><div id="wallapatta_10013" class="section"><div class="content"><p id="wallapatta_10014" class="paragraph"><span id="wallapatta_10070" class="text">For instance the above page break splits a set of paragraphs as well as a list of items. It's important to know the hierarchy of the document when calculating this cost.</span></p></div></div></div></div><div id="wallapatta_10015" class="section"><div class="content"><p id="wallapatta_10016" class="paragraph"><span id="wallapatta_10071" class="text">When we first tried with just the obove cost, it gave two main problems:</span></p><ol id="wallapatta_10017" class="list"><li id="wallapatta_10018" class="list-item"><span id="wallapatta_10019" class="block"><em id="wallapatta_10072" class="italics"><span id="wallapatta_10073" class="text">Not splitting at the best points</span></em></span><div id="wallapatta_10020" class="section"><div class="content"><p id="wallapatta_10021" class="paragraph"><span id="wallapatta_10074" class="text">e.g. when only 4 items would fit in a page</span></p><pre id="wallapatta_10022" class="codeBlock"><code class="nohighlight">1. Item 1
 &lt;&lt;&lt;&lt;&lt; Page break
 2. Item 2
 3. Item 3
 4. Item 4
-5. Item 5</code></pre><div id="wallapatta_23" class="section"><div class="content"><p id="wallapatta_24" class="paragraph"><span id="wallapatta_75" class="text">The algorithm would place the break between 1 and 2, whilst the best place is between 4 and 5.</span></p></div></div></div></div></li><li id="wallapatta_25" class="list-item"><span id="wallapatta_26" class="block"><em id="wallapatta_76" class="italics"><span id="wallapatta_77" class="text">Empty space</span></em></span><div id="wallapatta_27" class="section"><div class="content"><p id="wallapatta_28" class="paragraph"><span id="wallapatta_78" class="text">Like in the above example it would leave a lot of empty space in initial pages while filling up later pages.</span></p></div></div></li></ol></div></div><div id="wallapatta_29" class="section"><div class="content"><p id="wallapatta_30" class="paragraph"><span id="wallapatta_79" class="text">The first reaction to this was to add breaks at later points if the cost is the same. This didn't work out well as there were instances where the cost of breaking at a earlier point was slightely less - </span><em id="wallapatta_80" class="italics"><span id="wallapatta_81" class="text">although the cost was less it didn't look nice.</span></em></p></div></div><div id="wallapatta_31" class="section"><div class="content"><p id="wallapatta_32" class="paragraph"><span id="wallapatta_82" class="text">So we introduced a cost based on the height of upper-part of the sections we are splitting. And another cost based on the height of the page left empty.</span></p></div></div><div id="wallapatta_36" class="section"><div class="content"><p id="wallapatta_37" class="paragraph"><span id="wallapatta_84" class="text">The cost based on height of the upper-part is an inversely proportianaly to the height; i.e. there's a very large cost if you break a section right after the start. And the cost of empty pages is also inversely proportional to the height filled with content; i.e. a large cost if only a small portion of a page is filled. </span><em id="wallapatta_85" class="italics"><span id="wallapatta_86" class="text">The empty page cost is not added for the last page.</span></em></p></div></div><div id="wallapatta_38" class="section"><div class="content"><p id="wallapatta_39" class="paragraph"><span id="wallapatta_87" class="text">This algorithm seem to give decent results so far. Here are some example</span></p><ul id="wallapatta_40" class="list"><li id="wallapatta_41" class="list-item"><span id="wallapatta_42" class="block"><a id="wallapatta_88" class="link" href="http://vpj.github.io/images/posts/page_breaks/sample_a4.pdf">A guide - A4 size</a></span></li><li id="wallapatta_43" class="list-item"><span id="wallapatta_44" class="block"><a id="wallapatta_89" class="link" href="http://vpj.github.io/images/posts/page_breaks/sample_a5.pdf">Same guide - A5 size</a></span></li></ul></div></div></div>
+5. Item 5</code></pre><div id="wallapatta_10023" class="section"><div class="content"><p id="wallapatta_10024" class="paragraph"><span id="wallapatta_10075" class="text">The algorithm would place the break between 1 and 2, whilst the best place is between 4 and 5.</span></p></div></div></div></div></li><li id="wallapatta_10025" class="list-item"><span id="wallapatta_10026" class="block"><em id="wallapatta_10076" class="italics"><span id="wallapatta_10077" class="text">Empty space</span></em></span><div id="wallapatta_10027" class="section"><div class="content"><p id="wallapatta_10028" class="paragraph"><span id="wallapatta_10078" class="text">Like in the above example it would leave a lot of empty space in initial pages while filling up later pages.</span></p></div></div></li></ol></div></div><div id="wallapatta_10029" class="section"><div class="content"><p id="wallapatta_10030" class="paragraph"><span id="wallapatta_10079" class="text">The first reaction to this was to add breaks at later points if the cost is the same. This didn't work out well as there were instances where the cost of breaking at a earlier point was slightely less - </span><em id="wallapatta_10080" class="italics"><span id="wallapatta_10081" class="text">although the cost was less it didn't look nice.</span></em></p></div></div><div id="wallapatta_10031" class="section"><div class="content"><p id="wallapatta_10032" class="paragraph"><span id="wallapatta_10082" class="text">So we introduced a cost based on the height of upper-part of the sections we are splitting. And another cost based on the height of the page left empty.</span></p></div></div><div id="wallapatta_10036" class="section"><div class="content"><p id="wallapatta_10037" class="paragraph"><span id="wallapatta_10084" class="text">The cost based on height of the upper-part is an inversely proportianaly to the height; i.e. there's a very large cost if you break a section right after the start. And the cost of empty pages is also inversely proportional to the height filled with content; i.e. a large cost if only a small portion of a page is filled. </span><em id="wallapatta_10085" class="italics"><span id="wallapatta_10086" class="text">The empty page cost is not added for the last page.</span></em></p></div></div><div id="wallapatta_10038" class="section"><div class="content"><p id="wallapatta_10039" class="paragraph"><span id="wallapatta_10087" class="text">This algorithm seem to give decent results so far. Here are some example</span></p><ul id="wallapatta_10040" class="list"><li id="wallapatta_10041" class="list-item"><span id="wallapatta_10042" class="block"><a id="wallapatta_10088" class="link" href="http://vpj.github.io/images/posts/page_breaks/sample_a4.pdf">A guide - A4 size</a></span></li><li id="wallapatta_10043" class="list-item"><span id="wallapatta_10044" class="block"><a id="wallapatta_10089" class="link" href="http://vpj.github.io/images/posts/page_breaks/sample_a5.pdf">Same guide - A5 size</a></span></li></ul></div></div></div>
      </div>
      <div class="wallapatta-sidebar three columns ">
-      <div id="wallapatta_9" class="sidenote"><div id="wallapatta_10" class="section"><div class="content"><p id="wallapatta_11" class="paragraph"><span id="wallapatta_69" class="text">Cost based on the type of sections getting splitted</span></p></div></div></div><div id="wallapatta_33" class="sidenote"><div id="wallapatta_34" class="section"><div class="content"><p id="wallapatta_35" class="paragraph"><span id="wallapatta_83" class="text">Cost based on the height of upper-part of the sections getting splitted, and on the height of the page left empty</span></p></div></div></div>
+      <div id="wallapatta_10009" class="sidenote"><div id="wallapatta_10010" class="section"><div class="content"><p id="wallapatta_10011" class="paragraph"><span id="wallapatta_10069" class="text">Cost based on the type of sections getting splitted</span></p></div></div></div><div id="wallapatta_10033" class="sidenote"><div id="wallapatta_10034" class="section"><div class="content"><p id="wallapatta_10035" class="paragraph"><span id="wallapatta_10083" class="text">Cost based on the height of upper-part of the sections getting splitted, and on the height of the page left empty</span></p></div></div></div>
      </div>
      <div style="display:none;">
       <div class='wallapatta-code'>--How to automatically add sensible page breaks?
@@ -149,7 +389,7 @@ This algorithm seem to give decent results so far. Here are some example
     </h3>
     <div class="row ">
      <div class="wallapatta-main nine columns ">
-      <div id="wallapatta_10000" class="article"><div id="wallapatta_10001" class="section"><div class="content"><p id="wallapatta_10002" class="paragraph"><span id="wallapatta_10044" class="text">Here's a list of small node.js related performance tips. I will keep updating this with new stuff we come across.</span></p></div></div><div id="wallapatta_10003" class="section"><h2 class="heading"><span id="wallapatta_10004" class="block"><code id="wallapatta_10045" class="code"><span id="wallapatta_10046" class="text">vm.runInContext</span></code><span id="wallapatta_10047" class="text"> vs </span><code id="wallapatta_10048" class="code"><span id="wallapatta_10049" class="text">vm.runInThisContext</span></code></span></h2><div class="content"><div id="wallapatta_10008" class="section"><div class="content"><p id="wallapatta_10009" class="paragraph"><code id="wallapatta_10051" class="code"><span id="wallapatta_10052" class="text">runInContext</span></code><span id="wallapatta_10053" class="text"> and </span><code id="wallapatta_10054" class="code"><span id="wallapatta_10055" class="text">runInNewContext</span></code><span id="wallapatta_10056" class="text"> are much slower than </span><code id="wallapatta_10057" class="code"><span id="wallapatta_10058" class="text">runInThisContext</span></code><span id="wallapatta_10059" class="text">.</span></p></div></div><div id="wallapatta_10010" class="section"><div class="content"><p id="wallapatta_10011" class="paragraph"><span id="wallapatta_10060" class="text">Here's a small script that compares the performance with a simple for loop.</span></p></div></div><pre id="wallapatta_10012" class="codeBlock"><code class="coffee">vm = <span class="hljs-built_in">require</span> <span class="hljs-string">'vm'</span>
+      <div id="wallapatta_20000" class="article"><div id="wallapatta_20001" class="section"><div class="content"><p id="wallapatta_20002" class="paragraph"><span id="wallapatta_20044" class="text">Here's a list of small node.js related performance tips. I will keep updating this with new stuff we come across.</span></p></div></div><div id="wallapatta_20003" class="section"><h2 class="heading"><span id="wallapatta_20004" class="block"><code id="wallapatta_20045" class="code"><span id="wallapatta_20046" class="text">vm.runInContext</span></code><span id="wallapatta_20047" class="text"> vs </span><code id="wallapatta_20048" class="code"><span id="wallapatta_20049" class="text">vm.runInThisContext</span></code></span></h2><div class="content"><div id="wallapatta_20008" class="section"><div class="content"><p id="wallapatta_20009" class="paragraph"><code id="wallapatta_20051" class="code"><span id="wallapatta_20052" class="text">runInContext</span></code><span id="wallapatta_20053" class="text"> and </span><code id="wallapatta_20054" class="code"><span id="wallapatta_20055" class="text">runInNewContext</span></code><span id="wallapatta_20056" class="text"> are much slower than </span><code id="wallapatta_20057" class="code"><span id="wallapatta_20058" class="text">runInThisContext</span></code><span id="wallapatta_20059" class="text">.</span></p></div></div><div id="wallapatta_20010" class="section"><div class="content"><p id="wallapatta_20011" class="paragraph"><span id="wallapatta_20060" class="text">Here's a small script that compares the performance with a simple for loop.</span></p></div></div><pre id="wallapatta_20012" class="codeBlock"><code class="coffee">vm = <span class="hljs-built_in">require</span> <span class="hljs-string">'vm'</span>
 LOG = (<span class="hljs-built_in">require</span> <span class="hljs-string">'../lib/log.js/log'</span>).log
 
 N = <span class="hljs-number">10000000</span>
@@ -178,10 +418,10 @@ T = (<span class="hljs-keyword">new</span> Date).getTime()
  script.runInContext context, timeout: <span class="hljs-number">1000</span>
 <span class="hljs-keyword">catch</span> e
  LOG <span class="hljs-string">'error'</span>, <span class="hljs-string">'vm_error'</span>, e.message
-LOG <span class="hljs-string">'info'</span>, <span class="hljs-string">'run_in_context'</span>, <span class="hljs-string">"<span class="hljs-subst">#{(<span class="hljs-keyword">new</span> Date).getTime() - T}</span>ms"</span>, sandbox</code></pre><div id="wallapatta_10013" class="section"><div class="content"><p id="wallapatta_10014" class="paragraph"><span id="wallapatta_10061" class="text">This is the output</span></p></div></div><div id="wallapatta_10015" class="image-container"><img class="image" src="img/node-performance/vm.png" alt="img/node-performance/vm.png"></div></div></div><div id="wallapatta_10021" class="section"><h2 class="heading"><span id="wallapatta_10022" class="block"><span id="wallapatta_10072" class="text">Heap Limit</span></span></h2><div class="content"><div id="wallapatta_10023" class="section"><div class="content"><p id="wallapatta_10024" class="paragraph"><span id="wallapatta_10073" class="text">The heap size limit of node.js applications on 64-bit system is about 1.7gb. Fortunately, you can increase this by passing </span><code id="wallapatta_10074" class="code"><span id="wallapatta_10075" class="text">max_old_space_size</span></code><span id="wallapatta_10076" class="text"> parameter to node.</span></p></div></div><pre id="wallapatta_10025" class="codeBlock"><code class="bash">node --max_old_space_size=4096 [JS_FILE]</code></pre><div id="wallapatta_10029" class="section"><div class="content"><p id="wallapatta_10030" class="paragraph"><span id="wallapatta_10078" class="text">However, </span><a id="wallapatta_10079" class="link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays">typed arrays</a><span id="wallapatta_10080" class="text"> are not bound by this limit. That is, you can allocate a few gigabytes of memory to typed arrays without specifying the above parameter.</span></p></div></div></div></div><div id="wallapatta_10031" class="section"><h2 class="heading"><span id="wallapatta_10032" class="block"><span id="wallapatta_10081" class="text">Parent of sliced string</span></span></h2><div class="content"><div id="wallapatta_10036" class="section"><div class="content"><p id="wallapatta_10037" class="paragraph"><span id="wallapatta_10083" class="text">Substrings of large strings keep a reference to the parent string. This eats up memory if you want to discard the parent string.</span></p></div></div><div id="wallapatta_10038" class="section"><div class="content"><p id="wallapatta_10039" class="paragraph"><span id="wallapatta_10084" class="text">A quick hack of splitting and joining the substring solves this.</span></p></div></div></div></div><div id="wallapatta_10040" class="section"><h2 class="heading"><span id="wallapatta_10041" class="block"><span id="wallapatta_10085" class="text">String join</span></span></h2><div class="content"><div id="wallapatta_10042" class="section"><div class="content"><p id="wallapatta_10043" class="paragraph"><span id="wallapatta_10086" class="text">String concatenation </span><code id="wallapatta_10087" class="code"><span id="wallapatta_10088" class="text">s += part</span></code><span id="wallapatta_10089" class="text"> eats up a lot of memory, that doesn't get garbage collected. It's ok for a few concatenations. Anything more than 10 should use </span><code id="wallapatta_10090" class="code"><span id="wallapatta_10091" class="text">Array.join</span></code><span id="wallapatta_10092" class="text">.</span></p></div></div></div></div></div>
+LOG <span class="hljs-string">'info'</span>, <span class="hljs-string">'run_in_context'</span>, <span class="hljs-string">"<span class="hljs-subst">#{(<span class="hljs-keyword">new</span> Date).getTime() - T}</span>ms"</span>, sandbox</code></pre><div id="wallapatta_20013" class="section"><div class="content"><p id="wallapatta_20014" class="paragraph"><span id="wallapatta_20061" class="text">This is the output</span></p></div></div><div id="wallapatta_20015" class="image-container"><img class="image" src="img/node-performance/vm.png" alt="img/node-performance/vm.png"></div></div></div><div id="wallapatta_20021" class="section"><h2 class="heading"><span id="wallapatta_20022" class="block"><span id="wallapatta_20072" class="text">Heap Limit</span></span></h2><div class="content"><div id="wallapatta_20023" class="section"><div class="content"><p id="wallapatta_20024" class="paragraph"><span id="wallapatta_20073" class="text">The heap size limit of node.js applications on 64-bit system is about 1.7gb. Fortunately, you can increase this by passing </span><code id="wallapatta_20074" class="code"><span id="wallapatta_20075" class="text">max_old_space_size</span></code><span id="wallapatta_20076" class="text"> parameter to node.</span></p></div></div><pre id="wallapatta_20025" class="codeBlock"><code class="bash">node --max_old_space_size=4096 [JS_FILE]</code></pre><div id="wallapatta_20029" class="section"><div class="content"><p id="wallapatta_20030" class="paragraph"><span id="wallapatta_20078" class="text">However, </span><a id="wallapatta_20079" class="link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays">typed arrays</a><span id="wallapatta_20080" class="text"> are not bound by this limit. That is, you can allocate a few gigabytes of memory to typed arrays without specifying the above parameter.</span></p></div></div></div></div><div id="wallapatta_20031" class="section"><h2 class="heading"><span id="wallapatta_20032" class="block"><span id="wallapatta_20081" class="text">Parent of sliced string</span></span></h2><div class="content"><div id="wallapatta_20036" class="section"><div class="content"><p id="wallapatta_20037" class="paragraph"><span id="wallapatta_20083" class="text">Substrings of large strings keep a reference to the parent string. This eats up memory if you want to discard the parent string.</span></p></div></div><div id="wallapatta_20038" class="section"><div class="content"><p id="wallapatta_20039" class="paragraph"><span id="wallapatta_20084" class="text">A quick hack of splitting and joining the substring solves this.</span></p></div></div></div></div><div id="wallapatta_20040" class="section"><h2 class="heading"><span id="wallapatta_20041" class="block"><span id="wallapatta_20085" class="text">String join</span></span></h2><div class="content"><div id="wallapatta_20042" class="section"><div class="content"><p id="wallapatta_20043" class="paragraph"><span id="wallapatta_20086" class="text">String concatenation </span><code id="wallapatta_20087" class="code"><span id="wallapatta_20088" class="text">s += part</span></code><span id="wallapatta_20089" class="text"> eats up a lot of memory, that doesn't get garbage collected. It's ok for a few concatenations. Anything more than 10 should use </span><code id="wallapatta_20090" class="code"><span id="wallapatta_20091" class="text">Array.join</span></code><span id="wallapatta_20092" class="text">.</span></p></div></div></div></div></div>
      </div>
      <div class="wallapatta-sidebar three columns ">
-      <div id="wallapatta_10005" class="sidenote"><div id="wallapatta_10006" class="section"><div class="content"><p id="wallapatta_10007" class="paragraph"><a id="wallapatta_10050" class="link" href="https://nodejs.org/api/vm.html">Documentation</a></p></div></div></div><div id="wallapatta_10016" class="sidenote"><div id="wallapatta_10017" class="section"><div class="content"><p id="wallapatta_10018" class="paragraph"><span id="wallapatta_10062" class="text">The reason why the </span><strong id="wallapatta_10063" class="bold"><span id="wallapatta_10064" class="text">normal_time</span></strong><span id="wallapatta_10065" class="text"> is higher than </span><strong id="wallapatta_10066" class="bold"><span id="wallapatta_10067" class="text">run_in_this</span></strong><span id="wallapatta_10068" class="text"> is probably because coffeescript for loop has two counters.</span></p></div></div><div id="wallapatta_10019" class="section"><div class="content"><p id="wallapatta_10020" class="paragraph"><code id="wallapatta_10069" class="code"><span id="wallapatta_10070" class="text">runInContext</span></code><span id="wallapatta_10071" class="text"> gets terminated within the timeout (1s) before it completes the loop.</span></p></div></div></div><div id="wallapatta_10026" class="sidenote"><div id="wallapatta_10027" class="section"><div class="content"><p id="wallapatta_10028" class="paragraph"><span id="wallapatta_10077" class="text">The value is specified in megabytes.</span></p></div></div></div><div id="wallapatta_10033" class="sidenote"><div id="wallapatta_10034" class="section"><div class="content"><p id="wallapatta_10035" class="paragraph"><a id="wallapatta_10082" class="link" href="http://vpj.github.io/string_slice.html">Wrote a separate post on this</a></p></div></div></div>
+      <div id="wallapatta_20005" class="sidenote"><div id="wallapatta_20006" class="section"><div class="content"><p id="wallapatta_20007" class="paragraph"><a id="wallapatta_20050" class="link" href="https://nodejs.org/api/vm.html">Documentation</a></p></div></div></div><div id="wallapatta_20016" class="sidenote"><div id="wallapatta_20017" class="section"><div class="content"><p id="wallapatta_20018" class="paragraph"><span id="wallapatta_20062" class="text">The reason why the </span><strong id="wallapatta_20063" class="bold"><span id="wallapatta_20064" class="text">normal_time</span></strong><span id="wallapatta_20065" class="text"> is higher than </span><strong id="wallapatta_20066" class="bold"><span id="wallapatta_20067" class="text">run_in_this</span></strong><span id="wallapatta_20068" class="text"> is probably because coffeescript for loop has two counters.</span></p></div></div><div id="wallapatta_20019" class="section"><div class="content"><p id="wallapatta_20020" class="paragraph"><code id="wallapatta_20069" class="code"><span id="wallapatta_20070" class="text">runInContext</span></code><span id="wallapatta_20071" class="text"> gets terminated within the timeout (1s) before it completes the loop.</span></p></div></div></div><div id="wallapatta_20026" class="sidenote"><div id="wallapatta_20027" class="section"><div class="content"><p id="wallapatta_20028" class="paragraph"><span id="wallapatta_20077" class="text">The value is specified in megabytes.</span></p></div></div></div><div id="wallapatta_20033" class="sidenote"><div id="wallapatta_20034" class="section"><div class="content"><p id="wallapatta_20035" class="paragraph"><a id="wallapatta_20082" class="link" href="http://vpj.github.io/string_slice.html">Wrote a separate post on this</a></p></div></div></div>
      </div>
      <div style="display:none;">
       <div class='wallapatta-code'>Here's a list of small node.js related performance tips.
@@ -279,8 +519,8 @@ I will keep updating this with new stuff we come across.
     </h3>
     <div class="row ">
      <div class="wallapatta-main nine columns ">
-      <div id="wallapatta_20000" class="article"><div id="wallapatta_20001" class="section"><div class="content"><p id="wallapatta_20002" class="paragraph"><a id="wallapatta_20037" class="link" href="https://github.com/vpj/wallapatta">Wallapatta</a><sup id="wallapatta_20038" class="superScript"><span id="wallapatta_20039" class="text">1</span></sup><span id="wallapatta_20040" class="text"> got some new features.</span></p></div></div><div id="wallapatta_20013" class="full"><div id="wallapatta_20015" class="section"><div class="content"><p id="wallapatta_20016" class="paragraph"><span id="wallapatta_20047" class="text">First is full width blocks. These span into the sidenote area. These are ideal for large images and quotes.</span></p></div></div><div id="wallapatta_20017" class="image-container"><img class="image" src="https://static.pexels.com/photos/6547/sky-night-space-galaxy-large.jpeg" alt="https://static.pexels.com/photos/6547/sky-night-space-galaxy-large.jpeg"></div></div><div id="wallapatta_20018" class="section"><div class="content"><p id="wallapatta_20019" class="paragraph"><span id="wallapatta_20048" class="text">Next is javascript, coffeescript or weya template blocks. These can have code that generates html.</span></p></div></div><div id="wallapatta_20020" class="section"><div class="content"><p id="wallapatta_20021" class="paragraph"><span id="wallapatta_20049" class="text">Heres a coffeescript block.</span></p><pre id="wallapatta_20022" class="codeBlock"><code class="coffeescript">&lt;&lt;&lt;coffee
- <span class="hljs-string">"7 * 100 = &lt;strong&gt;<span class="hljs-subst">#{<span class="hljs-number">7</span> * <span class="hljs-number">100</span>}</span>&lt;/strong&gt;"</span></code></pre></div></div><div id="wallapatta_20025" class="section"><div class="content"><p id="wallapatta_20026" class="paragraph"><span id="wallapatta_20050" class="text">Here's a weya block that generates the </span><a id="wallapatta_20051" class="link" href="http://www.forestpin.com">Forestpin</a><span id="wallapatta_20052" class="text"> logo in an SVG.</span></p><pre id="wallapatta_20030" class="codeBlock"><code class="coffeescript">&lt;&lt;&lt;weya
+      <div id="wallapatta_30000" class="article"><div id="wallapatta_30001" class="section"><div class="content"><p id="wallapatta_30002" class="paragraph"><a id="wallapatta_30037" class="link" href="https://github.com/vpj/wallapatta">Wallapatta</a><sup id="wallapatta_30038" class="superScript"><span id="wallapatta_30039" class="text">1</span></sup><span id="wallapatta_30040" class="text"> got some new features.</span></p></div></div><div id="wallapatta_30013" class="full"><div id="wallapatta_30015" class="section"><div class="content"><p id="wallapatta_30016" class="paragraph"><span id="wallapatta_30047" class="text">First is full width blocks. These span into the sidenote area. These are ideal for large images and quotes.</span></p></div></div><div id="wallapatta_30017" class="image-container"><img class="image" src="https://static.pexels.com/photos/6547/sky-night-space-galaxy-large.jpeg" alt="https://static.pexels.com/photos/6547/sky-night-space-galaxy-large.jpeg"></div></div><div id="wallapatta_30018" class="section"><div class="content"><p id="wallapatta_30019" class="paragraph"><span id="wallapatta_30048" class="text">Next is javascript, coffeescript or weya template blocks. These can have code that generates html.</span></p></div></div><div id="wallapatta_30020" class="section"><div class="content"><p id="wallapatta_30021" class="paragraph"><span id="wallapatta_30049" class="text">Heres a coffeescript block.</span></p><pre id="wallapatta_30022" class="codeBlock"><code class="coffeescript">&lt;&lt;&lt;coffee
+ <span class="hljs-string">"7 * 100 = &lt;strong&gt;<span class="hljs-subst">#{<span class="hljs-number">7</span> * <span class="hljs-number">100</span>}</span>&lt;/strong&gt;"</span></code></pre></div></div><div id="wallapatta_30025" class="section"><div class="content"><p id="wallapatta_30026" class="paragraph"><span id="wallapatta_30050" class="text">Here's a weya block that generates the </span><a id="wallapatta_30051" class="link" href="http://www.forestpin.com">Forestpin</a><span id="wallapatta_30052" class="text"> logo in an SVG.</span></p><pre id="wallapatta_30030" class="codeBlock"><code class="coffeescript">&lt;&lt;&lt;weya
  G = <span class="hljs-number">1.618</span>
  H = <span class="hljs-number">13</span>
  order = [<span class="hljs-number">2</span>, <span class="hljs-number">4</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">3</span>]
@@ -291,7 +531,7 @@ I will keep updating this with new stuff we come across.
     @g <span class="hljs-string">".bar"</span>, transform: <span class="hljs-string">"translate(<span class="hljs-subst">#{i * <span class="hljs-number">50</span>}</span>, 0)"</span>, <span class="hljs-function">-&gt;</span>
      @rect y: -h * G, width: <span class="hljs-number">46</span>, height: h * G, fill: <span class="hljs-string">'#4a4a4a'</span>
      @rect width: <span class="hljs-number">30.67</span>, height: h,fill: <span class="hljs-string">'#98ff98'</span>
-     @rect x: <span class="hljs-number">30.67</span>, width: <span class="hljs-number">15.33</span>, height: h, fill: <span class="hljs-string">'#8bea8b'</span></code></pre><div id="wallapatta_20034" class="html"><svg width="250" height="250">
+     @rect x: <span class="hljs-number">30.67</span>, width: <span class="hljs-number">15.33</span>, height: h, fill: <span class="hljs-string">'#8bea8b'</span></code></pre><div id="wallapatta_30034" class="html"><svg width="250" height="250">
  <g transform="translate(2, 154)">
   <g class="bar " transform="translate(0, 0)">
    <rect y="-55.06541341600001" width="46" height="55.06541341600001" fill="#4a4a4a">
@@ -335,10 +575,10 @@ I will keep updating this with new stuff we come across.
   </g>
  </g>
 </svg>
-</div></div></div><div id="wallapatta_20035" class="section"><div class="content"><p id="wallapatta_20036" class="paragraph"><span id="wallapatta_20057" class="text">Checkout </span><a id="wallapatta_20058" class="link"><span id="wallapatta_20059" class="text"> for details</span></a></p></div></div></div>
+</div></div></div><div id="wallapatta_30035" class="section"><div class="content"><p id="wallapatta_30036" class="paragraph"><span id="wallapatta_30057" class="text">Checkout </span><a id="wallapatta_30058" class="link"><span id="wallapatta_30059" class="text"> for details</span></a></p></div></div></div>
      </div>
      <div class="wallapatta-sidebar three columns ">
-      <div id="wallapatta_20003" class="sidenote"><div id="wallapatta_20004" class="section"><div class="content"><p id="wallapatta_20005" class="paragraph"><sup id="wallapatta_20041" class="superScript"><span id="wallapatta_20042" class="text">1</span></sup><span id="wallapatta_20043" class="text"> Wallapatta is similar to markdown. It supports a document layout inspired by Edward Tufte's handouts and books. This blog is written in Wallapatta.</span></p></div></div><ul id="wallapatta_20006" class="list"><li id="wallapatta_20007" class="list-item"><span id="wallapatta_20008" class="block"><a id="wallapatta_20044" class="link" href="https://chrome.google.com/webstore/detail/wallapatta/nleponjjojkllonfamfjhebhadibjlip">Editor</a></span></li><li id="wallapatta_20009" class="list-item"><span id="wallapatta_20010" class="block"><a id="wallapatta_20045" class="link" href="https://github.com/vpj/wallapatta">Github</a></span></li><li id="wallapatta_20011" class="list-item"><span id="wallapatta_20012" class="block"><a id="wallapatta_20046" class="link" href="http://vpj.github.io/wallapatta/reference.html#wallapatta_335">Reference</a></span></li></ul></div><div id="wallapatta_20014" class="sidenote"></div><div id="wallapatta_20023" class="sidenote"><div id="wallapatta_20024" class="html">7 * 100 = <strong>700</strong></div></div><div id="wallapatta_20027" class="sidenote"><div id="wallapatta_20028" class="section"><div class="content"><p id="wallapatta_20029" class="paragraph"><a id="wallapatta_20053" class="link" href="https://github.com/vpj/weya">Weya on Github</a></p></div></div></div><div id="wallapatta_20031" class="sidenote"><div id="wallapatta_20032" class="section"><div class="content"><p id="wallapatta_20033" class="paragraph"><span id="wallapatta_20054" class="text">It generates the </span><a id="wallapatta_20055" class="link" href="https://www.forestpin.com">Forestpin</a><span id="wallapatta_20056" class="text"> Logo</span></p></div></div></div>
+      <div id="wallapatta_30003" class="sidenote"><div id="wallapatta_30004" class="section"><div class="content"><p id="wallapatta_30005" class="paragraph"><sup id="wallapatta_30041" class="superScript"><span id="wallapatta_30042" class="text">1</span></sup><span id="wallapatta_30043" class="text"> Wallapatta is similar to markdown. It supports a document layout inspired by Edward Tufte's handouts and books. This blog is written in Wallapatta.</span></p></div></div><ul id="wallapatta_30006" class="list"><li id="wallapatta_30007" class="list-item"><span id="wallapatta_30008" class="block"><a id="wallapatta_30044" class="link" href="https://chrome.google.com/webstore/detail/wallapatta/nleponjjojkllonfamfjhebhadibjlip">Editor</a></span></li><li id="wallapatta_30009" class="list-item"><span id="wallapatta_30010" class="block"><a id="wallapatta_30045" class="link" href="https://github.com/vpj/wallapatta">Github</a></span></li><li id="wallapatta_30011" class="list-item"><span id="wallapatta_30012" class="block"><a id="wallapatta_30046" class="link" href="http://vpj.github.io/wallapatta/reference.html#wallapatta_335">Reference</a></span></li></ul></div><div id="wallapatta_30014" class="sidenote"></div><div id="wallapatta_30023" class="sidenote"><div id="wallapatta_30024" class="html">7 * 100 = <strong>700</strong></div></div><div id="wallapatta_30027" class="sidenote"><div id="wallapatta_30028" class="section"><div class="content"><p id="wallapatta_30029" class="paragraph"><a id="wallapatta_30053" class="link" href="https://github.com/vpj/weya">Weya on Github</a></p></div></div></div><div id="wallapatta_30031" class="sidenote"><div id="wallapatta_30032" class="section"><div class="content"><p id="wallapatta_30033" class="paragraph"><span id="wallapatta_30054" class="text">It generates the </span><a id="wallapatta_30055" class="link" href="https://www.forestpin.com">Forestpin</a><span id="wallapatta_30056" class="text"> Logo</span></p></div></div></div>
      </div>
      <div style="display:none;">
       <div class='wallapatta-code'>&lt;&lt;https://github.com/vpj/wallapatta(Wallapatta)&gt;&gt;^^1^^ got some new features.
@@ -421,10 +661,10 @@ Checkout &lt;&lt; for details
     </h3>
     <div class="row ">
      <div class="wallapatta-main nine columns ">
-      <div id="wallapatta_30000" class="article"><div id="wallapatta_30001" class="full"><div id="wallapatta_30003" class="image-container"><img class="image" src="img/sliced_string.png" alt="img/sliced_string.png"></div></div><div id="wallapatta_30004" class="section"><div class="content"><p id="wallapatta_30005" class="paragraph"><span id="wallapatta_30034" class="text">In Google Chrome </span><sup id="wallapatta_30035" class="superScript"><span id="wallapatta_30036" class="text">1</span></sup><span id="wallapatta_30037" class="text"> when you take substrings of a larger string, the larger string is not garbage collected even if it is no longer referenced. The problem seems to be because the substring keeps a reference to the parent string.</span></p></div></div><div id="wallapatta_30009" class="section"><h2 class="heading"><span id="wallapatta_30010" class="block"><a id="wallapatta_30043" class="link" href="<http://vpj.github.io/bench/string_slice.html">Demo</a></span></h2><div class="content"><div id="wallapatta_30011" class="section"><div class="content"><p id="wallapatta_30012" class="paragraph"><span id="wallapatta_30044" class="text">The demo iteratively,</span></p><ol id="wallapatta_30013" class="list"><li id="wallapatta_30014" class="list-item"><span id="wallapatta_30015" class="block"><span id="wallapatta_30045" class="text">creates a random large string (~10M in length)</span></span></li><li id="wallapatta_30016" class="list-item"><span id="wallapatta_30017" class="block"><span id="wallapatta_30046" class="text">take a few substrings (each of about 50 characters)</span></span></li><li id="wallapatta_30018" class="list-item"><span id="wallapatta_30019" class="block"><span id="wallapatta_30047" class="text">push the substrings to a global array (the only thing permanently referenced)</span></span></li><li id="wallapatta_30020" class="list-item"><span id="wallapatta_30021" class="block"><span id="wallapatta_30048" class="text">remove references to the large string</span></span></li></ol></div></div><div id="wallapatta_30022" class="section"><div class="content"><p id="wallapatta_30023" class="paragraph"><span id="wallapatta_30049" class="text">You would assume that larger strings will get garbage collected. And would expect the program to run without a problem for many many iterations - until the memory taken up by the smaller strings hits the limit.</span></p></div></div><div id="wallapatta_30024" class="section"><div class="content"><p id="wallapatta_30025" class="paragraph"><span id="wallapatta_30050" class="text">Unfortunately in Google Chrome it doesn't work like that. The small substrings keep a reference to the parent and therefore it crashes after a few iterations. Try </span><a id="wallapatta_30051" class="link" href="http://vpj.github.io/bench/string_slice.html">http://vpj.github.io/bench/string_slice.html</a><span id="wallapatta_30052" class="text"> in Google Chrome.It crashes before 2000 cycles. </span><sup id="wallapatta_30053" class="superScript"><span id="wallapatta_30054" class="text">2</span></sup><span id="wallapatta_30055" class="text"> If you take a heap snapshot on Chrome Inspector, you can see the large strings, referenced as </span><strong id="wallapatta_30056" class="bold"><span id="wallapatta_30057" class="text">parent in (sliced string)</span></strong><span id="wallapatta_30058" class="text"> by smaller strings (as shown in the above screenshot).</span></p></div></div><div id="wallapatta_30029" class="section"><div class="content"><p id="wallapatta_30030" class="paragraph"><span id="wallapatta_30062" class="text">Then we wrote a copy of the same program, which creates a copy of the substrings before storing them. The following splitting and concatenation creates a actual copy of the string, instead of a reference copy.</span></p><pre id="wallapatta_30031" class="codeBlock"><code class="js">newSmallString = smallString.split(<span class="hljs-string">''</span>).join(<span class="hljs-string">''</span>)</code></pre></div></div><div id="wallapatta_30032" class="section"><div class="content"><p id="wallapatta_30033" class="paragraph"><span id="wallapatta_30063" class="text">Try </span><a id="wallapatta_30064" class="link" href="http://vpj.github.io/bench/string_slice_join.html">http://vpj.github.io/bench/string_slice_join.html</a><span id="wallapatta_30065" class="text">, which will run runs for many more iterations doing the same thing.</span></p></div></div></div></div></div>
+      <div id="wallapatta_40000" class="article"><div id="wallapatta_40001" class="full"><div id="wallapatta_40003" class="image-container"><img class="image" src="img/sliced_string.png" alt="img/sliced_string.png"></div></div><div id="wallapatta_40004" class="section"><div class="content"><p id="wallapatta_40005" class="paragraph"><span id="wallapatta_40034" class="text">In Google Chrome </span><sup id="wallapatta_40035" class="superScript"><span id="wallapatta_40036" class="text">1</span></sup><span id="wallapatta_40037" class="text"> when you take substrings of a larger string, the larger string is not garbage collected even if it is no longer referenced. The problem seems to be because the substring keeps a reference to the parent string.</span></p></div></div><div id="wallapatta_40009" class="section"><h2 class="heading"><span id="wallapatta_40010" class="block"><a id="wallapatta_40043" class="link" href="<http://vpj.github.io/bench/string_slice.html">Demo</a></span></h2><div class="content"><div id="wallapatta_40011" class="section"><div class="content"><p id="wallapatta_40012" class="paragraph"><span id="wallapatta_40044" class="text">The demo iteratively,</span></p><ol id="wallapatta_40013" class="list"><li id="wallapatta_40014" class="list-item"><span id="wallapatta_40015" class="block"><span id="wallapatta_40045" class="text">creates a random large string (~10M in length)</span></span></li><li id="wallapatta_40016" class="list-item"><span id="wallapatta_40017" class="block"><span id="wallapatta_40046" class="text">take a few substrings (each of about 50 characters)</span></span></li><li id="wallapatta_40018" class="list-item"><span id="wallapatta_40019" class="block"><span id="wallapatta_40047" class="text">push the substrings to a global array (the only thing permanently referenced)</span></span></li><li id="wallapatta_40020" class="list-item"><span id="wallapatta_40021" class="block"><span id="wallapatta_40048" class="text">remove references to the large string</span></span></li></ol></div></div><div id="wallapatta_40022" class="section"><div class="content"><p id="wallapatta_40023" class="paragraph"><span id="wallapatta_40049" class="text">You would assume that larger strings will get garbage collected. And would expect the program to run without a problem for many many iterations - until the memory taken up by the smaller strings hits the limit.</span></p></div></div><div id="wallapatta_40024" class="section"><div class="content"><p id="wallapatta_40025" class="paragraph"><span id="wallapatta_40050" class="text">Unfortunately in Google Chrome it doesn't work like that. The small substrings keep a reference to the parent and therefore it crashes after a few iterations. Try </span><a id="wallapatta_40051" class="link" href="http://vpj.github.io/bench/string_slice.html">http://vpj.github.io/bench/string_slice.html</a><span id="wallapatta_40052" class="text"> in Google Chrome.It crashes before 2000 cycles. </span><sup id="wallapatta_40053" class="superScript"><span id="wallapatta_40054" class="text">2</span></sup><span id="wallapatta_40055" class="text"> If you take a heap snapshot on Chrome Inspector, you can see the large strings, referenced as </span><strong id="wallapatta_40056" class="bold"><span id="wallapatta_40057" class="text">parent in (sliced string)</span></strong><span id="wallapatta_40058" class="text"> by smaller strings (as shown in the above screenshot).</span></p></div></div><div id="wallapatta_40029" class="section"><div class="content"><p id="wallapatta_40030" class="paragraph"><span id="wallapatta_40062" class="text">Then we wrote a copy of the same program, which creates a copy of the substrings before storing them. The following splitting and concatenation creates a actual copy of the string, instead of a reference copy.</span></p><pre id="wallapatta_40031" class="codeBlock"><code class="js">newSmallString = smallString.split(<span class="hljs-string">''</span>).join(<span class="hljs-string">''</span>)</code></pre></div></div><div id="wallapatta_40032" class="section"><div class="content"><p id="wallapatta_40033" class="paragraph"><span id="wallapatta_40063" class="text">Try </span><a id="wallapatta_40064" class="link" href="http://vpj.github.io/bench/string_slice_join.html">http://vpj.github.io/bench/string_slice_join.html</a><span id="wallapatta_40065" class="text">, which will run runs for many more iterations doing the same thing.</span></p></div></div></div></div></div>
      </div>
      <div class="wallapatta-sidebar three columns ">
-      <div id="wallapatta_30002" class="sidenote"></div><div id="wallapatta_30006" class="sidenote"><div id="wallapatta_30007" class="section"><div class="content"><p id="wallapatta_30008" class="paragraph"><sup id="wallapatta_30038" class="superScript"><span id="wallapatta_30039" class="text">1</span></sup><span id="wallapatta_30040" class="text"> Same happens in </span><a id="wallapatta_30041" class="link" href="https://nodejs.org/en/">node.js</a><span id="wallapatta_30042" class="text"> since it uses V8.</span></p></div></div></div><div id="wallapatta_30026" class="sidenote"><div id="wallapatta_30027" class="section"><div class="content"><p id="wallapatta_30028" class="paragraph"><sup id="wallapatta_30059" class="superScript"><span id="wallapatta_30060" class="text">2</span></sup><span id="wallapatta_30061" class="text"> This only happens in Chrome, not on Safari. Did not check on Firefox.</span></p></div></div></div>
+      <div id="wallapatta_40002" class="sidenote"></div><div id="wallapatta_40006" class="sidenote"><div id="wallapatta_40007" class="section"><div class="content"><p id="wallapatta_40008" class="paragraph"><sup id="wallapatta_40038" class="superScript"><span id="wallapatta_40039" class="text">1</span></sup><span id="wallapatta_40040" class="text"> Same happens in </span><a id="wallapatta_40041" class="link" href="https://nodejs.org/en/">node.js</a><span id="wallapatta_40042" class="text"> since it uses V8.</span></p></div></div></div><div id="wallapatta_40026" class="sidenote"><div id="wallapatta_40027" class="section"><div class="content"><p id="wallapatta_40028" class="paragraph"><sup id="wallapatta_40059" class="superScript"><span id="wallapatta_40060" class="text">2</span></sup><span id="wallapatta_40061" class="text"> This only happens in Chrome, not on Safari. Did not check on Firefox.</span></p></div></div></div>
      </div>
      <div style="display:none;">
       <div class='wallapatta-code'>&lt;!&gt;
@@ -474,11 +714,11 @@ In Google Chrome ^^1^^ when you take substrings of a larger string, the larger s
     </h3>
     <div class="row ">
      <div class="wallapatta-main nine columns ">
-      <div id="wallapatta_40000" class="article"><div id="wallapatta_40001" class="section"><div class="content"><p id="wallapatta_40002" class="paragraph"><span id="wallapatta_40048" class="text">I came across </span><a id="wallapatta_40049" class="link" href="http://jsblocks.com/">jsblock</a><span id="wallapatta_40050" class="text"> yesterday on Hacker News. They had a nice performance comparison test case set comparing jsblocks with </span><a id="wallapatta_40051" class="link" href="https://angularjs.org/">Angular</a><span id="wallapatta_40052" class="text"> and </span><a id="wallapatta_40053" class="link" href="https://facebook.github.io/react/">React</a><span id="wallapatta_40054" class="text">. It made me curious to see how the small library we use (</span><a id="wallapatta_40055" class="link" href="https://github.com/vpj/weya">Weya.coffee</a><span id="wallapatta_40056" class="text">) compares in performance with these.</span></p></div></div><div id="wallapatta_40007" class="section"><div class="content"><p id="wallapatta_40008" class="paragraph"><span id="wallapatta_40060" class="text">I ran the tests on Chrome broswer on a Macbook Air (1.6Ghz i5, 2GB). I have not altered test cases provided on </span><a id="wallapatta_40061" class="link" href="http://jsblocks.com/">jsblock</a><span id="wallapatta_40062" class="text">, and have added test cases for Weya for </span><strong id="wallapatta_40063" class="bold"><span id="wallapatta_40064" class="text">Rendering</span></strong><span id="wallapatta_40065" class="text"> and </span><strong id="wallapatta_40066" class="bold"><span id="wallapatta_40067" class="text">Syncing Changes</span></strong><span id="wallapatta_40068" class="text">., The results on Safari are not accurate in </span><em id="wallapatta_40069" class="italics"><span id="wallapatta_40070" class="text">syncing-changes</span></em><span id="wallapatta_40071" class="text"> test case, because jsblock test case use </span><code id="wallapatta_40072" class="code"><span id="wallapatta_40073" class="text">setTimeout(0)</span></code><span id="wallapatta_40074" class="text"> to resync which is called before html is actually rendered while the Weya test case use </span><code id="wallapatta_40075" class="code"><span id="wallapatta_40076" class="text">requestAnimationFrame</span></code><span id="wallapatta_40077" class="text"> which waits till it's rendered.</span></p></div></div><div id="wallapatta_40012" class="section"><h3 class="heading"><span id="wallapatta_40013" class="block"><span id="wallapatta_40080" class="text">Rendering</span></span></h3><div class="content"><table id="wallapatta_40014" class="table"><thead><tr><th colspan="1"><span id="wallapatta_40015" class="block"><span id="wallapatta_40081" class="text">Library</span></span></th><th colspan="1"><span id="wallapatta_40016" class="block"><span id="wallapatta_40082" class="text">Time (ms)</span></span></th><th colspan="1"><span id="wallapatta_40017" class="block"><span id="wallapatta_40083" class="text">Bar (shorter is better)</span></span></th></tr></thead><tbody><tr><td colspan="1"><span id="wallapatta_40018" class="block"><span id="wallapatta_40084" class="text">Weya.coffee</span></span></td><td colspan="1"><span id="wallapatta_40019" class="block"><span id="wallapatta_40085" class="text">404</span></span></td><td colspan="1"><span id="wallapatta_40020" class="block"><span id="wallapatta_40086" class="text">====</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_40021" class="block"><span id="wallapatta_40087" class="text">jsblocks</span></span></td><td colspan="1"><span id="wallapatta_40022" class="block"><span id="wallapatta_40088" class="text">801</span></span></td><td colspan="1"><span id="wallapatta_40023" class="block"><span id="wallapatta_40089" class="text">========</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_40024" class="block"><span id="wallapatta_40090" class="text">React</span></span></td><td colspan="1"><span id="wallapatta_40025" class="block"><span id="wallapatta_40091" class="text">1065</span></span></td><td colspan="1"><span id="wallapatta_40026" class="block"><span id="wallapatta_40092" class="text">==========</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_40027" class="block"><span id="wallapatta_40093" class="text">Angular</span></span></td><td colspan="1"><span id="wallapatta_40028" class="block"><span id="wallapatta_40094" class="text">2432</span></span></td><td colspan="1"><span id="wallapatta_40029" class="block"><span id="wallapatta_40095" class="text">========================</span></span></td></tr></tbody></table></div></div><div id="wallapatta_40030" class="section"><h3 class="heading"><span id="wallapatta_40031" class="block"><span id="wallapatta_40096" class="text">Syncing Changes</span></span></h3><div class="content"><table id="wallapatta_40032" class="table"><thead><tr><th colspan="1"><span id="wallapatta_40033" class="block"><span id="wallapatta_40097" class="text">Library</span></span></th><th colspan="1"><span id="wallapatta_40034" class="block"><span id="wallapatta_40098" class="text">Time (ms)</span></span></th><th colspan="1"><span id="wallapatta_40035" class="block"><span id="wallapatta_40099" class="text">Bar (shorter is better)</span></span></th></tr></thead><tbody><tr><td colspan="1"><span id="wallapatta_40036" class="block"><span id="wallapatta_40100" class="text">Weya.coffee</span></span></td><td colspan="1"><span id="wallapatta_40037" class="block"><span id="wallapatta_40101" class="text">1593</span></span></td><td colspan="1"><span id="wallapatta_40038" class="block"><span id="wallapatta_40102" class="text">========</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_40039" class="block"><span id="wallapatta_40103" class="text">jsblocks</span></span></td><td colspan="1"><span id="wallapatta_40040" class="block"><span id="wallapatta_40104" class="text">2035</span></span></td><td colspan="1"><span id="wallapatta_40041" class="block"><span id="wallapatta_40105" class="text">==========</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_40042" class="block"><span id="wallapatta_40106" class="text">React</span></span></td><td colspan="1"><span id="wallapatta_40043" class="block"><span id="wallapatta_40107" class="text">2781</span></span></td><td colspan="1"><span id="wallapatta_40044" class="block"><span id="wallapatta_40108" class="text">==============</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_40045" class="block"><span id="wallapatta_40109" class="text">Angular</span></span></td><td colspan="1"><span id="wallapatta_40046" class="block"><span id="wallapatta_40110" class="text">8081</span></span></td><td colspan="1"><span id="wallapatta_40047" class="block"><span id="wallapatta_40111" class="text">========================================</span></span></td></tr></tbody></table></div></div></div>
+      <div id="wallapatta_50000" class="article"><div id="wallapatta_50001" class="section"><div class="content"><p id="wallapatta_50002" class="paragraph"><span id="wallapatta_50048" class="text">I came across </span><a id="wallapatta_50049" class="link" href="http://jsblocks.com/">jsblock</a><span id="wallapatta_50050" class="text"> yesterday on Hacker News. They had a nice performance comparison test case set comparing jsblocks with </span><a id="wallapatta_50051" class="link" href="https://angularjs.org/">Angular</a><span id="wallapatta_50052" class="text"> and </span><a id="wallapatta_50053" class="link" href="https://facebook.github.io/react/">React</a><span id="wallapatta_50054" class="text">. It made me curious to see how the small library we use (</span><a id="wallapatta_50055" class="link" href="https://github.com/vpj/weya">Weya.coffee</a><span id="wallapatta_50056" class="text">) compares in performance with these.</span></p></div></div><div id="wallapatta_50007" class="section"><div class="content"><p id="wallapatta_50008" class="paragraph"><span id="wallapatta_50060" class="text">I ran the tests on Chrome broswer on a Macbook Air (1.6Ghz i5, 2GB). I have not altered test cases provided on </span><a id="wallapatta_50061" class="link" href="http://jsblocks.com/">jsblock</a><span id="wallapatta_50062" class="text">, and have added test cases for Weya for </span><strong id="wallapatta_50063" class="bold"><span id="wallapatta_50064" class="text">Rendering</span></strong><span id="wallapatta_50065" class="text"> and </span><strong id="wallapatta_50066" class="bold"><span id="wallapatta_50067" class="text">Syncing Changes</span></strong><span id="wallapatta_50068" class="text">., The results on Safari are not accurate in </span><em id="wallapatta_50069" class="italics"><span id="wallapatta_50070" class="text">syncing-changes</span></em><span id="wallapatta_50071" class="text"> test case, because jsblock test case use </span><code id="wallapatta_50072" class="code"><span id="wallapatta_50073" class="text">setTimeout(0)</span></code><span id="wallapatta_50074" class="text"> to resync which is called before html is actually rendered while the Weya test case use </span><code id="wallapatta_50075" class="code"><span id="wallapatta_50076" class="text">requestAnimationFrame</span></code><span id="wallapatta_50077" class="text"> which waits till it's rendered.</span></p></div></div><div id="wallapatta_50012" class="section"><h3 class="heading"><span id="wallapatta_50013" class="block"><span id="wallapatta_50080" class="text">Rendering</span></span></h3><div class="content"><table id="wallapatta_50014" class="table"><thead><tr><th colspan="1"><span id="wallapatta_50015" class="block"><span id="wallapatta_50081" class="text">Library</span></span></th><th colspan="1"><span id="wallapatta_50016" class="block"><span id="wallapatta_50082" class="text">Time (ms)</span></span></th><th colspan="1"><span id="wallapatta_50017" class="block"><span id="wallapatta_50083" class="text">Bar (shorter is better)</span></span></th></tr></thead><tbody><tr><td colspan="1"><span id="wallapatta_50018" class="block"><span id="wallapatta_50084" class="text">Weya.coffee</span></span></td><td colspan="1"><span id="wallapatta_50019" class="block"><span id="wallapatta_50085" class="text">404</span></span></td><td colspan="1"><span id="wallapatta_50020" class="block"><span id="wallapatta_50086" class="text">====</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_50021" class="block"><span id="wallapatta_50087" class="text">jsblocks</span></span></td><td colspan="1"><span id="wallapatta_50022" class="block"><span id="wallapatta_50088" class="text">801</span></span></td><td colspan="1"><span id="wallapatta_50023" class="block"><span id="wallapatta_50089" class="text">========</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_50024" class="block"><span id="wallapatta_50090" class="text">React</span></span></td><td colspan="1"><span id="wallapatta_50025" class="block"><span id="wallapatta_50091" class="text">1065</span></span></td><td colspan="1"><span id="wallapatta_50026" class="block"><span id="wallapatta_50092" class="text">==========</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_50027" class="block"><span id="wallapatta_50093" class="text">Angular</span></span></td><td colspan="1"><span id="wallapatta_50028" class="block"><span id="wallapatta_50094" class="text">2432</span></span></td><td colspan="1"><span id="wallapatta_50029" class="block"><span id="wallapatta_50095" class="text">========================</span></span></td></tr></tbody></table></div></div><div id="wallapatta_50030" class="section"><h3 class="heading"><span id="wallapatta_50031" class="block"><span id="wallapatta_50096" class="text">Syncing Changes</span></span></h3><div class="content"><table id="wallapatta_50032" class="table"><thead><tr><th colspan="1"><span id="wallapatta_50033" class="block"><span id="wallapatta_50097" class="text">Library</span></span></th><th colspan="1"><span id="wallapatta_50034" class="block"><span id="wallapatta_50098" class="text">Time (ms)</span></span></th><th colspan="1"><span id="wallapatta_50035" class="block"><span id="wallapatta_50099" class="text">Bar (shorter is better)</span></span></th></tr></thead><tbody><tr><td colspan="1"><span id="wallapatta_50036" class="block"><span id="wallapatta_50100" class="text">Weya.coffee</span></span></td><td colspan="1"><span id="wallapatta_50037" class="block"><span id="wallapatta_50101" class="text">1593</span></span></td><td colspan="1"><span id="wallapatta_50038" class="block"><span id="wallapatta_50102" class="text">========</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_50039" class="block"><span id="wallapatta_50103" class="text">jsblocks</span></span></td><td colspan="1"><span id="wallapatta_50040" class="block"><span id="wallapatta_50104" class="text">2035</span></span></td><td colspan="1"><span id="wallapatta_50041" class="block"><span id="wallapatta_50105" class="text">==========</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_50042" class="block"><span id="wallapatta_50106" class="text">React</span></span></td><td colspan="1"><span id="wallapatta_50043" class="block"><span id="wallapatta_50107" class="text">2781</span></span></td><td colspan="1"><span id="wallapatta_50044" class="block"><span id="wallapatta_50108" class="text">==============</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_50045" class="block"><span id="wallapatta_50109" class="text">Angular</span></span></td><td colspan="1"><span id="wallapatta_50046" class="block"><span id="wallapatta_50110" class="text">8081</span></span></td><td colspan="1"><span id="wallapatta_50047" class="block"><span id="wallapatta_50111" class="text">========================================</span></span></td></tr></tbody></table></div></div></div>
      </div>
      <div class="wallapatta-sidebar three columns ">
-      <div id="wallapatta_40003" class="sidenote"><div id="wallapatta_40004" class="section"><div class="content"><p id="wallapatta_40005" class="paragraph"><span id="wallapatta_40057" class="text">Weya.coffee is more of a rendering tool than a a framework. The main difference between Weya and other frameworks is that instead of writing logic inside html, markup is written in coffeescript. Weya comes with a router and a base class inspired by </span><a id="wallapatta_40058" class="link" href="http://backbonejs.org/">backbone.js</a><span id="wallapatta_40059" class="text">.</span></p></div></div><div id="wallapatta_40006" class="html"><iframe src="https://ghbtns.com/github-btn.html?user=vpj&amp;repo=weya&amp;type=star&amp;count=true&amp;size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
-</div></div><div id="wallapatta_40009" class="sidenote"><div id="wallapatta_40010" class="section"><div class="content"><p id="wallapatta_40011" class="paragraph"><strong id="wallapatta_40078" class="bold"><a id="wallapatta_40079" class="link" href="http://vpj.github.io/jsblocks-performance.zip">Download the performance test cases</a></strong></p></div></div></div>
+      <div id="wallapatta_50003" class="sidenote"><div id="wallapatta_50004" class="section"><div class="content"><p id="wallapatta_50005" class="paragraph"><span id="wallapatta_50057" class="text">Weya.coffee is more of a rendering tool than a a framework. The main difference between Weya and other frameworks is that instead of writing logic inside html, markup is written in coffeescript. Weya comes with a router and a base class inspired by </span><a id="wallapatta_50058" class="link" href="http://backbonejs.org/">backbone.js</a><span id="wallapatta_50059" class="text">.</span></p></div></div><div id="wallapatta_50006" class="html"><iframe src="https://ghbtns.com/github-btn.html?user=vpj&amp;repo=weya&amp;type=star&amp;count=true&amp;size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
+</div></div><div id="wallapatta_50009" class="sidenote"><div id="wallapatta_50010" class="section"><div class="content"><p id="wallapatta_50011" class="paragraph"><strong id="wallapatta_50078" class="bold"><a id="wallapatta_50079" class="link" href="http://vpj.github.io/jsblocks-performance.zip">Download the performance test cases</a></strong></p></div></div></div>
      </div>
      <div style="display:none;">
       <div class='wallapatta-code'>I came across &lt;&lt;http://jsblocks.com/(jsblock)&gt;&gt; yesterday on Hacker News. They had a nice performance comparison test case set comparing jsblocks with &lt;&lt;https://angularjs.org/(Angular)&gt;&gt; and &lt;&lt;https://facebook.github.io/react/(React)&gt;&gt;. It made me curious to see how the small library we use (&lt;&lt;https://github.com/vpj/weya(Weya.coffee)&gt;&gt;) compares in performance with these.
@@ -514,131 +754,6 @@ I ran the tests on Chrome broswer on a Macbook Air (1.6Ghz i5, 2GB). I have not 
   jsblocks | 2035 | ==========
   React | 2781 | ==============
   Angular | 8081 | ========================================
-
-</div>
-     </div>
-    </div>
-   </div>
-   <div class="wallapatta ">
-    <h1 class="title ">
-     <a href="cellular-start.html">
-      Small data preparation
-     </a>
-    </h1>
-    <h3 class="date ">
-     May 24, 2015
-    </h3>
-    <div class="row ">
-     <div class="wallapatta-main nine columns ">
-      <div id="wallapatta_50000" class="article"><div id="wallapatta_50001" class="html"><iframe width="550" height="310" src="https://www.youtube.com/embed/AcSIzSQIDQ8?autoplay=0" frameborder="0" allowfullscreen=""></iframe>
-</div><div id="wallapatta_50005" class="section"><div class="content"><p id="wallapatta_50006" class="paragraph"><span id="wallapatta_50020" class="text">One of the biggest </span><strong id="wallapatta_50021" class="bold"><span id="wallapatta_50022" class="text">small data</span></strong><span id="wallapatta_50023" class="text"> problems, is that data is structured in different ways. Some legacy systems give out reports in the formats like below.</span></p></div></div><pre id="wallapatta_50007" class="codeBlock"><code class="nohighlight">SUPPLIER STATEMENT                         38 November 2011
-
-Supplier   B0001   SupplierX Corp
-                   51, AAA STREET, BBB
-===========================================================
-DATE     REF.No.        DESCRIPTION       DEBIT      CREDIT
-===========================================================
-01/04/10                Balance B/F                1,000.00
-
-01/05/10 AAAA-00001     PAYMENT          500,00
-01/06/10 AAAA-00002     PAYMENT          250.00
-
-01/07/10 IIII-00001     INVOICE                    2,000.00
-                                      ---------  ----------
-                                         750.00    3,000.00
-
-31/03/11                Balance C/F                2,250.00
-
-Contd. ......
-
-
-SUPPLIER STATEMENT                         38 November 2011
-
-Supplier   B0002   SupplierY Corp
-                   51, ACD STREET, BBB
-===========================================================
-DATE     REF.No.        DESCRIPTION       DEBIT      CREDIT
-===========================================================
-01/04/10                Balance B/F                1,500.00
-
-01/05/10 AAAA-00003     PAYMENT        1,500,00
-
-01/07/10 IIII-00002     INVOICE                    2,000.00
-01/08/10 IIII-00003     INVOICE                    1,000.00
-                                      ---------  ----------
-                                       1,500.00    4,500.00
-
-31/03/11                Balance C/F                3,500.00
-
-Contd. ......</code></pre><div id="wallapatta_50008" class="section"><div class="content"><p id="wallapatta_50009" class="paragraph"><span id="wallapatta_50024" class="text">Getting this into a spreadsheet or a database table to analyse it is not easy. So I started a project to help transform data in various report formats into simple tables and export as comma-separated files.</span></p></div></div><div id="wallapatta_50010" class="section"><div class="content"><p id="wallapatta_50011" class="paragraph"><span id="wallapatta_50025" class="text">The project is called </span><strong id="wallapatta_50026" class="bold"><a id="wallapatta_50027" class="link" href="http://vpj.github.io/cellular/">cellular</a></strong><span id="wallapatta_50028" class="text">, and it is still in the early stages. I thought of writing about it to get ideas and suggestions. It has a simple user interface with the table on the left side with a sidepane on right side.</span></p></div></div></div>
-     </div>
-     <div class="wallapatta-sidebar three columns ">
-      <div id="wallapatta_50002" class="sidenote"><div id="wallapatta_50003" class="section"><div class="content"><p id="wallapatta_50004" class="paragraph"><span id="wallapatta_50016" class="text">Here's a small screen cast of using </span><strong id="wallapatta_50017" class="bold"><span id="wallapatta_50018" class="text">cellular</span></strong><span id="wallapatta_50019" class="text"> to transform the below report.</span></p></div></div></div><div id="wallapatta_50012" class="sidenote"><div id="wallapatta_50013" class="html"><iframe src="https://ghbtns.com/github-btn.html?user=vpj&amp;repo=cellular&amp;type=star&amp;count=true&amp;size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
-</div><div id="wallapatta_50014" class="section"><h3 class="heading"><span id="wallapatta_50015" class="block"><strong id="wallapatta_50029" class="bold"><a id="wallapatta_50030" class="link" href="http://vpj.github.io/cellular/">demo</a></strong></span></h3><div class="content"></div></div></div>
-     </div>
-     <div style="display:none;">
-      <div class='wallapatta-code'>&lt;&lt;&lt;
- &lt;iframe width="550" height="310" src="https://www.youtube.com/embed/AcSIzSQIDQ8?autoplay=0" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;
-
-&gt;&gt;&gt;
- Here's a small screen cast of using **cellular** to transform the below report.
-
-One of the biggest **small data** problems, is that data is structured in different ways. Some legacy systems give out reports in the formats like below.
-
-```
- SUPPLIER STATEMENT                         38 November 2011
-
- Supplier   B0001   SupplierX Corp
-                    51, AAA STREET, BBB
- ===========================================================
- DATE     REF.No.        DESCRIPTION       DEBIT      CREDIT
- ===========================================================
- 01/04/10                Balance B/F                1,000.00
-
- 01/05/10 AAAA-00001     PAYMENT          500,00
- 01/06/10 AAAA-00002     PAYMENT          250.00
-
- 01/07/10 IIII-00001     INVOICE                    2,000.00
-                                       ---------  ----------
-                                          750.00    3,000.00
-
- 31/03/11                Balance C/F                2,250.00
-
- Contd. ......
-
-
- SUPPLIER STATEMENT                         38 November 2011
-
- Supplier   B0002   SupplierY Corp
-                    51, ACD STREET, BBB
- ===========================================================
- DATE     REF.No.        DESCRIPTION       DEBIT      CREDIT
- ===========================================================
- 01/04/10                Balance B/F                1,500.00
-
- 01/05/10 AAAA-00003     PAYMENT        1,500,00
-
- 01/07/10 IIII-00002     INVOICE                    2,000.00
- 01/08/10 IIII-00003     INVOICE                    1,000.00
-                                       ---------  ----------
-                                        1,500.00    4,500.00
-
- 31/03/11                Balance C/F                3,500.00
-
- Contd. ......
-
-///This is what SAP exports look like.
-
-
-Getting this into a spreadsheet or a database table to analyse it is not easy. So I started a project to help transform data in various report formats into simple tables and export as comma-separated files.
-
-The project is called **&lt;&lt;http://vpj.github.io/cellular/(cellular)&gt;&gt;**, and it is still in the early stages. I thought of writing about it to get ideas and suggestions. It has a simple user interface with the table on the left side with a sidepane on right side.
-
-&gt;&gt;&gt;
- &lt;&lt;&lt;
-  &lt;iframe src="https://ghbtns.com/github-btn.html?user=vpj&repo=cellular&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px"&gt;&lt;/iframe&gt;
-
- ###**&lt;&lt;http://vpj.github.io/cellular/(demo)&gt;&gt;**
 
 </div>
      </div>
