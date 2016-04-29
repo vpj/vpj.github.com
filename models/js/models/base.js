@@ -1,5 +1,5 @@
 (function() {
-  Mod.require('Weya', 'Properties', 'Util', function(Weya, PROPERTIES, UTIL) {
+  Mod.require('Weya', 'Models.Properties', 'Models.Util', function(Weya, PROPERTIES, UTIL) {
     var Model;
     Model = (function() {
       Model.prototype._initialize = [];
@@ -167,7 +167,8 @@
         'html': 'Render html',
         'template': 'Render template',
         'toJSON': 'To JSON',
-        'edit': 'Render editor'
+        'edit': 'Render editor',
+        'valueChanged': 'A property value change event'
       });
 
       Model.prototype.parse = function(data) {
@@ -253,6 +254,30 @@
         return data;
       };
 
+      Model.prototype.toJSONFull = function() {
+        var data, name, prop, ref;
+        data = {};
+        ref = this._properties;
+        for (name in ref) {
+          prop = ref[name];
+          data[name] = prop.toJSONFull(this._values[name]);
+        }
+        return data;
+      };
+
+      Model.prototype.isDefault = function() {
+        var name, prop, ref, v;
+        ref = this._properties;
+        for (name in ref) {
+          prop = ref[name];
+          v = prop.toJSON(this._values[name]);
+          if (!prop.isDefault(v)) {
+            return false;
+          }
+        }
+        return true;
+      };
+
       Model.prototype.edit = function(elem, changed) {
         var name, prop, ref, results;
         this.onChanged = changed;
@@ -305,7 +330,7 @@
       return Model;
 
     })();
-    return Mod.set('Model.Base', Model);
+    return Mod.set('Models.Model.Base', Model);
   });
 
 }).call(this);

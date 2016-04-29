@@ -2,7 +2,7 @@
   var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
-  Mod.require('Properties', 'Property.Base', 'Weya.Base', function(PROPERTIES, Base, WeyaBase) {
+  Mod.require('Models.Properties', 'Models.Property.Base', 'Weya.Base', 'Weya', function(PROPERTIES, Base, WeyaBase, Weya) {
     var Edit, List;
     List = (function(superClass) {
       extend(List, superClass);
@@ -54,6 +54,19 @@
         for (j = 0, len = value.length; j < len; j++) {
           v = value[j];
           data.push(this.item.toJSON(v));
+        }
+        return data;
+      };
+
+      List.prototype.toJSONFull = function(value) {
+        var data, j, len, v;
+        if (!value) {
+          return null;
+        }
+        data = [];
+        for (j = 0, len = value.length; j < len; j++) {
+          v = value[j];
+          data.push(this.item.toJSONFull(v));
         }
         return data;
       };

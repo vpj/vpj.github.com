@@ -1,5 +1,5 @@
 (function() {
-  Mod.require('Util', function(UTIL) {
+  Mod.require('Models.Util', function(UTIL) {
     var Base;
     Base = (function() {
       Base.prototype._defaults = {};
@@ -79,7 +79,7 @@
       return Base;
 
     })();
-    return Mod.set('Property.Base', Base);
+    return Mod.set('Models.Property.Base', Base);
   });
 
 }).call(this);

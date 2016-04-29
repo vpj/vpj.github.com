@@ -1,5 +1,5 @@
 (function() {
-  Mod.require('Util', function(Util) {
+  Mod.require('Models.Util', function(Util) {
     var MODELS, Models;
     Models = (function() {
       function Models() {
@@ -21,7 +21,7 @@
 
     })();
     MODELS = new Models;
-    return Mod.set('Models', MODELS);
+    return Mod.set('Models.Models', MODELS);
   });
 
 }).call(this);

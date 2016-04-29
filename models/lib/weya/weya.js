@@ -266,7 +266,7 @@
       }
       return results;
     };
-    append = function(ns, name, args) {
+    append = function(ns, name, isVoid, args) {
       var buf, c, cssClass, j, len, params, ref;
       params = getParameters(args);
       buf = this._buf;
@@ -289,38 +289,45 @@
       if (params.attrs != null) {
         setAttributes(buf, params.attrs);
       }
-      buf.push(">\n");
-      this._indent++;
-      if (params.func != null) {
-        params.func.call(this);
-      } else if (params.text != null) {
+      if (isVoid) {
+        buf.push("/>\n");
+        if ((params.func != null) || (params.text != null)) {
+          throw new Error('Void tags cannot have content');
+        }
+      } else {
+        buf.push(">\n");
+        this._indent++;
+        if (params.func != null) {
+          params.func.call(this);
+        } else if (params.text != null) {
+          setIndent(buf, this._indent);
+          buf.push(params.text);
+          buf.push("\n");
+        }
+        this._indent--;
         setIndent(buf, this._indent);
-        buf.push(params.text);
-        buf.push("\n");
+        return buf.push("</" + name + ">\n");
       }
-      this._indent--;
-      setIndent(buf, this._indent);
-      return buf.push("</" + name + ">\n");
     };
-    wrapAppend = function(ns, name) {
+    wrapAppend = function(ns, name, isVoid) {
       return function() {
-        return append.call(this, ns, name, arguments);
+        return append.call(this, ns, name, isVoid, arguments);
       };
     };
     ref = Tags.svg.split(' ');
     for (j = 0, len = ref.length; j < len; j++) {
       name = ref[j];
-      weya[name] = wrapAppend("http://www.w3.org/2000/svg", name);
+      weya[name] = wrapAppend("http://www.w3.org/2000/svg", name, false);
     }
     ref1 = Tags.html.split(' ');
     for (l = 0, len1 = ref1.length; l < len1; l++) {
       name = ref1[l];
-      weya[name] = wrapAppend(null, name);
+      weya[name] = wrapAppend(null, name, false);
     }
     ref2 = Tags.htmlVoid.split(' ');
     for (m = 0, len2 = ref2.length; m < len2; m++) {
       name = ref2[m];
-      weya[name] = wrapAppend(null, name);
+      weya[name] = wrapAppend(null, name, true);
     }
     return weya;
   };

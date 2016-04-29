@@ -2,7 +2,7 @@
   var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
-  Mod.require('Properties', 'Property.Base', 'Weya.Base', function(PROPERTIES, Base, WeyaBase) {
+  Mod.require('Models.Properties', 'Models.Property.Base', 'Weya.Base', 'Weya', function(PROPERTIES, Base, WeyaBase, Weya) {
     var Edit, Value;
     Value = (function(superClass) {
       extend(Value, superClass);
@@ -69,6 +69,10 @@
       };
 
       Value.prototype.toJSON = function(value) {
+        return value;
+      };
+
+      Value.prototype.toJSONFull = function(value) {
         return value;
       };
 

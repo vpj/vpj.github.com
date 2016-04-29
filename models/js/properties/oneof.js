@@ -2,7 +2,7 @@
   var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
-  Mod.require('Properties', 'Property.Base', 'Models', 'Weya.Base', function(PROPERTIES, Base, MODELS, WeyaBase) {
+  Mod.require('Models.Properties', 'Models.Property.Base', 'Models.Models', 'Weya.Base', 'Weya', function(PROPERTIES, Base, MODELS, WeyaBase, Weya) {
     var Edit, OneOf;
     OneOf = (function(superClass) {
       extend(OneOf, superClass);
@@ -27,6 +27,16 @@
 
       OneOf["default"]('defaultValues', function() {
         return {};
+      });
+
+      OneOf["default"]('isDefault', function(value) {
+        var model;
+        if (this.schema.oneof.length === 0) {
+          return true;
+        }
+        model = new (MODELS.get(this.schema.oneof[0]));
+        model.parse(value);
+        return model.isDefault();
       });
 
       OneOf.isValidSchema = function(schema) {
@@ -64,6 +74,10 @@
 
       OneOf.prototype.toJSON = function(value) {
         return value.toJSON();
+      };
+
+      OneOf.prototype.toJSONFull = function(value) {
+        return value.toJSONFull();
       };
 
       OneOf.prototype.edit = function(elem, value, changed) {

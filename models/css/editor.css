@@ -1,0 +1,171 @@
+/*---------------------------------------------------
+    LESS Elements 0.9
+  ---------------------------------------------------
+    A set of useful LESS mixins
+    More info at: http://lesselements.com
+  ---------------------------------------------------*/
+.toolbar {
+  margin: 5px 25px;
+}
+.toolbar i {
+  cursor: pointer;
+  display: inline-block;
+  width: 25px;
+  color: #999;
+}
+.toolbar i:hover {
+  color: #333;
+}
+.toolbar .file-name {
+  font-size: 12px;
+  font-weight: 600;
+  margin-left: 20px;
+}
+.toolbar span {
+  display: inline-block;
+}
+.toolbar #toolbar {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 3px;
+  margin-bottom: 3px;
+}
+.toolbar #toolbar i {
+  color: #aaa;
+  width: 30px;
+}
+.CodeMirror {
+  background: #f8f8f8;
+  margin-bottom: 20px;
+  font-size: 0.9em;
+}
+.error {
+  font-weight: bold;
+  font-family: monospace;
+  color: #ff4444;
+}
+.model-editor {
+  max-width: 2000px;
+  width: 100%;
+  overflow-y: hidden;
+}
+.model-editor .model-preview-container {
+  width: 56%;
+  margin-left: 4%;
+  float: left;
+}
+.model-editor .model-editor-container {
+  width: 40%;
+  float: left;
+}
+.model-editor .model-preview {
+  overflow-y: scroll;
+}
+@media print {
+  .model-editor .model-editor-container {
+    display: none;
+  }
+  .model-editor .model-preview-container {
+    width: 100%;
+    max-height: none !important;
+  }
+  .model-editor .model-preview-container .model-preview {
+    overflow-y: auto;
+  }
+}
+.structured-editor {
+  font-size: 12px;
+  font-family: monospace;
+  overflow-x: scroll;
+}
+.structured-editor .property {
+  white-space: nowrap;
+}
+.structured-editor .property .property-name {
+  vertical-align: top;
+  display: inline-block;
+  margin-right: 3px;
+  color: #999;
+  line-height: 18px;
+  height: 18px;
+  cursor: default;
+}
+.structured-editor .property .property-name:after {
+  content: ":";
+  color: red;
+}
+.structured-editor .property .property-value {
+  vertical-align: top;
+  display: inline-block;
+}
+.structured-editor .property .property-value .value {
+  resize: none;
+  background: #f8f8f8;
+  font-family: monospace;
+  line-height: 18px;
+  height: 18px;
+  font-size: 12px;
+  margin: 0;
+  border: none;
+  outline: none;
+  padding: 0 0 0 2px;
+}
+.structured-editor .property .property-value .value.invalid {
+  background: #ffcccc;
+}
+.structured-editor .property .property-value .oneof-controls select {
+  cursor: pointer;
+  font-family: monospace;
+  line-height: 18px;
+  height: 18px;
+  font-size: 12px;
+  margin: 0;
+  border: none;
+  outline: none;
+  padding: 0;
+  font-style: italic;
+  color: #999;
+  font-weight: bold;
+}
+.structured-editor .property .property-value .list-controls i {
+  color: #999;
+  cursor: pointer;
+}
+.structured-editor .property .property-value .list-controls i:hover {
+  color: #222;
+}
+.structured-editor .property .property-value .list .list-item .list-item-controls-hover {
+  position: relative;
+  float: left;
+  margin-left: -20px;
+}
+.structured-editor .property .property-value .list .list-item .list-item-controls-hover i {
+  padding: 0 5px;
+  color: #999;
+  cursor: pointer;
+}
+.structured-editor .property .property-value .list .list-item .list-item-controls-hover i:hover {
+  color: #222;
+}
+.structured-editor .property .property-value .list .list-item .list-item-controls-hover:hover .list-item-controls {
+  display: block;
+  position: absolute;
+}
+.structured-editor .property .property-value .list .list-item .list-item-controls {
+  display: none;
+  -webkit-box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.4);
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.4);
+  background: #fff;
+}
+.structured-editor .property .property-value .list .list-item .list-item-controls i {
+  padding: 0 5px;
+  color: #333;
+  cursor: pointer;
+}
+.structured-editor .property .property-value .list .list-item .list-item-controls i:hover {
+  color: #666;
+}
+.structured-editor .property .property-value .list .list-item .list-item-controls .fa-trash {
+  margin-left: 20px;
+  color: red;
+}

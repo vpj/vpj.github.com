@@ -343,13 +343,20 @@
     };
 
     History.prototype.loadUrl = function(fragment, e) {
-      var handler, j, len, ref;
-      fragment = this.fragment = this.getFragment(fragment);
-      ref = this.handlers;
-      for (j = 0, len = ref.length; j < len; j++) {
-        handler = ref[j];
-        if (handler.route.test(fragment)) {
-          return handler.callback(fragment, e);
+      var error, handler, j, len, ref;
+      try {
+        fragment = this.fragment = this.getFragment(fragment);
+        ref = this.handlers;
+        for (j = 0, len = ref.length; j < len; j++) {
+          handler = ref[j];
+          if (handler.route.test(fragment)) {
+            return handler.callback(fragment, e);
+          }
+        }
+      } catch (error) {
+        e = error;
+        if (typeof this.onerror === "function") {
+          this.onerror(e);
         }
       }
     };

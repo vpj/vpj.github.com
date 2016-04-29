@@ -24,7 +24,7 @@
         return obj;
       }
     };
-    return Mod.set('Util', Util);
+    return Mod.set('Models.Util', Util);
   });
 
 }).call(this);
