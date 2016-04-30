@@ -63,7 +63,7 @@ ga('send', 'pageview');
  <span class="hljs-function"><span class="hljs-keyword">static</span> IOLoop * <span class="hljs-title">getInstance</span><span class="hljs-params">()</span></span>;
 
  IOLoop() {
-  <span class="hljs-keyword">this</span>-&gt;epfd = epoll_create(this-&gt;EPOLL_EVENTS);
+  <span class="hljs-keyword">this</span>-&gt;epfd = epoll_create(<span class="hljs-keyword">this</span>-&gt;EPOLL_EVENTS);
 
   <span class="hljs-keyword">if</span>(<span class="hljs-keyword">this</span>-&gt;epfd &lt; <span class="hljs-number">0</span>) {
    log_error(<span class="hljs-string">"Failed to create epoll"</span>);
@@ -74,7 +74,7 @@ ga('send', 'pageview');
 
  <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">start</span><span class="hljs-params">()</span> </span>{
   <span class="hljs-keyword">for</span>(;;) {
-   <span class="hljs-keyword">int</span> nfds = epoll_wait(this-&gt;epfd, this-&gt;events, this-&gt;MAX_EVENTS, <span class="hljs-number">-1</span> <span class="hljs-comment">/* Timeout */</span>);
+   <span class="hljs-keyword">int</span> nfds = epoll_wait(<span class="hljs-keyword">this</span>-&gt;epfd, <span class="hljs-keyword">this</span>-&gt;events, <span class="hljs-keyword">this</span>-&gt;MAX_EVENTS, <span class="hljs-number">-1</span> <span class="hljs-comment">/* Timeout */</span>);
 
    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; nfds; ++i) {
     <span class="hljs-keyword">int</span> fd = <span class="hljs-keyword">this</span>-&gt;events[i].data.fd;
@@ -90,7 +90,7 @@ ga('send', 'pageview');
   e.data.fd = fd;
   e.events = events;
 
-  <span class="hljs-keyword">if</span>(epoll_ctl(this-&gt;epfd, EPOLL_CTL_ADD, fd, &amp;e) &lt; <span class="hljs-number">0</span>) {
+  <span class="hljs-keyword">if</span>(epoll_ctl(<span class="hljs-keyword">this</span>-&gt;epfd, EPOLL_CTL_ADD, fd, &amp;e) &lt; <span class="hljs-number">0</span>) {
    log_error(<span class="hljs-string">"Failed to insert handler to epoll"</span>);
   }
  }
@@ -113,8 +113,8 @@ ga('send', 'pageview');
   addr.sin_addr.s_addr = htonl(INADDR_ANY);
   addr.sin_port = htons(port);
 
-  <span class="hljs-keyword">if</span> (bind(fd, (struct sockaddr *) &amp;addr,
-                               sizeof(addr)) &lt; <span class="hljs-number">0</span>) {
+  <span class="hljs-keyword">if</span> (bind(fd, (<span class="hljs-keyword">struct</span> sockaddr *) &amp;addr,
+                               <span class="hljs-keyword">sizeof</span>(addr)) &lt; <span class="hljs-number">0</span>) {
    log_error(<span class="hljs-string">"Failed to bind server socket"</span>);
    <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);
   }
@@ -132,27 +132,27 @@ ga('send', 'pageview');
   sockaddr_in client_addr;
   <span class="hljs-keyword">socklen_t</span> ca_len = <span class="hljs-keyword">sizeof</span>(client_addr);
 
-  <span class="hljs-keyword">int</span> client = accept(fd, (struct sockaddr *) &amp;client_addr,
+  <span class="hljs-keyword">int</span> client = accept(fd, (<span class="hljs-keyword">struct</span> sockaddr *) &amp;client_addr,
                   &amp;ca_len);
 
   <span class="hljs-keyword">if</span>(client &lt; <span class="hljs-number">0</span>) {
    log_error(<span class="hljs-string">"Error accepting connection"</span>);
-   return <span class="hljs-number">-1</span>;
+   <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
   }
 
   <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"Client connected: "</span> &lt;&lt; inet_ntoa(client_addr.sin_addr) &lt;&lt; <span class="hljs-built_in">endl</span>;
-  new EchoHandler(client, client_addr);
-  return <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">new</span> EchoHandler(client, client_addr);
+  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
  }
 };</code></pre></div></div><div id="wallapatta_15" class="section"><h2 class="heading"><span id="wallapatta_16" class="block"><span id="wallapatta_39" class="text">Set Non-blocking</span></span></h2><div class="content"><div id="wallapatta_17" class="section"><div class="content"><p id="wallapatta_18" class="paragraph"><span id="wallapatta_40" class="text">Function setnonblocking sets the file descriptor setting to non-clocking.</span></p></div></div><pre id="wallapatta_19" class="codeBlock"><code class="c">flags = fcntl(fd, F_GETFL, <span class="hljs-number">0</span>);
 fcntl(fd, F_SETFL, flags | O_NONBLOCK);</code></pre></div></div><div id="wallapatta_20" class="section"><h2 class="heading"><span id="wallapatta_21" class="block"><span id="wallapatta_41" class="text">EchoHandler:handle</span></span></h2><div class="content"><div id="wallapatta_22" class="section"><div class="content"><p id="wallapatta_23" class="paragraph"><span id="wallapatta_42" class="text">EchoHandler will write whatever it reads from the socket</span></p></div></div><pre id="wallapatta_24" class="codeBlock"><code class="c"><span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-keyword">int</span> <span class="hljs-title">handle</span><span class="hljs-params">(epoll_event e)</span> </span>{
  <span class="hljs-keyword">if</span>(e.events &amp; EPOLLHUP) {
   IOLoop::getInstance()-&gt;removeHandler(fd);
-  return <span class="hljs-number">-1</span>;
+  <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
  }
 
  <span class="hljs-keyword">if</span>(e.events &amp; EPOLLERR) {
-  return <span class="hljs-number">-1</span>;
+  <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
  }
 
  <span class="hljs-keyword">if</span>(e.events &amp; EPOLLOUT) {
@@ -181,7 +181,7 @@ fcntl(fd, F_SETFL, flags | O_NONBLOCK);</code></pre></div></div><div id="wallapa
   }
  }
 
- return <span class="hljs-number">0</span>;
+ <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 }</code></pre></div></div><div id="wallapatta_25" class="section"><div class="content"><p id="wallapatta_26" class="paragraph"><span id="wallapatta_43" class="text">Error checking in this code is minimal so it will probably fail unexpectedly in certain scenarios which I have not come across yet. And please leave a comment if you do find any errors or if there are things that could be improved.</span></p></div></div></div>
      </div>
      <div class="wallapatta-sidebar three columns ">

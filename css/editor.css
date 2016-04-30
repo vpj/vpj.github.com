@@ -19,21 +19,6 @@
   font-weight: 600;
   margin-left: 20px;
 }
-.toolbar .pick-media-dialog {
-  font-family: monospace;
-  display: none;
-  height: 200px;
-  width: 400px;
-  overflow: scroll;
-  position: absolute;
-  z-index: 100;
-  background: #eee;
-  padding: 0 0 0 10px;
-  border: 2px solid #666;
-}
-.toolbar .pick-media-dialog div:hover {
-  background: #ddd;
-}
 .toolbar span {
   display: inline-block;
 }
