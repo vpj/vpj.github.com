@@ -1,9 +1,19 @@
 (function() {
-  var Mode, OPERATOR, OPERATOR_INLINE;
+  var BREAK_WORD_CHAR, Mode, OPERATOR, OPERATOR_INLINE, c, j, len, ref;
 
   OPERATOR = "tag strong";
 
   OPERATOR_INLINE = "tag strong";
+
+  BREAK_WORD_CHAR = {};
+
+  ref = ' \t\n\r$#@!%^&*()_+-=~`1234567890[]{}\\|;:\'\",.<>/?';
+  for (j = 0, len = ref.length; j < len; j++) {
+    c = ref[j];
+    BREAK_WORD_CHAR[c] = true;
+  }
+
+  window.CHECK_SPELLING = false;
 
   Mode = (function() {
     function Mode(CodeMirror) {
@@ -116,6 +126,15 @@
         stream.skipToEnd();
         return OPERATOR;
       }
+      match = stream.match(/^<<<wallapatta/);
+      if (match) {
+        stack.push({
+          indentation: stream.indentation(),
+          type: 'code'
+        });
+        stream.skipToEnd();
+        return OPERATOR;
+      }
       return null;
     };
 
@@ -151,7 +170,7 @@
     };
 
     Mode.prototype.matchInline = function(stream, state) {
-      var i, len, match, ref, t;
+      var k, len1, match, ref1, t;
       match = stream.match(/^``/);
       if (match) {
         state.code = !state.code;
@@ -210,13 +229,37 @@
       }
       match = stream.match(/^\|/);
       if (match) {
-        ref = state.stack;
-        for (i = 0, len = ref.length; i < len; i++) {
-          t = ref[i];
+        ref1 = state.stack;
+        for (k = 0, len1 = ref1.length; k < len1; k++) {
+          t = ref1[k];
           if (t.type === 'table') {
             return OPERATOR_INLINE;
           }
         }
+      }
+      return null;
+    };
+
+    Mode.prototype.checkSpelling = function(stream, state) {
+      var i, word;
+      i = stream.pos;
+      while (i < stream.string.length) {
+        if (BREAK_WORD_CHAR[stream.string[i]]) {
+          break;
+        }
+        ++i;
+      }
+      if (i === stream.pos) {
+        stream.next();
+        return null;
+      }
+      word = stream.string.substring(stream.pos, i);
+      word = word.toLowerCase();
+      stream.pos = i;
+      if (GOOGLE_10000_WORDS[word] == null) {
+        return "invalid_spelling";
+      } else {
+        return "word_level_" + (Math.floor(GOOGLE_10000_WORDS[word] / 1000));
       }
       return null;
     };
@@ -257,7 +300,7 @@
     };
 
     Mode.prototype.token = function(stream, state) {
-      var i, j, l, len, len1, match, s, stack, t, types;
+      var k, l, len1, len2, m, match, s, stack, t, types;
       if (state.media) {
         stream.skipToEnd();
         state.media = false;
@@ -296,8 +339,8 @@
           code: false,
           table: false
         };
-        for (i = 0, len = stack.length; i < len; i++) {
-          t = stack[i];
+        for (k = 0, len1 = stack.length; k < len1; k++) {
+          t = stack[k];
           types[t.type] = true;
         }
         if (types.table) {
@@ -320,8 +363,8 @@
         code: false,
         table: false
       };
-      for (j = 0, len1 = stack.length; j < len1; j++) {
-        t = stack[j];
+      for (m = 0, len2 = stack.length; m < len2; m++) {
+        t = stack[m];
         types[t.type] = true;
       }
       l = "";
@@ -349,7 +392,14 @@
         if (match != null) {
           return match;
         }
-        stream.next();
+        if (CHECK_SPELLING) {
+          match = this.checkSpelling(stream, state);
+          if (match != null) {
+            l += " " + match;
+          }
+        } else {
+          stream.next();
+        }
         if (state.heading) {
           l += " header";
         }

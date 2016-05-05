@@ -3,7 +3,7 @@
     hasProp = {}.hasOwnProperty;
 
   Mod.require('Weya.Base', 'Weya', 'HLJS', 'CoffeeScript', function(Base, Weya, HLJS, CoffeeScript) {
-    var Article, Block, Bold, Code, CodeBlock, Full, Html, HtmlInline, Italics, Link, List, ListItem, Map, Media, MediaInline, Node, PREFIX, Section, Sidenote, Special, SubScript, SuperScript, TYPES, Table, Text, decodeURL;
+    var Article, Block, Bold, Code, CodeBlock, FormattedCode, Full, Html, HtmlInline, Italics, Link, List, ListItem, Map, Media, MediaInline, Node, PREFIX, Section, Sidenote, Special, SubScript, SuperScript, TYPES, Table, Text, decodeURL;
     decodeURL = function(url) {
       if ((typeof window !== "undefined" && window !== null ? window.wallapattaDecodeURL : void 0) != null) {
         return window.wallapattaDecodeURL(url);
@@ -15,6 +15,7 @@
       article: 'article',
       sidenote: 'sidenote',
       codeBlock: 'codeBlock',
+      formattedCode: 'formattedCode',
       special: 'special',
       full: 'full',
       html: 'html',
@@ -360,6 +361,35 @@
       };
 
       return Block;
+
+    })(Node);
+    FormattedCode = (function(superClass) {
+      extend(FormattedCode, superClass);
+
+      function FormattedCode() {
+        return FormattedCode.__super__.constructor.apply(this, arguments);
+      }
+
+      FormattedCode.extend();
+
+      FormattedCode.prototype.type = TYPES.formattedCode;
+
+      FormattedCode.initialize(function(options) {
+        return this.text = '';
+      });
+
+      FormattedCode.prototype.addText = function(text) {
+        if (this.text !== '') {
+          this.text += '\n';
+        }
+        return this.text += text;
+      };
+
+      FormattedCode.prototype.template = function() {
+        return this.$.elem = this.pre("#" + PREFIX + this.$.id + ".formattedCode", null);
+      };
+
+      return FormattedCode;
 
     })(Node);
     CodeBlock = (function(superClass) {
@@ -890,22 +920,29 @@
       Media.extend();
 
       Media.initialize(function(options) {
+        var ref;
         this.src = options.media.src;
         this.alt = options.media.alt;
         if (this.alt == null) {
           this.alt = options.media.src;
         }
-        return this.width = options.media.width;
+        this.width = options.media.width;
+        return this.float = (ref = options.media.float) != null ? ref : '';
       });
 
       Media.prototype.type = TYPES.media;
 
-      Media.prototype.add = function(node) {
-        throw new Error('Invalid indentation');
-      };
-
       Media.prototype.template = function() {
-        return this.$.elem = this.div("#" + PREFIX + this.$.id + ".image-container", function() {
+        var id;
+        id = "#" + PREFIX + this.$.id + ".image-container";
+        switch (this.$.float) {
+          case '<':
+            id += '.wrap-image-left';
+            break;
+          case '>':
+            id += '.wrap-image-right';
+        }
+        return this.$.elem = this.div(id, function() {
           this.$.elems.img = this.img(".image", {
             src: decodeURL(this.$.src),
             alt: this.$.alt
@@ -914,13 +951,6 @@
             return this.$.elems.img.style.maxWidth = this.$.width + "%";
           }
         });
-      };
-
-      Media.prototype.render = function(options) {
-        return Weya({
-          elem: options.elem,
-          context: this
-        }, this.template);
       };
 
       return Media;
@@ -942,6 +972,7 @@
     Mod.set('Wallapatta.Article', Article);
     Mod.set('Wallapatta.Media', Media);
     Mod.set('Wallapatta.CodeBlock', CodeBlock);
+    Mod.set('Wallapatta.FormattedCode', FormattedCode);
     Mod.set('Wallapatta.Table', Table);
     Mod.set('Wallapatta.Special', Special);
     Mod.set('Wallapatta.Html', Html);
