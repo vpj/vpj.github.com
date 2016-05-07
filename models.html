@@ -1,24 +1,16 @@
 <!DOCTYPE html><html>
  <head>
-  <meta charset="utf-8">
-  </meta>
+  <meta charset="utf-8"/>
   <title>
    Open sourcing nearby.lk data models library
   </title>
-  <meta name="viewport" content="width=550, initial-scale=1.0">
-  </meta>
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  </meta>
-  <link href="http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900" rel="stylesheet" type="text/css">
-  </link>
-  <link href="lib/skeleton/css/skeleton.css" rel="stylesheet">
-  </link>
-  <link href="lib/highlightjs/styles/default.css" rel="stylesheet">
-  </link>
-  <link href="css/style.css" rel="stylesheet">
-  </link>
-  <link href="blog.css" rel="stylesheet">
-  </link>
+  <meta name="viewport" content="width=550, initial-scale=1.0"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <link href="http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900" rel="stylesheet" type="text/css"/>
+  <link href="lib/skeleton/css/skeleton.css" rel="stylesheet"/>
+  <link href="lib/highlightjs/styles/default.css" rel="stylesheet"/>
+  <link href="css/style.css" rel="stylesheet"/>
+  <link href="blog.css" rel="stylesheet"/>
   <script>
    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -30,34 +22,34 @@ ga('send', 'pageview');
   </script>
  </head>
  <body>
-  <div class="container wallapatta-container ">
-   <div class="header ">
+  <div class="container wallapatta-container">
+   <div class="header">
     <h1>
      <a href="index.html">
       VARUNA JAYASIRI
      </a>
     </h1>
-    <a class="button " href="https://www.twitter.com/vpj">
+    <a class="button" href="https://www.twitter.com/vpj">
      @vpj
     </a>
    </div>
-   <div class="wallapatta ">
-    <h1 class="title ">
+   <div class="wallapatta">
+    <h1 class="title">
      Open sourcing nearby.lk data models library
     </h1>
-    <h3 class="date ">
+    <h3 class="date">
      April 29, 2016
     </h3>
     <div style="margin-bottom:30px;">
-     <a class="twitter-share-button " href="https://twitter.com/share" data-via="vpj" data-size="large">
+     <a class="twitter-share-button" href="https://twitter.com/share" data-via="vpj" data-size="large">
       Tweet
      </a>
      <script>
       !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
      </script>
     </div>
-    <div class="row ">
-     <div class="wallapatta-main nine columns ">
+    <div class="row">
+     <div class="wallapatta-main nine columns">
       <div id="wallapatta_0" class="article"><div id="wallapatta_1" class="section"><div class="content"><p id="wallapatta_2" class="paragraph"><span id="wallapatta_56" class="text">We did a re-write of the </span><a id="wallapatta_57" class="link" href="http://nearby.lk">nearby.lk</a><span id="wallapatta_58" class="text"> data model library, and we decided to open source the core of it. It supports JSON or YAML data files, and parses them based on a specification (like a schema).</span></p></div></div><div id="wallapatta_5" class="section"><div class="content"><p id="wallapatta_6" class="paragraph"><span id="wallapatta_59" class="text">The specification is a coffeescript class with a render function. The editor checks the input against the specification and uses the render function to show the parsed input. The editor can either work in YAML mode (plain YAML input) or form input mode (user fills up a form). It can handle quite complex data models.</span></p></div></div><div id="wallapatta_7" class="section"><div class="content"><p id="wallapatta_8" class="paragraph"><span id="wallapatta_60" class="text">Here's the editor accepting (and rendering a resume).</span></p></div></div><div id="wallapatta_9" class="full"><div id="wallapatta_11" class="html"><iframe src="http://vpj.github.io/models/" width="100%" height="500px" style="outline:none;border:1px solid #eee"></iframe>
 </div></div><div id="wallapatta_12" class="section"><div class="content"><p id="wallapatta_13" class="paragraph"><span id="wallapatta_61" class="text">This is the class for the </span><strong id="wallapatta_62" class="bold"><span id="wallapatta_63" class="text">Resume</span></strong><span id="wallapatta_64" class="text"> example.</span></p></div></div><pre id="wallapatta_14" class="codeBlock"><code class="coffee"> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Resume</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Base</span></span>
   @extend()</code></pre><div id="wallapatta_15" class="section"><div class="content"><p id="wallapatta_16" class="paragraph"><span id="wallapatta_65" class="text">Set the type of the model.</span></p></div></div><pre id="wallapatta_17" class="codeBlock"><code class="coffee">  type: <span class="hljs-string">'Resume'</span></code></pre><div id="wallapatta_18" class="section"><div class="content"><p id="wallapatta_19" class="paragraph"><span id="wallapatta_66" class="text">Define properties. The type of the property is determined based on the property parameters. It defaults to </span><em id="wallapatta_67" class="italics"><span id="wallapatta_68" class="text">Value</span></em><span id="wallapatta_69" class="text"> property.</span></p></div></div><pre id="wallapatta_20" class="codeBlock"><code class="coffee">  @property <span class="hljs-string">'name'</span>, {}
@@ -126,7 +118,7 @@ ga('send', 'pageview');
  model.render element
  model.html() <span class="hljs-comment">#returns html</span></code></pre></div></div></div></div></div>
      </div>
-     <div class="wallapatta-sidebar three columns ">
+     <div class="wallapatta-sidebar three columns">
       <div id="wallapatta_3" class="sidenote"><div id="wallapatta_4" class="html"><iframe src="https://ghbtns.com/github-btn.html?user=vpj&amp;repo=models&amp;type=star&amp;count=true&amp;size=large" frameborder="0" scrolling="0" width="160px" height="30px" <="" iframe="">
 </iframe></div></div><div id="wallapatta_10" class="sidenote"></div>
      </div>

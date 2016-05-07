@@ -1,24 +1,16 @@
 <!DOCTYPE html><html>
  <head>
-  <meta charset="utf-8">
-  </meta>
+  <meta charset="utf-8"/>
   <title>
    Moving from Google Appengine to NodeJS on Amazon EC2
   </title>
-  <meta name="viewport" content="width=550, initial-scale=1.0">
-  </meta>
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  </meta>
-  <link href="http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900" rel="stylesheet" type="text/css">
-  </link>
-  <link href="lib/skeleton/css/skeleton.css" rel="stylesheet">
-  </link>
-  <link href="lib/highlightjs/styles/default.css" rel="stylesheet">
-  </link>
-  <link href="css/style.css" rel="stylesheet">
-  </link>
-  <link href="blog.css" rel="stylesheet">
-  </link>
+  <meta name="viewport" content="width=550, initial-scale=1.0"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <link href="http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900" rel="stylesheet" type="text/css"/>
+  <link href="lib/skeleton/css/skeleton.css" rel="stylesheet"/>
+  <link href="lib/highlightjs/styles/default.css" rel="stylesheet"/>
+  <link href="css/style.css" rel="stylesheet"/>
+  <link href="blog.css" rel="stylesheet"/>
   <script>
    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -30,37 +22,37 @@ ga('send', 'pageview');
   </script>
  </head>
  <body>
-  <div class="container wallapatta-container ">
-   <div class="header ">
+  <div class="container wallapatta-container">
+   <div class="header">
     <h1>
      <a href="index.html">
       VARUNA JAYASIRI
      </a>
     </h1>
-    <a class="button " href="https://www.twitter.com/vpj">
+    <a class="button" href="https://www.twitter.com/vpj">
      @vpj
     </a>
    </div>
-   <div class="wallapatta ">
-    <h1 class="title ">
+   <div class="wallapatta">
+    <h1 class="title">
      Moving from Google Appengine to NodeJS on Amazon EC2
     </h1>
-    <h3 class="date ">
+    <h3 class="date">
      December 12, 2013
     </h3>
     <div style="margin-bottom:30px;">
-     <a class="twitter-share-button " href="https://twitter.com/share" data-via="vpj" data-size="large">
+     <a class="twitter-share-button" href="https://twitter.com/share" data-via="vpj" data-size="large">
       Tweet
      </a>
      <script>
       !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
      </script>
     </div>
-    <div class="row ">
-     <div class="wallapatta-main nine columns ">
+    <div class="row">
+     <div class="wallapatta-main nine columns">
       <div id="wallapatta_0" class="article"><div id="wallapatta_1" class="section"><div class="content"><p id="wallapatta_2" class="paragraph"><a id="wallapatta_81" class="link" href="http://nearby.lk">nearby.lk</a><span id="wallapatta_82" class="text"> moved the servers from Google App engine to Amazon EC2 a couple of months back, and the backend is now built with nodejs with mongodb as the database.</span></p></div></div><div id="wallapatta_6" class="section"><div class="content"><p id="wallapatta_7" class="paragraph"><span id="wallapatta_85" class="text">Backend does a lot of pre-computations and caching which gives slower start up times and faster response times. The migration decision was based on a number of factors such as ease of development, performance and cost. There were a bunch of disadvantages of using the app engine, a several benefits of using NodeJS and some things we miss after the migration.</span></p></div></div><div id="wallapatta_8" class="section"><h2 class="heading"><span id="wallapatta_9" class="block"><span id="wallapatta_86" class="text">App Engine: the bad</span></span></h2><div class="content"><div id="wallapatta_10" class="section"><h3 class="heading"><span id="wallapatta_11" class="block"><span id="wallapatta_87" class="text">Data store operations are slow</span></span></h3><div class="content"><div id="wallapatta_12" class="section"><div class="content"><p id="wallapatta_13" class="paragraph"><span id="wallapatta_88" class="text">There were not many data store writes. Almost none on most days since data was uploaded in bulk. Still, the data store reads were significantly slow. To improve performance we kept most of the data in memory, which worked great until the web traffic and database size started growing.</span></p></div></div></div></div><div id="wallapatta_14" class="section"><h3 class="heading"><span id="wallapatta_15" class="block"><span id="wallapatta_89" class="text">Too many instances</span></span></h3><div class="content"><div id="wallapatta_16" class="section"><div class="content"><p id="wallapatta_17" class="paragraph"><span id="wallapatta_90" class="text">App engine does load balancing for you. So when it feels like a single server cannot handle the load it creates multiple instances and balances the load. Although this sounds awesome, it wasn't for us. Pre-computations at start up kept the new instances busy, and app engine was creating more and more instances to handle this. Worst part is that multiple instances weren't actually required to handle the load, but App engine had a few instances running all the time, and we had to pay.</span></p></div></div><div id="wallapatta_18" class="section"><div class="content"><p id="wallapatta_19" class="paragraph"><span id="wallapatta_91" class="text">We tried warm-up requests to keep an extra instance running, to solve the slow start up issue, but it was not of much use.</span></p></div></div></div></div><div id="wallapatta_20" class="section"><h3 class="heading"><span id="wallapatta_21" class="block"><span id="wallapatta_92" class="text">Request Timeouts</span></span></h3><div class="content"><div id="wallapatta_22" class="section"><div class="content"><p id="wallapatta_23" class="paragraph"><span id="wallapatta_93" class="text">Start up pre-computations took more than the request time limit. This made us break down the start up process into smaller chunks and run each part on different requests. That is, an instance would only be ready after a couple of requests were sent to it. Breaking the start up process was a horrible coding experience, and the worst part is that the start up is taking most of it's time reading the data store - the system would start up in within a second on my computer with app engine development server.</span></p></div></div></div></div><div id="wallapatta_24" class="section"><h3 class="heading"><span id="wallapatta_25" class="block"><span id="wallapatta_94" class="text">Memcache</span></span></h3><div class="content"><div id="wallapatta_26" class="section"><div class="content"><p id="wallapatta_27" class="paragraph"><span id="wallapatta_95" class="text">Memcache helped solve the start up issue a bit, but it had a stupid 1MB size limit per entry which made things really hard for the developers. Large objects had to be broken down into pieces smaller than 1MB and if one of them was removed from memcache, everything had to be recomputed. (Search index was larger than 1MB)</span></p></div></div></div></div><div id="wallapatta_28" class="section"><h3 class="heading"><span id="wallapatta_29" class="block"><span id="wallapatta_96" class="text">Uploading and downloading data</span></span></h3><div class="content"><div id="wallapatta_30" class="section"><div class="content"><p id="wallapatta_31" class="paragraph"><span id="wallapatta_97" class="text">This was literally a nightmare. bulk data uploads and downloads had to be broken down into tiny chunks because of the request time limits, and there was no way to access the datastore without writing code to do it.</span></p></div></div></div></div><div id="wallapatta_32" class="section"><h3 class="heading"><span id="wallapatta_33" class="block"><span id="wallapatta_98" class="text">Search API</span></span></h3><div class="content"><div id="wallapatta_34" class="section"><div class="content"><p id="wallapatta_35" class="paragraph"><span id="wallapatta_99" class="text">We HAD to use the search API for the last few months because we couldn't keep our indexes in memory, because of the start up time (discussed earlier). You might expect the search API to be super awesome because it's Google, but it was so slow. May be we didn't use the proper design, but it was the best we could find with the documentation available.</span></p></div></div></div></div></div></div><div id="wallapatta_36" class="section"><h2 class="heading"><span id="wallapatta_37" class="block"><span id="wallapatta_100" class="text">NodeJS: the good</span></span></h2><div class="content"><div id="wallapatta_38" class="section"><h3 class="heading"><span id="wallapatta_39" class="block"><span id="wallapatta_101" class="text">One language</span></span></h3><div class="content"><div id="wallapatta_40" class="section"><div class="content"><p id="wallapatta_41" class="paragraph"><span id="wallapatta_102" class="text">Now the server and user interface are both in javascript, which makes it a lot easier for the developers to switch between the two.</span></p></div></div></div></div><div id="wallapatta_42" class="section"><h3 class="heading"><span id="wallapatta_43" class="block"><span id="wallapatta_103" class="text">Server-side rendering</span></span></h3><div class="content"><div id="wallapatta_44" class="section"><div class="content"><p id="wallapatta_45" class="paragraph"><span id="wallapatta_104" class="text">We don't have to maintain different code to do server side rendering since we can use the same templates on both the server and client.</span></p></div></div></div></div><div id="wallapatta_46" class="section"><h3 class="heading"><span id="wallapatta_47" class="block"><span id="wallapatta_105" class="text">Portable</span></span></h3><div class="content"><div id="wallapatta_48" class="section"><div class="content"><p id="wallapatta_49" class="paragraph"><span id="wallapatta_106" class="text">We can now host our servers anywhere. We are not stuck with any platform, as we were with the app engine - where we had no choice to pay more if they were to change pricing. We are currently hosted on amazon and it is running smoothly. We might switch to a larger server on amazon soon.</span></p></div></div></div></div><div id="wallapatta_50" class="section"><h3 class="heading"><span id="wallapatta_51" class="block"><span id="wallapatta_107" class="text">Speed</span></span></h3><div class="content"><div id="wallapatta_52" class="section"><div class="content"><p id="wallapatta_53" class="paragraph"><span id="wallapatta_108" class="text">The start up time is much faster and requests are handled within a couple of milliseconds. We are using Nginx for all static content.</span></p></div></div></div></div></div></div><div id="wallapatta_54" class="section"><h2 class="heading"><span id="wallapatta_55" class="block"><span id="wallapatta_109" class="text">What we miss</span></span></h2><div class="content"><div id="wallapatta_56" class="section"><h3 class="heading"><span id="wallapatta_57" class="block"><span id="wallapatta_110" class="text">Management Console</span></span></h3><div class="content"><div id="wallapatta_58" class="section"><div class="content"><p id="wallapatta_59" class="paragraph"><span id="wallapatta_111" class="text">Appengine had a nice management console where we could look at logs, system status etc. Now we have to do it through ssh with unix commands. Although this is not a big issue for the developers, now we can't ask someone else to check or restart the servers if needed.</span></p></div></div></div></div><div id="wallapatta_60" class="section"><h3 class="heading"><span id="wallapatta_61" class="block"><span id="wallapatta_112" class="text">Ease of deployment</span></span></h3><div class="content"><div id="wallapatta_62" class="section"><div class="content"><p id="wallapatta_63" class="paragraph"><span id="wallapatta_113" class="text">With app engine, all you have to do deploy is just to run a command. We need to write a small script to do this now.</span></p></div></div></div></div><div id="wallapatta_64" class="section"><h3 class="heading"><span id="wallapatta_65" class="block"><span id="wallapatta_114" class="text">Trying out new stuff</span></span></h3><div class="content"><div id="wallapatta_66" class="section"><div class="content"><p id="wallapatta_67" class="paragraph"><span id="wallapatta_115" class="text">With appengine you can easily create a new account or a new version without interfering with the main system, and do beta testing or A/B testing.</span></p></div></div></div></div></div></div><div id="wallapatta_68" class="section"><div class="content"><p id="wallapatta_69" class="paragraph"><span id="wallapatta_116" class="text">So far we are so glad that we moved away from appengine and we regret that we didn't do it sooner. Development got so much easier and now we are working on stuff that actually adds value to users than hacking the system to deal with all the constraints such as memcache limits, slow datastore reads, etc.</span></p></div></div><div id="wallapatta_70" class="section"><div class="content"><p id="wallapatta_71" class="paragraph"><span id="wallapatta_117" class="text">I wish I read one of these an year ago.</span></p></div></div><ul id="wallapatta_72" class="list"><li id="wallapatta_73" class="list-item"><span id="wallapatta_74" class="block"><a id="wallapatta_118" class="link" href="http://www.carlosble.com/2010/11/goodbye-google-app-engine-gae/">Good Bye Google App Engine</a></span></li><li id="wallapatta_75" class="list-item"><span id="wallapatta_76" class="block"><a id="wallapatta_119" class="link" href="http://www-cs-students.stanford.edu/~silver/gae.html">The Unofficial Guide to Migrating Off of Google App Engine</a></span></li><li id="wallapatta_77" class="list-item"><span id="wallapatta_78" class="block"><a id="wallapatta_120" class="link" href="http://reliablesoftwares.com/blog/2012/02/12/moving-away-from-google-app-engine/">Moving away from Google App Engine</a></span></li><li id="wallapatta_79" class="list-item"><span id="wallapatta_80" class="block"><a id="wallapatta_121" class="link" href="http://www.war-worlds.com/blog/2013/06/switched-away-from-app-engine-couldnt-be-happier">Switched away from App Engine, couldn't be happier</a></span></li></ul></div>
      </div>
-     <div class="wallapatta-sidebar three columns ">
+     <div class="wallapatta-sidebar three columns">
       <div id="wallapatta_3" class="sidenote"><div id="wallapatta_4" class="section"><div class="content"><p id="wallapatta_5" class="paragraph"><strong id="wallapatta_83" class="bold"><a id="wallapatta_84" class="link" href="https://news.ycombinator.com/item?id=6893495">Hacker News Discussion</a></strong></p></div></div></div>
      </div>
      <div style="display:none;">

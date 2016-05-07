@@ -1,24 +1,16 @@
 <!DOCTYPE html><html>
  <head>
-  <meta charset="utf-8">
-  </meta>
+  <meta charset="utf-8"/>
   <title>
    Coffeescript Macros
   </title>
-  <meta name="viewport" content="width=550, initial-scale=1.0">
-  </meta>
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  </meta>
-  <link href="http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900" rel="stylesheet" type="text/css">
-  </link>
-  <link href="lib/skeleton/css/skeleton.css" rel="stylesheet">
-  </link>
-  <link href="lib/highlightjs/styles/default.css" rel="stylesheet">
-  </link>
-  <link href="css/style.css" rel="stylesheet">
-  </link>
-  <link href="blog.css" rel="stylesheet">
-  </link>
+  <meta name="viewport" content="width=550, initial-scale=1.0"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <link href="http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900" rel="stylesheet" type="text/css"/>
+  <link href="lib/skeleton/css/skeleton.css" rel="stylesheet"/>
+  <link href="lib/highlightjs/styles/default.css" rel="stylesheet"/>
+  <link href="css/style.css" rel="stylesheet"/>
+  <link href="blog.css" rel="stylesheet"/>
   <script>
    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -30,34 +22,34 @@ ga('send', 'pageview');
   </script>
  </head>
  <body>
-  <div class="container wallapatta-container ">
-   <div class="header ">
+  <div class="container wallapatta-container">
+   <div class="header">
     <h1>
      <a href="index.html">
       VARUNA JAYASIRI
      </a>
     </h1>
-    <a class="button " href="https://www.twitter.com/vpj">
+    <a class="button" href="https://www.twitter.com/vpj">
      @vpj
     </a>
    </div>
-   <div class="wallapatta ">
-    <h1 class="title ">
+   <div class="wallapatta">
+    <h1 class="title">
      Coffeescript Macros
     </h1>
-    <h3 class="date ">
+    <h3 class="date">
      December 9, 2013
     </h3>
     <div style="margin-bottom:30px;">
-     <a class="twitter-share-button " href="https://twitter.com/share" data-via="vpj" data-size="large">
+     <a class="twitter-share-button" href="https://twitter.com/share" data-via="vpj" data-size="large">
       Tweet
      </a>
      <script>
       !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
      </script>
     </div>
-    <div class="row ">
-     <div class="wallapatta-main nine columns ">
+    <div class="row">
+     <div class="wallapatta-main nine columns">
       <div id="wallapatta_0" class="article"><div id="wallapatta_1" class="section"><div class="content"><p id="wallapatta_2" class="paragraph"><span id="wallapatta_27" class="text">Anyone who programs in C uses pre-processor macros to keep the code clean, maintainable and sometimes to improve run-time performance. You can use the same C pre-processor to include macros in [Coffeescript](http://coffeescript.org/) or Javascript code, and it is easy!</span></p></div></div><div id="wallapatta_3" class="section"><div class="content"><p id="wallapatta_4" class="paragraph"><span id="wallapatta_28" class="text">The coffeescript file needs to be renamed with `.c` extension before running it thrrough `gcc`; otherwise, it gives a warning and doesn't run the pre-processor. There may be some option to force it compile without checking the extension.</span></p></div></div><pre id="wallapatta_5" class="codeBlock"><code class="bash">cp [source.coffe] [source.c]
 gcc -E [source.c] &gt; [processed.coffee]</code></pre><div id="wallapatta_6" class="section"><h2 class="heading"><span id="wallapatta_7" class="block"><span id="wallapatta_29" class="text">Examples</span></span></h2><div class="content"><div id="wallapatta_8" class="section"><h3 class="heading"><span id="wallapatta_9" class="block"><span id="wallapatta_30" class="text">Improve performance</span></span></h3><div class="content"><div id="wallapatta_10" class="section"><div class="content"><p id="wallapatta_11" class="paragraph"><span id="wallapatta_31" class="text">This is the code with macros. It compares the time taken to calculate the sum of squares, using `function`s and macros.</span></p></div></div><pre id="wallapatta_12" class="codeBlock"><code class="coffeescript"><span class="hljs-function"><span class="hljs-title">square</span> = <span class="hljs-params">(x)</span> -&gt;</span> x * x
 
@@ -125,7 +117,7 @@ LOG(<span class="hljs-string">"Root of <span class="hljs-subst">#{n}</span> = <s
 n = <span class="hljs-number">3</span>
 LOG(<span class="hljs-string">"Root of <span class="hljs-subst">#{n}</span> = <span class="hljs-subst">#{Math.sqrt(n)}</span>"</span>)</code></pre></div></div></div></div></div>
      </div>
-     <div class="wallapatta-sidebar three columns ">
+     <div class="wallapatta-sidebar three columns">
       
      </div>
      <div style="display:none;">
