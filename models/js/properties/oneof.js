@@ -13,6 +13,8 @@
 
       OneOf.extend();
 
+      OneOf.prototype.propertyType = 'oneof';
+
       OneOf["default"]('oneof', ['Null']);
 
       OneOf["default"]('default', function() {
@@ -111,7 +113,7 @@
           elem: this.elems.parent,
           context: this
         }, function() {
-          this.div(".oneof-controls", function() {
+          this.$.elems.controls = this.div(".oneof-controls", function() {
             return this.$.elems.type = this.select({
               on: {
                 change: this.$.on.typeChange
@@ -131,6 +133,9 @@
           });
           return this.$.elems.model = this.div(".model", null);
         });
+        if (this.property.schema.oneof.length <= 1) {
+          this.elems.controls.style.display = 'none';
+        }
         return this.renderModel();
       };
 

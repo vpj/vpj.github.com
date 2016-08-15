@@ -67,7 +67,7 @@
   };
 
   weyaDomCreate = function() {
-    var append, j, l, len, len1, len2, m, name, ref, ref1, ref2, setAttributes, setData, setEvents, setIdClass, setStyles, weya, wrapAppend;
+    var append, j, l, len, len1, len2, m, name, ref, ref1, ref2, setAttributes, setData, setEvents, setIdClass, setIdClassFallback, setStyles, switchIdClass, weya, wrapAppend;
     weya = {
       _elem: null
     };
@@ -128,33 +128,40 @@
       return results;
     };
     setIdClass = function(elem, idClass) {
-      var c, className, j, l, len, len1, ref, ref1, results;
+      var c, j, len, ref, results;
       if (idClass.id != null) {
         elem.id = idClass.id;
       }
       if (idClass["class"] != null) {
-        if (elem.classList != null) {
-          ref = idClass["class"];
-          results = [];
-          for (j = 0, len = ref.length; j < len; j++) {
-            c = ref[j];
-            results.push(elem.classList.add(c));
-          }
-          return results;
-        } else {
-          className = '';
-          ref1 = idClass["class"];
-          for (l = 0, len1 = ref1.length; l < len1; l++) {
-            c = ref1[l];
-            if (className !== '') {
-              className += ' ';
-            }
-            className += "" + c;
-          }
-          return elem.className = className;
+        ref = idClass["class"];
+        results = [];
+        for (j = 0, len = ref.length; j < len; j++) {
+          c = ref[j];
+          results.push(elem.classList.add(c));
         }
+        return results;
       }
     };
+    setIdClassFallback = function(elem, idClass) {
+      var className;
+      if (idClass.id != null) {
+        elem.id = idClass.id;
+      }
+      if (idClass["class"] != null) {
+        className = idClass["class"].join(' ');
+        return elem.setAttribute('class', className);
+      }
+    };
+    switchIdClass = function() {
+      var elem;
+      elem = Api.document.createElementNS("http://www.w3.org/2000/svg", 'g');
+      if (!elem.classList) {
+        return setIdClass = setIdClassFallback;
+      }
+    };
+    if (Api.document != null) {
+      switchIdClass();
+    }
     append = function(ns, name, args) {
       var elem, pElem, params;
       params = getParameters(args);
@@ -267,7 +274,7 @@
       return results;
     };
     append = function(ns, name, isVoid, args) {
-      var buf, c, cssClass, j, len, params, ref;
+      var buf, className, params;
       params = getParameters(args);
       buf = this._buf;
       setIndent(buf, this._indent);
@@ -277,13 +284,8 @@
           buf.push(" id=\"" + params.idClass.id + "\"");
         }
         if (params.idClass["class"] != null) {
-          cssClass = '';
-          ref = params.idClass["class"];
-          for (j = 0, len = ref.length; j < len; j++) {
-            c = ref[j];
-            cssClass += c + " ";
-          }
-          buf.push(" class=\"" + cssClass + "\"");
+          className = params.idClass["class"].join(' ');
+          buf.push(" class=\"" + className + "\"");
         }
       }
       if (params.attrs != null) {
@@ -394,13 +396,13 @@
   };
 
   Weya.setApi = function(api) {
-    var k, results, v;
-    results = [];
+    var k, v;
     for (k in api) {
       v = api[k];
-      results.push(Api[k] = v);
+      Api[k] = v;
     }
-    return results;
+    weyaDom = weyaDomCreate();
+    return weyaMarkup = weyaMarkupCreate();
   };
 
   if (typeof module !== "undefined" && module !== null) {

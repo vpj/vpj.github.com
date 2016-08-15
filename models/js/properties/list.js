@@ -9,6 +9,8 @@
 
       List.extend();
 
+      List.prototype.propertyType = 'list';
+
       List["default"]('list', {});
 
       List["default"]('default', function() {
@@ -226,7 +228,11 @@
                   return icon.listAction = 'delete';
                 });
               });
-              return this.$.elems.items.push(this.div(".list-item-content", null));
+              return this.div(".list-item-content", function() {
+                return this.div(".property.property-type-" + this.$.property.item.propertyType, function() {
+                  return this.$.elems.items.push(this.div(".property-value", null));
+                });
+              });
             }));
           }
           return results;

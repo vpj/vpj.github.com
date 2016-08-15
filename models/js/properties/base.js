@@ -2,6 +2,8 @@
   Mod.require('Models.Util', function(UTIL) {
     var Base;
     Base = (function() {
+      Base.prototype.propertyType = 'base';
+
       Base.prototype._defaults = {};
 
       Base.extend = function() {
@@ -22,8 +24,9 @@
         return true;
       };
 
-      function Base(schema) {
+      function Base(schema, name) {
         var k, ref, v;
+        this._name = name;
         this.schema = {};
         ref = this._defaults;
         for (k in ref) {

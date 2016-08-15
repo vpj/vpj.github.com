@@ -85,7 +85,7 @@
         if ((typeof obj) !== 'object') {
           throw new Error("Property not an object: " + name);
         }
-        return this.prototype._properties[name] = PROPERTIES.create(obj);
+        return this.prototype._properties[name] = PROPERTIES.create(obj, name);
       };
 
       Model.requireFunction = function(name, desc) {
@@ -293,7 +293,7 @@
           results = [];
           for (name in ref) {
             prop = ref[name];
-            results.push(this.div(".property", function() {
+            results.push(this.div(".property.property-type-" + prop.propertyType, function() {
               this.span(".property-name", name);
               return this.$._editElems[name] = this.div(".property-value", "");
             }));

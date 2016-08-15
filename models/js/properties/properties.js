@@ -22,13 +22,13 @@
         return false;
       };
 
-      Properties.prototype.create = function(schema) {
+      Properties.prototype.create = function(schema, name) {
         var property, ref, type;
         ref = this.properties;
         for (type in ref) {
           property = ref[type];
           if (property.isValidSchema(schema)) {
-            return new property(schema);
+            return new property(schema, name);
           }
         }
         throw new Error("Unknown schema");

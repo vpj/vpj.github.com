@@ -13,6 +13,8 @@
 
       Value.extend();
 
+      Value.prototype.propertyType = 'value';
+
       Value["default"]('value', function(str) {
         if ((typeof str) !== 'string') {
           throw new Error("Exected string: " + (typeof str) + ", " + str);
@@ -37,10 +39,7 @@
       });
 
       Value["default"]('search', function(str) {
-        if ((typeof str) !== 'string') {
-          throw new Error("Exected string: " + (typeof str) + ", " + str);
-        }
-        return str;
+        return null;
       });
 
       Value["default"]('default', function() {
@@ -103,35 +102,116 @@
       });
 
       Edit.prototype.render = function() {
-        var schema;
+        var schema, width;
         schema = this.property.schema;
+        width = 2 + Math.round(schema.columns * 7.25);
         Weya({
           elem: this.elems.parent,
           context: this
         }, function() {
           if (schema.rows === 1) {
-            return this.$.elems.input = this.input('.value', {
+            this.$.elems.input = this.input('.value', {
               type: 'text',
+              placeholder: this.$.property._name,
               style: {
-                width: (2 + Math.round(schema.columns * 7.25)) + "px"
+                width: width + "px"
               }
             });
           } else {
-            return this.$.elems.input = this.textarea('.value', {
+            this.$.elems.input = this.textarea('.value', {
               rows: schema.rows,
               columns: schema.columns,
               style: {
-                width: (2 + Math.round(schema.columns * 7.25)) + "px",
+                width: width + "px",
                 height: (Math.round(schema.rows * 18)) + "px"
               }
             });
           }
+          return this.$.elems.search = this.div('.search', {
+            style: {
+              display: 'none',
+              width: width + "px"
+            }
+          });
         });
         this.elems.input.value = this.value;
-        return this.elems.input.addEventListener("input", this.on.change);
+        this.elems.input.addEventListener("input", this.on.change);
+        this.elems.input.addEventListener("focus", this.on.focus);
+        this.elems.input.addEventListener("blur", this.on.blur);
+        this.elems.search.addEventListener('click', this.on.searchClick);
+        return this.change();
       };
 
+      Edit.prototype.search = function() {
+        var results, value;
+        value = this.elems.input.value;
+        results = this.property.schema.search.call(this.property, value);
+        if (results == null) {
+          return;
+        }
+        if (!Array.isArray(results)) {
+          return;
+        }
+        if (results.length === 0) {
+          this.elems.search.style.display = 'none';
+          return;
+        }
+        this.elems.search.style.display = 'block';
+        this.elems.search.innerHTML = '';
+        return Weya({
+          elem: this.elems.search
+        }, function() {
+          var e, i, j, len, r, results1;
+          results1 = [];
+          for (i = j = 0, len = results.length; j < len; i = ++j) {
+            r = results[i];
+            if (i > 10) {
+              break;
+            }
+            e = this.div(r);
+            results1.push(e._result = r);
+          }
+          return results1;
+        });
+      };
+
+      Edit.listen('searchClick', function(e) {
+        var n, result;
+        n = e.target;
+        result = null;
+        while ((n != null) && n !== this.elems.search) {
+          if (n._result) {
+            result = n._result;
+            break;
+          }
+          n = n.parentNode;
+        }
+        if (result == null) {
+          return;
+        }
+        this.elems.input.value = result;
+        this.elems.search.style.display = 'none';
+        return this.change();
+      });
+
+      Edit.listen('focus', function(e) {
+        return this.search();
+      });
+
+      Edit.listen('blur', function(e) {
+        return setTimeout((function(_this) {
+          return function() {
+            return _this.elems.search.style.display = 'none';
+          };
+        })(this), 400);
+      });
+
       Edit.listen('change', function(e) {
+        this.search();
+        return this.change();
+      });
+
+      Edit.prototype.change = function() {
         var value;
         value = this.elems.input.value;
         if (!this.property.schema.valid.call(this.property, value)) {
@@ -141,7 +221,7 @@
           value = this.property.schema.value.call(this, value);
           return this.onChanged(value, true);
         }
-      });
+      };
 
       return Edit;
 

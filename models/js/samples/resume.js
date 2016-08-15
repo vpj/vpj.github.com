@@ -3,7 +3,14 @@
     hasProp = {}.hasOwnProperty;
 
   Mod.require('Models.Models', 'Models.Model.Base', function(MODELS, Base) {
-    var Address, Education, Experience, Recognition, Resume, Skill;
+    var Address, Education, Experience, ROLES, Recognition, Resume, Skill;
+    ROLES = {
+      Vigilante: true,
+      Programmer: true,
+      Designer: true,
+      Manager: true,
+      Other: true
+    };
     Resume = (function(superClass) {
       extend(Resume, superClass);
 
@@ -17,7 +24,22 @@
 
       Resume.property('name', {});
 
-      Resume.property('role', {});
+      Resume.property('role', {
+        valid: function(str) {
+          return ROLES[str];
+        },
+        search: function(str) {
+          var id, results;
+          str = str.toLowerCase();
+          results = [];
+          for (id in ROLES) {
+            if ((id.toLowerCase().indexOf(str)) !== -1) {
+              results.push(id);
+            }
+          }
+          return results;
+        }
+      });
 
       Resume.property('website', {});
 

@@ -9,11 +9,6 @@
 
   Weya = this.Weya;
 
-  if (typeof exports !== "undefined" && exports !== null) {
-    Weya = require('./weya');
-    Weya.Base = require('./weya_base');
-  }
-
   if (Weya.Base == null) {
     throw new Error('Weya.Base not found');
   }
@@ -427,9 +422,5 @@
   Weya.Router = Router;
 
   Weya.history = new History;
-
-  if (typeof module !== "undefined" && module !== null) {
-    module.exports = Weya.Router;
-  }
 
 }).call(this);
