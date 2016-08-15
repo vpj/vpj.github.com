@@ -106,11 +106,11 @@
         return this.operation = null;
       });
 
-      Editor.listen('tableClick', function(r, c, table) {
+      Editor.listen('tableClick', function(r, c, table, event) {
         if (!this.operation) {
           return;
         }
-        return this.operation.on.tableSelect(r, c, table);
+        return this.operation.on.tableSelect(r, c, table, event);
       });
 
       Editor.listen('cancelOperation', function() {

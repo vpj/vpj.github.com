@@ -84,7 +84,7 @@
       };
 
       DelimiterSeparateColumn.prototype._setData = function() {
-        var c, col, delimiter, j, len, ref;
+        var c, col, delimiter, k, len, ref;
         delimiter = this.delimiter;
         if (delimiter === ' ') {
           delimiter = 'SPACE';
@@ -95,7 +95,7 @@
         this.elems.quote.value = this.quote;
         this.table.clearHighlight();
         ref = this.table.columns;
-        for (c = j = 0, len = ref.length; j < len; c = ++j) {
+        for (c = k = 0, len = ref.length; k < len; c = ++k) {
           col = ref[c];
           if (col.id === this.column) {
             this.table.highlight.columns[c] = true;
@@ -132,7 +132,7 @@
       };
 
       DelimiterSeparateColumn.listen('apply', function(e) {
-        var i, j, k, n, ref, ref1;
+        var i, k, l, n, ref, ref1;
         e.preventDefault();
         this.delimiter = this.elems.delimiter.value.trim();
         this.quote = this.elems.quote.value.trim();
@@ -142,7 +142,7 @@
             n = 1;
           }
           this.delimiter = '';
-          for (i = j = 0, ref = n; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
+          for (i = k = 0, ref = n; 0 <= ref ? k < ref : k > ref; i = 0 <= ref ? ++k : --k) {
             this.delimiter += '\t';
           }
         }
@@ -152,7 +152,7 @@
             n = 1;
           }
           this.delimiter = '';
-          for (i = k = 0, ref1 = n; 0 <= ref1 ? k < ref1 : k > ref1; i = 0 <= ref1 ? ++k : --k) {
+          for (i = l = 0, ref1 = n; 0 <= ref1 ? l < ref1 : l > ref1; i = 0 <= ref1 ? ++l : --l) {
             this.delimiter += ' ';
           }
         }
@@ -160,25 +160,46 @@
       });
 
       DelimiterSeparateColumn.prototype.apply = function() {
-        var args, c, cidx, col, d, data, i, j, k, l, len, len1, nColumns, ref, ref1, results;
+        var a, args, c, cidx, col, column, d, data, i, j, k, l, len, len1, len2, len3, m, nColumns, o, p, q, r, ref, ref1, ref2, results, t;
         cidx = -1;
         ref = this.table.columns;
-        for (i = j = 0, len = ref.length; j < len; i = ++j) {
+        for (i = k = 0, len = ref.length; k < len; i = ++k) {
           c = ref[i];
           if (c.id === this.column) {
             cidx = i;
           }
         }
-        data = this.table.data[this.column].join('\n');
-        data = dsv({
-          separator: this.delimiter,
-          quote: this.quote.charCodeAt(0),
-          text: data
-        });
+        column = this.table.data[this.column];
+        data = [];
+        for (r = l = 0, len1 = column.length; l < len1; r = ++l) {
+          d = column[r];
+          if (d == null) {
+            d = '';
+          }
+          d = dsv({
+            separator: this.delimiter,
+            quote: this.quote,
+            text: d
+          });
+          while (d.length < data.length) {
+            d.push(['']);
+          }
+          for (i = m = 0, len2 = d.length; m < len2; i = ++m) {
+            t = d[i];
+            if (data.length <= i) {
+              a = new Array(r);
+              for (j = o = 0, ref1 = r; 0 <= ref1 ? o < ref1 : o > ref1; j = 0 <= ref1 ? ++o : --o) {
+                a[j] = '';
+              }
+              data.push(a);
+            }
+            data[i].push(t[0]);
+          }
+        }
         nColumns = data.length;
         col = this.table.columns[cidx];
         args = [cidx, 1];
-        for (i = k = 1, ref1 = nColumns; 1 <= ref1 ? k <= ref1 : k >= ref1; i = 1 <= ref1 ? ++k : --k) {
+        for (i = p = 1, ref2 = nColumns; 1 <= ref2 ? p <= ref2 : p >= ref2; i = 1 <= ref2 ? ++p : --p) {
           args.push({
             id: col.id + "_" + i,
             name: col.name + "_" + i,
@@ -189,7 +210,7 @@
         delete this.table.data[col.id];
         this.table.columns.splice.apply(this.table.columns, args);
         results = [];
-        for (i = l = 0, len1 = data.length; l < len1; i = ++l) {
+        for (i = q = 0, len3 = data.length; q < len3; i = ++q) {
           d = data[i];
           results.push(this.table.data[col.id + "_" + (i + 1)] = d);
         }

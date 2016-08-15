@@ -130,6 +130,9 @@
       });
 
       SearchDeleteRows.prototype.addInputs = function(id, name, search) {
+        if (search === '') {
+          search = '$^';
+        }
         if (this.elems.inputs[id] != null) {
           this.elems.inputsDiv.removeChild(this.elems.inputs[id].div);
         }
@@ -160,7 +163,7 @@
       };
 
       SearchDeleteRows.prototype.refresh = function() {
-        var d, elems, highlight, i, id, j, k, len, len1, n, r, ref, ref1, ref2, regex, s;
+        var d, data, elems, highlight, i, id, j, k, len, n, r, ref, ref1, ref2, regex, s;
         this.search = {};
         n = 0;
         ref = this.elems.inputs;
@@ -187,15 +190,15 @@
         for (id in ref1) {
           s = ref1[id];
           regex = new RegExp(s, '');
-          ref2 = this.table.data[id];
-          for (r = j = 0, len = ref2.length; j < len; r = ++j) {
-            d = ref2[r];
+          data = this.table.data[id];
+          for (r = j = 0, ref2 = this.table.size; 0 <= ref2 ? j < ref2 : j > ref2; r = 0 <= ref2 ? ++j : --j) {
+            d = data[r];
             if (!regex.test(d)) {
               highlight[r] = false;
             }
           }
         }
-        for (r = k = 0, len1 = highlight.length; k < len1; r = ++k) {
+        for (r = k = 0, len = highlight.length; k < len; r = ++k) {
           d = highlight[r];
           if (d) {
             this.table.highlight.rows[r] = true;
@@ -205,7 +208,7 @@
       };
 
       SearchDeleteRows.prototype.apply = function() {
-        var d, data, highlight, i, id, j, len, r, ref, ref1, ref2, regex, results, s;
+        var d, data, highlight, i, id, j, r, ref, ref1, ref2, regex, results, s;
         highlight = (function() {
           var j, ref, results;
           results = [];
@@ -218,9 +221,9 @@
         for (id in ref) {
           s = ref[id];
           regex = new RegExp(s, '');
-          ref1 = this.table.data[id];
-          for (r = j = 0, len = ref1.length; j < len; r = ++j) {
-            d = ref1[r];
+          data = this.table.data[id];
+          for (r = j = 0, ref1 = this.table.size; 0 <= ref1 ? j < ref1 : j > ref1; r = 0 <= ref1 ? ++j : --j) {
+            d = data[r];
             if (!regex.test(d)) {
               highlight[r] = false;
             }
@@ -231,9 +234,9 @@
         for (id in ref2) {
           data = ref2[id];
           this.table.data[id] = (function() {
-            var k, len1, results1;
+            var k, len, results1;
             results1 = [];
-            for (r = k = 0, len1 = highlight.length; k < len1; r = ++k) {
+            for (r = k = 0, len = highlight.length; k < len; r = ++k) {
               d = highlight[r];
               if (!d) {
                 results1.push(data[r]);

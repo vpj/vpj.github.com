@@ -82,6 +82,7 @@
 
       Table.prototype.clearHighlight = function() {
         return this.highlight = {
+          onlyHighlightedRows: false,
           rows: {},
           columns: {},
           cells: {}
@@ -103,7 +104,7 @@
         results = [];
         while (n != null) {
           if ((n._row != null) && (n._col != null)) {
-            this._onClick(n._row, n._col, this);
+            this._onClick(n._row, n._col, this, e);
           }
           results.push(n = n.parentNode);
         }
@@ -243,7 +244,7 @@
       };
 
       Table.prototype.generate = function(force) {
-        var bottomSpace, cluster, from, i, rows, scroll, to, topSpace;
+        var bottomSpace, cluster, from, i, r, rows, scroll, show, to, topSpace, v;
         scroll = this.scroll;
         cluster = Math.floor(scroll / (this.dims.clusterHeight - this.dims.visibleHeight));
         if (!force && this._currentCluster === cluster) {
@@ -260,6 +261,31 @@
           }
           return results;
         })();
+        if (this.highlight.onlyHighlightedRows) {
+          show = (function() {
+            var ref, results;
+            ref = this.highlight.rows;
+            results = [];
+            for (r in ref) {
+              v = ref[r];
+              if (v) {
+                results.push(r);
+              }
+            }
+            return results;
+          }).call(this);
+          rows = (function() {
+            var j, len, results;
+            results = [];
+            for (j = 0, len = rows.length; j < len; j++) {
+              r = rows[j];
+              if (show[r] != null) {
+                results.push(show[r]);
+              }
+            }
+            return results;
+          })();
+        }
         topSpace = from * this.dims.rowHeight;
         bottomSpace = (this.size - to) * this.dims.rowHeight;
         this.elems.tbody.innerHTML = '';
@@ -267,7 +293,7 @@
           elem: this.elems.tbody,
           context: this
         }, function() {
-          var j, len, r, rowCssClass;
+          var j, len, rowCssClass;
           this.tr('.top-space', {
             style: {
               height: topSpace + "px"

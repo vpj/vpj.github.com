@@ -48,7 +48,7 @@
   })(Error);
 
   Mod.set = function(name, module) {
-    var e;
+    var e, error;
     if (MODULES[name] != null) {
       throw new ModError("Module " + name + " already registered");
     }
@@ -58,8 +58,8 @@
     }
     try {
       _run();
-    } catch (_error) {
-      e = _error;
+    } catch (error) {
+      e = error;
       LOG("MOD: Set - " + name);
       if (e instanceof ModError) {
         LOG("MOD: Error - " + e.message);
@@ -184,12 +184,12 @@
   };
 
   Mod.initialize = function() {
-    var e;
+    var e, error;
     INITIALIZED = true;
     try {
       _run();
-    } catch (_error) {
-      e = _error;
+    } catch (error) {
+      e = error;
       if (e instanceof ModError) {
         LOG("MOD: Error - " + e.message);
       } else {

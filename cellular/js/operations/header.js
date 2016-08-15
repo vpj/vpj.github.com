@@ -196,7 +196,7 @@
       };
 
       Header.prototype.refresh = function() {
-        var bottom, d, elems, highlight, i, id, j, k, len, len1, n, r, ref, ref1, ref2, regex, s, top;
+        var bottom, d, data, elems, highlight, i, id, j, k, len, n, r, ref, ref1, ref2, regex, s, top;
         this.search = {};
         n = 0;
         ref = this.elems.inputs;
@@ -233,15 +233,15 @@
         for (id in ref1) {
           s = ref1[id];
           regex = new RegExp(s, '');
-          ref2 = this.table.data[id];
-          for (r = j = 0, len = ref2.length; j < len; r = ++j) {
-            d = ref2[r];
+          data = this.table.data[id];
+          for (r = j = 0, ref2 = this.table.size; 0 <= ref2 ? j < ref2 : j > ref2; r = 0 <= ref2 ? ++j : --j) {
+            d = data[r];
             if (!regex.test(d)) {
               highlight[r] = false;
             }
           }
         }
-        for (r = k = 0, len1 = highlight.length; k < len1; r = ++k) {
+        for (r = k = 0, len = highlight.length; k < len; r = ++k) {
           d = highlight[r];
           if (d) {
             this.table.highlight.rows[r] = true;
@@ -251,7 +251,7 @@
       };
 
       Header.prototype.apply = function() {
-        var col, columns, d, data, detail, highlight, hr, i, id, j, k, l, len, len1, len2, m, r, ref, ref1, ref2, ref3, regex, s, table, values;
+        var col, columns, d, data, detail, highlight, hr, i, id, j, k, l, len, len1, m, r, ref, ref1, ref2, ref3, regex, s, table, values;
         highlight = (function() {
           var j, ref, results;
           results = [];
@@ -264,9 +264,9 @@
         for (id in ref) {
           s = ref[id];
           regex = new RegExp(s, '');
-          ref1 = this.table.data[id];
-          for (r = j = 0, len = ref1.length; j < len; r = ++j) {
-            d = ref1[r];
+          data = this.table.data[id];
+          for (r = j = 0, ref1 = this.table.size; 0 <= ref1 ? j < ref1 : j > ref1; r = 0 <= ref1 ? ++j : --j) {
+            d = data[r];
             if (!regex.test(d)) {
               highlight[r] = false;
             }
@@ -275,7 +275,7 @@
         columns = [];
         table = {};
         ref2 = this.table.columns;
-        for (k = 0, len1 = ref2.length; k < len1; k++) {
+        for (k = 0, len = ref2.length; k < len; k++) {
           col = ref2[k];
           data = this.table.data[col.id];
           for (i = l = 1, ref3 = this.top + this.bottom + 1; 1 <= ref3 ? l <= ref3 : l >= ref3; i = 1 <= ref3 ? ++l : --l) {
@@ -304,7 +304,7 @@
             return results;
           }).call(this);
           detail = 0;
-          for (r = m = 0, len2 = highlight.length; m < len2; r = ++m) {
+          for (r = m = 0, len1 = highlight.length; m < len1; r = ++m) {
             d = highlight[r];
             if (!(d)) {
               continue;
