@@ -1,0 +1,164 @@
+<!DOCTYPE html><html>
+ <head>
+  <meta charset="utf-8"/>
+  <title>
+   Should we switch from CoffeeScript?
+  </title>
+  <meta name="viewport" content="width=550, initial-scale=1.0"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <link href="http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900" rel="stylesheet" type="text/css"/>
+  <link href="lib/skeleton/css/skeleton.css" rel="stylesheet"/>
+  <link href="lib/highlightjs/styles/default.css" rel="stylesheet"/>
+  <link href="css/style.css" rel="stylesheet"/>
+  <link href="blog.css" rel="stylesheet"/>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-44255805-1', 'auto');
+ga('send', 'pageview');
+  </script>
+ </head>
+ <body>
+  <div class="container wallapatta-container">
+   <div class="header">
+    <h1>
+     <a href="index.html">
+      VARUNA JAYASIRI
+     </a>
+    </h1>
+    <a class="button" href="https://www.twitter.com/vpj">
+     @vpj
+    </a>
+   </div>
+   <div class="wallapatta">
+    <h1 class="title">
+     Should we switch from CoffeeScript?
+    </h1>
+    <h3 class="date">
+     September 28, 2016
+    </h3>
+    <div style="margin-bottom:30px;">
+     <a class="twitter-share-button" href="https://twitter.com/share" data-via="vpj" data-size="large">
+      Tweet
+     </a>
+     <script>
+      !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+     </script>
+    </div>
+    <div class="row">
+     <div class="wallapatta-main nine columns">
+      <div id="wallapatta_0" class="article"><div id="wallapatta_1" class="section"><h2 class="heading"><span id="wallapatta_2" class="block"><span id="wallapatta_33" class="text">A little background</span></span></h2><div class="content"><div id="wallapatta_3" class="section"><div class="content"><p id="wallapatta_4" class="paragraph"><span id="wallapatta_34" class="text">At </span><a id="wallapatta_35" class="link" href="http://nearby.lk">nearby.lk</a><span id="wallapatta_36" class="text"> we </span><a id="wallapatta_37" class="link" href="http://blog.varunajayasiri.com/app_engine.html">moved our backend from python to node.js</a><span id="wallapatta_38" class="text"> and then rewrote both the backend and UI code in CoffeeScript in late 2013. And we migrated all Javascript code to CoffeeScript at </span><a id="wallapatta_39" class="link" href="https://www.forestpin.com">Forestpin</a><span id="wallapatta_40" class="text"> in early 2014.</span></p></div></div><div id="wallapatta_5" class="section"><div class="content"><p id="wallapatta_6" class="paragraph"><span id="wallapatta_41" class="text">Then we replaced all HTML files and generated HTML content in CoffeeScript; initially with </span><a id="wallapatta_42" class="link" href="http://coffeekup.org/">Coffeecup</a><span id="wallapatta_43" class="text"> and then with </span><a id="wallapatta_44" class="link" href="https://github.com/vpj/weya">Weya.coffee</a><span id="wallapatta_45" class="text">. So we only have Coffeescript and CSS in our projects.</span></p></div></div></div></div><div id="wallapatta_7" class="section"><h2 class="heading"><span id="wallapatta_8" class="block"><span id="wallapatta_46" class="text">Why we are considering to switch</span></span></h2><div class="content"><div id="wallapatta_9" class="section"><div class="content"><p id="wallapatta_10" class="paragraph"><span id="wallapatta_47" class="text">There are two main reasons. First is that CoffeeScript is untyped. The second is the uncertainty of the future of CoffeeScript.</span></p></div></div><div id="wallapatta_11" class="section"><div class="content"><p id="wallapatta_12" class="paragraph"><strong id="wallapatta_48" class="bold"><span id="wallapatta_49" class="text">CoffeeScript is untyped</span></strong><span id="wallapatta_50" class="text"> and so is Javascript. This becomes a problem when you have a large code base. There can be hidden errors not covered by unit tests. Refactoring and making modifications is harder. Also, editors can give better code completion with typed languages. A typed language can introduce extra optimizations too, but I don't think this is done with likes of </span><a id="wallapatta_51" class="link" href="http://www.typescriptlang.org/">TypeScript</a><span id="wallapatta_52" class="text">.</span></p></div></div><div id="wallapatta_16" class="section"><div class="content"><p id="wallapatta_17" class="paragraph"><strong id="wallapatta_56" class="bold"><span id="wallapatta_57" class="text">The popularity of CoffeeScript is fading.</span></strong><span id="wallapatta_58" class="text"> There are a lot of posts about people moving away from CoffeeScript, and almost nothing about people adopting CoffeeScript. If CoffeeScript loses popularity there'll be fewer contributions to the CoffeeScript compiler project; it might not get updated along with developments of Javascript. However, CoffeeScript has so far adopted all new features of Javascript we found to be important (e.g. generators, modules).</span></p></div></div></div></div><div id="wallapatta_18" class="section"><h2 class="heading"><span id="wallapatta_19" class="block"><span id="wallapatta_59" class="text">What we will miss</span></span></h2><div class="content"><div id="wallapatta_20" class="section"><div class="content"><p id="wallapatta_21" class="paragraph"><span id="wallapatta_60" class="text">We are certainly going to miss </span><strong id="wallapatta_61" class="bold"><span id="wallapatta_62" class="text">markup in CoffeeScript</span></strong><span id="wallapatta_63" class="text">. Generating HTML text from Javascript is clean (with string concatenations and HTML tags).</span></p></div></div><pre id="wallapatta_22" class="codeBlock"><code class="coffeescript"> @div <span class="hljs-string">".users"</span>, <span class="hljs-function">-&gt;</span>
+  <span class="hljs-keyword">for</span> user <span class="hljs-keyword">in</span> users
+   @div <span class="hljs-string">'.user'</span>, on: {click: editUser}, <span class="hljs-function">-&gt;</span>
+    @span <span class="hljs-string">".name"</span>, user.name
+    @span <span class="hljs-string">".phone"</span>, user.phone
+    <span class="hljs-keyword">if</span> v.image?
+     @img src: user.image</code></pre><div id="wallapatta_23" class="section"><div class="content"><p id="wallapatta_24" class="paragraph"><span id="wallapatta_64" class="text">The other thing we are going to miss is </span><strong id="wallapatta_65" class="bold"><span id="wallapatta_66" class="text">executable class bodies</span></strong><span id="wallapatta_67" class="text">. This let us have mixins, bind </span><code id="wallapatta_68" class="code"><span id="wallapatta_69" class="text">this</span></code><span id="wallapatta_70" class="text"> </span><a id="wallapatta_71" class="link" href="https://github.com/vpj/weya/blob/master/base.litcoffee">to event handlers</a><span id="wallapatta_72" class="text">, and even do things like check if all abstract methods are implemented. We use these quite often in our code.</span></p></div></div></div></div><div id="wallapatta_25" class="section"><h2 class="heading"><span id="wallapatta_26" class="block"><span id="wallapatta_73" class="text">What are we going to do</span></span></h2><div class="content"><div id="wallapatta_27" class="section"><div class="content"><p id="wallapatta_28" class="paragraph"><span id="wallapatta_74" class="text">There was a new release of CoffeeScript, and there are discussions about CoffeeScript2 and about compiling CoffeeScript to ES6. So, hopefully, CoffeeScript will have a future.</span></p></div></div><div id="wallapatta_29" class="section"><div class="content"><p id="wallapatta_30" class="paragraph"><span id="wallapatta_75" class="text">Since the only immediate benefit of switching from CoffeeScript to TypeScript is type checking, we will stay with CoffeeScript for a while.</span></p></div></div><div id="wallapatta_31" class="section"><div class="content"><p id="wallapatta_32" class="paragraph"><span id="wallapatta_76" class="text">To keep our options open, I started a small side project in TypeScript. Apart from not having a nice way to generate HTML, the experience so far has been good. Typescript is less error prone and the editor code completion saves time. But the code is a lot longer (lines of code) and to me doesn't look as elegant as CoffeeScript - perhaps I need some more getting-used-to.</span></p></div></div></div></div></div>
+     </div>
+     <div class="wallapatta-sidebar three columns">
+      <div id="wallapatta_13" class="sidenote"><div id="wallapatta_14" class="section"><div class="content"><p id="wallapatta_15" class="paragraph"><span id="wallapatta_53" class="text">Coffeescript will stay untyped for a while - </span><a id="wallapatta_54" class="link" href="https://github.com/coffeescript6/discuss/blob/master/Features.md">Type annotations are marked as "no action"</a><span id="wallapatta_55" class="text">.</span></p></div></div></div>
+     </div>
+     <div style="display:none;">
+      <div class='wallapatta-code'>##A little background
+
+ At &lt;&lt;http://nearby.lk(nearby.lk)&gt;&gt; we
+ &lt;&lt;http://blog.varunajayasiri.com/app_engine.html(moved our backend from python to node.js)&gt;&gt;
+ and then rewrote both the backend and UI code in CoffeeScript in late 2013.
+ And we migrated all Javascript code to CoffeeScript at
+ &lt;&lt;https://www.forestpin.com(Forestpin)&gt;&gt; in early 2014.
+
+ Then we replaced all HTML files and generated HTML content in CoffeeScript;
+ initially with &lt;&lt;http://coffeekup.org/(Coffeecup)&gt;&gt; and then with
+ &lt;&lt;https://github.com/vpj/weya(Weya.coffee)&gt;&gt;.
+ So we only have Coffeescript and CSS in our projects.
+
+##Why we are considering to switch
+
+ There are two main reasons.
+ First is that CoffeeScript is untyped.
+ The second is the uncertainty of the future of CoffeeScript.
+
+ **CoffeeScript is untyped** and so is Javascript.
+ This becomes a problem when you have a large code base.
+ There can be hidden errors not covered by unit tests.
+ Refactoring and making modifications is harder.
+ Also, editors can give better code completion with typed languages.
+ A typed language can introduce extra optimizations too,
+ but I don't think this is done with likes of
+ &lt;&lt;http://www.typescriptlang.org/(TypeScript)&gt;&gt;.
+
+ &gt;&gt;&gt;
+  Coffeescript will stay untyped for a while -
+  &lt;&lt;https://github.com/coffeescript6/discuss/blob/master/Features.md(Type annotations are marked as "no action")&gt;&gt;.
+
+ **The popularity of CoffeeScript is fading.**
+ There are a lot of posts about people moving away from CoffeeScript,
+ and almost nothing about people adopting CoffeeScript.
+ If CoffeeScript loses popularity there'll be
+ fewer contributions to the CoffeeScript compiler project;
+ it might not get updated along with developments of Javascript.
+ However, CoffeeScript has so far adopted all new features of Javascript we found to be important (e.g. generators, modules).
+
+##What we will miss
+
+ We are certainly going to miss **markup in CoffeeScript**.
+ Generating HTML text from Javascript is clean
+ (with string concatenations and HTML tags).
+
+ ```coffeescript
+   @div ".users", -&gt;
+    for user in users
+     @div '.user', on: {click: editUser}, -&gt;
+      @span ".name", user.name
+      @span ".phone", user.phone
+      if v.image?
+       @img src: user.image
+
+ The other thing we are going to miss is **executable class bodies**.
+ This let us have mixins,
+ bind ``this`` &lt;&lt;https://github.com/vpj/weya/blob/master/base.litcoffee(to event handlers)&gt;&gt;,
+ and even do things like check if all abstract methods are implemented.
+ We use these quite often in our code.
+
+##What are we going to do
+
+ There was a new release of CoffeeScript, and there are discussions about CoffeeScript2 and about compiling CoffeeScript to ES6. So, hopefully, CoffeeScript will have a future.
+
+ Since the only immediate benefit of switching
+ from CoffeeScript to TypeScript is type checking,
+ we will stay with CoffeeScript for a while.
+
+ To keep our options open, I started a small side project in TypeScript.
+ Apart from not having a nice way to generate HTML,
+ the experience so far has been good.
+ Typescript is less error prone and the editor code completion saves time.
+ But the code is a lot longer (lines of code)
+ and to me doesn't look as elegant as CoffeeScript -
+ perhaps I need some more getting-used-to.</div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script src="lib/highlightjs/highlight.pack.js">
+  </script>
+  <script src="lib/weya/weya.js">
+  </script>
+  <script src="lib/weya/base.js">
+  </script>
+  <script src="lib/mod/mod.js">
+  </script>
+  <script src="js/static.js?v=9">
+  </script>
+  <script src="js/parser.js?v=9">
+  </script>
+  <script src="js/reader.js?v=9">
+  </script>
+  <script src="js/nodes.js?v=9">
+  </script>
+  <script src="js/render.js?v=9">
+  </script>
+ </body>
+</html>

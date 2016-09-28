@@ -2,7 +2,7 @@
   var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
-  Mod.require('Weya.Base', 'Wallapatta.TYPES', 'Wallapatta.Text', 'Wallapatta.Bold', 'Wallapatta.Italics', 'Wallapatta.SuperScript', 'Wallapatta.SubScript', 'Wallapatta.Code', 'Wallapatta.Link', 'Wallapatta.MediaInline', 'Wallapatta.Block', 'Wallapatta.Section', 'Wallapatta.List', 'Wallapatta.ListItem', 'Wallapatta.Sidenote', 'Wallapatta.Article', 'Wallapatta.Media', 'Wallapatta.CodeBlock', 'Wallapatta.Table', 'Wallapatta.Special', 'Wallapatta.Html', 'Wallapatta.Full', 'Wallapatta.HtmlInline', 'Wallapatta.Map', 'Wallapatta.Reader', 'Wallapatta.Render', function(Base, TYPES, Text, Bold, Italics, SuperScript, SubScript, Code, Link, MediaInline, Block, Section, List, ListItem, Sidenote, Article, Media, CodeBlock, Table, Special, Html, Full, HtmlInline, Map, Reader, Render) {
+  Mod.require('Weya.Base', 'Wallapatta.TYPES', 'Wallapatta.Text', 'Wallapatta.Bold', 'Wallapatta.Italics', 'Wallapatta.SuperScript', 'Wallapatta.SubScript', 'Wallapatta.Code', 'Wallapatta.Link', 'Wallapatta.MediaInline', 'Wallapatta.Block', 'Wallapatta.Section', 'Wallapatta.List', 'Wallapatta.ListItem', 'Wallapatta.Sidenote', 'Wallapatta.Article', 'Wallapatta.Media', 'Wallapatta.CodeBlock', 'Wallapatta.FormattedCode', 'Wallapatta.Table', 'Wallapatta.Special', 'Wallapatta.Html', 'Wallapatta.Full', 'Wallapatta.HtmlInline', 'Wallapatta.Map', 'Wallapatta.Reader', 'Wallapatta.Render', function(Base, TYPES, Text, Bold, Italics, SuperScript, SubScript, Code, Link, MediaInline, Block, Section, List, ListItem, Sidenote, Article, Media, CodeBlock, FormattedCode, Table, Special, Html, Full, HtmlInline, Map, Reader, Render) {
     var BLOCK_LEVEL, Parser, TOKENS, TOKEN_MATCHES;
     TOKENS = {
       bold: Bold,
@@ -86,6 +86,9 @@
       Parser.prototype.addNode = function(node) {
         this.node.add(node);
         if (node.type === TYPES.block) {
+          this.blocks.push(node);
+        }
+        if (node.type === TYPES.formattedCode) {
           this.blocks.push(node);
         }
         return this.prevNode = this.node = node;
@@ -207,14 +210,14 @@
       };
 
       Parser.prototype.processLine = function() {
-        var id, j, len, line, n, node, nodes;
+        var id, j, len, line, n, node, nodes, ref;
         line = this.reader.get();
         if (line.empty) {
           if (this.node.type === TYPES.block) {
             this.prevNode = this.node;
             this.node = this.node.parent();
           }
-          if (this.node.type === TYPES.codeBlock || this.node.type === TYPES.html) {
+          if ((ref = this.node.type) === TYPES.codeBlock || ref === TYPES.html || ref === TYPES.formattedCode) {
             this.node.addText(line.line.substr(this.node.indentation));
           }
           return;
@@ -247,6 +250,7 @@
             break;
           case TYPES.codeBlock:
           case TYPES.html:
+          case TYPES.formattedCode:
             this.node.addText(line.line.substr(this.node.indentation));
             return;
           case TYPES.table:
@@ -272,6 +276,11 @@
               map: this.map,
               indentation: line.indentation + 1,
               lang: line.text
+            }));
+          case TYPES.formattedCode:
+            return this.addNode(new FormattedCode({
+              map: this.map,
+              indentation: line.indentation + 1
             }));
           case TYPES.html:
             return this.addNode(new Html({
@@ -417,6 +426,10 @@
           return media;
         }
         media.width = parts[2].trim();
+        if (parts.length <= 3) {
+          return media;
+        }
+        media.float = parts[3].trim();
         return media;
       };
 

@@ -56,7 +56,7 @@ ga('send', 'pageview');
 
     <span class="hljs-keyword">if</span> ((fd = socket(AF_LOCAL, SOCK_STREAM, <span class="hljs-number">0</span>)) &lt; <span class="hljs-number">0</span>) {
      log_error(<span class="hljs-string">"Failed to create server socket"</span>);
-     <span class="hljs-keyword">return</span> fd;
+     return fd;
     }
 
     <span class="hljs-built_in">memset</span>(&amp;addr, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(addr));
@@ -65,22 +65,22 @@ ga('send', 'pageview');
     unlink(SOCKET_PATH);
     <span class="hljs-built_in">strcpy</span>(addr.sun_path, SOCKET_PATH);
 
-    <span class="hljs-keyword">if</span> (bind(fd, (<span class="hljs-keyword">struct</span> sockaddr *) &amp;(addr),
-                                 <span class="hljs-keyword">sizeof</span>(addr)) &lt; <span class="hljs-number">0</span>) {
+    <span class="hljs-keyword">if</span> (bind(fd, (struct sockaddr *) &amp;(addr),
+                                 sizeof(addr)) &lt; <span class="hljs-number">0</span>) {
      log_error(<span class="hljs-string">"Failed to bind server socket"</span>);
-     <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
+     return <span class="hljs-number">-1</span>;
     }
 
     <span class="hljs-keyword">if</span> (listen(fd, MAX_PENDING) &lt; <span class="hljs-number">0</span>) {
      log_error(<span class="hljs-string">"Failed to listen on server socket"</span>);
-     <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
+     return <span class="hljs-number">-1</span>;
     }
 
     setnonblocking(fd);
 
     <span class="hljs-comment">/* Add handler to handle events on fd */</span>
 
-    <span class="hljs-keyword">return</span> fd;
+    return fd;
    }</code></pre><div id="wallapatta_10" class="section"><div class="content"><p id="wallapatta_11" class="paragraph"><span id="wallapatta_40" class="text">I used epoll for handling events, so adding a handler was something like this.</span></p></div></div><pre id="wallapatta_12" class="codeBlock"><code class="c">   hash_set(ioloop-&gt;handlers, fd, handler);
 
    e.data.fd = fd;
@@ -88,14 +88,14 @@ ga('send', 'pageview');
 
    <span class="hljs-keyword">if</span>(epoll_ctl(ioloop-&gt;epfd, EPOLL_CTL_ADD, fd, &amp;e) &lt; <span class="hljs-number">0</span>) {
     log_error(<span class="hljs-string">"Failed to insert handler to epoll"</span>);
-    <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
+    return <span class="hljs-number">-1</span>;
    }</code></pre><div id="wallapatta_13" class="section"><div class="content"><p id="wallapatta_14" class="paragraph"><span id="wallapatta_41" class="text">Connections to the server should be accepted with accept() similar to TCP sockets.</span></p></div></div><div id="wallapatta_15" class="section"><h2 class="heading"><span id="wallapatta_16" class="block"><span id="wallapatta_42" class="text">Connecting to the server</span></span></h2><div class="content"></div></div><pre id="wallapatta_17" class="codeBlock"><code class="c">   <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">connect_server</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">struct</span> sockaddr_un addr;
     <span class="hljs-keyword">int</span> fd;
 
     <span class="hljs-keyword">if</span> ((fd = socket(AF_LOCAL, SOCK_STREAM, <span class="hljs-number">0</span>)) &lt; <span class="hljs-number">0</span>) {
      log_error(<span class="hljs-string">"Failed to create client socket"</span>);
-     <span class="hljs-keyword">return</span> fd;
+     return fd;
     }
 
     <span class="hljs-built_in">memset</span>(&amp;addr, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(addr));
@@ -104,17 +104,17 @@ ga('send', 'pageview');
     <span class="hljs-built_in">strcpy</span>(addr.sun_path, SOCKET_PATH);
 
     <span class="hljs-keyword">if</span> (connect(fd,
-                (<span class="hljs-keyword">struct</span> sockaddr *) &amp;(addr),
-                <span class="hljs-keyword">sizeof</span>(addr)) &lt; <span class="hljs-number">0</span>) {
+                (struct sockaddr *) &amp;(addr),
+                sizeof(addr)) &lt; <span class="hljs-number">0</span>) {
      log_error(<span class="hljs-string">"Failed to connect to server"</span>);
-     <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
+     return <span class="hljs-number">-1</span>;
     }
 
     setnonblocking(fd);
 
     <span class="hljs-comment">/* Add handler to handle events */</span>
 
-    <span class="hljs-keyword">return</span> fd;
+    return fd;
    }</code></pre><div id="wallapatta_18" class="section"><div class="content"><p id="wallapatta_19" class="paragraph"><span id="wallapatta_43" class="text">I was adding </span><code id="wallapatta_44" class="code"><span id="wallapatta_45" class="text">EPOLLOUT</span></code><span id="wallapatta_46" class="text"> listener to the socket whenever there were file descriptors to be passed to the other process.</span></p></div></div><div id="wallapatta_20" class="section"><h2 class="heading"><span id="wallapatta_21" class="block"><span id="wallapatta_47" class="text">Receiving a file descriptor</span></span></h2><div class="content"></div></div><pre id="wallapatta_22" class="codeBlock"><code class="c">   <span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span>
    <span class="hljs-title">recv_file_descriptor</span><span class="hljs-params">(
      <span class="hljs-keyword">int</span> socket)</span> <span class="hljs-comment">/* Socket from which the file descriptor is read */</span>
@@ -123,12 +123,12 @@ ga('send', 'pageview');
     <span class="hljs-keyword">struct</span> msghdr message;
     <span class="hljs-keyword">struct</span> iovec iov[<span class="hljs-number">1</span>];
     <span class="hljs-keyword">struct</span> cmsghdr *control_message = <span class="hljs-literal">NULL</span>;
-    <span class="hljs-keyword">char</span> ctrl_buf[CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>))];
+    <span class="hljs-keyword">char</span> ctrl_buf[CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(int))];
     <span class="hljs-keyword">char</span> data[<span class="hljs-number">1</span>];
     <span class="hljs-keyword">int</span> res;
 
-    <span class="hljs-built_in">memset</span>(&amp;message, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">struct</span> msghdr));
-    <span class="hljs-built_in">memset</span>(ctrl_buf, <span class="hljs-number">0</span>, CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>)));
+    <span class="hljs-built_in">memset</span>(&amp;message, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(struct msghdr));
+    <span class="hljs-built_in">memset</span>(ctrl_buf, <span class="hljs-number">0</span>, CMSG_SPACE(sizeof(int)));
 
     <span class="hljs-comment">/* For the dummy data */</span>
     iov[<span class="hljs-number">0</span>].iov_base = data;
@@ -137,12 +137,12 @@ ga('send', 'pageview');
     message.msg_name = <span class="hljs-literal">NULL</span>;
     message.msg_namelen = <span class="hljs-number">0</span>;
     message.msg_control = ctrl_buf;
-    message.msg_controllen = CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
+    message.msg_controllen = CMSG_SPACE(sizeof(int));
     message.msg_iov = iov;
     message.msg_iovlen = <span class="hljs-number">1</span>;
 
     <span class="hljs-keyword">if</span>((res = recvmsg(socket, &amp;message, <span class="hljs-number">0</span>)) &lt;= <span class="hljs-number">0</span>)
-     <span class="hljs-keyword">return</span> res;
+     return res;
 
     <span class="hljs-comment">/* Iterate through header to find if there is a file descriptor */</span>
     <span class="hljs-keyword">for</span>(control_message = CMSG_FIRSTHDR(&amp;message);
@@ -153,11 +153,11 @@ ga('send', 'pageview');
      <span class="hljs-keyword">if</span>( (control_message-&gt;cmsg_level == SOL_SOCKET) &amp;&amp;
          (control_message-&gt;cmsg_type == SCM_RIGHTS) )
      {
-      <span class="hljs-keyword">return</span> *((<span class="hljs-keyword">int</span> *) CMSG_DATA(control_message));
+      return *((int *) CMSG_DATA(control_message));
      }
     }
 
-    <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
+    return <span class="hljs-number">-1</span>;
    }</code></pre><div id="wallapatta_23" class="section"><h2 class="heading"><span id="wallapatta_24" class="block"><span id="wallapatta_48" class="text">Sending a file descriptor</span></span></h2><div class="content"></div></div><pre id="wallapatta_25" class="codeBlock"><code class="c">   <span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span>
    <span class="hljs-title">send_file_descriptor</span><span class="hljs-params">(
      <span class="hljs-keyword">int</span> socket, <span class="hljs-comment">/* Socket through which the file descriptor is passed */</span>
@@ -166,11 +166,11 @@ ga('send', 'pageview');
     <span class="hljs-keyword">struct</span> msghdr message;
     <span class="hljs-keyword">struct</span> iovec iov[<span class="hljs-number">1</span>];
     <span class="hljs-keyword">struct</span> cmsghdr *control_message = <span class="hljs-literal">NULL</span>;
-    <span class="hljs-keyword">char</span> ctrl_buf[CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>))];
+    <span class="hljs-keyword">char</span> ctrl_buf[CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(int))];
     <span class="hljs-keyword">char</span> data[<span class="hljs-number">1</span>];
 
-    <span class="hljs-built_in">memset</span>(&amp;message, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">struct</span> msghdr));
-    <span class="hljs-built_in">memset</span>(ctrl_buf, <span class="hljs-number">0</span>, CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>)));
+    <span class="hljs-built_in">memset</span>(&amp;message, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(struct msghdr));
+    <span class="hljs-built_in">memset</span>(ctrl_buf, <span class="hljs-number">0</span>, CMSG_SPACE(sizeof(int)));
 
     <span class="hljs-comment">/* We are passing at least one byte of data so that recvmsg() will not return 0 */</span>
     data[<span class="hljs-number">0</span>] = <span class="hljs-string">' '</span>;
@@ -181,17 +181,17 @@ ga('send', 'pageview');
     message.msg_namelen = <span class="hljs-number">0</span>;
     message.msg_iov = iov;
     message.msg_iovlen = <span class="hljs-number">1</span>;
-    message.msg_controllen =  CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
+    message.msg_controllen =  CMSG_SPACE(sizeof(int));
     message.msg_control = ctrl_buf;
 
     control_message = CMSG_FIRSTHDR(&amp;message);
     control_message-&gt;cmsg_level = SOL_SOCKET;
     control_message-&gt;cmsg_type = SCM_RIGHTS;
-    control_message-&gt;cmsg_len = CMSG_LEN(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
+    control_message-&gt;cmsg_len = CMSG_LEN(sizeof(int));
 
-    *((<span class="hljs-keyword">int</span> *) CMSG_DATA(control_message)) = fd_to_send;
+    *((int *) CMSG_DATA(control_message)) = fd_to_send;
 
-    <span class="hljs-keyword">return</span> sendmsg(socket, &amp;message, <span class="hljs-number">0</span>);
+    return sendmsg(socket, &amp;message, <span class="hljs-number">0</span>);
    }</code></pre></div>
      </div>
      <div class="wallapatta-sidebar three columns">

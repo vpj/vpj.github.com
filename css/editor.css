@@ -19,6 +19,21 @@
   font-weight: 600;
   margin-left: 20px;
 }
+.toolbar .pick-media-dialog {
+  font-family: monospace;
+  display: none;
+  height: 200px;
+  width: 400px;
+  overflow: scroll;
+  position: absolute;
+  z-index: 100;
+  background: #eee;
+  padding: 0 0 0 10px;
+  border: 2px solid #666;
+}
+.toolbar .pick-media-dialog div:hover {
+  background: #ddd;
+}
 .toolbar span {
   display: inline-block;
 }
@@ -35,6 +50,42 @@
   background: #f8f8f8;
   margin-bottom: 20px;
   font-size: 0.9em;
+}
+.CodeMirror .cm-invalid_spelling {
+  background: #ff0000;
+}
+.CodeMirror .cm-word_level_0 {
+  background: rgba(255, 127, 0, 0);
+}
+.CodeMirror .cm-word_level_1 {
+  background: rgba(255, 127, 0, 0.05);
+}
+.CodeMirror .cm-word_level_2 {
+  background: rgba(255, 127, 0, 0.1);
+}
+.CodeMirror .cm-word_level_3 {
+  background: rgba(255, 127, 0, 0.15);
+}
+.CodeMirror .cm-word_level_4 {
+  background: rgba(255, 127, 0, 0.2);
+}
+.CodeMirror .cm-word_level_5 {
+  background: rgba(255, 127, 0, 0.25);
+}
+.CodeMirror .cm-word_level_6 {
+  background: rgba(255, 127, 0, 0.3);
+}
+.CodeMirror .cm-word_level_7 {
+  background: rgba(255, 127, 0, 0.35);
+}
+.CodeMirror .cm-word_level_8 {
+  background: rgba(255, 127, 0, 0.4);
+}
+.CodeMirror .cm-word_level_9 {
+  background: rgba(255, 127, 0, 0.45);
+}
+.CodeMirror .cm-word_level_10 {
+  background: rgba(255, 127, 0, 0.5);
 }
 .error {
   font-weight: bold;

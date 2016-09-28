@@ -3,8 +3,9 @@
     hasProp = {}.hasOwnProperty;
 
   Mod.require('Weya.Base', 'Wallapatta.TYPES', function(Base, TYPES) {
-    var BREAK_COST, EMPTY_PAGE_COST, FIRST_CHILD_COST, INF, PAGE_COST, PAGE_MARGIN, PREFIX, Render, START;
+    var BLOCK_LEVEL, BREAK_COST, EMPTY_PAGE_COST, INF, PAGE_COST, PAGE_MARGIN, PARENT_POSITION_COST, PREFIX, Render, SECTION_BREAK_COST, START, obj;
     PREFIX = 'wallapatta_';
+    BLOCK_LEVEL = 10;
     INF = 1e10;
     PAGE_COST = 100;
     BREAK_COST = {
@@ -20,15 +21,22 @@
       article: 0,
       table: 1500
     };
-    FIRST_CHILD_COST = 10000;
+    SECTION_BREAK_COST = (
+      obj = {
+        1: 25,
+        2: 36,
+        3: 52,
+        4: 75,
+        5: 108,
+        6: 155
+      },
+      obj["" + BLOCK_LEVEL] = 1000,
+      obj
+    );
+    PARENT_POSITION_COST = 500;
+    EMPTY_PAGE_COST = 200;
     PAGE_MARGIN = '1000px';
     START = 1;
-    EMPTY_PAGE_COST = function(filled, height) {
-      var p;
-      p = filled / height;
-      p = Math.sqrt(p);
-      return parseInt(1500 / p - 1500);
-    };
     Render = (function(superClass) {
       extend(Render, superClass);
 
@@ -42,53 +50,43 @@
         return this.sidenotes = options.sidenotes;
       });
 
-      Render.prototype._parentPositionCost = function(node) {
-        var cost, p;
-        cost = 0;
-        if (node.parent() != null) {
-          p = node.parent().getChildPosition(node);
-          p = Math.max(p, 0.01);
-          p = Math.sqrt(p);
-          cost += (FIRST_CHILD_COST / p - FIRST_CHILD_COST) / 10;
-        }
-        return cost;
+      Render.prototype._emptyPageCost = function(filled, height) {
+        var p;
+        p = filled / height;
+        p = Math.max(p, 0.01);
+        p = Math.min(1, p);
+        return EMPTY_PAGE_COST * (1 / p - 1);
+      };
+
+      Render.prototype._parentPositionCost = function(pos) {
+        var p;
+        p = pos / this.pageHeight;
+        p = Math.max(p, 0.01);
+        p = Math.min(1, p);
+        return PARENT_POSITION_COST * (1 / p - 1);
       };
 
       Render.prototype.getNodeBreakCost = function(node) {
-        var cost;
-        cost = this._parentPositionCost(node);
         if (BREAK_COST[node.type] != null) {
-          cost += BREAK_COST[node.type];
-        } else if (node.type === 'section') {
-          cost += 25 * Math.pow(1.44, node.level);
+          return BREAK_COST[node.type];
+        } else if (node.type === 'section' && (SECTION_BREAK_COST[node.level] != null)) {
+          return SECTION_BREAK_COST[node.level];
         } else {
-          throw new Error('Unknown type');
+          throw new Error("Unknown type " + node.type + " - " + node.level);
         }
-        return cost;
-      };
-
-      Render.prototype.getBreakTopCost = function(node) {
-        var cost;
-        cost = this._parentPositionCost(node);
-        cost -= this.getNodeBreakCost(node);
-        return cost;
       };
 
       Render.prototype.getBreakCost = function(node) {
-        var cost;
-        if (this.breakCostMap[node.id] != null) {
-          return this.breakCostMap[node.id];
+        var cost, parent, pos;
+        parent = node.parent();
+        cost = 0;
+        while (parent != null) {
+          cost += this.getNodeBreakCost(parent);
+          pos = (this.getOffsetTop(node.elem, this.elems.main)) - (this.getOffsetTop(parent.elem, this.elems.main));
+          cost += this._parentPositionCost(pos);
+          parent = parent.parent();
         }
-        if (node.parent() != null) {
-          cost = this.getBreakCost(node.parent(), true);
-        } else {
-          if (node.type !== 'article') {
-            throw new Error('oops');
-          }
-          cost = 0;
-        }
-        this.breakCostMap[node.id] = cost + this.getNodeBreakCost(node);
-        return this.breakCostMap[node.id];
+        return cost;
       };
 
       Render.prototype.getOffsetTop = function(elem, parent) {
@@ -163,7 +161,7 @@
           if (pos > H) {
             break;
           }
-          c = this.broken[i] + this.breakCost[i] + PAGE_COST + EMPTY_PAGE_COST(pos, H);
+          c = this.broken[i] + this.breakCost[i] + PAGE_COST + this._emptyPageCost(pos, H);
           if (this.broken[n] >= c) {
             this.broken[n] = c;
             this.nextBreak[n] = i;
@@ -198,12 +196,11 @@
           this.broken.push(INF);
           this.nextBreak.push(null);
         }
-        this.breakCostMap = {};
         this.breakCost = [];
         ref1 = this.mainNodes;
         for (l = 0, len1 = ref1.length; l < len1; l++) {
           i = ref1[l];
-          this.breakCost.push((this.getBreakCost(this.map.nodes[i])) + (this.getBreakTopCost(this.map.nodes[i])));
+          this.breakCost.push(this.getBreakCost(this.map.nodes[i]));
         }
         n = this.mainNodes.length - 1;
         results = [];
