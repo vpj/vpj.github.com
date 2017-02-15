@@ -127,7 +127,7 @@ Teachings of visualizations experts such as Edward Tufte, Stephan Few and Naomi 
 
     <span class="hljs-keyword">if</span> ((fd = socket(AF_LOCAL, SOCK_STREAM, <span class="hljs-number">0</span>)) &lt; <span class="hljs-number">0</span>) {
      log_error(<span class="hljs-string">"Failed to create server socket"</span>);
-     return fd;
+     <span class="hljs-keyword">return</span> fd;
     }
 
     <span class="hljs-built_in">memset</span>(&amp;addr, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(addr));
@@ -136,22 +136,22 @@ Teachings of visualizations experts such as Edward Tufte, Stephan Few and Naomi 
     unlink(SOCKET_PATH);
     <span class="hljs-built_in">strcpy</span>(addr.sun_path, SOCKET_PATH);
 
-    <span class="hljs-keyword">if</span> (bind(fd, (struct sockaddr *) &amp;(addr),
-                                 sizeof(addr)) &lt; <span class="hljs-number">0</span>) {
+    <span class="hljs-keyword">if</span> (bind(fd, (<span class="hljs-keyword">struct</span> sockaddr *) &amp;(addr),
+                                 <span class="hljs-keyword">sizeof</span>(addr)) &lt; <span class="hljs-number">0</span>) {
      log_error(<span class="hljs-string">"Failed to bind server socket"</span>);
-     return <span class="hljs-number">-1</span>;
+     <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
     }
 
     <span class="hljs-keyword">if</span> (listen(fd, MAX_PENDING) &lt; <span class="hljs-number">0</span>) {
      log_error(<span class="hljs-string">"Failed to listen on server socket"</span>);
-     return <span class="hljs-number">-1</span>;
+     <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
     }
 
     setnonblocking(fd);
 
     <span class="hljs-comment">/* Add handler to handle events on fd */</span>
 
-    return fd;
+    <span class="hljs-keyword">return</span> fd;
    }</code></pre><div id="wallapatta_10010" class="section"><div class="content"><p id="wallapatta_10011" class="paragraph"><span id="wallapatta_10040" class="text">I used epoll for handling events, so adding a handler was something like this.</span></p></div></div><pre id="wallapatta_10012" class="codeBlock"><code class="c">   hash_set(ioloop-&gt;handlers, fd, handler);
 
    e.data.fd = fd;
@@ -159,14 +159,14 @@ Teachings of visualizations experts such as Edward Tufte, Stephan Few and Naomi 
 
    <span class="hljs-keyword">if</span>(epoll_ctl(ioloop-&gt;epfd, EPOLL_CTL_ADD, fd, &amp;e) &lt; <span class="hljs-number">0</span>) {
     log_error(<span class="hljs-string">"Failed to insert handler to epoll"</span>);
-    return <span class="hljs-number">-1</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
    }</code></pre><div id="wallapatta_10013" class="section"><div class="content"><p id="wallapatta_10014" class="paragraph"><span id="wallapatta_10041" class="text">Connections to the server should be accepted with accept() similar to TCP sockets.</span></p></div></div><div id="wallapatta_10015" class="section"><h2 class="heading"><span id="wallapatta_10016" class="block"><span id="wallapatta_10042" class="text">Connecting to the server</span></span></h2><div class="content"></div></div><pre id="wallapatta_10017" class="codeBlock"><code class="c">   <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">connect_server</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">struct</span> sockaddr_un addr;
     <span class="hljs-keyword">int</span> fd;
 
     <span class="hljs-keyword">if</span> ((fd = socket(AF_LOCAL, SOCK_STREAM, <span class="hljs-number">0</span>)) &lt; <span class="hljs-number">0</span>) {
      log_error(<span class="hljs-string">"Failed to create client socket"</span>);
-     return fd;
+     <span class="hljs-keyword">return</span> fd;
     }
 
     <span class="hljs-built_in">memset</span>(&amp;addr, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(addr));
@@ -175,17 +175,17 @@ Teachings of visualizations experts such as Edward Tufte, Stephan Few and Naomi 
     <span class="hljs-built_in">strcpy</span>(addr.sun_path, SOCKET_PATH);
 
     <span class="hljs-keyword">if</span> (connect(fd,
-                (struct sockaddr *) &amp;(addr),
-                sizeof(addr)) &lt; <span class="hljs-number">0</span>) {
+                (<span class="hljs-keyword">struct</span> sockaddr *) &amp;(addr),
+                <span class="hljs-keyword">sizeof</span>(addr)) &lt; <span class="hljs-number">0</span>) {
      log_error(<span class="hljs-string">"Failed to connect to server"</span>);
-     return <span class="hljs-number">-1</span>;
+     <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
     }
 
     setnonblocking(fd);
 
     <span class="hljs-comment">/* Add handler to handle events */</span>
 
-    return fd;
+    <span class="hljs-keyword">return</span> fd;
    }</code></pre><div id="wallapatta_10018" class="section"><div class="content"><p id="wallapatta_10019" class="paragraph"><span id="wallapatta_10043" class="text">I was adding </span><code id="wallapatta_10044" class="code"><span id="wallapatta_10045" class="text">EPOLLOUT</span></code><span id="wallapatta_10046" class="text"> listener to the socket whenever there were file descriptors to be passed to the other process.</span></p></div></div><div id="wallapatta_10020" class="section"><h2 class="heading"><span id="wallapatta_10021" class="block"><span id="wallapatta_10047" class="text">Receiving a file descriptor</span></span></h2><div class="content"></div></div><pre id="wallapatta_10022" class="codeBlock"><code class="c">   <span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span>
    <span class="hljs-title">recv_file_descriptor</span><span class="hljs-params">(
      <span class="hljs-keyword">int</span> socket)</span> <span class="hljs-comment">/* Socket from which the file descriptor is read */</span>
@@ -194,12 +194,12 @@ Teachings of visualizations experts such as Edward Tufte, Stephan Few and Naomi 
     <span class="hljs-keyword">struct</span> msghdr message;
     <span class="hljs-keyword">struct</span> iovec iov[<span class="hljs-number">1</span>];
     <span class="hljs-keyword">struct</span> cmsghdr *control_message = <span class="hljs-literal">NULL</span>;
-    <span class="hljs-keyword">char</span> ctrl_buf[CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(int))];
+    <span class="hljs-keyword">char</span> ctrl_buf[CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>))];
     <span class="hljs-keyword">char</span> data[<span class="hljs-number">1</span>];
     <span class="hljs-keyword">int</span> res;
 
-    <span class="hljs-built_in">memset</span>(&amp;message, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(struct msghdr));
-    <span class="hljs-built_in">memset</span>(ctrl_buf, <span class="hljs-number">0</span>, CMSG_SPACE(sizeof(int)));
+    <span class="hljs-built_in">memset</span>(&amp;message, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">struct</span> msghdr));
+    <span class="hljs-built_in">memset</span>(ctrl_buf, <span class="hljs-number">0</span>, CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>)));
 
     <span class="hljs-comment">/* For the dummy data */</span>
     iov[<span class="hljs-number">0</span>].iov_base = data;
@@ -208,12 +208,12 @@ Teachings of visualizations experts such as Edward Tufte, Stephan Few and Naomi 
     message.msg_name = <span class="hljs-literal">NULL</span>;
     message.msg_namelen = <span class="hljs-number">0</span>;
     message.msg_control = ctrl_buf;
-    message.msg_controllen = CMSG_SPACE(sizeof(int));
+    message.msg_controllen = CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
     message.msg_iov = iov;
     message.msg_iovlen = <span class="hljs-number">1</span>;
 
     <span class="hljs-keyword">if</span>((res = recvmsg(socket, &amp;message, <span class="hljs-number">0</span>)) &lt;= <span class="hljs-number">0</span>)
-     return res;
+     <span class="hljs-keyword">return</span> res;
 
     <span class="hljs-comment">/* Iterate through header to find if there is a file descriptor */</span>
     <span class="hljs-keyword">for</span>(control_message = CMSG_FIRSTHDR(&amp;message);
@@ -224,11 +224,11 @@ Teachings of visualizations experts such as Edward Tufte, Stephan Few and Naomi 
      <span class="hljs-keyword">if</span>( (control_message-&gt;cmsg_level == SOL_SOCKET) &amp;&amp;
          (control_message-&gt;cmsg_type == SCM_RIGHTS) )
      {
-      return *((int *) CMSG_DATA(control_message));
+      <span class="hljs-keyword">return</span> *((<span class="hljs-keyword">int</span> *) CMSG_DATA(control_message));
      }
     }
 
-    return <span class="hljs-number">-1</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
    }</code></pre><div id="wallapatta_10023" class="section"><h2 class="heading"><span id="wallapatta_10024" class="block"><span id="wallapatta_10048" class="text">Sending a file descriptor</span></span></h2><div class="content"></div></div><pre id="wallapatta_10025" class="codeBlock"><code class="c">   <span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span>
    <span class="hljs-title">send_file_descriptor</span><span class="hljs-params">(
      <span class="hljs-keyword">int</span> socket, <span class="hljs-comment">/* Socket through which the file descriptor is passed */</span>
@@ -237,11 +237,11 @@ Teachings of visualizations experts such as Edward Tufte, Stephan Few and Naomi 
     <span class="hljs-keyword">struct</span> msghdr message;
     <span class="hljs-keyword">struct</span> iovec iov[<span class="hljs-number">1</span>];
     <span class="hljs-keyword">struct</span> cmsghdr *control_message = <span class="hljs-literal">NULL</span>;
-    <span class="hljs-keyword">char</span> ctrl_buf[CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(int))];
+    <span class="hljs-keyword">char</span> ctrl_buf[CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>))];
     <span class="hljs-keyword">char</span> data[<span class="hljs-number">1</span>];
 
-    <span class="hljs-built_in">memset</span>(&amp;message, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(struct msghdr));
-    <span class="hljs-built_in">memset</span>(ctrl_buf, <span class="hljs-number">0</span>, CMSG_SPACE(sizeof(int)));
+    <span class="hljs-built_in">memset</span>(&amp;message, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">struct</span> msghdr));
+    <span class="hljs-built_in">memset</span>(ctrl_buf, <span class="hljs-number">0</span>, CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>)));
 
     <span class="hljs-comment">/* We are passing at least one byte of data so that recvmsg() will not return 0 */</span>
     data[<span class="hljs-number">0</span>] = <span class="hljs-string">' '</span>;
@@ -252,17 +252,17 @@ Teachings of visualizations experts such as Edward Tufte, Stephan Few and Naomi 
     message.msg_namelen = <span class="hljs-number">0</span>;
     message.msg_iov = iov;
     message.msg_iovlen = <span class="hljs-number">1</span>;
-    message.msg_controllen =  CMSG_SPACE(sizeof(int));
+    message.msg_controllen =  CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
     message.msg_control = ctrl_buf;
 
     control_message = CMSG_FIRSTHDR(&amp;message);
     control_message-&gt;cmsg_level = SOL_SOCKET;
     control_message-&gt;cmsg_type = SCM_RIGHTS;
-    control_message-&gt;cmsg_len = CMSG_LEN(sizeof(int));
+    control_message-&gt;cmsg_len = CMSG_LEN(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
 
-    *((int *) CMSG_DATA(control_message)) = fd_to_send;
+    *((<span class="hljs-keyword">int</span> *) CMSG_DATA(control_message)) = fd_to_send;
 
-    return sendmsg(socket, &amp;message, <span class="hljs-number">0</span>);
+    <span class="hljs-keyword">return</span> sendmsg(socket, &amp;message, <span class="hljs-number">0</span>);
    }</code></pre></div>
      </div>
      <div class="wallapatta-sidebar three columns">
@@ -471,7 +471,7 @@ I was adding ``EPOLLOUT`` listener to the socket whenever there were file descri
  <span class="hljs-function"><span class="hljs-keyword">static</span> IOLoop * <span class="hljs-title">getInstance</span><span class="hljs-params">()</span></span>;
 
  IOLoop() {
-  <span class="hljs-keyword">this</span>-&gt;epfd = epoll_create(this-&gt;EPOLL_EVENTS);
+  <span class="hljs-keyword">this</span>-&gt;epfd = epoll_create(<span class="hljs-keyword">this</span>-&gt;EPOLL_EVENTS);
 
   <span class="hljs-keyword">if</span>(<span class="hljs-keyword">this</span>-&gt;epfd &lt; <span class="hljs-number">0</span>) {
    log_error(<span class="hljs-string">"Failed to create epoll"</span>);
@@ -482,7 +482,7 @@ I was adding ``EPOLLOUT`` listener to the socket whenever there were file descri
 
  <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">start</span><span class="hljs-params">()</span> </span>{
   <span class="hljs-keyword">for</span>(;;) {
-   <span class="hljs-keyword">int</span> nfds = epoll_wait(this-&gt;epfd, this-&gt;events, this-&gt;MAX_EVENTS, <span class="hljs-number">-1</span> <span class="hljs-comment">/* Timeout */</span>);
+   <span class="hljs-keyword">int</span> nfds = epoll_wait(<span class="hljs-keyword">this</span>-&gt;epfd, <span class="hljs-keyword">this</span>-&gt;events, <span class="hljs-keyword">this</span>-&gt;MAX_EVENTS, <span class="hljs-number">-1</span> <span class="hljs-comment">/* Timeout */</span>);
 
    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; nfds; ++i) {
     <span class="hljs-keyword">int</span> fd = <span class="hljs-keyword">this</span>-&gt;events[i].data.fd;
@@ -498,7 +498,7 @@ I was adding ``EPOLLOUT`` listener to the socket whenever there were file descri
   e.data.fd = fd;
   e.events = events;
 
-  <span class="hljs-keyword">if</span>(epoll_ctl(this-&gt;epfd, EPOLL_CTL_ADD, fd, &amp;e) &lt; <span class="hljs-number">0</span>) {
+  <span class="hljs-keyword">if</span>(epoll_ctl(<span class="hljs-keyword">this</span>-&gt;epfd, EPOLL_CTL_ADD, fd, &amp;e) &lt; <span class="hljs-number">0</span>) {
    log_error(<span class="hljs-string">"Failed to insert handler to epoll"</span>);
   }
  }
@@ -521,8 +521,8 @@ I was adding ``EPOLLOUT`` listener to the socket whenever there were file descri
   addr.sin_addr.s_addr = htonl(INADDR_ANY);
   addr.sin_port = htons(port);
 
-  <span class="hljs-keyword">if</span> (bind(fd, (struct sockaddr *) &amp;addr,
-                               sizeof(addr)) &lt; <span class="hljs-number">0</span>) {
+  <span class="hljs-keyword">if</span> (bind(fd, (<span class="hljs-keyword">struct</span> sockaddr *) &amp;addr,
+                               <span class="hljs-keyword">sizeof</span>(addr)) &lt; <span class="hljs-number">0</span>) {
    log_error(<span class="hljs-string">"Failed to bind server socket"</span>);
    <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);
   }
@@ -540,27 +540,27 @@ I was adding ``EPOLLOUT`` listener to the socket whenever there were file descri
   sockaddr_in client_addr;
   <span class="hljs-keyword">socklen_t</span> ca_len = <span class="hljs-keyword">sizeof</span>(client_addr);
 
-  <span class="hljs-keyword">int</span> client = accept(fd, (struct sockaddr *) &amp;client_addr,
+  <span class="hljs-keyword">int</span> client = accept(fd, (<span class="hljs-keyword">struct</span> sockaddr *) &amp;client_addr,
                   &amp;ca_len);
 
   <span class="hljs-keyword">if</span>(client &lt; <span class="hljs-number">0</span>) {
    log_error(<span class="hljs-string">"Error accepting connection"</span>);
-   return <span class="hljs-number">-1</span>;
+   <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
   }
 
   <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"Client connected: "</span> &lt;&lt; inet_ntoa(client_addr.sin_addr) &lt;&lt; <span class="hljs-built_in">endl</span>;
-  new EchoHandler(client, client_addr);
-  return <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">new</span> EchoHandler(client, client_addr);
+  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
  }
 };</code></pre></div></div><div id="wallapatta_20015" class="section"><h2 class="heading"><span id="wallapatta_20016" class="block"><span id="wallapatta_20039" class="text">Set Non-blocking</span></span></h2><div class="content"><div id="wallapatta_20017" class="section"><div class="content"><p id="wallapatta_20018" class="paragraph"><span id="wallapatta_20040" class="text">Function setnonblocking sets the file descriptor setting to non-clocking.</span></p></div></div><pre id="wallapatta_20019" class="codeBlock"><code class="c">flags = fcntl(fd, F_GETFL, <span class="hljs-number">0</span>);
 fcntl(fd, F_SETFL, flags | O_NONBLOCK);</code></pre></div></div><div id="wallapatta_20020" class="section"><h2 class="heading"><span id="wallapatta_20021" class="block"><span id="wallapatta_20041" class="text">EchoHandler:handle</span></span></h2><div class="content"><div id="wallapatta_20022" class="section"><div class="content"><p id="wallapatta_20023" class="paragraph"><span id="wallapatta_20042" class="text">EchoHandler will write whatever it reads from the socket</span></p></div></div><pre id="wallapatta_20024" class="codeBlock"><code class="c"><span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-keyword">int</span> <span class="hljs-title">handle</span><span class="hljs-params">(epoll_event e)</span> </span>{
  <span class="hljs-keyword">if</span>(e.events &amp; EPOLLHUP) {
   IOLoop::getInstance()-&gt;removeHandler(fd);
-  return <span class="hljs-number">-1</span>;
+  <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
  }
 
  <span class="hljs-keyword">if</span>(e.events &amp; EPOLLERR) {
-  return <span class="hljs-number">-1</span>;
+  <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
  }
 
  <span class="hljs-keyword">if</span>(e.events &amp; EPOLLOUT) {
@@ -589,7 +589,7 @@ fcntl(fd, F_SETFL, flags | O_NONBLOCK);</code></pre></div></div><div id="wallapa
   }
  }
 
- return <span class="hljs-number">0</span>;
+ <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 }</code></pre></div></div><div id="wallapatta_20025" class="section"><div class="content"><p id="wallapatta_20026" class="paragraph"><span id="wallapatta_20043" class="text">Error checking in this code is minimal so it will probably fail unexpectedly in certain scenarios which I have not come across yet. And please leave a comment if you do find any errors or if there are things that could be improved.</span></p></div></div></div>
      </div>
      <div class="wallapatta-sidebar three columns">

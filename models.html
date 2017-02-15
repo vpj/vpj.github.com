@@ -64,7 +64,7 @@ ga('send', 'pageview');
 
   ...</code></pre><div id="wallapatta_30" class="section"><div class="content"><p id="wallapatta_31" class="paragraph"><span id="wallapatta_81" class="text">These are some private functions of the </span><strong id="wallapatta_82" class="bold"><span id="wallapatta_83" class="text">Resume</span></strong><span id="wallapatta_84" class="text"> model.</span></p></div></div><pre id="wallapatta_32" class="codeBlock"><code class="coffee">  _education: <span class="hljs-function">-&gt;</span>
    res = (e <span class="hljs-keyword">for</span> e <span class="hljs-keyword">in</span> @_values.timeline <span class="hljs-keyword">when</span> e.type <span class="hljs-keyword">is</span> <span class="hljs-string">'Education'</span>)
-   res.sort (x, y) -&gt; y._values.from - x._values.from
+   res.sort (x, y) -&gt; y._values.<span class="hljs-keyword">from</span> - x._values.<span class="hljs-keyword">from</span>
 
   ...</code></pre><div id="wallapatta_33" class="section"><div class="content"><p id="wallapatta_34" class="paragraph"><span id="wallapatta_85" class="text">This is the template to render the output.</span></p></div></div><pre id="wallapatta_35" class="codeBlock"><code class="coffee">  template: <span class="hljs-function"><span class="hljs-params">(self)</span> -&gt;</span>
    values = self._values

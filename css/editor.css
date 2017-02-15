@@ -87,6 +87,32 @@
 .CodeMirror .cm-word_level_10 {
   background: rgba(255, 127, 0, 0.5);
 }
+.CodeMirror .cm-meta {
+  color: #644;
+}
+.CodeMirror .cm-header {
+  color: #000;
+  font-weight: bold;
+}
+.CodeMirror .cm-tag {
+  color: #0a0;
+  font-weight: bold;
+}
+.CodeMirror .cm-link {
+  color: #00c;
+  text-decoration: underline;
+  font-weight: normal;
+}
+.CodeMirror .cm-media {
+  color: #00c;
+  font-weight: normal;
+}
+.CodeMirror .cm-comment {
+  color: #777;
+}
+.CodeMirror .cm-inline-html {
+  color: #c00;
+}
 .error {
   font-weight: bold;
   font-family: monospace;

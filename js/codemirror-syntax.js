@@ -206,10 +206,12 @@
       }
       match = stream.match(/^<-/);
       if (match) {
+        state.inlineHtml = true;
         return OPERATOR_INLINE;
       }
       match = stream.match(/^->/);
       if (match) {
+        state.inlineHtml = false;
         return OPERATOR_INLINE;
       }
       match = stream.match(/^>>/);
@@ -272,6 +274,7 @@
       state.code = false;
       state.link = false;
       state.inlineMedia = false;
+      state.inlineHtml = false;
       return state.comment = false;
     };
 
@@ -304,7 +307,7 @@
       if (state.media) {
         stream.skipToEnd();
         state.media = false;
-        return "link";
+        return "media";
       }
       if (stream.sol()) {
         state.start = true;
@@ -416,7 +419,10 @@
           l += " link";
         }
         if (state.inlineMedia) {
-          l += " link";
+          l += " media";
+        }
+        if (state.inlineHtml) {
+          l += " inline-html";
         }
         if (state.code) {
           l += " meta";

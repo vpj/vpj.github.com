@@ -51,7 +51,8 @@
           this.id = options.id;
         }
         this.start = this.id;
-        return this.N = 0;
+        this.N = 0;
+        return this.lineNumbers = {};
       });
 
       Map.prototype.smallElements = function() {
@@ -62,6 +63,31 @@
         node.id = this.id;
         this.nodes[this.id] = node;
         return this.id++;
+      };
+
+      Map.prototype.mapLineNumbers = function() {
+        var base, id, ln, max, node, ref, results;
+        this.lineNumbers = {};
+        max = 0;
+        ref = this.nodes;
+        for (id in ref) {
+          node = ref[id];
+          ln = node.lineNumber;
+          if (ln == null) {
+            continue;
+          }
+          this.lineNumbers[ln] = id;
+          max = Math.max(max, parseInt(ln));
+        }
+        ln = 1;
+        results = [];
+        while (ln <= max) {
+          if ((base = this.lineNumbers)[ln] == null) {
+            base[ln] = this.lineNumbers[ln - 1];
+          }
+          results.push(++ln);
+        }
+        return results;
       };
 
       return Map;

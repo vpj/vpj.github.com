@@ -3,7 +3,7 @@
     hasProp = {}.hasOwnProperty;
 
   Mod.require('Weya.Base', 'CodeMirror', 'Wallapatta.Parser', 'Wallapatta.Sample', 'HLJS', function(Base, CodeMirror, Parser, Sample, HLJS) {
-    var EDITOR, Editor;
+    var Editor;
     Editor = (function(superClass) {
       extend(Editor, superClass);
 
@@ -116,8 +116,18 @@
             return this.$.elems.preview = this.div(".preview.seven.columns", function() {
               this.$.elems.errors = this.div(".row.error", null);
               return this.div(".row.wallapatta", function() {
-                this.$.elems.previewMain = this.div(".nine.columns", null);
-                return this.$.elems.previewSidebar = this.div(".three.columns", null);
+                this.$.elems.previewMain = this.div(".nine.columns", {
+                  on: {
+                    click: this.$.on.previewClick,
+                    dblclick: this.$.on.previewDbClick
+                  }
+                });
+                return this.$.elems.previewSidebar = this.div(".three.columns", {
+                  on: {
+                    click: this.$.on.previewClick,
+                    dblclick: this.$.on.previewDbClick
+                  }
+                });
               });
             });
           });
@@ -166,14 +176,67 @@
         });
       };
 
-      Editor.initialize(function() {
+      Editor.initialize(function(options) {
+        var ref, ref1;
+        this.openUrl = (ref = options.openUrl) != null ? ref : (function() {});
+        this.onChangeListener = (ref1 = options.onChanged) != null ? ref1 : (function() {});
         this.elems = {};
         return this._isPrint = false;
       });
 
+      Editor.listen('previewClick', function(e) {
+        var n, node, results;
+        if (this.renderer == null) {
+          return;
+        }
+        node = e.target;
+        results = [];
+        while ((node != null) && node !== document.body) {
+          n = this.renderer.getNodeFromElem(node);
+          if ((n != null) && n.lineNumber) {
+            this.editor.setCursor({
+              line: n.lineNumber
+            });
+            break;
+          }
+          results.push(node = node.parentNode);
+        }
+        return results;
+      });
+
+      Editor.listen('previewDbClick', function(e) {
+        var href, node, results;
+        e.preventDefault();
+        node = e.target;
+        results = [];
+        while ((node != null) && node !== document.body) {
+          href = node.getAttribute('href');
+          if (href != null) {
+            this.openUrl(href);
+            break;
+          }
+          results.push(node = node.parentNode);
+        }
+        return results;
+      });
+
+      Editor.listen('gutterClick', function(cm, line, where, e) {
+        var elem, node, top;
+        node = this.renderer.getNodeFromLine(line);
+        if (node == null) {
+          return;
+        }
+        elem = node.elem;
+        if (elem == null) {
+          return;
+        }
+        top = this.renderer.getOffsetTop(elem, this.elems.preview);
+        return this.elems.preview.scrollTop = top;
+      });
+
       Editor.listen('change', function() {
         this.preview();
-        return typeof this.onChangeListener === "function" ? this.onChangeListener() : void 0;
+        return this.onChangeListener();
       });
 
       Editor.listen('parse', function(e) {
@@ -313,7 +376,7 @@
       });
 
       Editor.listen('renderPrint', function(e) {
-        var HEIGHT, WIDTH, error, parser, render, text;
+        var HEIGHT, WIDTH, error, render, text;
         e.preventDefault();
         WIDTH = parseInt(this.elems.widthInput.value);
         if (isNaN(WIDTH)) {
@@ -326,18 +389,18 @@
         text = this.editor.getValue();
         this.elems.printMain.innerHTML = '';
         this.elems.printSidebar.innerHTML = '';
-        parser = new Parser({
+        this.parser = new Parser({
           text: text
         });
         try {
-          parser.parse();
+          this.parser.parse();
         } catch (error) {
           e = error;
           this.elems.errors.textContent = e.message;
           return;
         }
         this.elems.errors.textContent = '';
-        render = parser.getRender();
+        render = this.renderer = this.parser.getRender();
         render.render(this.elems.printMain, this.elems.printSidebar);
         this.elems.printContainer.style.width = WIDTH + "mm";
         return window.requestAnimationFrame((function(_this) {
@@ -373,22 +436,22 @@
       };
 
       Editor.prototype.preview = function() {
-        var e, error, parser, render, text;
+        var e, error, render, text;
         text = this.editor.getValue();
         this.elems.previewMain.innerHTML = '';
         this.elems.previewSidebar.innerHTML = '';
-        parser = new Parser({
+        this.parser = new Parser({
           text: text
         });
         try {
-          parser.parse();
+          this.parser.parse();
         } catch (error) {
           e = error;
           this.elems.errors.textContent = e.message;
           return;
         }
         this.elems.errors.textContent = '';
-        render = parser.getRender();
+        render = this.renderer = this.parser.getRender();
         render.render(this.elems.previewMain, this.elems.previewSidebar);
         return window.requestAnimationFrame(function() {
           return render.mediaLoaded(function() {
@@ -406,6 +469,7 @@
           tabSize: 1,
           indentUnit: 1,
           foldGutter: true,
+          styleActiveLine: true,
           gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
         });
         this.editor.on('change', this.on.change);
@@ -413,6 +477,7 @@
         this.editor.setSize(null, (height - 100) + "px");
         this.elems.preview.style.maxHeight = (height - 50) + "px";
         this.editor.setValue(Sample);
+        this.editor.on('gutterClick', this.on.gutterClick);
         window.addEventListener('resize', this.on.resize);
         return window.requestAnimationFrame(this._onRendered);
       });
@@ -483,10 +548,7 @@
       return Editor;
 
     })(Base);
-    EDITOR = new Editor;
-    return EDITOR.render(function() {
-      return Mod.set('Editor', EDITOR);
-    });
+    return Mod.set('Editor', Editor);
   });
 
 }).call(this);

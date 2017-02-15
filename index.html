@@ -196,7 +196,7 @@ In the &lt;&lt;https://chrome.google.com/webstore/detail/wallapatta/nleponjjojkl
 
   ...</code></pre><div id="wallapatta_20030" class="section"><div class="content"><p id="wallapatta_20031" class="paragraph"><span id="wallapatta_20081" class="text">These are some private functions of the </span><strong id="wallapatta_20082" class="bold"><span id="wallapatta_20083" class="text">Resume</span></strong><span id="wallapatta_20084" class="text"> model.</span></p></div></div><pre id="wallapatta_20032" class="codeBlock"><code class="coffee">  _education: <span class="hljs-function">-&gt;</span>
    res = (e <span class="hljs-keyword">for</span> e <span class="hljs-keyword">in</span> @_values.timeline <span class="hljs-keyword">when</span> e.type <span class="hljs-keyword">is</span> <span class="hljs-string">'Education'</span>)
-   res.sort (x, y) -&gt; y._values.from - x._values.from
+   res.sort (x, y) -&gt; y._values.<span class="hljs-keyword">from</span> - x._values.<span class="hljs-keyword">from</span>
 
   ...</code></pre><div id="wallapatta_20033" class="section"><div class="content"><p id="wallapatta_20034" class="paragraph"><span id="wallapatta_20085" class="text">This is the template to render the output.</span></p></div></div><pre id="wallapatta_20035" class="codeBlock"><code class="coffee">  template: <span class="hljs-function"><span class="hljs-params">(self)</span> -&gt;</span>
    values = self._values
@@ -670,7 +670,7 @@ I will keep updating this with new stuff we come across.
      @rect width: <span class="hljs-number">30.67</span>, height: h,fill: <span class="hljs-string">'#98ff98'</span>
      @rect x: <span class="hljs-number">30.67</span>, width: <span class="hljs-number">15.33</span>, height: h, fill: <span class="hljs-string">'#8bea8b'</span></code></pre><div id="wallapatta_50034" class="html"><svg width="250" height="250">
  <g transform="translate(2, 154)">
-  <g class="bar " transform="translate(0, 0)">
+  <g class="bar" transform="translate(0, 0)">
    <rect y="-55.06541341600001" width="46" height="55.06541341600001" fill="#4a4a4a">
    </rect>
    <rect width="30.67" height="34.03301200000001" fill="#98ff98">
@@ -678,7 +678,7 @@ I will keep updating this with new stuff we come across.
    <rect x="30.67" width="15.33" height="34.03301200000001" fill="#8bea8b">
    </rect>
   </g>
-  <g class="bar " transform="translate(50, 0)">
+  <g class="bar" transform="translate(50, 0)">
    <rect y="-144.15706735166842" width="46" height="144.15706735166842" fill="#4a4a4a">
    </rect>
    <rect width="30.67" height="89.09583890708802" fill="#98ff98">
@@ -686,7 +686,7 @@ I will keep updating this with new stuff we come across.
    <rect x="30.67" width="15.33" height="89.09583890708802" fill="#8bea8b">
    </rect>
   </g>
-  <g class="bar " transform="translate(100, 0)">
+  <g class="bar" transform="translate(100, 0)">
    <rect y="-34.03301200000001" width="46" height="34.03301200000001" fill="#4a4a4a">
    </rect>
    <rect width="30.67" height="21.034000000000002" fill="#98ff98">
@@ -694,7 +694,7 @@ I will keep updating this with new stuff we come across.
    <rect x="30.67" width="15.33" height="21.034000000000002" fill="#8bea8b">
    </rect>
   </g>
-  <g class="bar " transform="translate(150, 0)">
+  <g class="bar" transform="translate(150, 0)">
    <rect y="-21.034000000000002" width="46" height="21.034000000000002" fill="#4a4a4a">
    </rect>
    <rect width="30.67" height="13" fill="#98ff98">
@@ -702,7 +702,7 @@ I will keep updating this with new stuff we come across.
    <rect x="30.67" width="15.33" height="13" fill="#8bea8b">
    </rect>
   </g>
-  <g class="bar " transform="translate(200, 0)">
+  <g class="bar" transform="translate(200, 0)">
    <rect y="-89.09583890708802" width="46" height="89.09583890708802" fill="#4a4a4a">
    </rect>
    <rect width="30.67" height="55.06541341600001" fill="#98ff98">
