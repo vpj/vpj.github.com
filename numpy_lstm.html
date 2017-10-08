@@ -1,0 +1,124 @@
+<!DOCTYPE html><html>
+ <head>
+  <meta charset="utf-8"/>
+  <title>
+   Vanilla LSTM with numpy
+  </title>
+  <meta name="viewport" content="width=550, initial-scale=1.0"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <link href="http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900" rel="stylesheet" type="text/css"/>
+  <link href="lib/skeleton/css/skeleton.css" rel="stylesheet"/>
+  <link href="lib/highlightjs/styles/default.css" rel="stylesheet"/>
+  <link href="css/style.css" rel="stylesheet"/>
+  <link href="blog.css" rel="stylesheet"/>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-44255805-1', 'auto');
+ga('send', 'pageview');
+  </script>
+ </head>
+ <body>
+  <div class="container wallapatta-container">
+   <div class="header">
+    <h1>
+     <a href="index.html">
+      VARUNA JAYASIRI
+     </a>
+    </h1>
+    <a class="button" href="https://www.twitter.com/vpj">
+     @vpj
+    </a>
+   </div>
+   <div class="wallapatta">
+    <h1 class="title">
+     Vanilla LSTM with numpy
+    </h1>
+    <h3 class="date">
+     October 8, 2017
+    </h3>
+    <div style="margin-bottom:30px;">
+     <a class="twitter-share-button" href="https://twitter.com/share" data-via="vpj" data-size="large">
+      Tweet
+     </a>
+     <script>
+      !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+     </script>
+    </div>
+    <div class="row">
+     <div class="wallapatta-main nine columns">
+      <div id="wallapatta_0" class="article"><div id="wallapatta_1" class="section"><div class="content"><p id="wallapatta_2" class="paragraph"><strong id="wallapatta_8" class="bold"><span id="wallapatta_9" class="text">This is inspired from </span><a id="wallapatta_10" class="link" href="https://gist.github.com/karpathy/d4dee566867f8291f086 by [Andrej Karpathy]">https://github.com/karpathy</a><span id="wallapatta_11" class="text"> by </span><a id="wallapatta_12" class="link" href="https://github.com/karpathy">Andrej Karpathy</a><span id="wallapatta_13" class="text">.</span></strong></p></div></div><div id="wallapatta_3" class="section"><div class="content"><p id="wallapatta_4" class="paragraph"><span id="wallapatta_14" class="text">The model usually reaches a error of about 45 after 5000 iterations. However it sometimes get stuck in a local minima. Reinitialize the weights if this happens.</span></p></div></div><div id="wallapatta_5" class="full"><div id="wallapatta_7" class="html"><script type="text/javascript">
+ function iframeLoaded() {
+  var iframe = window.document.getElementById('numpy_lstm_iframe')
+  if(iframe) {
+   iframe.height = ""
+   iframe.height = iframe.contentWindow.document.body.scrollHeight + "px"
+  }
+ }
+</script>
+
+<iframe id="numpy_lstm_iframe" onload="iframeLoaded()" src="numpy_lstm_ipynb.html" style="width: 100%;
+               border: none;
+               outline: none;
+               min-height: 640px;">
+</iframe></div></div></div>
+     </div>
+     <div class="wallapatta-sidebar three columns">
+      <div id="wallapatta_6" class="sidenote"></div>
+     </div>
+     <div style="display:none;">
+      <div class='wallapatta-code'>**This is inspired from
+&lt;&lt;https://gist.github.com/karpathy/d4dee566867f8291f086) by [Andrej Karpathy](https://github.com/karpathy(Minimal character-level language model with a Vanilla Recurrent Neural Network, in Python/numpy)&gt;&gt;
+by
+&lt;&lt;https://github.com/karpathy(Andrej Karpathy)&gt;&gt;.**
+
+The model usually reaches a error of about 45 after 5000 iterations.
+However it sometimes get stuck in a local minima. Reinitialize the weights if this happens.
+
+&lt;!&gt;
+ &lt;&lt;&lt;html
+  &lt;script type="text/javascript"&gt;
+   function iframeLoaded() {
+    var iframe = window.document.getElementById('numpy_lstm_iframe')
+    if(iframe) {
+     iframe.height = ""
+     iframe.height = iframe.contentWindow.document.body.scrollHeight + "px"
+    }
+   }
+  &lt;/script&gt;
+
+  &lt;iframe id="numpy_lstm_iframe"
+          onload="iframeLoaded()"
+          src="numpy_lstm_ipynb.html"
+          style="width: 100%;
+                 border: none;
+                 outline: none;
+                 min-height: 640px;" /&gt;
+</div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script src="lib/highlightjs/highlight.pack.js">
+  </script>
+  <script src="lib/weya/weya.js">
+  </script>
+  <script src="lib/weya/base.js">
+  </script>
+  <script src="lib/mod/mod.js">
+  </script>
+  <script src="js/static.js?v=9">
+  </script>
+  <script src="js/parser.js?v=9">
+  </script>
+  <script src="js/reader.js?v=9">
+  </script>
+  <script src="js/nodes.js?v=9">
+  </script>
+  <script src="js/render.js?v=9">
+  </script>
+ </body>
+</html>
