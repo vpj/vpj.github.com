@@ -49,8 +49,11 @@ ga('send', 'pageview');
  function iframeLoaded() {
   var iframe = window.document.getElementById('numpy_lstm_iframe')
   if(iframe) {
-   iframe.height = ""
-   iframe.height = iframe.contentWindow.document.body.scrollHeight + "px"
+   function setHeight() {
+    iframe.height = iframe.contentWindow.document.body.scrollHeight + "px"
+   }
+   setTimeout(setHeight, 1000)
+   setHeight()
   }
  }
 </script>
@@ -79,8 +82,11 @@ However it sometimes get stuck in a local minima. Reinitialize the weights if th
    function iframeLoaded() {
     var iframe = window.document.getElementById('numpy_lstm_iframe')
     if(iframe) {
-     iframe.height = ""
-     iframe.height = iframe.contentWindow.document.body.scrollHeight + "px"
+     function setHeight() {
+      iframe.height = iframe.contentWindow.document.body.scrollHeight + "px"
+     }
+     setTimeout(setHeight, 1000)
+     setHeight()
     }
    }
   &lt;/script&gt;
