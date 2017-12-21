@@ -3,3 +3,17 @@
  -webkit-box-shadow: none;
  box-shadow: none;
 }
+
+body {
+ padding: 0;
+}
+
+.prompt {
+ min-width: 10ex;
+ padding: 0.4em 0.4em 0.4em 0;
+}
+
+div.cell {
+ padding: 5px 0 5px 0;
+ border: none;
+}
