@@ -9,10 +9,24 @@ body {
     position: fixed;
 }
 
+svg {
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+text.game-over {
+    text-anchor: middle;
+    font-size: 36px;
+    fill: green;
+    font-weight: bold;
+}
+
 div {
     position: fixed;
     top: 0;
     left: 0;
+    z-index: 1000;
 }
 
 rect.touch-overlay {
