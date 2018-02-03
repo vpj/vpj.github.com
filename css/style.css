@@ -1,20 +1,24 @@
-.wallapatta h1 {
-  font-size: 3.5rem;
+.wallapatta {
+  overflow: auto;
 }
-.wallapatta h2 {
-  font-size: 3rem;
+.wallapatta .wallapatta-main {
+  width: 74.0%;
+  float: left;
+  box-sizing: border-box;
 }
-.wallapatta h3 {
-  font-size: 2.5rem;
+.wallapatta .wallapatta-sidebar {
+  width: 22%;
+  margin-left: 4%;
+  float: left;
+  box-sizing: border-box;
 }
-.wallapatta h4 {
-  font-size: 2rem;
-}
-.wallapatta h5 {
-  font-size: 1.5rem;
-}
+.wallapatta h1,
+.wallapatta h2,
+.wallapatta h3,
+.wallapatta h4,
+.wallapatta h5,
 .wallapatta h6 {
-  font-size: 1rem;
+  white-space: initial;
 }
 .wallapatta pre {
   word-wrap: break-word;
@@ -104,15 +108,6 @@
   color: #777;
   word-wrap: break-word;
 }
-h2.heading {
-  margin-top: 40px;
-  margin-right: 0;
-  margin-bottom: 6pxpx;
-  margin-left: 0;
-}
-h1 {
-  margin-bottom: 20px;
-}
 .code {
   color: #219984;
   font-size: 1.1em;
@@ -131,78 +126,14 @@ h1 {
   padding: 12px 20px;
   background-color: #F5F5F5;
 }
-@media print {
-  .columns {
-    margin-left: 4%;
-  }
-  .column:first-child,
-  .columns:first-child {
-    margin-left: 0;
-  }
-  .one.column,
-  .one.columns {
-    width: 4.66666666667%;
-  }
-  .two.columns {
-    width: 13.3333333333%;
-  }
-  .three.columns {
-    width: 22%;
-  }
-  .four.columns {
-    width: 30.6666666667%;
-  }
-  .five.columns {
-    width: 39.3333333333%;
-  }
-  .six.columns {
-    width: 48%;
-  }
-  .seven.columns {
-    width: 56.6666666667%;
-  }
-  .eight.columns {
-    width: 65.3333333333%;
-  }
-  .nine.columns {
-    width: 74.0%;
-  }
-  .ten.columns {
-    width: 82.6666666667%;
-  }
-  .eleven.columns {
-    width: 91.3333333333%;
-  }
-  .twelve.columns {
-    width: 100%;
-    margin-left: 0;
-  }
-  h1 {
-    font-size: 3.5rem;
-  }
-  h2 {
-    font-size: 3rem;
-  }
-  h3 {
-    font-size: 2.5rem;
-  }
-  h4 {
-    font-size: 2rem;
-  }
-  h5 {
-    font-size: 1.5rem;
-  }
-  h6 {
-    font-size: 1rem;
-  }
-}
 .page-backgrounds {
   position: absolute;
   z-index: -1;
   top: 0;
 }
 .page-backgrounds .page-background {
-  border: 8px solid #eee;
+  background: white;
+  box-shadow: 0 0 1cm rgba(0, 0, 0, 0.2);
 }
 @media print {
   .page-backgrounds {

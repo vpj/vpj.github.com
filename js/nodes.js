@@ -667,7 +667,7 @@
       };
 
       Html.prototype.render = function(options) {
-        var c, e, error, error1, error2, f, k, l, len, lines, s, w;
+        var c, e, f, k, l, len, lines, s, w;
         if (this.lang === 'js') {
           try {
             f = new Function("return (" + this.text + ")");
@@ -681,8 +681,8 @@
             c = CoffeeScript.compile("return (" + this.text + ")");
             f = new Function("return " + c);
             s = f();
-          } catch (error1) {
-            e = error1;
+          } catch (error) {
+            e = error;
             s = e.message;
           }
         } else if (this.lang === 'weya') {
@@ -696,8 +696,8 @@
             c = CoffeeScript.compile("return (" + w + ")");
             f = new Function("return " + c);
             s = f();
-          } catch (error2) {
-            e = error2;
+          } catch (error) {
+            e = error;
             s = e.message;
           }
         } else {

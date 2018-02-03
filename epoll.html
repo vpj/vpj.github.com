@@ -50,7 +50,7 @@ ga('send', 'pageview');
     </div>
     <div class="row">
      <div class="wallapatta-main nine columns">
-      <div id="wallapatta_0" class="article"><div id="wallapatta_1" class="section"><div class="content"><p id="wallapatta_2" class="paragraph"><span id="wallapatta_27" class="text">This example is a simple server which accepts connections and echos whatever data sent to the server. This example also demonstrates the use of </span><strong id="wallapatta_28" class="bold"><span id="wallapatta_29" class="text">epoll</span></strong><span id="wallapatta_30" class="text">, which is efficient than </span><strong id="wallapatta_31" class="bold"><span id="wallapatta_32" class="text">poll</span></strong><span id="wallapatta_33" class="text">. In epoll unlike poll all events that need to be monitored are not passed everytime the wait call is made. Epoll uses event registration where events to be watched can be added, modified or removed. This makes it efficient when there are a large number of events to be watched.</span></p></div></div><div id="wallapatta_3" class="section"><h2 class="heading"><span id="wallapatta_4" class="block"><span id="wallapatta_34" class="text">IOLoop</span></span></h2><div class="content"><div id="wallapatta_5" class="section"><div class="content"><p id="wallapatta_6" class="paragraph"><span id="wallapatta_35" class="text">In this example the class IOLoop will deal with epoll interface and it will invoke relevant handlers based on events occurred.</span></p></div></div><pre id="wallapatta_7" class="codeBlock"><code class="c"><span class="hljs-keyword">class</span> IOLoop {
+      <div id="wallapatta_0" class="article"><div id="wallapatta_1" class="section"><div class="content"><p id="wallapatta_2" class="paragraph"><span id="wallapatta_27" class="text">This example is a simple server which accepts connections and echos whatever data sent to the server. This example also demonstrates the use of </span><strong id="wallapatta_28" class="bold"><span id="wallapatta_29" class="text">epoll</span></strong><span id="wallapatta_30" class="text">, which is efficient than </span><strong id="wallapatta_31" class="bold"><span id="wallapatta_32" class="text">poll</span></strong><span id="wallapatta_33" class="text">. In epoll unlike poll all events that need to be monitored are not passed everytime the wait call is made. Epoll uses event registration where events to be watched can be added, modified or removed. This makes it efficient when there are a large number of events to be watched.</span></p></div></div><div id="wallapatta_3" class="section"><h2 class="heading"><span id="wallapatta_4" class="block"><span id="wallapatta_34" class="text">IOLoop</span></span></h2><div class="content"><div id="wallapatta_5" class="section"><div class="content"><p id="wallapatta_6" class="paragraph"><span id="wallapatta_35" class="text">In this example the class IOLoop will deal with epoll interface and it will invoke relevant handlers based on events occurred.</span></p></div></div><pre id="wallapatta_7" class="codeBlock"><code class="c"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">IOLoop</span> {</span>
 ...
  <span class="hljs-function"><span class="hljs-keyword">static</span> IOLoop * <span class="hljs-title">getInstance</span><span class="hljs-params">()</span></span>;
 
@@ -90,7 +90,7 @@ ga('send', 'pageview');
  <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">modifyHandler</span><span class="hljs-params">(<span class="hljs-keyword">int</span> fd, <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> events)</span></span>;
 
  <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">removeHandler</span><span class="hljs-params">(<span class="hljs-keyword">int</span> fd)</span></span>;
-};</code></pre><div id="wallapatta_8" class="section"><div class="content"><p id="wallapatta_9" class="paragraph"><span id="wallapatta_36" class="text">Handlers used in this example are ServerHandler and EchoHandler which derive from class Handler. Handlers have a member function handle which handles the event occurred.</span></p></div></div></div></div><div id="wallapatta_10" class="section"><h2 class="heading"><span id="wallapatta_11" class="block"><span id="wallapatta_37" class="text">ServerHandler</span></span></h2><div class="content"><div id="wallapatta_12" class="section"><div class="content"><p id="wallapatta_13" class="paragraph"><span id="wallapatta_38" class="text">ServerHandler will create a server socket and handle in coming connections</span></p></div></div><pre id="wallapatta_14" class="codeBlock"><code class="c"><span class="hljs-keyword">class</span> ServerHandler : Handler {
+};</code></pre><div id="wallapatta_8" class="section"><div class="content"><p id="wallapatta_9" class="paragraph"><span id="wallapatta_36" class="text">Handlers used in this example are ServerHandler and EchoHandler which derive from class Handler. Handlers have a member function handle which handles the event occurred.</span></p></div></div></div></div><div id="wallapatta_10" class="section"><h2 class="heading"><span id="wallapatta_11" class="block"><span id="wallapatta_37" class="text">ServerHandler</span></span></h2><div class="content"><div id="wallapatta_12" class="section"><div class="content"><p id="wallapatta_13" class="paragraph"><span id="wallapatta_38" class="text">ServerHandler will create a server socket and handle in coming connections</span></p></div></div><pre id="wallapatta_14" class="codeBlock"><code class="c"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ServerHandler</span> :</span> Handler {
 ...
 
  ServerHandler(<span class="hljs-keyword">int</span> port) {
@@ -105,7 +105,7 @@ ga('send', 'pageview');
   addr.sin_addr.s_addr = htonl(INADDR_ANY);
   addr.sin_port = htons(port);
 
-  <span class="hljs-keyword">if</span> (bind(fd, (<span class="hljs-keyword">struct</span> sockaddr *) &amp;addr,
+  <span class="hljs-keyword">if</span> (bind(fd, (struct sockaddr *) &amp;addr,
                                <span class="hljs-keyword">sizeof</span>(addr)) &lt; <span class="hljs-number">0</span>) {
    log_error(<span class="hljs-string">"Failed to bind server socket"</span>);
    <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);
@@ -124,7 +124,7 @@ ga('send', 'pageview');
   sockaddr_in client_addr;
   <span class="hljs-keyword">socklen_t</span> ca_len = <span class="hljs-keyword">sizeof</span>(client_addr);
 
-  <span class="hljs-keyword">int</span> client = accept(fd, (<span class="hljs-keyword">struct</span> sockaddr *) &amp;client_addr,
+  <span class="hljs-keyword">int</span> client = accept(fd, (struct sockaddr *) &amp;client_addr,
                   &amp;ca_len);
 
   <span class="hljs-keyword">if</span>(client &lt; <span class="hljs-number">0</span>) {

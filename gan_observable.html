@@ -1,0 +1,132 @@
+<!DOCTYPE html><html>
+ <head>
+  <meta charset="utf-8"/>
+  <title>
+   Generative Adversarial Networks (Gaussian Distribution)
+  </title>
+  <meta name="viewport" content="width=550, initial-scale=1.0"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <link href="http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900" rel="stylesheet" type="text/css"/>
+  <link href="lib/skeleton/css/skeleton.css" rel="stylesheet"/>
+  <link href="lib/highlightjs/styles/default.css" rel="stylesheet"/>
+  <link href="css/style.css" rel="stylesheet"/>
+  <link href="blog.css" rel="stylesheet"/>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-44255805-1', 'auto');
+ga('send', 'pageview');
+  </script>
+ </head>
+ <body>
+  <div class="container wallapatta-container">
+   <div class="header">
+    <h1>
+     <a href="index.html">
+      VARUNA JAYASIRI
+     </a>
+    </h1>
+    <a class="button" href="https://www.twitter.com/vpj">
+     @vpj
+    </a>
+   </div>
+   <div class="wallapatta">
+    <h1 class="title">
+     Generative Adversarial Networks (Gaussian Distribution)
+    </h1>
+    <h3 class="date">
+     February 3, 2018
+    </h3>
+    <div style="margin-bottom:30px;">
+     <a class="twitter-share-button" href="https://twitter.com/share" data-via="vpj" data-size="large">
+      Tweet
+     </a>
+     <script>
+      !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+     </script>
+    </div>
+    <div class="row">
+     <div class="wallapatta-main nine columns">
+      <div id="wallapatta_0" class="article"><div id="wallapatta_1" class="section"><div class="content"><p id="wallapatta_2" class="paragraph"><span id="wallapatta_14" class="text">I tried implementing a simple 1 dimensional Generative Adversarial Network (to fit a Gaussian distribution) on ObservableHQ.</span></p></div></div><div id="wallapatta_3" class="section"><div class="content"><p id="wallapatta_4" class="paragraph"><span id="wallapatta_15" class="text">I loved the observable HQ experience; deeplearn.js not so much.</span></p></div></div><div id="wallapatta_5" class="section"><div class="content"><p id="wallapatta_6" class="paragraph"><span id="wallapatta_16" class="text">The only annoying thing I came across with observable is that it started running all the cells at the startup. It sometimes causes the browser to stall when you load a notebook with heavy computation (may be observable is not meant for anything with heavy computation). The other problem with it was that if you have some animation running below the screen height, you will miss whatever happened before you scrolled down. May be they should let the user select which cells to run automatically, and only run those and their dependencies at startup.</span></p></div></div><div id="wallapatta_7" class="section"><div class="content"><p id="wallapatta_8" class="paragraph"><span id="wallapatta_17" class="text">I'm looking forward to using observable notebooks more.</span></p></div></div><div id="wallapatta_9" class="section"><div class="content"><p id="wallapatta_10" class="paragraph"><a id="wallapatta_18" class="link" href="https://beta.observablehq.com/@vpj/gan">Here's the notebook</a><span id="wallapatta_19" class="text">. Or on the iframe below.</span></p></div></div><div id="wallapatta_11" class="full"><div id="wallapatta_13" class="html"><script type="text/javascript">
+ function iframeLoaded() {
+  var iframe = window.document.getElementById('numpy_lstm_iframe')
+  if(iframe) {
+   function setHeight() {
+    iframe.height = iframe.contentWindow.document.body.scrollHeight + "px"
+   }
+   setTimeout(setHeight, 1000)
+   setHeight()
+  }
+ }
+</script>
+
+<iframe id="numpy_lstm_iframe" onload="iframeLoaded()" src="https://beta.observablehq.com/@vpj/gan" style="width: 100%;
+               border: none;
+               outline: none;
+               min-height: 640px;">
+</iframe></div></div></div>
+     </div>
+     <div class="wallapatta-sidebar three columns">
+      <div id="wallapatta_12" class="sidenote"></div>
+     </div>
+     <div style="display:none;">
+      <div class='wallapatta-code'>I tried implementing a simple 1 dimensional Generative Adversarial Network (to fit a Gaussian distribution) on ObservableHQ.
+
+I loved the observable HQ experience; deeplearn.js not so much.
+
+The only annoying thing I came across with observable is that it started running all the cells at the startup. It sometimes causes the browser to stall when you load a notebook with heavy computation (may be observable is not meant for anything with heavy computation). The other problem with it was that if you have some animation running below the screen height, you will miss whatever happened before you scrolled down. May be they should let the user select which cells to run automatically, and only run those and their dependencies at startup.
+
+I'm looking forward to using observable notebooks more.
+
+&lt;&lt;https://beta.observablehq.com/@vpj/gan(Here's the notebook)&gt;&gt;. Or on the iframe below.
+
+&lt;!&gt;
+ &lt;&lt;&lt;html
+  &lt;script type="text/javascript"&gt;
+   function iframeLoaded() {
+    var iframe = window.document.getElementById('numpy_lstm_iframe')
+    if(iframe) {
+     function setHeight() {
+      iframe.height = iframe.contentWindow.document.body.scrollHeight + "px"
+     }
+     setTimeout(setHeight, 1000)
+     setHeight()
+    }
+   }
+  &lt;/script&gt;
+
+  &lt;iframe id="numpy_lstm_iframe"
+          onload="iframeLoaded()"
+          src="https://beta.observablehq.com/@vpj/gan"
+          style="width: 100%;
+                 border: none;
+                 outline: none;
+                 min-height: 640px;" /&gt;
+</div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script src="lib/highlightjs/highlight.pack.js">
+  </script>
+  <script src="lib/weya/weya.js">
+  </script>
+  <script src="lib/weya/base.js">
+  </script>
+  <script src="lib/mod/mod.js">
+  </script>
+  <script src="js/static.js?v=9">
+  </script>
+  <script src="js/parser.js?v=9">
+  </script>
+  <script src="js/reader.js?v=9">
+  </script>
+  <script src="js/nodes.js?v=9">
+  </script>
+  <script src="js/render.js?v=9">
+  </script>
+ </body>
+</html>

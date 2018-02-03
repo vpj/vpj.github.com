@@ -58,7 +58,7 @@
       };
 
       Parser.prototype.parse = function() {
-        var block, e, error, error1, j, len, ref;
+        var block, e, j, len, ref;
         this._lineNumber = null;
         while (this.reader.has()) {
           try {
@@ -76,8 +76,8 @@
           block = ref[j];
           try {
             this.parseText(block.text, block);
-          } catch (error1) {
-            e = error1;
+          } catch (error) {
+            e = error;
             throw new Error(e.message + ": \"" + block.text + "\"");
           }
         }
@@ -317,6 +317,10 @@
             }));
           case TYPES.list:
             if (this.node.type !== TYPES.list) {
+              if (this.node.type === TYPES.block && this.node.paragraph === false && this.node.parent().type === TYPES.listItem) {
+                this.prevNode = this.node;
+                this.node = this.node.parent();
+              }
               this.addNode(new List({
                 map: this.map,
                 ordered: line.ordered,

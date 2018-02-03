@@ -51,7 +51,7 @@ ga('send', 'pageview');
     <div class="row">
      <div class="wallapatta-main nine columns">
       <div id="wallapatta_0" class="article"><div id="wallapatta_1" class="section"><div class="content"><p id="wallapatta_2" class="paragraph"><span id="wallapatta_26" class="text">Using this technique you can pass file descriptors between processes using </span><code id="wallapatta_27" class="code"><span id="wallapatta_28" class="text">sendmsg()</span></code><span id="wallapatta_29" class="text"> and </span><code id="wallapatta_30" class="code"><span id="wallapatta_31" class="text">recvmsg()</span></code><span id="wallapatta_32" class="text"> functions using UNIX Domain Protocol. Any descriptor can be passed using this method not just a file descriptor.</span></p></div></div><div id="wallapatta_3" class="section"><div class="content"><p id="wallapatta_4" class="paragraph"><span id="wallapatta_33" class="text">This is quite useful when you want to balance load in a multi-core system. Other way of passing file descriptors is by forking the process, but in this case you can pass file descriptors between different processes at anytime.</span></p></div></div><div id="wallapatta_5" class="section"><h2 class="heading"><span id="wallapatta_6" class="block"><span id="wallapatta_34" class="text">Creating the UNIX Domain Protocol server</span></span></h2><div class="content"></div></div><div id="wallapatta_7" class="section"><div class="content"><p id="wallapatta_8" class="paragraph"><code id="wallapatta_35" class="code"><span id="wallapatta_36" class="text">SOCKET_PATH</span></code><span id="wallapatta_37" class="text"> was set to </span><code id="wallapatta_38" class="code"><span id="wallapatta_39" class="text">/tmp/unix_socket</span></code></p></div></div><pre id="wallapatta_9" class="codeBlock"><code class="c">   <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">create_server</span><span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">struct</span> sockaddr_un addr;
+    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">sockaddr_un</span> <span class="hljs-title">addr</span>;</span>
     <span class="hljs-keyword">int</span> fd;
 
     <span class="hljs-keyword">if</span> ((fd = socket(AF_LOCAL, SOCK_STREAM, <span class="hljs-number">0</span>)) &lt; <span class="hljs-number">0</span>) {
@@ -65,7 +65,7 @@ ga('send', 'pageview');
     unlink(SOCKET_PATH);
     <span class="hljs-built_in">strcpy</span>(addr.sun_path, SOCKET_PATH);
 
-    <span class="hljs-keyword">if</span> (bind(fd, (<span class="hljs-keyword">struct</span> sockaddr *) &amp;(addr),
+    <span class="hljs-keyword">if</span> (bind(fd, (struct sockaddr *) &amp;(addr),
                                  <span class="hljs-keyword">sizeof</span>(addr)) &lt; <span class="hljs-number">0</span>) {
      log_error(<span class="hljs-string">"Failed to bind server socket"</span>);
      <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
@@ -90,7 +90,7 @@ ga('send', 'pageview');
     log_error(<span class="hljs-string">"Failed to insert handler to epoll"</span>);
     <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
    }</code></pre><div id="wallapatta_13" class="section"><div class="content"><p id="wallapatta_14" class="paragraph"><span id="wallapatta_41" class="text">Connections to the server should be accepted with accept() similar to TCP sockets.</span></p></div></div><div id="wallapatta_15" class="section"><h2 class="heading"><span id="wallapatta_16" class="block"><span id="wallapatta_42" class="text">Connecting to the server</span></span></h2><div class="content"></div></div><pre id="wallapatta_17" class="codeBlock"><code class="c">   <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">connect_server</span><span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">struct</span> sockaddr_un addr;
+    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">sockaddr_un</span> <span class="hljs-title">addr</span>;</span>
     <span class="hljs-keyword">int</span> fd;
 
     <span class="hljs-keyword">if</span> ((fd = socket(AF_LOCAL, SOCK_STREAM, <span class="hljs-number">0</span>)) &lt; <span class="hljs-number">0</span>) {
@@ -104,7 +104,7 @@ ga('send', 'pageview');
     <span class="hljs-built_in">strcpy</span>(addr.sun_path, SOCKET_PATH);
 
     <span class="hljs-keyword">if</span> (connect(fd,
-                (<span class="hljs-keyword">struct</span> sockaddr *) &amp;(addr),
+                (struct sockaddr *) &amp;(addr),
                 <span class="hljs-keyword">sizeof</span>(addr)) &lt; <span class="hljs-number">0</span>) {
      log_error(<span class="hljs-string">"Failed to connect to server"</span>);
      <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
@@ -120,14 +120,14 @@ ga('send', 'pageview');
      <span class="hljs-keyword">int</span> socket)</span> <span class="hljs-comment">/* Socket from which the file descriptor is read */</span>
    </span>{
     <span class="hljs-keyword">int</span> sent_fd;
-    <span class="hljs-keyword">struct</span> msghdr message;
-    <span class="hljs-keyword">struct</span> iovec iov[<span class="hljs-number">1</span>];
-    <span class="hljs-keyword">struct</span> cmsghdr *control_message = <span class="hljs-literal">NULL</span>;
+    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">msghdr</span> <span class="hljs-title">message</span>;</span>
+    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">iovec</span> <span class="hljs-title">iov</span>[1];</span>
+    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">cmsghdr</span> *<span class="hljs-title">control_message</span> = <span class="hljs-title">NULL</span>;</span>
     <span class="hljs-keyword">char</span> ctrl_buf[CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>))];
     <span class="hljs-keyword">char</span> data[<span class="hljs-number">1</span>];
     <span class="hljs-keyword">int</span> res;
 
-    <span class="hljs-built_in">memset</span>(&amp;message, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">struct</span> msghdr));
+    <span class="hljs-built_in">memset</span>(&amp;message, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(struct msghdr));
     <span class="hljs-built_in">memset</span>(ctrl_buf, <span class="hljs-number">0</span>, CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>)));
 
     <span class="hljs-comment">/* For the dummy data */</span>
@@ -163,13 +163,13 @@ ga('send', 'pageview');
      <span class="hljs-keyword">int</span> socket, <span class="hljs-comment">/* Socket through which the file descriptor is passed */</span>
      <span class="hljs-keyword">int</span> fd_to_send)</span> <span class="hljs-comment">/* File descriptor to be passed, could be another socket */</span>
    </span>{
-    <span class="hljs-keyword">struct</span> msghdr message;
-    <span class="hljs-keyword">struct</span> iovec iov[<span class="hljs-number">1</span>];
-    <span class="hljs-keyword">struct</span> cmsghdr *control_message = <span class="hljs-literal">NULL</span>;
+    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">msghdr</span> <span class="hljs-title">message</span>;</span>
+    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">iovec</span> <span class="hljs-title">iov</span>[1];</span>
+    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">cmsghdr</span> *<span class="hljs-title">control_message</span> = <span class="hljs-title">NULL</span>;</span>
     <span class="hljs-keyword">char</span> ctrl_buf[CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>))];
     <span class="hljs-keyword">char</span> data[<span class="hljs-number">1</span>];
 
-    <span class="hljs-built_in">memset</span>(&amp;message, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">struct</span> msghdr));
+    <span class="hljs-built_in">memset</span>(&amp;message, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(struct msghdr));
     <span class="hljs-built_in">memset</span>(ctrl_buf, <span class="hljs-number">0</span>, CMSG_SPACE(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>)));
 
     <span class="hljs-comment">/* We are passing at least one byte of data so that recvmsg() will not return 0 */</span>
