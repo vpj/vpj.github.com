@@ -11939,6 +11939,63 @@ div#notebook {
   <div tabindex="-1" id="notebook" class="border-box-sizing">
     <div class="container" id="notebook-container">
 
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Turn-TensorFlow-functions-into-mathematical-notations-and-diagrams">Turn TensorFlow functions into mathematical notations and diagrams<a class="anchor-link" href="#Turn-TensorFlow-functions-into-mathematical-notations-and-diagrams">&#182;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This is based on some helper classes I started writing,
+to help my self make less mistakes and understand the code better.
+It is still work in progress.
+I want to share the idea to see if it interests others.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>TLDR</strong>: it is a bunch of helper functions that can act
+as a direct replacement of tensorflow. It renders mathematical formulas
+and output tensor dimensions. I'm looking for feedback.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Example">Example<a class="anchor-link" href="#Example">&#182;</a></h2><p>There's a bunch of things I've been working on.
+In order to show them I've used the initial model creation code of
+<a href="https://github.com/ageron/handson-ml/blob/master/extra_capsnets.ipynb">this tensorflow implementation of capsule nets</a>.
+<em>Starting from <strong>Input Images</strong> upto <strong>Digit Capsules</strong>.</em></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Import the library. I'm trying to make it work as a direct replacement.</p>
+
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[1]:</div>
@@ -12432,43 +12489,9 @@ window.renderMatrix("cube-div", 28, 28);
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Turn-tensorflow-functions-into-mathematical-notations-and-diagrams">Turn tensorflow functions into mathematical notations and diagrams<a class="anchor-link" href="#Turn-tensorflow-functions-into-mathematical-notations-and-diagrams">&#182;</a></h1>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>This is based on some helper classes I started writing,
-to help my self make less mistakes and understand the code better.
-I have not written anything complete yet.
-I want to share the idea to see if it interests others.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>TLDR</strong> it is a bunch of helper functions that render formulas
-and render output tensor dimensions. I'm looking for feedback.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Example">Example<a class="anchor-link" href="#Example">&#182;</a></h2><p>There's a bunch of things I've been working on.
-In order to show them I've used the initial model creation code of
-<a href="https://github.com/ageron/handson-ml/blob/master/extra_capsnets.ipynb">this tensorflow implementation of capsule nets</a>.
-<em>Starting from <strong>Input Images</strong> upto <strong>Digit Capsules</strong>.</em></p>
+<p>All the operations and variables are assigned to a model.
+This takes care of variable names, so that you don't have 
+to explicitly specify <code>name=</code>.</p>
 
 </div>
 </div>
@@ -12485,6 +12508,18 @@ In order to show them I've used the initial model creation code of
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Create a place holder just like you do with <a href="https://www.tensorflow.org">TensorFlow</a>,
+and assign it to <code>model</code>. The library will set the tensorflow name, and output a nice
+3D diagram showing the dimensions of the placeholder.</p>
+
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -12533,7 +12568,6 @@ X
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The above diagram is generated by the call to <code>tf.placeholder</code>.</p>
 <p>The dimensions of the tensor is visualized in 3D.
 This is more convinient than having to write an extra line
 to output the shape of $X$.
@@ -12588,6 +12622,16 @@ variables and operations.</p>
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>You can add <code>conv2d</code> layers similarly.</p>
+
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -12659,10 +12703,8 @@ conv2
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Here we see that there are 6x6 feature maps of 256 channels after the second convolution.
-I'm planning to indicate the strides, kernel size and padding type on a 2-D diagram.
-So if you are writing a notebook as a tutorial you don't have to explicitly explain.
-We can make the level of details they want to see visualized, be configurable.</p>
+<p>Above diagram shows that there are <code>6x6</code> feature maps of <code>256</code> channels after the second convolution.
+I'm planning to indicate the <em>strides</em>, <em>kernel size</em> and <em>padding</em> on the 2-D diagram.</p>
 
 </div>
 </div>
@@ -12709,6 +12751,18 @@ caps1Raw
 </div>
 
 </div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Here's a function definition.
+You can add a naming scope,
+so that it will not render internal operations.</p>
+
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[8]:</div>
@@ -12735,6 +12789,16 @@ caps1Raw
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Call to the function will render the full formula and output tensor dimensions.</p>
+
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -12795,13 +12859,11 @@ caps1Output = {\frac{\sum_{i=0}^{7} {caps1Raw^2_{:,:,i}}}{1.0 + \sum_{i=0}^{7} {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The above formula is generated from the code.</p>
-<p>This helps you verify the formulas when coding,
-and help readers quickly understand whats going on.
-It also tries to convert the variable names into mathematical symbols;
-ror example, <code>epsilon</code> -&gt; $\epsilon$</p>
-<p>You can change the output detail level,
-if you want to see the formulas within the function (within the added name scope).</p>
+<p>This helps you verify the formulas when coding.
+It help readers quickly understand whats going on,
+without having to look back at the function definition.</p>
+<p>Notice that, tries to convert the variable names into mathematical symbols;
+e.g. <code>epsilon</code> -&gt; $\epsilon$</p>
 
 </div>
 </div>
@@ -12811,18 +12873,15 @@ if you want to see the formulas within the function (within the added name scope
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Why?">Why?<a class="anchor-link" href="#Why?">&#182;</a></h2><p>This was developed to help understand tensorflow code better.
+<h2 id="Why?">Why?<a class="anchor-link" href="#Why?">&#182;</a></h2><p>This was developed to make machine learning code easier to understand,
+at the time of writing as well as for readers.
 I have only tried this on small networks (mostly based on tutorials).
-So far I've found it helpful. When coding notebooks,
-I have to visit documentations less often.
-Also, it helps a lot when reading a notebook later.
-I can understand/recall what it does in a quick skim through the notebook.</p>
+So far I've found it helpful.</p>
 <p>I feel it's helpful for beginners than for experts,
-who can get confused on how exactly each of the functions
-work and what the arguments are.
-This is espcially true for me because I do not work on tensorflow
-regulary.</p>
-<p>It is also useful for those who write tutorials.</p>
+who get confused on the detailed workings of the functions.
+This is espcially true for me because I only work on tensorflow
+on and off, and I forget all the details.</p>
+<p>It is also useful when writing notebooks intended for others to read (like tutorials).</p>
 
 </div>
 </div>
@@ -12835,21 +12894,26 @@ regulary.</p>
 <h2 id="What's-next?">What's next?<a class="anchor-link" href="#What's-next?">&#182;</a></h2><p>The above example shows most of the things I've implemented so far.
 It's just a couple of hunderd lines of python and javascript I've written on free time.
 I am planning to cleanup the code and host it on github.
-(Right now the code is messy, and needs to be fixed almost everytime I use it).</p>
-<h3 id="Cover-all-tensorflow-operations">Cover all tensorflow operations<a class="anchor-link" href="#Cover-all-tensorflow-operations">&#182;</a></h3><p>Current implementaion is only for a few common tensorflow functions.</p>
-<h3 id="Diagrams-to-how-operations-work">Diagrams to how operations work<a class="anchor-link" href="#Diagrams-to-how-operations-work">&#182;</a></h3><p>I need to include more details in diagrams to explain complex operation;
-for instance, for convolution, indicate padding, strides and kernal size
-in the diagram, and similarly for tensor transformations.</p>
-<h3 id="Improve-current-diagrams">Improve current diagrams<a class="anchor-link" href="#Improve-current-diagrams">&#182;</a></h3><p>The current 2-D and 3-D tensor diagrams might not be the best in all situations.
-It sometimes makes more sense not to show individual cells, but
-to show the sizes of the dimensions.</p>
+Right now the code is messy, and needs to be fixed almost everytime I use it.</p>
+<h3 id="Cover-more-tensorflow-operations">Cover more tensorflow operations<a class="anchor-link" href="#Cover-more-tensorflow-operations">&#182;</a></h3><p>Current implementaion is only for a few common tensorflow functions.</p>
+<p>Also, the library doesn't do operator overloading which is really important.
+That is, we should be able to write <code>X / Y</code>
+instead of <code>tf.divide(X, Y)</code></p>
+<h3 id="Diagrams-to-how-operations-work">Diagrams to how operations work<a class="anchor-link" href="#Diagrams-to-how-operations-work">&#182;</a></h3><p>We need to include more details in diagrams to explain complex operation.
+For instance, we can <em>indicate padding, strides and kernal size
+in the diagram for convolution operation</em>.
+We can do similar diagrams for tensor transformations.</p>
+<p>Also, the current 2-D and 3-D tensor diagrams might 
+not be the best in all situations.
+It sometimes makes more sense not to show individual cells,
+butto show the sizes of the dimensions.</p>
 <p>Why I decided to show individual cells is with the intention of
 adding details like highlighted cells, kernels, etc on the same diagram.</p>
 <p><img src="http://blog.varunajayasiri.com/ml/tf_for_beginners/matrix.png" alt="matrix"></p>
-<p>It's sometimes be important to show higher dimensianality,
+<p>It's sometimes important to show higher dimensianality,
 especially for operations like reshaping and tiling.</p>
 <p><img src="http://blog.varunajayasiri.com/ml/tf_for_beginners/tile.png" alt="tiling"></p>
-<p>Or, on some occasions,
+<p>And, on some occasions,
 it may be just enough to show the shape of the tensor in text;
 e.g. <code>([?, 10, 50, 20, 10])</code>.</p>
 <h3 id="Please-give-your-feedback.-Find-me-on-twitter-@vpj.">Please give your feedback. Find me on twitter <a href="https://twitter.com/vpj">@vpj</a>.<a class="anchor-link" href="#Please-give-your-feedback.-Find-me-on-twitter-@vpj.">&#182;</a></h3>
