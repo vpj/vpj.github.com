@@ -1,697 +1,134 @@
-<!DOCTYPE html><html>
- <head>
-  <meta charset="utf-8"/>
-  <title>
-   Varuna Jayasiri
-  </title>
-  <meta name="viewport" content="width=550, initial-scale=1.0"/>
-  <meta name="apple-mobile-web-app-capable" content="yes"/>
-  <link href="http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900" rel="stylesheet" type="text/css"/>
-  <link href="lib/skeleton/css/skeleton.css" rel="stylesheet"/>
-  <link href="lib/highlightjs/styles/default.css" rel="stylesheet"/>
-  <link href="css/style.css" rel="stylesheet"/>
-  <link href="css/paginate.css" rel="stylesheet"/>
-  <link href="blog.css" rel="stylesheet"/>
-  <script>
-   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <title>Varuna Jayasiri</title>
+    <link href="http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900"
+          rel="stylesheet"
+          type="text/css"/>
+    <link rel="stylesheet" href="lib/skeleton/css/skeleton.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/paginate.css">
+    <link rel="stylesheet" href="blog.css">
+</head>
 
-ga('create', 'UA-44255805-1', 'auto');
-ga('send', 'pageview');
-  </script>
- </head>
- <body>
-  <div class="container wallapatta-container">
-   <div class="header">
-    <h1>
-     <a href="index.html">
-      VARUNA JAYASIRI
-     </a>
-    </h1>
-    <a class="button" href="https://www.twitter.com/vpj">
-     @vpj
-    </a>
-   </div>
-   <div class="wallapatta">
-    <h1 class="title">
-     <a href="gan_observable.html">
-      Generative Adversarial Networks (Gaussian Distribution)
-     </a>
-    </h1>
-    <h3 class="date">
-     February 3, 2018
-    </h3>
-    <div class="post-paginated">
-     <div class="wallapatta-main nine columns">
-      <div id="wallapatta_0" class="article"><div id="wallapatta_1" class="section"><div class="content"><p id="wallapatta_2" class="paragraph"><span id="wallapatta_14" class="text">I tried implementing a simple 1 dimensional Generative Adversarial Network (to fit a Gaussian distribution) on ObservableHQ.</span></p></div></div><div id="wallapatta_3" class="section"><div class="content"><p id="wallapatta_4" class="paragraph"><span id="wallapatta_15" class="text">I loved the observable HQ experience; deeplearn.js not so much.</span></p></div></div><div id="wallapatta_5" class="section"><div class="content"><p id="wallapatta_6" class="paragraph"><span id="wallapatta_16" class="text">The only annoying thing I came across with observable is that it started running all the cells at the startup. It sometimes causes the browser to stall when you load a notebook with heavy computation (may be observable is not meant for anything with heavy computation). The other problem with it was that if you have some animation running below the screen height, you will miss whatever happened before you scrolled down. May be they should let the user select which cells to run automatically, and only run those and their dependencies at startup.</span></p></div></div><div id="wallapatta_7" class="section"><div class="content"><p id="wallapatta_8" class="paragraph"><span id="wallapatta_17" class="text">I'm looking forward to using observable notebooks more.</span></p></div></div><div id="wallapatta_9" class="section"><div class="content"><p id="wallapatta_10" class="paragraph"><a id="wallapatta_18" class="link" href="https://beta.observablehq.com/@vpj/gan">Here's the notebook</a><span id="wallapatta_19" class="text">. Or on the iframe below.</span></p></div></div><div id="wallapatta_11" class="full"><div id="wallapatta_13" class="html"><script type="text/javascript">
- function iframeLoaded() {
-  var iframe = window.document.getElementById('numpy_lstm_iframe')
-  if(iframe) {
-   function setHeight() {
-    iframe.height = iframe.contentWindow.document.body.scrollHeight + "px"
-   }
-   setTimeout(setHeight, 1000)
-   setHeight()
-  }
- }
-</script>
+<body>
+<div class='container'>
+    <div class="header">
+        <h1><a href="index.html">VARUNA JAYASIRI</a></h1>
+        <a class="button" href="https://www.twitter.com/vpj">@vpj</a>
+    </div>
 
-<iframe id="numpy_lstm_iframe" onload="iframeLoaded()" src="https://beta.observablehq.com/@vpj/gan" style="width: 100%;
-               border: none;
-               outline: none;
-               min-height: 640px;">
-</iframe></div></div></div>
-     </div>
-     <div class="wallapatta-sidebar three columns">
-      <div id="wallapatta_12" class="sidenote"></div>
-     </div>
-     <div style="display:none;">
-      <div class='wallapatta-code'>I tried implementing a simple 1 dimensional Generative Adversarial Network (to fit a Gaussian distribution) on ObservableHQ.
+    <div class="wallapatta">
+        <h1 class="title"><a href="ml/dqn.html">Deeq Q Learning in Tensorflow</a></h1>
+        <h3 class="date">June 16, 2018</h3>
 
-I loved the observable HQ experience; deeplearn.js not so much.
+        <div class="description">
+                <p>I coded a DQN agent to play Atari. It is a stand alone implementation. I went through the Open AI DQN so it&#x27;s very similar to it. I coded this also in a literate fashion similar to my previous PPO implementation.</p>
+        </div>
 
-The only annoying thing I came across with observable is that it started running all the cells at the startup. It sometimes causes the browser to stall when you load a notebook with heavy computation (may be observable is not meant for anything with heavy computation). The other problem with it was that if you have some animation running below the screen height, you will miss whatever happened before you scrolled down. May be they should let the user select which cells to run automatically, and only run those and their dependencies at startup.
+        <div><a href="ml/dqn.html">More...</a></div>
+    </div>
+    <div class="wallapatta">
+        <h1 class="title"><a href="ml/ppo.html">Proximal Policy Optimization (PPO) in Tensorflow</a></h1>
+        <h3 class="date">June 3, 2018</h3>
 
-I'm looking forward to using observable notebooks more.
+        <div class="description">
+                <p>I implemented a reinforcement learning agent using PPO to play Atari Breakout. It is a standalone implementation on TensorFlow.</p>
+                <p></p>
+                <p>I coded in a literate form with all the mathematical formula&#x27;s etc, embedded in comments so that it can be used as a tutorial if any one wants to - and of course as a reference for my self.</p>
+        </div>
 
-&lt;&lt;https://beta.observablehq.com/@vpj/gan(Here's the notebook)&gt;&gt;. Or on the iframe below.
+        <div><a href="ml/ppo.html">More...</a></div>
+    </div>
+    <div class="wallapatta">
+        <h1 class="title"><a href="ml/tf_for_beginners.html">Turn TensorFlow functions into mathematical notations and diagrams</a></h1>
+        <h3 class="date">March 24, 2018</h3>
 
-&lt;!&gt;
- &lt;&lt;&lt;html
-  &lt;script type="text/javascript"&gt;
-   function iframeLoaded() {
-    var iframe = window.document.getElementById('numpy_lstm_iframe')
-    if(iframe) {
-     function setHeight() {
-      iframe.height = iframe.contentWindow.document.body.scrollHeight + "px"
-     }
-     setTimeout(setHeight, 1000)
-     setHeight()
-    }
-   }
-  &lt;/script&gt;
+        <div class="description">
+                <p>I started working on a bunch of helper classes to use TensorFlow on Jupyter notebooks.</p>
+                <p></p>
+                <p>They provide nice diagrams and mathematical formulas as outputs based on the TensorFlow operations. It helps you understand the code better, and also acts as an inline help when coding.</p>
+        </div>
 
-  &lt;iframe id="numpy_lstm_iframe"
-          onload="iframeLoaded()"
-          src="https://beta.observablehq.com/@vpj/gan"
-          style="width: 100%;
-                 border: none;
-                 outline: none;
-                 min-height: 640px;" /&gt;
+        <div><a href="ml/tf_for_beginners.html">More...</a></div>
+    </div>
+    <div class="wallapatta">
+        <h1 class="title"><a href="https://beta.observablehq.com/@vpj/gan">Generative Adversarial Networks (Gaussian Distribution)</a></h1>
+        <h3 class="date">February 3, 2018</h3>
+
+        <div class="description">
+                <p>This is a very simple Generative Adversarial Network build with deeplearn.js on ObservableHQ.</p>
+                <p></p>
+                <p>I coded this as an experiment to try out ObservableHQ, because I&#x27;ve loved almost all the projects by its creators @jashkenas and @mbostock.</p>
+        </div>
+
+        <div><a href="https://beta.observablehq.com/@vpj/gan">More...</a></div>
+    </div>
+    <div class="wallapatta">
+        <h1 class="title"><a href="numpy_lstm.html">Vanilla LSTM with numpy</a></h1>
+        <h3 class="date">October 8, 2017</h3>
+
+        <div class="description">
+                <p>I implemented a Long short-term memory (LSTM) module on numpy from scratch. This is for learning purposes. The network is trained with stochastic gradient descent with a batch size of 1 using AdaGrad algorithm (with momentum).</p>
+        </div>
+
+        <div><a href="numpy_lstm.html">More...</a></div>
+    </div>
+    <div class="wallapatta">
+        <h1 class="title"><a href="switch_coffeescript.html">Should we switch from CoffeeScript?</a></h1>
+        <h3 class="date">September 28, 2016</h3>
+
+        <div class="description">
+                <p>We are considering moving out codebase from CoffeeScript to TypeScript.</p>
+        </div>
+
+        <div><a href="switch_coffeescript.html">More...</a></div>
+    </div>
+    <div class="wallapatta">
+        <h1 class="title"><a href="wallapatta_spell_checker.html">Wallapatta editor spelling checker</a></h1>
+        <h3 class="date">April 30, 2016</h3>
+
+        <div class="description">
+                <p>I updated Wallapatta editor with a spellchecker.</p>
+        </div>
+
+        <div><a href="wallapatta_spell_checker.html">More...</a></div>
+    </div>
+    <div class="wallapatta">
+        <h1 class="title"><a href="models.html">Open sourcing nearby.lk data models library</a></h1>
+        <h3 class="date">April 29, 2016</h3>
+
+        <div class="description">
+                <p>We did a re-write of the nearby.lk data model library, and we decided to open source the core of it. It supports JSON or YAML data files, and parses them based on a specification (like a schema).</p>
+        </div>
+
+        <div><a href="models.html">More...</a></div>
+    </div>
+    <div class="wallapatta">
+        <h1 class="title"><a href="page_breaks.html">Page Breaks</a></h1>
+        <h3 class="date">April 27, 2016</h3>
+
+        <div class="description">
+                <p>In Wallaptta we model pagination as a cost minimization problem. That is, we try to find where to place page breaks so that there is no overflow and the cost is minimised. If the cost of adding a page break at a given point is know this can be easily solved with dynamic programming.</p>
+        </div>
+
+        <div><a href="page_breaks.html">More...</a></div>
+    </div>
+    <div class="wallapatta">
+        <h1 class="title"><a href="node_performance_tips.html">A few node.js/Javascript performance tips</a></h1>
+        <h3 class="date">March 19, 2016</h3>
+
+        <div class="description">
+                <p>We want to share some node.js performance tips we found while working on Forestpin; specifically how to optimize runInContext, setting heap limits, memory usage with string slices, and joining strings.</p>
+        </div>
+
+        <div><a href="node_performance_tips.html">More...</a></div>
+    </div>
+
+    <div class="paginate">
+
+        <a class="next-page button" href="page2.html">next</a>
+    </div>
 </div>
-     </div>
-     <div class="overlay">
-      
-     </div>
-    </div>
-   </div>
-   <div class="wallapatta">
-    <h1 class="title">
-     <a href="numpy_lstm.html">
-      Vanilla LSTM with numpy
-     </a>
-    </h1>
-    <h3 class="date">
-     October 8, 2017
-    </h3>
-    <div class="post-paginated">
-     <div class="wallapatta-main nine columns">
-      <div id="wallapatta_10000" class="article"><div id="wallapatta_10001" class="section"><div class="content"><p id="wallapatta_10002" class="paragraph"><em id="wallapatta_10017" class="italics"><span id="wallapatta_10018" class="text">This is inspired from </span><a id="wallapatta_10019" class="link" href="https://gist.github.com/karpathy/d4dee566867f8291f086">Minimal character-level language model with a Vanilla Recurrent Neural Network, in Python/numpy</a><span id="wallapatta_10020" class="text"> by </span><a id="wallapatta_10021" class="link" href="https://github.com/karpathy">Andrej Karpathy</a><span id="wallapatta_10022" class="text">.</span></em></p></div></div><div id="wallapatta_10003" class="section"><div class="content"><p id="wallapatta_10004" class="paragraph"><em id="wallapatta_10023" class="italics"><span id="wallapatta_10024" class="text">The blog post updated in December, 2017 based on feedback from </span><a id="wallapatta_10025" class="link" href="https://twitter.com/AlexSherstinsky">@AlexSherstinsky</a><span id="wallapatta_10026" class="text">; Thanks!</span></em></p></div></div><div id="wallapatta_10005" class="section"><div class="content"><p id="wallapatta_10006" class="paragraph"><span id="wallapatta_10027" class="text">This is a simple implementation of Long short-term memory (LSTM) module on numpy from scratch. This is for learning purposes. The network is trained with stochastic gradient descent with a batch size of 1 using AdaGrad algorithm (with momentum).</span></p></div></div><div id="wallapatta_10007" class="image-container"><img class="image" src="http://blog.varunajayasiri.com/ml/lstm.svg" alt="http://blog.varunajayasiri.com/ml/lstm.svg"></div><div id="wallapatta_10008" class="section"><div class="content"><p id="wallapatta_10009" class="paragraph"><span id="wallapatta_10028" class="text">You can download the jupyter notebook from </span><a id="wallapatta_10029" class="link" href="http://blog.varunajayasiri.com/ml/numpy_lstm.ipynb">http://blog.varunajayasiri.com/ml/numpy_lstm.ipynb</a></p></div></div><div id="wallapatta_10010" class="section"><div class="content"><p id="wallapatta_10011" class="paragraph"><span id="wallapatta_10030" class="text">The model usually reaches an error of about 45 after 5000 iterations when tested with </span><a id="wallapatta_10031" class="link" href="http://cs.stanford.edu/people/karpathy/char-rnn/shakespear.txt">100,000 character sample from Shakespeare</a><span id="wallapatta_10032" class="text">. However it sometimes get stuck in a local minima; reinitialize the weights if this happens.</span></p></div></div><div id="wallapatta_10012" class="section"><div class="content"><p id="wallapatta_10013" class="paragraph"><span id="wallapatta_10033" class="text">You need to place the input text file as `input.txt` in the same folder as the python code.</span></p></div></div><div id="wallapatta_10014" class="full"><div id="wallapatta_10016" class="html"><script type="text/javascript">
- function iframeLoaded() {
-  var iframe = window.document.getElementById('numpy_lstm_iframe')
-  if(iframe) {
-   function setHeight() {
-    iframe.height = iframe.contentWindow.document.body.scrollHeight + "px"
-   }
-   setTimeout(setHeight, 1000)
-   setHeight()
-  }
- }
-</script>
-
-<iframe id="numpy_lstm_iframe" onload="iframeLoaded()" src="ml/numpy_lstm_ipynb.html" style="width: 100%;
-               border: none;
-               outline: none;
-               min-height: 640px;">
-</iframe></div></div></div>
-     </div>
-     <div class="wallapatta-sidebar three columns">
-      <div id="wallapatta_10015" class="sidenote"></div>
-     </div>
-     <div style="display:none;">
-      <div class='wallapatta-code'>--This is inspired from
-&lt;&lt;https://gist.github.com/karpathy/d4dee566867f8291f086(Minimal character-level language model with a Vanilla Recurrent Neural Network, in Python/numpy)&gt;&gt;
-by
-&lt;&lt;https://github.com/karpathy(Andrej Karpathy)&gt;&gt;.--
-
---The blog post updated in December, 2017 based on feedback from &lt;&lt;https://twitter.com/AlexSherstinsky(@AlexSherstinsky)&gt;&gt;; Thanks!--
-
-This is a simple implementation of Long short-term memory (LSTM) module on numpy from scratch. This
-is for learning purposes. The network is trained with stochastic gradient descent
-with a batch size of 1 using AdaGrad algorithm (with momentum).
-
-!http://blog.varunajayasiri.com/ml/lstm.svg
-
-You can download the jupyter notebook from &lt;&lt;http://blog.varunajayasiri.com/ml/numpy_lstm.ipynb&gt;&gt;
-
-The model usually reaches an error of about 45 after 5000 iterations when tested with
-&lt;&lt;http://cs.stanford.edu/people/karpathy/char-rnn/shakespear.txt(100,000 character sample from Shakespeare)&gt;&gt;.
-However it sometimes get stuck in a local minima; reinitialize the weights if this happens.
-
-You need to place the input text file as `input.txt` in the same folder as the python code.
-
-&lt;!&gt;
- &lt;&lt;&lt;html
-  &lt;script type="text/javascript"&gt;
-   function iframeLoaded() {
-    var iframe = window.document.getElementById('numpy_lstm_iframe')
-    if(iframe) {
-     function setHeight() {
-      iframe.height = iframe.contentWindow.document.body.scrollHeight + "px"
-     }
-     setTimeout(setHeight, 1000)
-     setHeight()
-    }
-   }
-  &lt;/script&gt;
-
-  &lt;iframe id="numpy_lstm_iframe"
-          onload="iframeLoaded()"
-          src="ml/numpy_lstm_ipynb.html"
-          style="width: 100%;
-                 border: none;
-                 outline: none;
-                 min-height: 640px;" /&gt;
-</div>
-     </div>
-     <div class="overlay">
-      
-     </div>
-    </div>
-   </div>
-   <div class="wallapatta">
-    <h1 class="title">
-     <a href="switch_coffeescript.html">
-      Should we switch from CoffeeScript?
-     </a>
-    </h1>
-    <h3 class="date">
-     September 28, 2016
-    </h3>
-    <div class="post-paginated">
-     <div class="wallapatta-main nine columns">
-      <div id="wallapatta_20000" class="article"><div id="wallapatta_20001" class="section"><h2 class="heading"><span id="wallapatta_20002" class="block"><span id="wallapatta_20033" class="text">A little background</span></span></h2><div class="content"><div id="wallapatta_20003" class="section"><div class="content"><p id="wallapatta_20004" class="paragraph"><span id="wallapatta_20034" class="text">At </span><a id="wallapatta_20035" class="link" href="http://nearby.lk">nearby.lk</a><span id="wallapatta_20036" class="text"> we </span><a id="wallapatta_20037" class="link" href="http://blog.varunajayasiri.com/app_engine.html">moved our backend from python to node.js</a><span id="wallapatta_20038" class="text"> and then rewrote both the backend and UI code in CoffeeScript in late 2013. And we migrated all Javascript code to CoffeeScript at </span><a id="wallapatta_20039" class="link" href="https://www.forestpin.com">Forestpin</a><span id="wallapatta_20040" class="text"> in early 2014.</span></p></div></div><div id="wallapatta_20005" class="section"><div class="content"><p id="wallapatta_20006" class="paragraph"><span id="wallapatta_20041" class="text">Then we replaced all HTML files and generated HTML content in CoffeeScript; initially with </span><a id="wallapatta_20042" class="link" href="http://coffeekup.org/">Coffeecup</a><span id="wallapatta_20043" class="text"> and then with </span><a id="wallapatta_20044" class="link" href="https://github.com/vpj/weya">Weya.coffee</a><span id="wallapatta_20045" class="text">. So we only have Coffeescript and CSS in our projects.</span></p></div></div></div></div><div id="wallapatta_20007" class="section"><h2 class="heading"><span id="wallapatta_20008" class="block"><span id="wallapatta_20046" class="text">Why we are considering to switch</span></span></h2><div class="content"><div id="wallapatta_20009" class="section"><div class="content"><p id="wallapatta_20010" class="paragraph"><span id="wallapatta_20047" class="text">There are two main reasons. First is that CoffeeScript is untyped. The second is the uncertainty of the future of CoffeeScript.</span></p></div></div><div id="wallapatta_20011" class="section"><div class="content"><p id="wallapatta_20012" class="paragraph"><strong id="wallapatta_20048" class="bold"><span id="wallapatta_20049" class="text">CoffeeScript is untyped</span></strong><span id="wallapatta_20050" class="text"> and so is Javascript. This becomes a problem when you have a large code base. There can be hidden errors not covered by unit tests. Refactoring and making modifications is harder. Also, editors can give better code completion with typed languages. A typed language can introduce extra optimizations too, but I don't think this is done with likes of </span><a id="wallapatta_20051" class="link" href="http://www.typescriptlang.org/">TypeScript</a><span id="wallapatta_20052" class="text">.</span></p></div></div><div id="wallapatta_20016" class="section"><div class="content"><p id="wallapatta_20017" class="paragraph"><strong id="wallapatta_20056" class="bold"><span id="wallapatta_20057" class="text">The popularity of CoffeeScript is fading.</span></strong><span id="wallapatta_20058" class="text"> There are a lot of posts about people moving away from CoffeeScript, and almost nothing about people adopting CoffeeScript. If CoffeeScript loses popularity there'll be fewer contributions to the CoffeeScript compiler project; it might not get updated along with developments of Javascript. However, CoffeeScript has so far adopted all new features of Javascript we found to be important (e.g. generators, modules).</span></p></div></div></div></div><div id="wallapatta_20018" class="section"><h2 class="heading"><span id="wallapatta_20019" class="block"><span id="wallapatta_20059" class="text">What we will miss</span></span></h2><div class="content"><div id="wallapatta_20020" class="section"><div class="content"><p id="wallapatta_20021" class="paragraph"><span id="wallapatta_20060" class="text">We are certainly going to miss </span><strong id="wallapatta_20061" class="bold"><span id="wallapatta_20062" class="text">markup in CoffeeScript</span></strong><span id="wallapatta_20063" class="text">. Generating HTML text from Javascript is clean (with string concatenations and HTML tags).</span></p></div></div><pre id="wallapatta_20022" class="codeBlock"><code class="coffeescript"> @div <span class="hljs-string">".users"</span>, <span class="hljs-function">-&gt;</span>
-  <span class="hljs-keyword">for</span> user <span class="hljs-keyword">in</span> users
-   @div <span class="hljs-string">'.user'</span>, on: {click: editUser}, <span class="hljs-function">-&gt;</span>
-    @span <span class="hljs-string">".name"</span>, user.name
-    @span <span class="hljs-string">".phone"</span>, user.phone
-    <span class="hljs-keyword">if</span> v.image?
-     @img src: user.image</code></pre><div id="wallapatta_20023" class="section"><div class="content"><p id="wallapatta_20024" class="paragraph"><span id="wallapatta_20064" class="text">The other thing we are going to miss is </span><strong id="wallapatta_20065" class="bold"><span id="wallapatta_20066" class="text">executable class bodies</span></strong><span id="wallapatta_20067" class="text">. This let us have mixins, bind </span><code id="wallapatta_20068" class="code"><span id="wallapatta_20069" class="text">this</span></code><span id="wallapatta_20070" class="text"> </span><a id="wallapatta_20071" class="link" href="https://github.com/vpj/weya/blob/master/base.litcoffee">to event handlers</a><span id="wallapatta_20072" class="text">, and even do things like check if all abstract methods are implemented. We use these quite often in our code.</span></p></div></div></div></div><div id="wallapatta_20025" class="section"><h2 class="heading"><span id="wallapatta_20026" class="block"><span id="wallapatta_20073" class="text">What are we going to do</span></span></h2><div class="content"><div id="wallapatta_20027" class="section"><div class="content"><p id="wallapatta_20028" class="paragraph"><span id="wallapatta_20074" class="text">There was a new release of CoffeeScript, and there are discussions about CoffeeScript2 and about compiling CoffeeScript to ES6. So, hopefully, CoffeeScript will have a future.</span></p></div></div><div id="wallapatta_20029" class="section"><div class="content"><p id="wallapatta_20030" class="paragraph"><span id="wallapatta_20075" class="text">Since the only immediate benefit of switching from CoffeeScript to TypeScript is type checking, we will stay with CoffeeScript for a while.</span></p></div></div><div id="wallapatta_20031" class="section"><div class="content"><p id="wallapatta_20032" class="paragraph"><span id="wallapatta_20076" class="text">To keep our options open, I started a small side project in TypeScript. Apart from not having a nice way to generate HTML, the experience so far has been good. Typescript is less error prone and the editor code completion saves time. But the code is a lot longer (lines of code) and to me doesn't look as elegant as CoffeeScript - perhaps I need some more getting-used-to.</span></p></div></div></div></div></div>
-     </div>
-     <div class="wallapatta-sidebar three columns">
-      <div id="wallapatta_20013" class="sidenote"><div id="wallapatta_20014" class="section"><div class="content"><p id="wallapatta_20015" class="paragraph"><span id="wallapatta_20053" class="text">Coffeescript will stay untyped for a while - </span><a id="wallapatta_20054" class="link" href="https://github.com/coffeescript6/discuss/blob/master/Features.md">Type annotations are marked as "no action"</a><span id="wallapatta_20055" class="text">.</span></p></div></div></div>
-     </div>
-     <div style="display:none;">
-      <div class='wallapatta-code'>##A little background
-
- At &lt;&lt;http://nearby.lk(nearby.lk)&gt;&gt; we
- &lt;&lt;http://blog.varunajayasiri.com/app_engine.html(moved our backend from python to node.js)&gt;&gt;
- and then rewrote both the backend and UI code in CoffeeScript in late 2013.
- And we migrated all Javascript code to CoffeeScript at
- &lt;&lt;https://www.forestpin.com(Forestpin)&gt;&gt; in early 2014.
-
- Then we replaced all HTML files and generated HTML content in CoffeeScript;
- initially with &lt;&lt;http://coffeekup.org/(Coffeecup)&gt;&gt; and then with
- &lt;&lt;https://github.com/vpj/weya(Weya.coffee)&gt;&gt;.
- So we only have Coffeescript and CSS in our projects.
-
-##Why we are considering to switch
-
- There are two main reasons.
- First is that CoffeeScript is untyped.
- The second is the uncertainty of the future of CoffeeScript.
-
- **CoffeeScript is untyped** and so is Javascript.
- This becomes a problem when you have a large code base.
- There can be hidden errors not covered by unit tests.
- Refactoring and making modifications is harder.
- Also, editors can give better code completion with typed languages.
- A typed language can introduce extra optimizations too,
- but I don't think this is done with likes of
- &lt;&lt;http://www.typescriptlang.org/(TypeScript)&gt;&gt;.
-
- &gt;&gt;&gt;
-  Coffeescript will stay untyped for a while -
-  &lt;&lt;https://github.com/coffeescript6/discuss/blob/master/Features.md(Type annotations are marked as "no action")&gt;&gt;.
-
- **The popularity of CoffeeScript is fading.**
- There are a lot of posts about people moving away from CoffeeScript,
- and almost nothing about people adopting CoffeeScript.
- If CoffeeScript loses popularity there'll be
- fewer contributions to the CoffeeScript compiler project;
- it might not get updated along with developments of Javascript.
- However, CoffeeScript has so far adopted all new features of Javascript we found to be important (e.g. generators, modules).
-
-##What we will miss
-
- We are certainly going to miss **markup in CoffeeScript**.
- Generating HTML text from Javascript is clean
- (with string concatenations and HTML tags).
-
- ```coffeescript
-   @div ".users", -&gt;
-    for user in users
-     @div '.user', on: {click: editUser}, -&gt;
-      @span ".name", user.name
-      @span ".phone", user.phone
-      if v.image?
-       @img src: user.image
-
- The other thing we are going to miss is **executable class bodies**.
- This let us have mixins,
- bind ``this`` &lt;&lt;https://github.com/vpj/weya/blob/master/base.litcoffee(to event handlers)&gt;&gt;,
- and even do things like check if all abstract methods are implemented.
- We use these quite often in our code.
-
-##What are we going to do
-
- There was a new release of CoffeeScript, and there are discussions about CoffeeScript2 and about compiling CoffeeScript to ES6. So, hopefully, CoffeeScript will have a future.
-
- Since the only immediate benefit of switching
- from CoffeeScript to TypeScript is type checking,
- we will stay with CoffeeScript for a while.
-
- To keep our options open, I started a small side project in TypeScript.
- Apart from not having a nice way to generate HTML,
- the experience so far has been good.
- Typescript is less error prone and the editor code completion saves time.
- But the code is a lot longer (lines of code)
- and to me doesn't look as elegant as CoffeeScript -
- perhaps I need some more getting-used-to.</div>
-     </div>
-     <div class="overlay">
-      
-     </div>
-    </div>
-   </div>
-   <div class="wallapatta">
-    <h1 class="title">
-     <a href="wallapatta_spell_checker.html">
-      Wallapatta editor spelling checker
-     </a>
-    </h1>
-    <h3 class="date">
-     April 30, 2016
-    </h3>
-    <div class="post-paginated">
-     <div class="wallapatta-main nine columns">
-      <div id="wallapatta_30000" class="article"><div id="wallapatta_30001" class="section"><div class="content"><p id="wallapatta_30002" class="paragraph"><span id="wallapatta_30011" class="text">Wallapatta spell checker uses the </span><a id="wallapatta_30012" class="link" href="https://github.com/first20hours/google-10000-english">10000 word list</a><sup id="wallapatta_30013" class="superScript"><span id="wallapatta_30014" class="text">1</span></sup><span id="wallapatta_30015" class="text">. The words not on the list are highlighted in red, and the words less commonly used are highlighted in shades of orange. This lets you help use simple language in your articles.</span></p></div></div><div id="wallapatta_30006" class="full"><div id="wallapatta_30008" class="image-container"><img class="image" src="images/posts/wallapatta/spell_check.png" alt="images/posts/wallapatta/spell_check.png"></div></div><div id="wallapatta_30009" class="section"><div class="content"><p id="wallapatta_30010" class="paragraph"><span id="wallapatta_30019" class="text">In the </span><a id="wallapatta_30020" class="link" href="https://chrome.google.com/webstore/detail/wallapatta/nleponjjojkllonfamfjhebhadibjlip">Wallapatta Chrome Editor</a><span id="wallapatta_30021" class="text">, press </span><span id="wallapatta_30022" class="html"><i class="fa fa-check"></i></span><span id="wallapatta_30023" class="text"> to turn spell checking on and off.</span></p></div></div></div>
-     </div>
-     <div class="wallapatta-sidebar three columns">
-      <div id="wallapatta_30003" class="sidenote"><div id="wallapatta_30004" class="section"><div class="content"><p id="wallapatta_30005" class="paragraph"><sup id="wallapatta_30016" class="superScript"><span id="wallapatta_30017" class="text">1</span></sup><span id="wallapatta_30018" class="text"> It doesn't have the whole dictionary; i.e. words that are not in the top 10,000 common words will be highlighted as spelling errors.</span></p></div></div></div><div id="wallapatta_30007" class="sidenote"></div>
-     </div>
-     <div style="display:none;">
-      <div class='wallapatta-code'>Wallapatta spell checker uses the &lt;&lt;https://github.com/first20hours/google-10000-english(10000 word list)&gt;&gt;^^1^^. The words not on the list are highlighted in red, and the words less commonly used are highlighted in shades of orange. This lets you help use simple language in your articles.
-
-&gt;&gt;&gt;
- ^^1^^ It doesn't have the whole dictionary; i.e. words that are not in the top 10,000 common words will be highlighted as spelling errors.
-
-&lt;!&gt;
- !images/posts/wallapatta/spell_check.png
-
-In the &lt;&lt;https://chrome.google.com/webstore/detail/wallapatta/nleponjjojkllonfamfjhebhadibjlip(Wallapatta Chrome Editor)&gt;&gt;, press &lt;-&lt;i class="fa fa-check" /&gt;-&gt; to turn spell checking on and off.</div>
-     </div>
-     <div class="overlay">
-      
-     </div>
-    </div>
-   </div>
-   <div class="wallapatta">
-    <h1 class="title">
-     <a href="models.html">
-      Open sourcing nearby.lk data models library
-     </a>
-    </h1>
-    <h3 class="date">
-     April 29, 2016
-    </h3>
-    <div class="post-paginated">
-     <div class="wallapatta-main nine columns">
-      <div id="wallapatta_40000" class="article"><div id="wallapatta_40001" class="section"><div class="content"><p id="wallapatta_40002" class="paragraph"><span id="wallapatta_40056" class="text">We did a re-write of the </span><a id="wallapatta_40057" class="link" href="http://nearby.lk">nearby.lk</a><span id="wallapatta_40058" class="text"> data model library, and we decided to open source the core of it. It supports JSON or YAML data files, and parses them based on a specification (like a schema).</span></p></div></div><div id="wallapatta_40005" class="section"><div class="content"><p id="wallapatta_40006" class="paragraph"><span id="wallapatta_40059" class="text">The specification is a coffeescript class with a render function. The editor checks the input against the specification and uses the render function to show the parsed input. The editor can either work in YAML mode (plain YAML input) or form input mode (user fills up a form). It can handle quite complex data models.</span></p></div></div><div id="wallapatta_40007" class="section"><div class="content"><p id="wallapatta_40008" class="paragraph"><span id="wallapatta_40060" class="text">Here's the editor accepting (and rendering a resume).</span></p></div></div><div id="wallapatta_40009" class="full"><div id="wallapatta_40011" class="html"><iframe src="http://vpj.github.io/models/" width="100%" height="500px" style="outline:none;border:1px solid #eee"></iframe>
-</div></div><div id="wallapatta_40012" class="section"><div class="content"><p id="wallapatta_40013" class="paragraph"><span id="wallapatta_40061" class="text">This is the class for the </span><strong id="wallapatta_40062" class="bold"><span id="wallapatta_40063" class="text">Resume</span></strong><span id="wallapatta_40064" class="text"> example.</span></p></div></div><pre id="wallapatta_40014" class="codeBlock"><code class="coffee"> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Resume</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Base</span></span>
-  @extend()</code></pre><div id="wallapatta_40015" class="section"><div class="content"><p id="wallapatta_40016" class="paragraph"><span id="wallapatta_40065" class="text">Set the type of the model.</span></p></div></div><pre id="wallapatta_40017" class="codeBlock"><code class="coffee">  type: <span class="hljs-string">'Resume'</span></code></pre><div id="wallapatta_40018" class="section"><div class="content"><p id="wallapatta_40019" class="paragraph"><span id="wallapatta_40066" class="text">Define properties. The type of the property is determined based on the property parameters. It defaults to </span><em id="wallapatta_40067" class="italics"><span id="wallapatta_40068" class="text">Value</span></em><span id="wallapatta_40069" class="text"> property.</span></p></div></div><pre id="wallapatta_40020" class="codeBlock"><code class="coffee">  @property <span class="hljs-string">'name'</span>, {}
-  ...</code></pre><div id="wallapatta_40021" class="section"><div class="content"><p id="wallapatta_40022" class="paragraph"><code id="wallapatta_40070" class="code"><span id="wallapatta_40071" class="text">oneof</span></code><span id="wallapatta_40072" class="text"> specifies that the property is one of the models specified.</span></p></div></div><pre id="wallapatta_40023" class="codeBlock"><code class="coffee">  @property <span class="hljs-string">'address'</span>,
-   oneof: [<span class="hljs-string">'Null'</span>, <span class="hljs-string">'Address'</span>]</code></pre><div id="wallapatta_40024" class="section"><div class="content"><p id="wallapatta_40025" class="paragraph"><span id="wallapatta_40073" class="text">This is a list of values. </span><code id="wallapatta_40074" class="code"><span id="wallapatta_40075" class="text">rows</span></code><span id="wallapatta_40076" class="text"> and </span><code id="wallapatta_40077" class="code"><span id="wallapatta_40078" class="text">columns</span></code><span id="wallapatta_40079" class="text"> are schema parameters for values.</span></p></div></div><pre id="wallapatta_40026" class="codeBlock"><code class="coffee">  @property <span class="hljs-string">'statement'</span>,
-   list:
-    rows: <span class="hljs-number">3</span>
-    columns: <span class="hljs-number">50</span></code></pre><div id="wallapatta_40027" class="section"><div class="content"><p id="wallapatta_40028" class="paragraph"><span id="wallapatta_40080" class="text">This property is a list of other models.</span></p></div></div><pre id="wallapatta_40029" class="codeBlock"><code class="coffee">  @property <span class="hljs-string">'timeline'</span>,
-   list:
-    oneof: [<span class="hljs-string">'Experience'</span>, <span class="hljs-string">'Education'</span>, <span class="hljs-string">'Recognition'</span>]
-    defaultValues: <span class="hljs-function">-&gt;</span> {from: <span class="hljs-string">'2010'</span>, to: <span class="hljs-string">'2020'</span>}
-
-  ...</code></pre><div id="wallapatta_40030" class="section"><div class="content"><p id="wallapatta_40031" class="paragraph"><span id="wallapatta_40081" class="text">These are some private functions of the </span><strong id="wallapatta_40082" class="bold"><span id="wallapatta_40083" class="text">Resume</span></strong><span id="wallapatta_40084" class="text"> model.</span></p></div></div><pre id="wallapatta_40032" class="codeBlock"><code class="coffee">  _education: <span class="hljs-function">-&gt;</span>
-   res = (e <span class="hljs-keyword">for</span> e <span class="hljs-keyword">in</span> @_values.timeline <span class="hljs-keyword">when</span> e.type <span class="hljs-keyword">is</span> <span class="hljs-string">'Education'</span>)
-   res.sort (x, y) -&gt; y._values.<span class="hljs-keyword">from</span> - x._values.<span class="hljs-keyword">from</span>
-
-  ...</code></pre><div id="wallapatta_40033" class="section"><div class="content"><p id="wallapatta_40034" class="paragraph"><span id="wallapatta_40085" class="text">This is the template to render the output.</span></p></div></div><pre id="wallapatta_40035" class="codeBlock"><code class="coffee">  template: <span class="hljs-function"><span class="hljs-params">(self)</span> -&gt;</span>
-   values = self._values
-   education = self._education()
-   experience = self._experience()
-   recognitions = self._recognitions()
-
-   @div <span class="hljs-string">".resume"</span>, <span class="hljs-function">-&gt;</span>
-    @div <span class="hljs-string">".row"</span>, <span class="hljs-function">-&gt;</span>
-     @div <span class="hljs-string">".six.columns"</span>, <span class="hljs-function">-&gt;</span>
-      @div <span class="hljs-string">".name"</span>, <span class="hljs-string">"<span class="hljs-subst">#{values.name}</span>"</span>
-      @div <span class="hljs-string">".role"</span>, <span class="hljs-string">"<span class="hljs-subst">#{values.role}</span>"</span>
-      <span class="hljs-keyword">if</span> values.website <span class="hljs-keyword">isnt</span> <span class="hljs-string">''</span>
-       @div <span class="hljs-string">".website"</span>, <span class="hljs-function">-&gt;</span>
-        @a href: <span class="hljs-string">"<span class="hljs-subst">#{values.website}</span>"</span>, <span class="hljs-string">"<span class="hljs-subst">#{values.website}</span>"</span>
-
-     <span class="hljs-keyword">if</span> values.address.type <span class="hljs-keyword">isnt</span> <span class="hljs-string">'Null'</span>
-      @div <span class="hljs-string">".three.columns.address"</span>, <span class="hljs-function">-&gt;</span>
-       values.address.weya <span class="hljs-keyword">this</span>
-
-     ...</code></pre><div id="wallapatta_40036" class="section"><div class="content"><p id="wallapatta_40037" class="paragraph"><span id="wallapatta_40086" class="text">New properties (e.g. image uploads) can be defined similarly.</span></p></div></div><div id="wallapatta_40038" class="section"><h2 class="heading"><span id="wallapatta_40039" class="block"><span id="wallapatta_40087" class="text">Why did we need this?</span></span></h2><div class="content"><div id="wallapatta_40040" class="section"><div class="content"><p id="wallapatta_40041" class="paragraph"><span id="wallapatta_40088" class="text">On </span><a id="wallapatta_40089" class="link" href="http://www.nearby.lk">nearby.lk</a><span id="wallapatta_40090" class="text">, we have local business information. Initially it was basic information like contact numbers, a small description, etc. Later, more details needed to be included. Also, the page structures </span><a id="wallapatta_40091" class="link" href="http://www.laundromat.lk/">differed</a><span id="wallapatta_40092" class="text"> based on the </span><a id="wallapatta_40093" class="link" href="http://www.nearby.lk/templeoftooth">type of location</a><span id="wallapatta_40094" class="text">. We didn't want to have the content in free flow. It's easier to make mistakes and not have uniform style with free text content. Also you can do a much better search with structured content.</span></p></div></div></div></div><div id="wallapatta_40042" class="section"><div class="content"><p id="wallapatta_40043" class="paragraph"><a id="wallapatta_40095" class="link" href="http://www.nearby.lk">nearby.lk</a><span id="wallapatta_40096" class="text"> is not yet running this re-written library. A little more work needs to be done to integrate this with the nearby search engine.</span></p></div></div><div id="wallapatta_40044" class="section"><h2 class="heading"><span id="wallapatta_40045" class="block"><span id="wallapatta_40097" class="text">How to use it?</span></span></h2><div class="content"><div id="wallapatta_40046" class="section"><div class="content"><p id="wallapatta_40047" class="paragraph"><a id="wallapatta_40098" class="link" href="https://github.com/vpj/models/tree/master/js/samples">These samples</a><span id="wallapatta_40099" class="text"> show the classes for Resume example.</span></p></div></div><div id="wallapatta_40048" class="section"><div class="content"><p id="wallapatta_40049" class="paragraph"><span id="wallapatta_40100" class="text">The library depends on </span><a id="wallapatta_40101" class="link" href="https://github.com/vpj/weya">Weya</a><span id="wallapatta_40102" class="text"> and </span><a id="wallapatta_40103" class="link" href="https://github.com/vpj/mod">Mod</a><span id="wallapatta_40104" class="text"> libraries for rendering and module management.</span></p></div></div><div id="wallapatta_40050" class="section"><h3 class="heading"><span id="wallapatta_40051" class="block"><span id="wallapatta_40105" class="text">Embedding the editor</span></span></h3><div class="content"><pre id="wallapatta_40052" class="codeBlock"><code class="coffee">Mod.<span class="hljs-built_in">require</span> <span class="hljs-string">'Models.Editor'</span>, <span class="hljs-function"><span class="hljs-params">(Editor)</span> -&gt;</span>
- editor = <span class="hljs-keyword">new</span> Editor
-  model: <span class="hljs-string">'Resume'</span> <span class="hljs-comment">#Base model name</span>
- editor.render element,
-  width: width
-  height: height
-  onRendered
-<span class="hljs-function"> <span class="hljs-title">onRendered</span> = -&gt;</span>
-  editor.yaml() <span class="hljs-comment">#yaml edit mode</span>
-  editor.structured() <span class="hljs-comment">#structured edit mode</span>
-  editor.resize  <span class="hljs-comment">#resize editor</span>
-   width: width
-   height: height
-  editor.getModel() <span class="hljs-comment">#return model object</span>
-  <span class="hljs-comment">#returns json object omiting default values</span>
-  editor.getModel().getJSON()
-  <span class="hljs-comment">#returns full json object</span>
-  editor.getModel().getJSONFull()
-  editor.setJSON jsonObject <span class="hljs-comment">#set json object content</span></code></pre></div></div><div id="wallapatta_40053" class="section"><h3 class="heading"><span id="wallapatta_40054" class="block"><span id="wallapatta_40106" class="text">Using models</span></span></h3><div class="content"><pre id="wallapatta_40055" class="codeBlock"><code class="coffee">Mod.<span class="hljs-built_in">require</span> <span class="hljs-string">'Models.Models'</span>, <span class="hljs-function"><span class="hljs-params">(Models)</span> -&gt;</span>
- ModelClass = Models.get <span class="hljs-string">'Resume'</span>
- model = <span class="hljs-keyword">new</span> ModelClass
- <span class="hljs-comment">#parse json object</span>
- results = ModelClass.parse jsonObject
- <span class="hljs-comment">#results.score = How maching it was [0..1]</span>
- <span class="hljs-comment">#results.errors = List of errors when parsing</span>
- <span class="hljs-comment">#results.value = model</span>
- <span class="hljs-comment">#returns json object omiting default values</span>
- model.getJSON()
- <span class="hljs-comment">#returns full json object</span>
- model.getJSONFull()
- model.render element
- model.html() <span class="hljs-comment">#returns html</span></code></pre></div></div></div></div></div>
-     </div>
-     <div class="wallapatta-sidebar three columns">
-      <div id="wallapatta_40003" class="sidenote"><div id="wallapatta_40004" class="html"><iframe src="https://ghbtns.com/github-btn.html?user=vpj&amp;repo=models&amp;type=star&amp;count=true&amp;size=large" frameborder="0" scrolling="0" width="160px" height="30px" <="" iframe="">
-</iframe></div></div><div id="wallapatta_40010" class="sidenote"></div>
-     </div>
-     <div style="display:none;">
-      <div class='wallapatta-code'>We did a re-write of the &lt;&lt;http://nearby.lk(nearby.lk)&gt;&gt; data model library, and we decided to open source the core of it.
-It supports JSON or YAML data files, and parses them based on a specification (like a schema).
-
-&gt;&gt;&gt;
- &lt;&lt;&lt;
-  &lt;iframe src="https://ghbtns.com/github-btn.html?user=vpj&repo=models&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px"
-  &lt;/iframe&gt;
-
-The specification is a coffeescript class with a render function.
-The editor checks the input against the specification and uses the render function to show the parsed input. The editor can either work in YAML mode (plain YAML input) or form input mode (user fills up a form). It can handle quite complex data models.
-
-Here's the editor accepting (and rendering a resume).
-
-&lt;!&gt;
- &lt;&lt;&lt;
-  &lt;iframe src="http://vpj.github.io/models/" width="100%" height="500px"
-   style="outline:none;border:1px solid #eee"&gt;&lt;/iframe&gt;
-
-This is the class for the **Resume** example.
-
-```coffee
-  class Resume extends Base
-   @extend()
-
-Set the type of the model.
-
-```coffee
-   type: 'Resume'
-
-Define properties. The type of the property is determined based on the property parameters. It defaults to --Value-- property.
-
-```coffee
-   @property 'name', {}
-   ...
-
-``oneof`` specifies that the property is one of the models specified.
-
-```coffee
-   @property 'address',
-    oneof: ['Null', 'Address']
-
-This is a list of values.
-``rows`` and ``columns`` are schema parameters for values.
-
-```coffee
-   @property 'statement',
-    list:
-     rows: 3
-     columns: 50
-
-This property is a list of other models.
-
-```coffee
-   @property 'timeline',
-    list:
-     oneof: ['Experience', 'Education', 'Recognition']
-     defaultValues: -&gt; {from: '2010', to: '2020'}
-
-   ...
-
-These are some private functions of the **Resume** model.
-
-```coffee
-   _education: -&gt;
-    res = (e for e in @_values.timeline when e.type is 'Education')
-    res.sort (x, y) -&gt; y._values.from - x._values.from
-
-   ...
-
-This is the template to render the output.
-
-```coffee
-   template: (self) -&gt;
-    values = self._values
-    education = self._education()
-    experience = self._experience()
-    recognitions = self._recognitions()
-
-    @div ".resume", -&gt;
-     @div ".row", -&gt;
-      @div ".six.columns", -&gt;
-       @div ".name", "#{values.name}"
-       @div ".role", "#{values.role}"
-       if values.website isnt ''
-        @div ".website", -&gt;
-         @a href: "#{values.website}", "#{values.website}"
-
-      if values.address.type isnt 'Null'
-       @div ".three.columns.address", -&gt;
-        values.address.weya this
-
-      ...
-
-New properties (e.g. image uploads) can be defined similarly.
-
-##Why did we need this?
-
- On &lt;&lt;http://www.nearby.lk(nearby.lk)&gt;&gt;, we have local business information.
- Initially it was basic information like contact numbers, a small description, etc.
- Later, more details needed to be included. Also, the page structures &lt;&lt;http://www.laundromat.lk/(differed)&gt;&gt; based on the &lt;&lt;http://www.nearby.lk/templeoftooth(type of location)&gt;&gt;.
- We didn't want to have the content in free flow. It's easier to make mistakes and not have uniform style with free text content.
- Also you can do a much better search with structured content.
-
-&lt;&lt;http://www.nearby.lk(nearby.lk)&gt;&gt; is not yet running this re-written library. A little more work needs to be done to integrate this with the nearby search engine.
-
-##How to use it?
-
- &lt;&lt;https://github.com/vpj/models/tree/master/js/samples(These samples)&gt;&gt; show the classes for Resume example.
-
- The library depends on &lt;&lt;https://github.com/vpj/weya(Weya)&gt;&gt; and &lt;&lt;https://github.com/vpj/mod(Mod)&gt;&gt; libraries for rendering and module management.
-
- ###Embedding the editor
-
-  ```coffee
-   Mod.require 'Models.Editor', (Editor) -&gt;
-    editor = new Editor
-     model: 'Resume' #Base model name
-    editor.render element,
-     width: width
-     height: height
-     onRendered
-    onRendered = -&gt;
-     editor.yaml() #yaml edit mode
-     editor.structured() #structured edit mode
-     editor.resize  #resize editor
-      width: width
-      height: height
-     editor.getModel() #return model object
-     #returns json object omiting default values
-     editor.getModel().getJSON()
-     #returns full json object
-     editor.getModel().getJSONFull()
-     editor.setJSON jsonObject #set json object content
-
- ###Using models
-
-  ```coffee
-   Mod.require 'Models.Models', (Models) -&gt;
-    ModelClass = Models.get 'Resume'
-    model = new ModelClass
-    #parse json object
-    results = ModelClass.parse jsonObject
-    #results.score = How maching it was [0..1]
-    #results.errors = List of errors when parsing
-    #results.value = model
-    #returns json object omiting default values
-    model.getJSON()
-    #returns full json object
-    model.getJSONFull()
-    model.render element
-    model.html() #returns html
-
-</div>
-     </div>
-     <div class="overlay">
-      
-     </div>
-    </div>
-   </div>
-   <div class="wallapatta">
-    <h1 class="title">
-     <a href="page_breaks.html">
-      Page Breaks
-     </a>
-    </h1>
-    <h3 class="date">
-     April 27, 2016
-    </h3>
-    <div class="post-paginated">
-     <div class="wallapatta-main nine columns">
-      <div id="wallapatta_50000" class="article"><div id="wallapatta_50001" class="section"><div class="content"><p id="wallapatta_50002" class="paragraph"><em id="wallapatta_50045" class="italics"><span id="wallapatta_50046" class="text">How to automatically add sensible page breaks?</span></em></p></div></div><div id="wallapatta_50003" class="section"><div class="content"><p id="wallapatta_50004" class="paragraph"><span id="wallapatta_50047" class="text">In </span><a id="wallapatta_50048" class="link" href="https://github.com/vpj/wallapatta">Wallaptta</a><span id="wallapatta_50049" class="text"> we model pagination as a cost minimization problem. That is, we try to find where to place page breaks so that there is no overflow and the cost is minimised. If the cost of adding a page break at a given point is know this can be easily solved with </span><em id="wallapatta_50050" class="italics"><span id="wallapatta_50051" class="text">dynamic programming.</span></em></p></div></div><div id="wallapatta_50005" class="section"><div class="content"><p id="wallapatta_50006" class="paragraph"><span id="wallapatta_50052" class="text">The question is how to determine the cost of adding a page-break at a given point.</span></p></div></div><div id="wallapatta_50007" class="section"><div class="content"><p id="wallapatta_50008" class="paragraph"><span id="wallapatta_50053" class="text">First we calculated the cost based on the type of sections we split; e.g. </span><em id="wallapatta_50054" class="italics"><span id="wallapatta_50055" class="text">list</span></em><span id="wallapatta_50056" class="text">, </span><em id="wallapatta_50057" class="italics"><span id="wallapatta_50058" class="text">paragraph</span></em><span id="wallapatta_50059" class="text">, </span><em id="wallapatta_50060" class="italics"><span id="wallapatta_50061" class="text">table</span></em><span id="wallapatta_50062" class="text">, </span><em id="wallapatta_50063" class="italics"><span id="wallapatta_50064" class="text">between to paragraphs</span></em><span id="wallapatta_50065" class="text">, </span><em id="wallapatta_50066" class="italics"><span id="wallapatta_50067" class="text">between two topics</span></em><span id="wallapatta_50068" class="text">. This way the program would try to insert page breaks where the cost is less, like between two topics. Often inserting a page break will split multiple sections.</span></p><pre id="wallapatta_50012" class="codeBlock"><code class="nohighlight">1 Item one
-2 Item two
-  &lt;&lt;&lt;&lt;&lt; Page break
-  Item two details
-3 Item three</code></pre><div id="wallapatta_50013" class="section"><div class="content"><p id="wallapatta_50014" class="paragraph"><span id="wallapatta_50070" class="text">For instance the above page break splits a set of paragraphs as well as a list of items. It's important to know the hierarchy of the document when calculating this cost.</span></p></div></div></div></div><div id="wallapatta_50015" class="section"><div class="content"><p id="wallapatta_50016" class="paragraph"><span id="wallapatta_50071" class="text">When we first tried with just the above cost, it gave two main problems:</span></p><ol id="wallapatta_50017" class="list"><li id="wallapatta_50018" class="list-item"><span id="wallapatta_50019" class="block"><em id="wallapatta_50072" class="italics"><span id="wallapatta_50073" class="text">Not splitting at the best points</span></em></span><div id="wallapatta_50020" class="section"><div class="content"><p id="wallapatta_50021" class="paragraph"><span id="wallapatta_50074" class="text">e.g. when only 4 items would fit in a page</span></p><pre id="wallapatta_50022" class="codeBlock"><code class="nohighlight">1. Item 1
-&lt;&lt;&lt;&lt;&lt; Page break
-2. Item 2
-3. Item 3
-4. Item 4
-5. Item 5</code></pre><div id="wallapatta_50023" class="section"><div class="content"><p id="wallapatta_50024" class="paragraph"><span id="wallapatta_50075" class="text">The algorithm would place the break between 1 and 2, whilst the best place is between 4 and 5.</span></p></div></div></div></div></li><li id="wallapatta_50025" class="list-item"><span id="wallapatta_50026" class="block"><em id="wallapatta_50076" class="italics"><span id="wallapatta_50077" class="text">Empty space</span></em></span><div id="wallapatta_50027" class="section"><div class="content"><p id="wallapatta_50028" class="paragraph"><span id="wallapatta_50078" class="text">Like in the above example it would leave a lot of empty space in initial pages while filling up later pages.</span></p></div></div></li></ol></div></div><div id="wallapatta_50029" class="section"><div class="content"><p id="wallapatta_50030" class="paragraph"><span id="wallapatta_50079" class="text">The first reaction to this was to add breaks at later points if the cost is the same. This didn't work out well as there were instances where the cost of breaking at a earlier point was slightly less - </span><em id="wallapatta_50080" class="italics"><span id="wallapatta_50081" class="text">although the cost was less it didn't look nice.</span></em></p></div></div><div id="wallapatta_50031" class="section"><div class="content"><p id="wallapatta_50032" class="paragraph"><span id="wallapatta_50082" class="text">So we introduced a cost based on the height of upper-part of the sections we are splitting. And another cost based on the height of the page left empty.</span></p></div></div><div id="wallapatta_50036" class="section"><div class="content"><p id="wallapatta_50037" class="paragraph"><span id="wallapatta_50084" class="text">The cost based on height of the upper-part is an inversely proportionaly to the height; i.e. there's a very large cost if you break a section right after the start. And the cost of empty pages is also inversely proportional to the height filled with content; i.e. a large cost if only a small portion of a page is filled. </span><em id="wallapatta_50085" class="italics"><span id="wallapatta_50086" class="text">The empty page cost is not added for the last page.</span></em></p></div></div><div id="wallapatta_50038" class="section"><div class="content"><p id="wallapatta_50039" class="paragraph"><span id="wallapatta_50087" class="text">This algorithm seem to give decent results so far. Here are some example</span></p><ul id="wallapatta_50040" class="list"><li id="wallapatta_50041" class="list-item"><span id="wallapatta_50042" class="block"><a id="wallapatta_50088" class="link" href="http://vpj.github.io/images/posts/page_breaks/sample_a4.pdf">A guide - A4 size</a></span></li><li id="wallapatta_50043" class="list-item"><span id="wallapatta_50044" class="block"><a id="wallapatta_50089" class="link" href="http://vpj.github.io/images/posts/page_breaks/sample_a5.pdf">Same guide - A5 size</a></span></li></ul></div></div></div>
-     </div>
-     <div class="wallapatta-sidebar three columns">
-      <div id="wallapatta_50009" class="sidenote"><div id="wallapatta_50010" class="section"><div class="content"><p id="wallapatta_50011" class="paragraph"><span id="wallapatta_50069" class="text">Cost based on the type of sections getting splitted</span></p></div></div></div><div id="wallapatta_50033" class="sidenote"><div id="wallapatta_50034" class="section"><div class="content"><p id="wallapatta_50035" class="paragraph"><span id="wallapatta_50083" class="text">Cost based on the height of upper-part of the sections getting splitted, and on the height of the page left empty</span></p></div></div></div>
-     </div>
-     <div style="display:none;">
-      <div class='wallapatta-code'>--How to automatically add sensible page breaks?
-
-In &lt;&lt;https://github.com/vpj/wallapatta(Wallaptta)&gt;&gt; we model pagination as a
-cost minimization problem.
-That is, we try to find where to place page breaks so that there is no overflow
-and the cost is minimised. If the cost of adding a page break at a given
-point is know this can be easily solved with --dynamic programming.
-
-The question is how to determine the cost of adding a page-break at a given point.
-
-First we calculated the cost based on the type of sections we split;
-e.g. --list--, --paragraph--, --table--, --between to paragraphs--, --between two topics--.
-This way the program would try to insert page breaks where the cost is less, like between two topics. Often inserting a page break will split multiple sections.
-
- &gt;&gt;&gt;
-  Cost based on the type of sections getting splitted
-
- ```
-  1 Item one
-  2 Item two
-    &lt;&lt;&lt;&lt;&lt; Page break
-    Item two details
-  3 Item three
-
- For instance the above page break splits a set of paragraphs as well as a list of items.
- It's important to know the hierarchy of the document when calculating this cost.
-
-When we first tried with just the above cost, it gave two main problems:
-
- - --Not splitting at the best points
-
-  e.g. when only 4 items would fit in a page
-
-   ```
-    1. Item 1
-    &lt;&lt;&lt;&lt;&lt; Page break
-    2. Item 2
-    3. Item 3
-    4. Item 4
-    5. Item 5
-
-   The algorithm would place the break between 1 and 2, whilst the best place is between 4 and 5.
-
- - --Empty space
-
-  Like in the above example it would leave a lot of empty space in initial pages while filling up later pages.
-
-The first reaction to this was to add breaks at later points if the cost is the same.
-This didn't work out well as there were instances where the cost of breaking
-at a earlier point was slightly less - --although the cost was less it didn't look nice.
-
-So we introduced a cost based on the height of upper-part of the sections we are
-splitting. And another cost based on the height of the page left empty.
-
- &gt;&gt;&gt;
-  Cost based on the height of upper-part of the sections getting splitted,
-  and on the height of the page left empty
-
-The cost based on height of the upper-part is an inversely proportionaly to the height;
-i.e. there's a very large cost if you break a section right after the start.
-And the cost of empty pages is also inversely proportional to the height filled with content; i.e. a large cost if only a small portion of a page is filled. --The empty page cost is not added for the last page.
-
-This algorithm seem to give decent results so far. Here are some example
-
- * &lt;&lt;http://vpj.github.io/images/posts/page_breaks/sample_a4.pdf(A guide - A4 size)&gt;&gt;
- * &lt;&lt;http://vpj.github.io/images/posts/page_breaks/sample_a5.pdf(Same guide - A5 size)&gt;&gt;</div>
-     </div>
-     <div class="overlay">
-      
-     </div>
-    </div>
-   </div>
-   <div class="paginate">
-    <a class="next-page button" href="page2.html">
-     next
-    </a>
-   </div>
-  </div>
-  <script src="lib/highlightjs/highlight.pack.js">
-  </script>
-  <script src="lib/weya/weya.js">
-  </script>
-  <script src="lib/weya/base.js">
-  </script>
-  <script src="lib/mod/mod.js">
-  </script>
-  <script src="js/static.js?v=9">
-  </script>
-  <script src="js/parser.js?v=9">
-  </script>
-  <script src="js/reader.js?v=9">
-  </script>
-  <script src="js/nodes.js?v=9">
-  </script>
-  <script src="js/render.js?v=9">
-  </script>
- </body>
-</html>
+</body>

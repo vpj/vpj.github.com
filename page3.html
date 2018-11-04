@@ -1,709 +1,129 @@
-<!DOCTYPE html><html>
- <head>
-  <meta charset="utf-8"/>
-  <title>
-   Varuna Jayasiri
-  </title>
-  <meta name="viewport" content="width=550, initial-scale=1.0"/>
-  <meta name="apple-mobile-web-app-capable" content="yes"/>
-  <link href="http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900" rel="stylesheet" type="text/css"/>
-  <link href="lib/skeleton/css/skeleton.css" rel="stylesheet"/>
-  <link href="lib/highlightjs/styles/default.css" rel="stylesheet"/>
-  <link href="css/style.css" rel="stylesheet"/>
-  <link href="css/paginate.css" rel="stylesheet"/>
-  <link href="blog.css" rel="stylesheet"/>
-  <script>
-   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <title>Varuna Jayasiri: Page 3</title>
+    <link href="http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900"
+          rel="stylesheet"
+          type="text/css"/>
+    <link rel="stylesheet" href="lib/skeleton/css/skeleton.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/paginate.css">
+    <link rel="stylesheet" href="blog.css">
+</head>
 
-ga('create', 'UA-44255805-1', 'auto');
-ga('send', 'pageview');
-  </script>
- </head>
- <body>
-  <div class="container wallapatta-container">
-   <div class="header">
-    <h1>
-     <a href="index.html">
-      VARUNA JAYASIRI
-     </a>
-    </h1>
-    <a class="button" href="https://www.twitter.com/vpj">
-     @vpj
-    </a>
-   </div>
-   <div class="wallapatta">
-    <h1 class="title">
-     <a href="node_shm.html">
-      Shared memory with Node.js
-     </a>
-    </h1>
-    <h3 class="date">
-     May 13, 2015
-    </h3>
-    <div class="post-paginated">
-     <div class="wallapatta-main nine columns">
-      <div id="wallapatta_0" class="article"><div id="wallapatta_1" class="section"><div class="content"><p id="wallapatta_2" class="paragraph"><span id="wallapatta_92" class="text">This is more like a tutorial on writing a simple node.js add-on to share memory among node.js processes.</span></p></div></div><div id="wallapatta_3" class="section"><div class="content"><p id="wallapatta_4" class="paragraph"><span id="wallapatta_93" class="text">One of the limitations of node.js/io.js is that they are single threaded. Only way to use multiple cores in the processor is to run multiple processes</span><sup id="wallapatta_94" class="superScript"><span id="wallapatta_95" class="text">1</span></sup><span id="wallapatta_96" class="text">. But then you are working on different memory spaces. So it doesn't help if you want multiple processes working on  the same memory block. This is required in memory intensive tasks that cannot be efficiently sharded.</span></p></div></div><div id="wallapatta_8" class="section"><div class="content"><p id="wallapatta_9" class="paragraph"><span id="wallapatta_102" class="text">All the source code is available in </span><a id="wallapatta_103" class="link" href="https://github.com/vpj/node_shm">Github</a><span id="wallapatta_104" class="text">.</span></p></div></div><div id="wallapatta_10" class="section"><h1 class="heading"><span id="wallapatta_11" class="block"><span id="wallapatta_105" class="text">Node addon</span></span></h1><div class="content"><div id="wallapatta_12" class="section"><div class="content"><p id="wallapatta_13" class="paragraph"><span id="wallapatta_106" class="text">You need </span><code id="wallapatta_107" class="code"><span id="wallapatta_108" class="text">node-gyp</span></code><span id="wallapatta_109" class="text"> installed to build the node module.</span></p></div></div><pre id="wallapatta_14" class="codeBlock"><code class="nohighlight">npm install node-gyp -g</code></pre><div id="wallapatta_15" class="section"><div class="content"><p id="wallapatta_16" class="paragraph"><span id="wallapatta_110" class="text">I think the node.js version matters as the addon api has changed. I was working on node </span><em id="wallapatta_111" class="italics"><span id="wallapatta_112" class="text">0.12.2</span></em><span id="wallapatta_113" class="text">, when I tested this out.</span></p></div></div><div id="wallapatta_17" class="section"><div class="content"><p id="wallapatta_18" class="paragraph"><code id="wallapatta_114" class="code"><span id="wallapatta_115" class="text">binding.gyp</span></code><span id="wallapatta_116" class="text"> is required by node-gyp to build the addon.</span></p></div></div><div id="wallapatta_19" class="section"><div class="content"><p id="wallapatta_20" class="paragraph"><span id="wallapatta_117" class="text">Then comes </span><code id="wallapatta_118" class="code"><span id="wallapatta_119" class="text">shm_addon.cpp</span></code><span id="wallapatta_120" class="text">. This is a very basic addon that has one export </span><code id="wallapatta_121" class="code"><span id="wallapatta_122" class="text">createSHM</span></code><span id="wallapatta_123" class="text">, which creates a shared memory block of 800,000 bytes (attaches if exists) with read &amp; write permission to all users</span><sup id="wallapatta_124" class="superScript"><span id="wallapatta_125" class="text">2</span></sup><span id="wallapatta_126" class="text">.</span></p></div></div><div id="wallapatta_24" class="section"><div class="content"><p id="wallapatta_25" class="paragraph"><span id="wallapatta_140" class="text">Shared memory is allocated with </span><code id="wallapatta_141" class="code"><span id="wallapatta_142" class="text">shmget</span></code><span id="wallapatta_143" class="text"> and attached to the address space of the process with </span><code id="wallapatta_144" class="code"><span id="wallapatta_145" class="text">shmat</span></code><span id="wallapatta_146" class="text">.</span></p></div></div><pre id="wallapatta_26" class="codeBlock"><code class="cpp">shmid = shmget( key, MEM, IPC_CREAT | <span class="hljs-number">0666</span> );
-data = (<span class="hljs-keyword">char</span> *)shmat( shmid, <span class="hljs-literal">NULL</span>, <span class="hljs-number">0</span> );</code></pre><div id="wallapatta_27" class="section"><div class="content"><p id="wallapatta_28" class="paragraph"><span id="wallapatta_147" class="text">It keeps a pointer to the memory block and returns it if </span><code id="wallapatta_148" class="code"><span id="wallapatta_149" class="text">createSHM</span></code><span id="wallapatta_150" class="text"> is called twice by the same node.js program</span><sup id="wallapatta_151" class="superScript"><span id="wallapatta_152" class="text">3</span></sup><span id="wallapatta_153" class="text">. </span><code id="wallapatta_154" class="code"><span id="wallapatta_155" class="text">createSHM</span></code><span id="wallapatta_156" class="text"> returns an </span><code id="wallapatta_157" class="code"><span id="wallapatta_158" class="text">ArrayBuffer</span></code><span id="wallapatta_159" class="text">, initialized with the pointer to the shared memory.</span></p></div></div><pre id="wallapatta_32" class="codeBlock"><code class="cpp">Local&lt;ArrayBuffer&gt; buffer = ArrayBuffer::New(isolate, (<span class="hljs-keyword">void</span> *)data, MEM);</code></pre><div id="wallapatta_33" class="section"><div class="content"><p id="wallapatta_34" class="paragraph"><span id="wallapatta_174" class="text">The node module </span><code id="wallapatta_175" class="code"><span id="wallapatta_176" class="text">shm_addon</span></code><span id="wallapatta_177" class="text"> is built with node-gyp with following commands.</span></p></div></div><pre id="wallapatta_35" class="codeBlock"><code class="nohighlight">node-gyp configure
-node-gyp build</code></pre><div id="wallapatta_36" class="section"><div class="content"><p id="wallapatta_37" class="paragraph"><span id="wallapatta_178" class="text">The node addon will be created in </span><code id="wallapatta_179" class="code"><span id="wallapatta_180" class="text">build/Release/shm_addon.node</span></code><span id="wallapatta_181" class="text">.</span></p></div></div></div></div><div id="wallapatta_38" class="section"><h1 class="heading"><span id="wallapatta_39" class="block"><span id="wallapatta_182" class="text">Parent and child programs</span></span></h1><div class="content"><div id="wallapatta_40" class="section"><div class="content"><p id="wallapatta_41" class="paragraph"><span id="wallapatta_183" class="text">This is a simple counting problem to illustrate how shared memory can be used. We will populate the array of 200,000 32-bit integers with the sequence </span><code id="wallapatta_184" class="code"><span id="wallapatta_185" class="text">0,1,2,...998,999,0,1,2,..998,999,0,1,2,...</span></code><span id="wallapatta_186" class="text">. So there are 200 positions with each integer between 0 and 999. Each of the child programs (workers) will count the number of occurrences of each integer between 0 and 999 by inefficiently traversing the array a 1,000 times.</span></p></div></div><div id="wallapatta_45" class="section"><div class="content"><p id="wallapatta_46" class="paragraph"><code id="wallapatta_190" class="code"><span id="wallapatta_191" class="text">spawn.coffee</span></code><span id="wallapatta_192" class="text"> is the parent program that starts the child processes. </span><code id="wallapatta_193" class="code"><span id="wallapatta_194" class="text">child.coffee</span></code><span id="wallapatta_195" class="text"> is the child program.</span></p></div></div><div id="wallapatta_47" class="section"><div class="content"><p id="wallapatta_48" class="paragraph"><span id="wallapatta_196" class="text">Shared memory is attached by parent program and child program by calling the node addon.</span></p></div></div><pre id="wallapatta_49" class="codeBlock"><code class="coffee">shm = <span class="hljs-built_in">require</span> <span class="hljs-string">'./build/Release/shm_addon'</span>
-a = <span class="hljs-keyword">new</span> Int32Array shm.createSHM()</code></pre><div id="wallapatta_50" class="section"><div class="content"><p id="wallapatta_51" class="paragraph"><span id="wallapatta_197" class="text">We are calculating the time taken for the child processes to count. Time it takes for processes to get spawn and exit is excluded. Therefore the child processes start counting when they receive something in the </span><em id="wallapatta_198" class="italics"><span id="wallapatta_199" class="text">standard input</span></em><span id="wallapatta_200" class="text">. Number of child processes can be set with </span><code id="wallapatta_201" class="code"><span id="wallapatta_202" class="text">CHILDREN</span></code><span id="wallapatta_203" class="text">.</span></p></div></div><pre id="wallapatta_52" class="codeBlock"><code class="coffee">process.stdin.<span class="hljs-literal">on</span> <span class="hljs-string">'data'</span>, <span class="hljs-function"><span class="hljs-params">(msg)</span> -&gt;</span>
-start()</code></pre><div id="wallapatta_53" class="section"><div class="content"><p id="wallapatta_54" class="paragraph"><span id="wallapatta_204" class="text">Running </span><code id="wallapatta_205" class="code"><span id="wallapatta_206" class="text">coffee spawn.coffee</span></code><span id="wallapatta_207" class="text"> will start processes and do the counting and show the time it took to complete.</span></p></div></div><div id="wallapatta_55" class="section"><div class="content"><p id="wallapatta_56" class="paragraph"><span id="wallapatta_208" class="text">You can take a look at shared memory allocated by running command </span><code id="wallapatta_209" class="code"><span id="wallapatta_210" class="text">ipcs</span></code><span id="wallapatta_211" class="text">.</span></p></div></div><pre id="wallapatta_57" class="codeBlock"><code class="nohighlight">IPC status from &lt;running system&gt; as of Tue Apr 14 13:58:16 IST 2015
-T     ID     KEY        MODE       OWNER    GROUP
-Shared Memory:
-m  65536 0x000019a5 --rw-rw-rw- varunajayasiri    staff
-m  65537 0x000019a4 --rw-rw-rw- varunajayasiri    staff
-m  65538 0x000019a2 --rw-rw-rw- varunajayasiri    staff</code></pre></div></div><div id="wallapatta_58" class="section"><h1 class="heading"><span id="wallapatta_59" class="block"><span id="wallapatta_212" class="text">Results</span></span></h1><div class="content"><div id="wallapatta_60" class="section"><div class="content"><p id="wallapatta_61" class="paragraph"><code id="wallapatta_213" class="code"><span id="wallapatta_214" class="text">bench.coffee</span></code><span id="wallapatta_215" class="text"> was used to find the time a single process takes to count.</span></p></div></div><div id="wallapatta_62" class="section"><div class="content"><p id="wallapatta_63" class="paragraph"><a id="wallapatta_216" class="link" href="https://twitter.com/chethiyaa">@chethiyaa</a><span id="wallapatta_217" class="text"> did some testing on a </span><strong id="wallapatta_218" class="bold"><span id="wallapatta_219" class="text">quad core i7</span></strong><span id="wallapatta_220" class="text">.</span></p></div></div><table id="wallapatta_64" class="table"><thead><tr><th colspan="1"><span id="wallapatta_65" class="block"><span id="wallapatta_221" class="text"># children</span></span></th><th colspan="1"><span id="wallapatta_66" class="block"><span id="wallapatta_222" class="text">single process (ms)</span></span></th><th colspan="2"><span id="wallapatta_67" class="block"><span id="wallapatta_223" class="text">multi process (ms)</span></span></th></tr></thead><tbody><tr><td colspan="1"><span id="wallapatta_68" class="block"><span id="wallapatta_224" class="text">1</span></span></td><td colspan="1"><span id="wallapatta_69" class="block"><span id="wallapatta_225" class="text">398</span></span></td><td colspan="2"><span id="wallapatta_70" class="block"><span id="wallapatta_226" class="text">430</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_71" class="block"><span id="wallapatta_227" class="text">2</span></span></td><td colspan="1"><span id="wallapatta_72" class="block"><span id="wallapatta_228" class="text">782</span></span></td><td colspan="2"><span id="wallapatta_73" class="block"><span id="wallapatta_229" class="text">394</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_74" class="block"><span id="wallapatta_230" class="text">4</span></span></td><td colspan="1"><span id="wallapatta_75" class="block"><span id="wallapatta_231" class="text">1626</span></span></td><td colspan="2"><span id="wallapatta_76" class="block"><span id="wallapatta_232" class="text">415</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_77" class="block"><span id="wallapatta_233" class="text">8</span></span></td><td colspan="1"><span id="wallapatta_78" class="block"><span id="wallapatta_234" class="text">3300</span></span></td><td colspan="2"><span id="wallapatta_79" class="block"><span id="wallapatta_235" class="text">799</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_80" class="block"><span id="wallapatta_236" class="text">16</span></span></td><td colspan="1"><span id="wallapatta_81" class="block"><span id="wallapatta_237" class="text">6285</span></span></td><td colspan="2"><span id="wallapatta_82" class="block"><span id="wallapatta_238" class="text">1594</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_83" class="block"><span id="wallapatta_239" class="text">32</span></span></td><td colspan="1"><span id="wallapatta_84" class="block"></span></td><td colspan="2"><span id="wallapatta_85" class="block"><span id="wallapatta_240" class="text">3183</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_86" class="block"><span id="wallapatta_241" class="text">64</span></span></td><td colspan="1"><span id="wallapatta_87" class="block"></span></td><td colspan="2"><span id="wallapatta_88" class="block"><span id="wallapatta_242" class="text">6372</span></span></td></tr><tr><td colspan="1"><span id="wallapatta_89" class="block"><span id="wallapatta_243" class="text">128</span></span></td><td colspan="1"><span id="wallapatta_90" class="block"></span></td><td colspan="2"><span id="wallapatta_91" class="block"><span id="wallapatta_244" class="text">13049</span></span></td></tr></tbody></table></div></div></div>
-     </div>
-     <div class="wallapatta-sidebar three columns">
-      <div id="wallapatta_5" class="sidenote"><div id="wallapatta_6" class="section"><div class="content"><p id="wallapatta_7" class="paragraph"><sup id="wallapatta_97" class="superScript"><span id="wallapatta_98" class="text">1</span></sup><span id="wallapatta_99" class="text"> Node modules like </span><a id="wallapatta_100" class="link" href="http://adambom.github.io/parallel.js/">parallel.js</a><span id="wallapatta_101" class="text"> fork new processes when on node  and use web workers on browser.</span></p></div></div></div><div id="wallapatta_21" class="sidenote"><div id="wallapatta_22" class="section"><div class="content"><p id="wallapatta_23" class="paragraph"><sup id="wallapatta_127" class="superScript"><span id="wallapatta_128" class="text">2</span></sup><span id="wallapatta_129" class="text"> </span><code id="wallapatta_130" class="code"><span id="wallapatta_131" class="text">shmget</span></code><span id="wallapatta_132" class="text"> (</span><a id="wallapatta_133" class="link" href="http://man7.org/linux/man-pages/man2/shmget.2.html">documentation</a><span id="wallapatta_134" class="text">) allocates shared memory and </span><code id="wallapatta_135" class="code"><span id="wallapatta_136" class="text">shmat</span></code><span id="wallapatta_137" class="text"> (</span><a id="wallapatta_138" class="link" href="http://man7.org/linux/man-pages/man2/shmat.2.html">documentation</a><span id="wallapatta_139" class="text">) attaches the shared memory block.</span></p></div></div></div><div id="wallapatta_29" class="sidenote"><div id="wallapatta_30" class="section"><div class="content"><p id="wallapatta_31" class="paragraph"><sup id="wallapatta_160" class="superScript"><span id="wallapatta_161" class="text">3</span></sup><span id="wallapatta_162" class="text"> Since the </span><code id="wallapatta_163" class="code"><span id="wallapatta_164" class="text">ArrayBuffer</span></code><span id="wallapatta_165" class="text"> is constructed with a memory pointer, it will be </span><code id="wallapatta_166" class="code"><span id="wallapatta_167" class="text">external</span></code><span id="wallapatta_168" class="text">. That is the memory will not be garbage collected and the addon will have to free the memory. Here's the </span><strong id="wallapatta_169" class="bold"><span id="wallapatta_170" class="text">v8</span></strong><span id="wallapatta_171" class="text"> documentation to </span><a id="wallapatta_172" class="link" href="http://bespin.cz/~ondras/html/classv8_1_1ArrayBuffer.html">ArrayBuffer</a><span id="wallapatta_173" class="text">.</span></p></div></div></div><div id="wallapatta_42" class="sidenote"><div id="wallapatta_43" class="section"><div class="content"><p id="wallapatta_44" class="paragraph"><span id="wallapatta_187" class="text">Shared memory limits are quite small by default. So trying to allocate a lot of shared memory will give errors. This </span><a id="wallapatta_188" class="link" href="http://seriousbirder.com/blogs/linux-understanding-shmmax-and-shmall-settings/">article</a><span id="wallapatta_189" class="text"> gives details on changing and viewing these settings.</span></p></div></div></div>
-     </div>
-     <div style="display:none;">
-      <div class='wallapatta-code'>
-This is more like a tutorial on writing a simple node.js add-on to share memory among node.js processes.
+<body>
+<div class='container'>
+    <div class="header">
+        <h1><a href="index.html">VARUNA JAYASIRI</a></h1>
+        <a class="button" href="https://www.twitter.com/vpj">@vpj</a>
+    </div>
 
-One of the limitations of node.js/io.js is that they are single threaded. Only way to use multiple cores in the processor is to run multiple processes^^1^^. But then you are working on different memory spaces. So it doesn't help if you want multiple processes working on  the same memory block. This is required in memory intensive tasks that cannot be efficiently sharded.
+    <div class="wallapatta">
+        <h1 class="title"><a href="weya.html">Weya.coffee</a></h1>
+        <h3 class="date">March 19, 2014</h3>
 
-&gt;&gt;&gt;
- ^^1^^ Node modules like &lt;&lt;http://adambom.github.io/parallel.js/(parallel.js)&gt;&gt; fork new processes when on node  and use web workers on browser.
+        <div class="description">
+                <p>Weya.coffee is a lightweight library with no dependencies to generate DOM elements. We developed it to replace Coffeecup as a client side template engine. Because of its simplicity and performance, we are also using Weya to replace DOM manipulation of d3.js in data visualizations.</p>
+        </div>
 
-All the source code is available in &lt;&lt;https://github.com/vpj/node_shm(Github)&gt;&gt;.
+        <div><a href="weya.html">More...</a></div>
+    </div>
+    <div class="wallapatta">
+        <h1 class="title"><a href="libraries.html">People who are really serious about software should write their libraries</a></h1>
+        <h3 class="date">February 19, 2014</h3>
 
-#Node addon
+        <div class="description">
+                <p>We have been using a lot of tools and libraries in our software, and have replaced a number of them with our code. Libraries makes it easy to get things done, and to ship early. But from my experience, having a third-party library or a tool dominate a core part of your software is not a good idea.</p>
+        </div>
 
- You need ``node-gyp`` installed to build the node module.
+        <div><a href="libraries.html">More...</a></div>
+    </div>
+    <div class="wallapatta">
+        <h1 class="title"><a href="facebook.html">We stopped advertising on Facebook</a></h1>
+        <h3 class="date">December 30, 2013</h3>
 
- ```
-  npm install node-gyp -g
+        <div class="description">
+                <p>nearby.lk stopped advertising on Facebook to get Facebook likes, because we felt that it was a giant fruitless scheme of making Facebook rich. Most of the likes on Facebook are useless, they are basically random clicks, which adds no value to anybody, and you need to pay Facebook for that. By the way, this may not be the case with advertising for Clicks to Website, Website Conversions, etc. - I don&#x27;t have experience with those.</p>
+        </div>
 
- I think the node.js version matters as the addon api has changed. I was working on node --0.12.2--, when I tested this out.
+        <div><a href="facebook.html">More...</a></div>
+    </div>
+    <div class="wallapatta">
+        <h1 class="title"><a href="d3_helpers.html">Coffeescript helpers for d3.js</a></h1>
+        <h3 class="date">December 28, 2013</h3>
 
- ``binding.gyp`` is required by node-gyp to build the addon.
+        <div class="description">
+                <p>We developed a a small library called fp.js as a wrapper for d3.js dom creation code. It helps you have much more readable, cleaner code.</p>
+        </div>
 
- Then comes ``shm_addon.cpp``. This is a very basic addon that has one export ``createSHM``, which creates a shared memory block of 800,000 bytes (attaches if exists) with read & write permission to all users^^2^^.
+        <div><a href="d3_helpers.html">More...</a></div>
+    </div>
+    <div class="wallapatta">
+        <h1 class="title"><a href="underline.html">Visualize data tables with variable length underlines</a></h1>
+        <h3 class="date">December 23, 2013</h3>
 
- &gt;&gt;&gt;
-  ^^2^^ ``shmget`` (&lt;&lt;http://man7.org/linux/man-pages/man2/shmget.2.html(documentation)&gt;&gt;) allocates shared memory and ``shmat`` (&lt;&lt;http://man7.org/linux/man-pages/man2/shmat.2.html(documentation)&gt;&gt;) attaches the shared memory block.
+        <div class="description">
+                <p>Underline doesn&#x27;t take away space in a table or a list of data and by varying the length of the underline you can help readers scan much faster and get an idea of the data and its distribution without having to read each number.</p>
+        </div>
 
+        <div><a href="underline.html">More...</a></div>
+    </div>
+    <div class="wallapatta">
+        <h1 class="title"><a href="sweetjs.html">Another JS Framework</a></h1>
+        <h3 class="date">December 17, 2013</h3>
 
- Shared memory is allocated with ``shmget`` and attached to the address space of the process with ``shmat``.
+        <div class="description">
+                <p>I started working on Sweet.js about a month ago. It is inspired by Backbone.js. Sweet.js supports HTML5 states, so that you don&#x27;t have to go through work arounds like these. Sweet.js is not a MVC framework, but it has a views similar to Backbone.js, which supports inheritance without affecting events and initializations of super classes. And it&#x27;s written in Coffeescript.</p>
+        </div>
 
- ```cpp
-  shmid = shmget( key, MEM, IPC_CREAT | 0666 );
-  data = (char *)shmat( shmid, NULL, 0 );
+        <div><a href="sweetjs.html">More...</a></div>
+    </div>
+    <div class="wallapatta">
+        <h1 class="title"><a href="app_engine.html">Moving from Google Appengine to NodeJS on Amazon EC2</a></h1>
+        <h3 class="date">December 12, 2013</h3>
 
- It keeps a pointer to the memory block and returns it if ``createSHM`` is called twice by the same node.js program^^3^^. ``createSHM`` returns an ``ArrayBuffer``, initialized with the pointer to the shared memory.
+        <div class="description">
+                <p>nearby.lk moved the servers from Google App engine to Amazon EC2 a couple of months back, and the backend is now built with nodejs with mongodb as the database.</p>
+        </div>
 
- &gt;&gt;&gt;
-  ^^3^^ Since the ``ArrayBuffer`` is constructed with a memory pointer, it will be ``external``. That is the memory will not be garbage collected and the addon will have to free the memory. Here's the **v8** documentation to &lt;&lt;http://bespin.cz/~ondras/html/classv8_1_1ArrayBuffer.html(ArrayBuffer)&gt;&gt;.
+        <div><a href="app_engine.html">More...</a></div>
+    </div>
+    <div class="wallapatta">
+        <h1 class="title"><a href="coffeescript_macros.html">Coffeescript Macros</a></h1>
+        <h3 class="date">December 9, 2013</h3>
 
- ```cpp
-  Local&lt;ArrayBuffer&gt; buffer = ArrayBuffer::New(isolate, (void *)data, MEM);
+        <div class="description">
+                <p>We are trying to have C like macros in CoffeeScript. Main motivator is to improve efficiency while keeping the code clean and maintanable.</p>
+        </div>
 
- The node module ``shm_addon`` is built with node-gyp with following commands.
+        <div><a href="coffeescript_macros.html">More...</a></div>
+    </div>
+    <div class="wallapatta">
+        <h1 class="title"><a href="forestpin_lite.html">Forestpin Lite</a></h1>
+        <h3 class="date">December 1, 2013</h3>
 
- ```
-  node-gyp configure
-  node-gyp build
+        <div class="description">
+                <p>We are releasing Forestpin Lite, with a lot of improvements to our previous Forestpin Lite version released at the 24th Fraud Conference in June. The new version is packaged as a Google Chrome offline application and therefore runs on Windows, Mac and Linux platforms. Chethiya Abeysinghe was behind Forestpin Lite.</p>
+        </div>
 
- The node addon will be created in ``build/Release/shm_addon.node``.
+        <div><a href="forestpin_lite.html">More...</a></div>
+    </div>
+    <div class="wallapatta">
+        <h1 class="title"><a href="forestpin_2014.html">Forestpin Enterprise Redesign</a></h1>
+        <h3 class="date">November 27, 2013</h3>
 
-#Parent and child programs
+        <div class="description">
+                <p>We released the new version of Forestpin Enterprise last week. The new version is a complete rewrite of both the backend and UI. The backend was rewritten to be faster and to introduce a bunch of new features and analytics. The user interface was redesigned to be much more user friendly and also with focus on mobile devices such as tablets.</p>
+        </div>
 
- This is a simple counting problem to illustrate how shared memory can be used. We will populate the array of 200,000 32-bit integers with the sequence
- ``0,1,2,...998,999,0,1,2,..998,999,0,1,2,...``. So there are 200 positions with each integer between 0 and 999. Each of the child programs (workers) will count the number of occurrences of each integer between 0 and 999 by inefficiently traversing the array a 1,000 times.
+        <div><a href="forestpin_2014.html">More...</a></div>
+    </div>
 
- &gt;&gt;&gt;
-  Shared memory limits are quite small by default. So trying to allocate a lot of shared memory will give errors. This &lt;&lt;http://seriousbirder.com/blogs/linux-understanding-shmmax-and-shmall-settings/(article)&gt;&gt; gives details on changing and viewing these settings.
+    <div class="paginate">
+        <a class="prev-page button" href="page2.html">prev</a>
 
-
- ``spawn.coffee`` is the parent program that starts the child processes. ``child.coffee`` is the child program.
-
- Shared memory is attached by parent program and child program by calling the node addon.
-
- ```coffee
-  shm = require './build/Release/shm_addon'
-  a = new Int32Array shm.createSHM()
-
- We are calculating the time taken for the child processes to count. Time it takes for processes to get spawn and exit is excluded. Therefore the child processes start counting when they receive something in the --standard input--. Number of child processes can be set with ``CHILDREN``.
-
- ```coffee
-  process.stdin.on 'data', (msg) -&gt;
-  start()
-
- Running ``coffee spawn.coffee`` will start processes and do the counting and show the time it took to complete.
-
- You can take a look at shared memory allocated by running command ``ipcs``.
-
- ```
-  IPC status from &lt;running system&gt; as of Tue Apr 14 13:58:16 IST 2015
-  T     ID     KEY        MODE       OWNER    GROUP
-  Shared Memory:
-  m  65536 0x000019a5 --rw-rw-rw- varunajayasiri    staff
-  m  65537 0x000019a4 --rw-rw-rw- varunajayasiri    staff
-  m  65538 0x000019a2 --rw-rw-rw- varunajayasiri    staff
-
-#Results
-
- ``bench.coffee`` was used to find the time a single process takes to count.
-
- &lt;&lt;https://twitter.com/chethiyaa(@chethiyaa)&gt;&gt; did some testing on a **quad core i7**.
-
-
- |||
-  | # children | single process (ms) | multi process (ms) |
-  ===
-  | 1 | 398 | 430 |
-  | 2 | 782 | 394 |
-  | 4 | 1626 | 415 |
-  | 8 | 3300 | 799 |
-  | 16 | 6285 | 1594 |
-  | 32 | | 3183 |
-  | 64 | | 6372 |
-  | 128	 | | 13049 |
-
+        <a class="next-page button" href="page4.html">next</a>
+    </div>
 </div>
-     </div>
-     <div class="overlay">
-      
-     </div>
-    </div>
-   </div>
-   <div class="wallapatta">
-    <h1 class="title">
-     <a href="b2b_customer.html">
-      Getting the first B2B customer
-     </a>
-    </h1>
-    <h3 class="date">
-     August 11, 2014
-    </h3>
-    <div class="post-paginated">
-     <div class="wallapatta-main nine columns">
-      <div id="wallapatta_10000" class="article"><div id="wallapatta_10001" class="section"><div class="content"><p id="wallapatta_10002" class="paragraph"><span id="wallapatta_10099" class="text">It took </span><a id="wallapatta_10100" class="link" href="http://www.forestpin.com">Forestpin</a><span id="wallapatta_10101" class="text"> almost 2 years to get its first big customer. Making the first sale is always hard. It was a tough ride; talking to a lot of potential customers, changing product strategy from time to time, taking up classes on pitching and of course a lot of programming. We learned a lot during the process.</span></p></div></div><div id="wallapatta_10003" class="section"><h3 class="heading"><span id="wallapatta_10004" class="block"><span id="wallapatta_10102" class="text">Beginning</span></span></h3><div class="content"><div id="wallapatta_10005" class="section"><div class="content"><p id="wallapatta_10006" class="paragraph"><span id="wallapatta_10103" class="text">We started off in March 2012, with a meeting of a few of guys. Some of whom believed that there is a lack of tools to find fraud and irregularities in financial transactions.</span></p></div></div><div id="wallapatta_10007" class="section"><div class="content"><p id="wallapatta_10008" class="paragraph"><span id="wallapatta_10104" class="text">The idea was to develop financial data analytics software to highlight anomalies.</span></p></div></div><div id="wallapatta_10009" class="section"><div class="content"><p id="wallapatta_10010" class="paragraph"><span id="wallapatta_10105" class="text">First couple of months were spent on research. We talked to auditors, accountants and managers to see if they had the problem we were trying to solve. We also discussed solutions they were using to solve it.</span></p></div></div><div id="wallapatta_10011" class="section"><div class="content"><p id="wallapatta_10012" class="paragraph"><span id="wallapatta_10106" class="text">Before starting on the product, we implemented a bunch of analyses to highlight anomalies in payments data; ran it on a large dataset and sent out compiled reports to those we talked before. We wanted to make sure that they wanted what we were building. It was quite useful since we also got feedback about other analyses they were using.</span></p></div></div><div id="wallapatta_10013" class="section"><div class="content"><p id="wallapatta_10014" class="paragraph"><span id="wallapatta_10107" class="text">It was around May when we first started working on the product, and it was ready by mid October, 2012. Sales agents were approached, documentation and legal documents were prepared and every thing was ready; all we needed was customers. We wanted to get first few customers in Sri Lanka before selling in US. It was easier to support clients in Sri Lanka since our developers based in Sri Lanka.</span></p></div></div><div id="wallapatta_10015" class="full"><div id="wallapatta_10017" class="image-container"><img class="image" src="img/forestpin_2014/2013-duplicates.png" alt="Duplicates Test"></div></div></div></div><div id="wallapatta_10018" class="section"><h3 class="heading"><span id="wallapatta_10019" class="block"><span id="wallapatta_10108" class="text">Seeking customers</span></span></h3><div class="content"><div id="wallapatta_10020" class="section"><div class="content"><p id="wallapatta_10021" class="paragraph"><span id="wallapatta_10109" class="text">We decided to get sales through sales agents. It took us a lot of time to realize that it wouldn't work out with sales agents unless we get the first few sales ourselves. Losing a few months due to a bad decision is one of the terrible things that could happen to a start up - the finances drain away, founders get demotivated, and competition increases. Luckily, we managed to get a small manufacturing company in Sri Lanka through a contact. But we needed a few big Sri Lankan customers.</span></p></div></div><div id="wallapatta_10022" class="section"><div class="content"><p id="wallapatta_10023" class="paragraph"><span id="wallapatta_10110" class="text">We pitched to companies through contacts, but it was hard - mostly because we were programmers and not marketers. Also we sometimes didn't get to pitch to decision makers. Then it takes a really long time before anything happens.  Pitching without customer references made it even harder.</span></p></div></div><div id="wallapatta_10024" class="section"><div class="content"><p id="wallapatta_10025" class="paragraph"><span id="wallapatta_10111" class="text">We didn't know how hard to push for sales; how often to call them? should we send a reminder? Pushing too much could be annoying, whilst waiting for long could reduce interest.</span></p></div></div><div id="wallapatta_10026" class="section"><div class="content"><p id="wallapatta_10027" class="paragraph"><span id="wallapatta_10112" class="text">Meetings getting canceled and postponed (sometimes after you leave for the meeting) were very discouraging; perhaps because we don't come from a marketing background.</span></p></div></div></div></div><div id="wallapatta_10028" class="section"><h3 class="heading"><span id="wallapatta_10029" class="block"><span id="wallapatta_10113" class="text">Forestpin Lite</span></span></h3><div class="content"><div id="wallapatta_10030" class="section"><div class="content"><p id="wallapatta_10031" class="paragraph"><span id="wallapatta_10114" class="text">One of the biggest difficulties in sales was proving that Forestpin could benefit companies. Trials weren't much useful since it needs hardware and connectors to their current databases.</span></p></div></div><div id="wallapatta_10032" class="section"><div class="content"><p id="wallapatta_10033" class="paragraph"><span id="wallapatta_10115" class="text">Around May - June, 2013, we developed Forestpin Lite as a standalone application to analyze small datasets. Potential customers could scan a dataset with Forestpin Lite on a laptop and get an idea of how Forestpin works. It had a limited set of features, but gave a pretty good idea of what we had to offer. This was quite useful in getting the first big sale.</span></p></div></div><div id="wallapatta_10034" class="section"><div class="content"><p id="wallapatta_10035" class="paragraph"><span id="wallapatta_10116" class="text">With Forestpin Lite, we approached the companies we had pitched earlier. We offered to analyze their data and give an overview. And it worked. The first company we approached (</span><a id="wallapatta_10117" class="link" href="http://goo.gl/TcqxxT">Hemas Holdings</a><span id="wallapatta_10118" class="text">) liked it when they saw Forestpin Lite's analysis of *their data*. It pointed out areas that required attention.</span></p></div></div></div></div><div id="wallapatta_10036" class="section"><h3 class="heading"><span id="wallapatta_10037" class="block"><span id="wallapatta_10119" class="text">Training</span></span></h3><div class="content"><div id="wallapatta_10038" class="section"><div class="content"><p id="wallapatta_10039" class="paragraph"><span id="wallapatta_10120" class="text">After doing a trial in August - September 2013, we offered a product training to </span><a id="wallapatta_10121" class="link" href="http://goo.gl/TcqxxT">Hemas Holdings</a><span id="wallapatta_10122" class="text"> risk team before they decided to purchase Forestpin. We believed it would help gain traction within their organization. We had to make the training useful for them even if they didn't purchase Forestpin.</span></p></div></div><div id="wallapatta_10040" class="section"><div class="content"><p id="wallapatta_10041" class="paragraph"><span id="wallapatta_10123" class="text">Me and Chethiya had no experience in training. We were lucky that </span><a id="wallapatta_10124" class="link" href="http://almostunreal.org/">Sifaan</a><span id="wallapatta_10125" class="text"> (a professional trainer we've known for a long time) helped us prepare and deliver the training. I believe the training was one of the key factors in getting our first sale.</span></p></div></div></div></div><div id="wallapatta_10042" class="section"><h3 class="heading"><span id="wallapatta_10043" class="block"><span id="wallapatta_10126" class="text">Next version of the software</span></span></h3><div class="content"><div id="wallapatta_10044" class="section"><div class="content"><p id="wallapatta_10045" class="paragraph"><span id="wallapatta_10127" class="text">Training was in late November 2013, and we had the second version of Forestpin ready when we did the training. They seemed quite impressed with the progress we had made from the first version they saw about 9 months back.</span></p></div></div><div id="wallapatta_10046" class="full"><div id="wallapatta_10048" class="image-container"><img class="image" src="img/forestpin_2014/2014-timeseries-correlation.png" alt="Timeseries Analysis - Redesign"></div></div><div id="wallapatta_10049" class="section"><div class="content"><p id="wallapatta_10050" class="paragraph"><span id="wallapatta_10128" class="text">All these factors helped us get the first big sale. Now it's up to us to make the existing customers really happy and look for referrals. Having a couple of reference customers helps tremendously in B2B sales.</span></p></div></div></div></div><div id="wallapatta_10051" class="section"><h2 class="heading"><span id="wallapatta_10052" class="block"><span id="wallapatta_10129" class="text">What we should have done differently</span></span></h2><div class="content"><ol id="wallapatta_10053" class="list"><li id="wallapatta_10054" class="list-item"><span id="wallapatta_10055" class="block"><strong id="wallapatta_10130" class="bold"><span id="wallapatta_10131" class="text">Develop Forestpin Lite at the beginning</span></strong></span><div id="wallapatta_10056" class="section"><div class="content"><p id="wallapatta_10057" class="paragraph"><span id="wallapatta_10132" class="text">We should have started with Forestpin Lite. It would have much easier to validate the idea and find a product market fit. We spent a lot of time rewriting the entire system when we moved from first version to second. We would have saved all that time and gained traction faster if we had Forestpin Lite early on.</span></p></div></div></li><li id="wallapatta_10058" class="list-item"><span id="wallapatta_10059" class="block"><strong id="wallapatta_10133" class="bold"><span id="wallapatta_10134" class="text">Not approach sales agents before the first few sales</span></strong></span><div id="wallapatta_10060" class="section"><div class="content"><p id="wallapatta_10061" class="paragraph"><span id="wallapatta_10135" class="text">Pitching to sales agents is harder than pitching to customers when you don't have reference customers. We lost at least 6 months while we were pitching to agents. If we had more discussions with potential customers and users instead of agents we would have at least got a lot of feedback to improve the product.</span></p></div></div></li><li id="wallapatta_10062" class="list-item"><span id="wallapatta_10063" class="block"><strong id="wallapatta_10136" class="bold"><span id="wallapatta_10137" class="text">Get in touch with user communities</span></strong></span><div id="wallapatta_10064" class="section"><div class="content"><p id="wallapatta_10065" class="paragraph"><span id="wallapatta_10138" class="text">Although we contacted a few potential customers and users at the beginning, we didn't try to get in touch with the communities of these users. We should have got involved in their communities in social media; for example, Linkedin groups for auditors, accountants and finance managers. You can definitely get good insights by discussing with these groups.</span></p></div></div></li><li id="wallapatta_10066" class="list-item"><span id="wallapatta_10067" class="block"><strong id="wallapatta_10139" class="bold"><span id="wallapatta_10140" class="text">Talk to a lot of companies in parallel</span></strong></span><div id="wallapatta_10068" class="section"><div class="content"><p id="wallapatta_10069" class="paragraph"><span id="wallapatta_10141" class="text">We initiated discussions with a lot of companies. But we tried to engage with only one company at a time from trial stage. It is a trade off between focusing on a company or dividing our limited resources among a few companies. But waiting till you finish the engagement with one company before moving on to next can be disastrous. Also there were so many gaps and delays during the engagement which would have let us work with at least 5 companies in parallel.</span></p></div></div></li></ol><div id="wallapatta_10070" class="section"><div class="content"><p id="wallapatta_10071" class="paragraph"><span id="wallapatta_10142" class="text">However, it wasn't that bad in our case since the first company we gave a trial decided to purchase Forestpin.</span></p></div></div></div></div><div id="wallapatta_10072" class="section"><h2 class="heading"><span id="wallapatta_10073" class="block"><span id="wallapatta_10143" class="text">Things we learned</span></span></h2><div class="content"><ol id="wallapatta_10074" class="list"><li id="wallapatta_10075" class="list-item"><span id="wallapatta_10076" class="block"><strong id="wallapatta_10144" class="bold"><span id="wallapatta_10145" class="text">Lot of people can influence the buying decision</span></strong></span><div id="wallapatta_10077" class="section"><div class="content"><p id="wallapatta_10078" class="paragraph"><span id="wallapatta_10146" class="text">Unlike in consumer sales, in B2B sales a lot of people influence the buying decision. They have different requirements and responsibilities. So in order to make a sale happen smoothly all these parties should be kept satisfied. I think this is more relevant when the vendor doesn't have large portfolio.</span></p></div></div><div id="wallapatta_10079" class="section"><div class="content"><p id="wallapatta_10080" class="paragraph"><span id="wallapatta_10147" class="text">In our case, the finance team, internal auditors or risk team, IT team and the top management were all involved in the decision making. All though it was the top management that made the final decision, it was based on inputs of other parties.</span></p></div></div><div id="wallapatta_10081" class="section"><div class="content"><p id="wallapatta_10082" class="paragraph"><span id="wallapatta_10148" class="text">If the finance team looks at our product as something that will put more controls on them they are not going to like it. Similarly if the auditors or IT team sees it as something that is going to increase their work load they are not going to like it either.</span></p></div></div><div id="wallapatta_10083" class="section"><div class="content"><p id="wallapatta_10084" class="paragraph"><span id="wallapatta_10149" class="text">So the pitch needs to show that the product will benefit the organization as well as individual teams.</span></p></div></div></li><li id="wallapatta_10085" class="list-item"><span id="wallapatta_10086" class="block"><strong id="wallapatta_10150" class="bold"><span id="wallapatta_10151" class="text">Sales take a long time</span></strong></span><div id="wallapatta_10087" class="section"><div class="content"><p id="wallapatta_10088" class="paragraph"><span id="wallapatta_10152" class="text">It takes a really long time. Sometimes more than an year. The organizations are busy with loads of work. And different teams become available at different times.</span></p></div></div><div id="wallapatta_10089" class="section"><div class="content"><p id="wallapatta_10090" class="paragraph"><span id="wallapatta_10153" class="text">The implementation and adaptation can also take a lot of time. We still don't have much experience at this stage, but almost all the organizations we spoke to had ongoing software implementation project that had spanned for more than 6 months.</span></p></div></div></li><li id="wallapatta_10091" class="list-item"><span id="wallapatta_10092" class="block"><strong id="wallapatta_10154" class="bold"><span id="wallapatta_10155" class="text">Urgency</span></strong></span><div id="wallapatta_10093" class="section"><div class="content"><p id="wallapatta_10094" class="paragraph"><span id="wallapatta_10156" class="text">Sales are going to take forever if there is no sense of urgency. We haven't figured how to tackle this.</span></p></div></div><div id="wallapatta_10095" class="section"><div class="content"><p id="wallapatta_10096" class="paragraph"><span id="wallapatta_10157" class="text">At a relatively smaller company, the sale happened within a couple of weeks, because they wanted their data analyze their data quickly. Perhaps they lost money due to a fraud or an inefficiency in the recent past, and wanted to make sure everything else is clean. And they wanted to do it quickly before losing any more money.</span></p></div></div><div id="wallapatta_10097" class="section"><div class="content"><p id="wallapatta_10098" class="paragraph"><span id="wallapatta_10158" class="text">Having a this sort of a reason to make things happen fast can be very helpful in sales. </span><a id="wallapatta_10159" class="link" href="http://blog.hubspot.com/sales/create-sense-of-urgency-in-prospect-roleplay">This article by HubSpot</a><span id="wallapatta_10160" class="text"> illustrates how you can create urgency.</span></p></div></div></li></ol></div></div></div>
-     </div>
-     <div class="wallapatta-sidebar three columns">
-      <div id="wallapatta_10016" class="sidenote"></div><div id="wallapatta_10047" class="sidenote"></div>
-     </div>
-     <div style="display:none;">
-      <div class='wallapatta-code'>It took &lt;&lt;http://www.forestpin.com(Forestpin)&gt;&gt; almost 2 years to get its first big customer. Making the first sale is always hard. It was a tough ride; talking to a lot of potential customers, changing product strategy from time to time, taking up classes on pitching and of course a lot of programming. We learned a lot during the process.
-
-###Beginning
- We started off in March 2012, with a meeting of a few of guys. Some of whom believed that there is a lack of tools to find fraud and irregularities in financial transactions.
-
- The idea was to develop financial data analytics software to highlight anomalies.
-
- First couple of months were spent on research. We talked to auditors, accountants and managers to see if they had the problem we were trying to solve. We also discussed solutions they were using to solve it.
-
- Before starting on the product, we implemented a bunch of analyses to highlight anomalies in payments data; ran it on a large dataset and sent out compiled reports to those we talked before. We wanted to make sure that they wanted what we were building. It was quite useful since we also got feedback about other analyses they were using.
-
- It was around May when we first started working on the product, and it was ready by mid October, 2012. Sales agents were approached, documentation and legal documents were prepared and every thing was ready; all we needed was customers. We wanted to get first few customers in Sri Lanka before selling in US. It was easier to support clients in Sri Lanka since our developers based in Sri Lanka.
-
- &lt;!&gt;
-  !img/forestpin_2014/2013-duplicates.png(Duplicates Test)
-
-###Seeking customers
- We decided to get sales through sales agents. It took us a lot of time to realize that it wouldn't work out with sales agents unless we get the first few sales ourselves. Losing a few months due to a bad decision is one of the terrible things that could happen to a start up - the finances drain away, founders get demotivated, and competition increases. Luckily, we managed to get a small manufacturing company in Sri Lanka through a contact. But we needed a few big Sri Lankan customers.
-
- We pitched to companies through contacts, but it was hard - mostly because we were programmers and not marketers. Also we sometimes didn't get to pitch to decision makers. Then it takes a really long time before anything happens.  Pitching without customer references made it even harder.
-
- We didn't know how hard to push for sales; how often to call them? should we send a reminder? Pushing too much could be annoying, whilst waiting for long could reduce interest.
-
- Meetings getting canceled and postponed (sometimes after you leave for the meeting) were very discouraging; perhaps because we don't come from a marketing background.
-
-###Forestpin Lite
- One of the biggest difficulties in sales was proving that Forestpin could benefit companies. Trials weren't much useful since it needs hardware and connectors to their current databases.
-
- Around May - June, 2013, we developed Forestpin Lite as a standalone application to analyze small datasets. Potential customers could scan a dataset with Forestpin Lite on a laptop and get an idea of how Forestpin works. It had a limited set of features, but gave a pretty good idea of what we had to offer. This was quite useful in getting the first big sale.
-
- With Forestpin Lite, we approached the companies we had pitched earlier. We offered to analyze their data and give an overview. And it worked. The first company we approached (&lt;&lt;http://goo.gl/TcqxxT(Hemas Holdings)&gt;&gt;) liked it when they saw Forestpin Lite's analysis of *their data*. It pointed out areas that required attention.
-
-###Training
- After doing a trial in August - September 2013, we offered a product training to &lt;&lt;http://goo.gl/TcqxxT(Hemas Holdings)&gt;&gt; risk team before they decided to purchase Forestpin. We believed it would help gain traction within their organization. We had to make the training useful for them even if they didn't purchase Forestpin.
-
- Me and Chethiya had no experience in training. We were lucky that &lt;&lt;http://almostunreal.org/(Sifaan)&gt;&gt; (a professional trainer we've known for a long time) helped us prepare and deliver the training. I believe the training was one of the key factors in getting our first sale.
-
-###Next version of the software
- Training was in late November 2013, and we had the second version of Forestpin ready when we did the training. They seemed quite impressed with the progress we had made from the first version they saw about 9 months back.
-
- &lt;!&gt;
-  !img/forestpin_2014/2014-timeseries-correlation.png(Timeseries Analysis - Redesign)
-
- All these factors helped us get the first big sale. Now it's up to us to make the existing customers really happy and look for referrals. Having a couple of reference customers helps tremendously in B2B sales.
-
-##What we should have done differently
-
- - **Develop Forestpin Lite at the beginning
-
-  We should have started with Forestpin Lite. It would have much easier to validate the idea and find a product market fit. We spent a lot of time rewriting the entire system when we moved from first version to second. We would have saved all that time and gained traction faster if we had Forestpin Lite early on.
-
- - **Not approach sales agents before the first few sales
-
-  Pitching to sales agents is harder than pitching to customers when you don't have reference customers. We lost at least 6 months while we were pitching to agents. If we had more discussions with potential customers and users instead of agents we would have at least got a lot of feedback to improve the product.
-
- - **Get in touch with user communities
-
-  Although we contacted a few potential customers and users at the beginning, we didn't try to get in touch with the communities of these users. We should have got involved in their communities in social media; for example, Linkedin groups for auditors, accountants and finance managers. You can definitely get good insights by discussing with these groups.
-
- - **Talk to a lot of companies in parallel
-
-  We initiated discussions with a lot of companies. But we tried to engage with only one company at a time from trial stage. It is a trade off between focusing on a company or dividing our limited resources among a few companies. But waiting till you finish the engagement with one company before moving on to next can be disastrous. Also there were so many gaps and delays during the engagement which would have let us work with at least 5 companies in parallel.
-
- However, it wasn't that bad in our case since the first company we gave a trial decided to purchase Forestpin.
-
-##Things we learned
-
- - **Lot of people can influence the buying decision
-
-  Unlike in consumer sales, in B2B sales a lot of people influence the buying decision. They have different requirements and responsibilities. So in order to make a sale happen smoothly all these parties should be kept satisfied. I think this is more relevant when the vendor doesn't have large portfolio.
-
-  In our case, the finance team, internal auditors or risk team, IT team and the top management were all involved in the decision making. All though it was the top management that made the final decision, it was based on inputs of other parties.
-
-  If the finance team looks at our product as something that will put more controls on them they are not going to like it. Similarly if the auditors or IT team sees it as something that is going to increase their work load they are not going to like it either.
-
-  So the pitch needs to show that the product will benefit the organization as well as individual teams.
-
- - **Sales take a long time
-
-  It takes a really long time. Sometimes more than an year. The organizations are busy with loads of work. And different teams become available at different times.
-
-  The implementation and adaptation can also take a lot of time. We still don't have much experience at this stage, but almost all the organizations we spoke to had ongoing software implementation project that had spanned for more than 6 months.
-
- - **Urgency
-
-  Sales are going to take forever if there is no sense of urgency. We haven't figured how to tackle this.
-
-  At a relatively smaller company, the sale happened within a couple of weeks, because they wanted their data analyze their data quickly. Perhaps they lost money due to a fraud or an inefficiency in the recent past, and wanted to make sure everything else is clean. And they wanted to do it quickly before losing any more money.
-
-  Having a this sort of a reason to make things happen fast can be very helpful in sales. &lt;&lt;http://blog.hubspot.com/sales/create-sense-of-urgency-in-prospect-roleplay(This article by HubSpot)&gt;&gt; illustrates how you can create urgency.
-</div>
-     </div>
-     <div class="overlay">
-      
-     </div>
-    </div>
-   </div>
-   <div class="wallapatta">
-    <h1 class="title">
-     <a href="dark_light.html">
-      Black or White
-     </a>
-    </h1>
-    <h3 class="date">
-     July 27, 2014
-    </h3>
-    <div class="post-paginated">
-     <div class="wallapatta-main nine columns">
-      <div id="wallapatta_20000" class="article"><div id="wallapatta_20001" class="section"><div class="content"><p id="wallapatta_20002" class="paragraph"><span id="wallapatta_20049" class="text">Which background is better? Most text editors and document readers have light backgrounds. But there's a lot of programmers who use dark backgrounds. And there are a some analytics and dashboard applications with dark backgrounds.</span></p></div></div><div id="wallapatta_20003" class="full"><div id="wallapatta_20005" class="image-container"><img class="image" src="img/dark.png" alt="img/dark.png"></div></div><div id="wallapatta_20006" class="section"><div class="content"><p id="wallapatta_20007" class="paragraph"><span id="wallapatta_20050" class="text">Stephan Few has criticized using dark backgrounds for dashboards in his book </span><a id="wallapatta_20051" class="link" href="http://www.amazon.com/Information-Dashboard-Design-At-Glance/dp/1938377001">Information Dashboard Design</a><span id="wallapatta_20052" class="text">, citing an image of </span><a id="wallapatta_20053" class="link" href="http://roambi.com">Roambi</a><span id="wallapatta_20054" class="text">. By the way, Roambi later moved to a white background and then brought back the option of dark backgrounds.</span></p></div></div><div id="wallapatta_20008" class="special"><div id="wallapatta_20009" class="section"><div class="content"><p id="wallapatta_20010" class="paragraph"><span id="wallapatta_20055" class="text">Have you noticed that many business intelligence (BI) software companies have introduced black screens as the standard for mobile devices? Is this because mobile devices work better with black screens? If you look for the research, as I have, it isn’t likely that you’ll find any.</span></p></div></div><div id="wallapatta_20011" class="section"><div class="content"><p id="wallapatta_20012" class="paragraph"><span id="wallapatta_20056" class="text">No one seems to question the efficacy of light backgrounds for reading text. Why the difference? Text and graphics both involve objects that are constructed of lines and filled in areas of color. Do they differ in a way that demands a different background color? I don’t think so.</span></p></div></div></div><div id="wallapatta_20016" class="section"><div class="content"><p id="wallapatta_20017" class="paragraph"><span id="wallapatta_20059" class="text">In the above article he discusses arguments by vendors who use dark backgrounds. Most of the arguments he has considered are technical (battery saving, sunlight reflection) and doesn't discuss which is better if technology wasn't a constraint. I feel the discussion is biased towards light backgrounds.</span></p></div></div><div id="wallapatta_20018" class="section"><div class="content"><p id="wallapatta_20019" class="paragraph"><span id="wallapatta_20060" class="text">The article is based on the idea that because white backgrounds are used in editors and readers for a long time, it is better to stick to it until there is solid evidence that dark backgrounds are better.</span></p></div></div><div id="wallapatta_20020" class="section"><div class="content"><p id="wallapatta_20021" class="paragraph"><span id="wallapatta_20061" class="text">Editing and reading software use white backgrounds to mimic paper. Paper is whitish and has been there for centuries. However that was probably because of technological limitations on paper and ink colors. It was not a decision based evidence that white backgrounds are perceptually better.</span></p></div></div><div id="wallapatta_20022" class="section"><div class="content"><p id="wallapatta_20023" class="paragraph"><span id="wallapatta_20062" class="text">Edward Tufte has brought it up in one of his discussions.</span></p></div></div><div id="wallapatta_20024" class="special"><div id="wallapatta_20025" class="section"><div class="content"><p id="wallapatta_20026" class="paragraph"><span id="wallapatta_20063" class="text">The usual metaphor for screens (projection and computer) these days seems to be black type on a white background, that is, a paper metaphor. This sometimes results in video glare, with lots of rays coming from the background. Sometimes the old fashioned computer screen seems less tiring, showing lit-up text on a dead backround.</span></p></div></div></div><div id="wallapatta_20030" class="section"><div class="content"><p id="wallapatta_20031" class="paragraph"><span id="wallapatta_20066" class="text">Then he continues to discuss why his website has a light background.</span></p></div></div><div id="wallapatta_20032" class="special"><div id="wallapatta_20033" class="section"><div class="content"><p id="wallapatta_20034" class="paragraph"><span id="wallapatta_20067" class="text">But my metaphor here is paper, like a book. If reproduced on a dark background, my images (which are generally very light in value) would come blaring and glaring out of the dark surround.</span></p></div></div><div id="wallapatta_20035" class="section"><div class="content"><p id="wallapatta_20036" class="paragraph"><span id="wallapatta_20068" class="text">Light backgrounds produce video glare. So turn the screen brightness at night and after working many hours at the computer. It is often useful to dull down the electric-blue white of the computer screen with a soft background tone, as done here.</span></p></div></div></div><div id="wallapatta_20040" class="section"><div class="content"><p id="wallapatta_20041" class="paragraph"><span id="wallapatta_20071" class="text">I feel what needs to be considered is how people use your application. If they switch between your application and other applications with light backgrounds (e.g. websites, editors, physical paper), then you should consider a light background. It won't happen the other way around often since majority of software uses light backgrounds, with the exception of photo editors.</span></p></div></div><div id="wallapatta_20042" class="section"><div class="content"><p id="wallapatta_20043" class="paragraph"><span id="wallapatta_20072" class="text">If the software is used in isolation, dark or light wouldn't make a big difference. Then the factors such as device, power consumption, coolness (aesthetics) and glare can be considered.</span></p></div></div><div id="wallapatta_20044" class="full"><div id="wallapatta_20046" class="image-container"><img class="image" src="img/light.png" alt="img/light.png"></div><div id="wallapatta_20047" class="section"><div class="content"><p id="wallapatta_20048" class="paragraph"><em id="wallapatta_20073" class="italics"><span id="wallapatta_20074" class="text">These dark and light screenshots are still WIP. We were trying different backgrounds to see which is better. When placed inside this blog, the screenshot with light background looks a lot better because of the surrounding.*</span></em></p></div></div></div></div>
-     </div>
-     <div class="wallapatta-sidebar three columns">
-      <div id="wallapatta_20004" class="sidenote"></div><div id="wallapatta_20013" class="sidenote"><div id="wallapatta_20014" class="section"><div class="content"><p id="wallapatta_20015" class="paragraph"><strong id="wallapatta_20057" class="bold"><a id="wallapatta_20058" class="link" href="http://www.perceptualedge.com/blog/?p=1445">Stephan Few</a></strong></p></div></div></div><div id="wallapatta_20027" class="sidenote"><div id="wallapatta_20028" class="section"><div class="content"><p id="wallapatta_20029" class="paragraph"><strong id="wallapatta_20064" class="bold"><a id="wallapatta_20065" class="link" href="http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=000082">Edward Tufte</a></strong></p></div></div></div><div id="wallapatta_20037" class="sidenote"><div id="wallapatta_20038" class="section"><div class="content"><p id="wallapatta_20039" class="paragraph"><strong id="wallapatta_20069" class="bold"><a id="wallapatta_20070" class="link" href="http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000M0">Edward Tufte</a></strong></p></div></div></div><div id="wallapatta_20045" class="sidenote"></div>
-     </div>
-     <div style="display:none;">
-      <div class='wallapatta-code'>Which background is better? Most text editors and document readers have light backgrounds. But there's a lot of programmers who use dark backgrounds. And there are a some analytics and dashboard applications with dark backgrounds.
-
-&lt;!&gt;
- !img/dark.png
-
-Stephan Few has criticized using dark backgrounds for dashboards in his book &lt;&lt;http://www.amazon.com/Information-Dashboard-Design-At-Glance/dp/1938377001(Information Dashboard Design)&gt;&gt;, citing an image of &lt;&lt;http://roambi.com(Roambi)&gt;&gt;. By the way, Roambi later moved to a white background and then brought back the option of dark backgrounds.
-
-+++
- Have you noticed that many business intelligence (BI) software companies have introduced black screens as the standard for mobile devices? Is this because mobile devices work better with black screens? If you look for the research, as I have, it isn’t likely that you’ll find any.
-
- No one seems to question the efficacy of light backgrounds for reading text. Why the difference? Text and graphics both involve objects that are constructed of lines and filled in areas of color. Do they differ in a way that demands a different background color? I don’t think so.
-
-&gt;&gt;&gt;
- **&lt;&lt;http://www.perceptualedge.com/blog/?p=1445(Stephan Few)&gt;&gt;
-
-In the above article he discusses arguments by vendors who use dark backgrounds. Most of the arguments he has considered are technical (battery saving, sunlight reflection) and doesn't discuss which is better if technology wasn't a constraint. I feel the discussion is biased towards light backgrounds.
-
-The article is based on the idea that because white backgrounds are used in editors and readers for a long time, it is better to stick to it until there is solid evidence that dark backgrounds are better.
-
-Editing and reading software use white backgrounds to mimic paper. Paper is whitish and has been there for centuries. However that was probably because of technological limitations on paper and ink colors. It was not a decision based evidence that white backgrounds are perceptually better.
-
-Edward Tufte has brought it up in one of his discussions.
-
-+++
- The usual metaphor for screens (projection and computer) these days seems to be black type on a white background, that is, a paper metaphor. This sometimes results in video glare, with lots of rays coming from the background. Sometimes the old fashioned computer screen seems less tiring, showing lit-up text on a dead backround.
-
-&gt;&gt;&gt;
- **&lt;&lt;http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=000082(Edward Tufte)&gt;&gt;
-
-Then he continues to discuss why his website has a light background.
-
-+++
- But my metaphor here is paper, like a book. If reproduced on a dark background, my images (which are generally very light in value) would come blaring and glaring out of the dark surround.
-
- Light backgrounds produce video glare. So turn the screen brightness at night and after working many hours at the computer. It is often useful to dull down the electric-blue white of the computer screen with a soft background tone, as done here.
-
-&gt;&gt;&gt;
- **&lt;&lt;http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000M0(Edward Tufte)&gt;&gt;
-
-I feel what needs to be considered is how people use your application. If they switch between your application and other applications with light backgrounds (e.g. websites, editors, physical paper), then you should consider a light background. It won't happen the other way around often since majority of software uses light backgrounds, with the exception of photo editors.
-
-If the software is used in isolation, dark or light wouldn't make a big difference. Then the factors such as device, power consumption, coolness (aesthetics) and glare can be considered.
-
-&lt;!&gt;
- !img/light.png
-
- --These dark and light screenshots are still WIP. We were trying different backgrounds to see which is better. When placed inside this blog, the screenshot with light background looks a lot better because of the surrounding.*</div>
-     </div>
-     <div class="overlay">
-      
-     </div>
-    </div>
-   </div>
-   <div class="wallapatta">
-    <h1 class="title">
-     <a href="seo.html">
-      SEO Crap
-     </a>
-    </h1>
-    <h3 class="date">
-     July 27, 2014
-    </h3>
-    <div class="post-paginated">
-     <div class="wallapatta-main nine columns">
-      <div id="wallapatta_30000" class="article"><div id="wallapatta_30001" class="section"><div class="content"><p id="wallapatta_30002" class="paragraph"><a id="wallapatta_30028" class="link" href="http://www.forbes.com/sites/jaysondemers/2013/11/13/is-seo-dead/">SEO is dead</a><span id="wallapatta_30029" class="text"> - at least much different from what it was known to be. But there are a plenty of consultants who market SEO, as if it is something that is hard to get right. Many organizations fall for it.</span></p></div></div><div id="wallapatta_30003" class="section"><div class="content"><p id="wallapatta_30004" class="paragraph"><span id="wallapatta_30030" class="text">Search engines do not want to show web sites with some special SEO sauce to be on top. They want websites that people look for.</span></p></div></div><div id="wallapatta_30005" class="section"><div class="content"><p id="wallapatta_30006" class="paragraph"><span id="wallapatta_30031" class="text">There were days when you could use neat little tricks (link farms, etc) to go higher on search results.  This was possible because it is hard for an algorithm to figure out what's better content. Now search engine algorithms have gotten better and they don't fall for these tricks.</span></p></div></div><div id="wallapatta_30007" class="special"><div id="wallapatta_30008" class="section"><div class="content"><p id="wallapatta_30009" class="paragraph"><span id="wallapatta_30032" class="text">Yet I knew from experience that the real secret to SEO was not about tricks but about making your site the best it could be for your users while keeping the search engines in mind. It was true when I started doing SEO and it’s true now. Doing that always, always, always works to bring more targeted search engine traffic to your website. But, sadly, the tricks that the other SEO people were doing and writing about also worked, albeit temporarily.</span></p></div></div><div id="wallapatta_30010" class="section"><div class="content"><p id="wallapatta_30011" class="paragraph"><a id="wallapatta_30033" class="link" href="http://whatdidyoudowithjill.com/leaving-seo-post/">Jill Whalen</a><span id="wallapatta_30034" class="text"> </span><a id="wallapatta_30035" class="link" href="http://en.wikipedia.org/wiki/Jill_Whalen">SEO Consultant</a></p></div></div></div><div id="wallapatta_30012" class="section"><div class="content"><p id="wallapatta_30013" class="paragraph"><span id="wallapatta_30036" class="text">So as long as your website</span></p><ol id="wallapatta_30014" class="list"><li id="wallapatta_30015" class="list-item"><span id="wallapatta_30016" class="block"><span id="wallapatta_30037" class="text">has good content which people like,</span></span></li><li id="wallapatta_30017" class="list-item"><span id="wallapatta_30018" class="block"><span id="wallapatta_30038" class="text">is accessible to internet users,</span></span></li><li id="wallapatta_30019" class="list-item"><span id="wallapatta_30020" class="block"><span id="wallapatta_30039" class="text">uses proper HTML syntax, and</span></span></li><li id="wallapatta_30021" class="list-item"><span id="wallapatta_30022" class="block"><a id="wallapatta_30040" class="link" href="https://support.google.com/webmasters/answer/182072?hl=en">is crawlable</a></span></li></ol></div></div><div id="wallapatta_30026" class="section"><div class="content"><p id="wallapatta_30027" class="paragraph"><span id="wallapatta_30043" class="text">you don't have to worry about getting consultancy for SEO. If your web developer can't get 2, 3 and 4 right, you should get a better developer; often it requires effort to get those wrong.</span></p></div></div></div>
-     </div>
-     <div class="wallapatta-sidebar three columns">
-      <div id="wallapatta_30023" class="sidenote"><div id="wallapatta_30024" class="section"><div class="content"><p id="wallapatta_30025" class="paragraph"><a id="wallapatta_30041" class="link" href="https://static.googleusercontent.com/external_content/untrusted_dlcp/www.google.com/en//webmasters/docs/search-engine-optimization-starter-guide.pdf">This document</a><span id="wallapatta_30042" class="text"> by Google is a pretty good guide about these stuff.</span></p></div></div></div>
-     </div>
-     <div style="display:none;">
-      <div class='wallapatta-code'>&lt;&lt;http://www.forbes.com/sites/jaysondemers/2013/11/13/is-seo-dead/(SEO is dead)&gt;&gt; - at least much different from what it was known to be. But there are a plenty of consultants who market SEO, as if it is something that is hard to get right. Many organizations fall for it.
-
-Search engines do not want to show web sites with some special SEO sauce to be on top. They want websites that people look for.
-
-There were days when you could use neat little tricks (link farms, etc) to go higher on search results.  This was possible because it is hard for an algorithm to figure out what's better content. Now search engine algorithms have gotten better and they don't fall for these tricks.
-
-+++
- Yet I knew from experience that the real secret to SEO was not about tricks but about making your site the best it could be for your users while keeping the search engines in mind. It was true when I started doing SEO and it’s true now. Doing that always, always, always works to bring more targeted search engine traffic to your website. But, sadly, the tricks that the other SEO people were doing and writing about also worked, albeit temporarily.
-
- &lt;&lt;http://whatdidyoudowithjill.com/leaving-seo-post/(Jill Whalen)&gt;&gt; &lt;&lt;http://en.wikipedia.org/wiki/Jill_Whalen(SEO Consultant)&gt;&gt;
-
-So as long as your website
-
- - has good content which people like,
- - is accessible to internet users,
- - uses proper HTML syntax, and
- - &lt;&lt;https://support.google.com/webmasters/answer/182072?hl=en(is crawlable)&gt;&gt;
-
-&gt;&gt;&gt;
- &lt;&lt;https://static.googleusercontent.com/external_content/untrusted_dlcp/www.google.com/en//webmasters/docs/search-engine-optimization-starter-guide.pdf(This document)&gt;&gt; by Google is a pretty good guide about these stuff.
-
-you don't have to worry about getting consultancy for SEO. If your web developer can't get 2, 3 and 4 right, you should get a better developer; often it requires effort to get those wrong.
-
-</div>
-     </div>
-     <div class="overlay">
-      
-     </div>
-    </div>
-   </div>
-   <div class="wallapatta">
-    <h1 class="title">
-     <a href="html_animation.html">
-      2 to 10 times faster HTML animations
-     </a>
-    </h1>
-    <h3 class="date">
-     May 10, 2014
-    </h3>
-    <div class="post-paginated">
-     <div class="wallapatta-main nine columns">
-      <div id="wallapatta_40000" class="article"><div id="wallapatta_40001" class="section"><div class="content"><p id="wallapatta_40002" class="paragraph"><span id="wallapatta_40034" class="text">When animating/moving HTML elements, setting their position with </span><code id="wallapatta_40035" class="code"><span id="wallapatta_40036" class="text">-webkit-transform: matrix3d()</span></code><span id="wallapatta_40037" class="text"> gives two to ten times faster frame rates compared to </span><code id="wallapatta_40038" class="code"><span id="wallapatta_40039" class="text">top</span></code><span id="wallapatta_40040" class="text">/</span><code id="wallapatta_40041" class="code"><span id="wallapatta_40042" class="text">left</span></code><span id="wallapatta_40043" class="text"> or </span><code id="wallapatta_40044" class="code"><span id="wallapatta_40045" class="text">-webkit-transform: matrix()</span></code><span id="wallapatta_40046" class="text">. On mobile devices you can observe native app like performance with </span><code id="wallapatta_40047" class="code"><span id="wallapatta_40048" class="text">transform: matrix3d</span></code><span id="wallapatta_40049" class="text">.</span></p></div></div><div id="wallapatta_40003" class="section"><h2 class="heading"><span id="wallapatta_40004" class="block"><span id="wallapatta_40050" class="text">Demo</span></span></h2><div class="content"></div></div><div id="wallapatta_40010" class="section"><div class="content"><p id="wallapatta_40011" class="paragraph"><span id="wallapatta_40053" class="text">It moves a panel that contains 10,000 </span><code id="wallapatta_40054" class="code"><span id="wallapatta_40055" class="text">div</span></code><span id="wallapatta_40056" class="text"> elements. On my macbook air running chrome, </span><code id="wallapatta_40057" class="code"><span id="wallapatta_40058" class="text">transform:matrix3d</span></code><span id="wallapatta_40059" class="text"> gives 30 - 40 fps while </span><code id="wallapatta_40060" class="code"><span id="wallapatta_40061" class="text">position:top/left</span></code><span id="wallapatta_40062" class="text"> and </span><code id="wallapatta_40063" class="code"><span id="wallapatta_40064" class="text">transform:matrix</span></code><span id="wallapatta_40065" class="text"> gives 10-15 fps. You can check the frame rate by selecting </span><strong id="wallapatta_40066" class="bold"><span id="wallapatta_40067" class="text">Show FPS meter</span></strong><span id="wallapatta_40068" class="text"> on </span><strong id="wallapatta_40069" class="bold"><span id="wallapatta_40070" class="text">Rendering</span></strong><span id="wallapatta_40071" class="text"> tab of chrome developer tools.</span></p></div></div><div id="wallapatta_40012" class="section"><div class="content"><p id="wallapatta_40013" class="paragraph"><span id="wallapatta_40072" class="text">The following image shows snapshot of frames timeline with </span><code id="wallapatta_40073" class="code"><span id="wallapatta_40074" class="text">top</span></code><span id="wallapatta_40075" class="text">/</span><code id="wallapatta_40076" class="code"><span id="wallapatta_40077" class="text">left</span></code><span id="wallapatta_40078" class="text">.</span></p></div></div><div id="wallapatta_40014" class="image-container"><img class="image" src="img/transform/topleft.png" alt="Timeline for top/left"></div><div id="wallapatta_40015" class="section"><div class="content"><p id="wallapatta_40016" class="paragraph"><span id="wallapatta_40079" class="text">This is the snapshot of frames timeline with </span><code id="wallapatta_40080" class="code"><span id="wallapatta_40081" class="text">transform:matrix3d</span></code><span id="wallapatta_40082" class="text">.</span></p></div></div><div id="wallapatta_40017" class="image-container"><img class="image" src="img/transform/matrix3d.png" alt="Timeline for transform:matrix3d"></div><div id="wallapatta_40018" class="section"><div class="content"><p id="wallapatta_40019" class="paragraph"><code id="wallapatta_40083" class="code"><span id="wallapatta_40084" class="text">transform: matrix3d</span></code><span id="wallapatta_40085" class="text"> takes out the paint operation which gives increased frame.</span></p></div></div><div id="wallapatta_40020" class="special"><div id="wallapatta_40021" class="section"><div class="content"><p id="wallapatta_40022" class="paragraph"><span id="wallapatta_40086" class="text">The 3d translation layers offer a way of pre-blitting all the stuff inside the DOM element into a layer, which is therefore available for direct blitting operations inside the render tree. Well, at least that's the conceptual idea behind.</span></p></div></div><div id="wallapatta_40023" class="section"><div class="content"><p id="wallapatta_40024" class="paragraph"><strong id="wallapatta_40087" class="bold"><span id="wallapatta_40088" class="text">martensms</span></strong><span id="wallapatta_40089" class="text"> on </span><a id="wallapatta_40090" class="link" href="http://www.html5gamedevs.com/topic/171-myth-busting-the-html5-performance-of-transformtranslate-vs-topleft/">html5gamedevs.com</a></p></div></div></div><div id="wallapatta_40025" class="section"><div class="content"><p id="wallapatta_40026" class="paragraph"><span id="wallapatta_40091" class="text">The frame rates with </span><code id="wallapatta_40092" class="code"><span id="wallapatta_40093" class="text">transform:matrix3d</span></code><span id="wallapatta_40094" class="text"> becomes about </span><em id="wallapatta_40095" class="italics"><span id="wallapatta_40096" class="text">10 times</span></em><span id="wallapatta_40097" class="text"> higher than other methods as the content of the panel which moves gets heavier. I tried with about a 1,000 small SVG graphs with 1,000 data points.</span></p></div></div><div id="wallapatta_40027" class="section"><div class="content"><p id="wallapatta_40028" class="paragraph"><span id="wallapatta_40098" class="text">Most of the discussions I found on the internet were comparing </span><code id="wallapatta_40099" class="code"><span id="wallapatta_40100" class="text">top</span></code><span id="wallapatta_40101" class="text">/</span><code id="wallapatta_40102" class="code"><span id="wallapatta_40103" class="text">left</span></code><span id="wallapatta_40104" class="text"> to </span><code id="wallapatta_40105" class="code"><span id="wallapatta_40106" class="text">transform: matrix</span></code><span id="wallapatta_40107" class="text"> or </span><code id="wallapatta_40108" class="code"><span id="wallapatta_40109" class="text">transform: translate</span></code><span id="wallapatta_40110" class="text"> </span><sup id="wallapatta_40111" class="superScript"><span id="wallapatta_40112" class="text">1, 2</span></sup><span id="wallapatta_40113" class="text">, but not so much information about using </span><code id="wallapatta_40114" class="code"><span id="wallapatta_40115" class="text">transform: matrix3d</span></code><span id="wallapatta_40116" class="text">.</span></p></div></div></div>
-     </div>
-     <div class="wallapatta-sidebar three columns">
-      <div id="wallapatta_40005" class="sidenote"><div id="wallapatta_40006" class="section"><div class="content"><p id="wallapatta_40007" class="paragraph"><a id="wallapatta_40051" class="link" href="http://bl.ocks.org/vpj/c5468e4593319009320e">Demo 1</a></p></div></div><div id="wallapatta_40008" class="section"><div class="content"><p id="wallapatta_40009" class="paragraph"><a id="wallapatta_40052" class="link" href="http://bl.ocks.org/vpj/c5468e4593319009320e">Demo 2</a></p></div></div></div><div id="wallapatta_40029" class="sidenote"><div id="wallapatta_40030" class="section"><div class="content"><p id="wallapatta_40031" class="paragraph"><sup id="wallapatta_40117" class="superScript"><span id="wallapatta_40118" class="text">1</span></sup><span id="wallapatta_40119" class="text"> An old discussion on Hacker News about </span><code id="wallapatta_40120" class="code"><span id="wallapatta_40121" class="text">transform: translate</span></code><span id="wallapatta_40122" class="text"> and </span><code id="wallapatta_40123" class="code"><span id="wallapatta_40124" class="text">top</span></code><span id="wallapatta_40125" class="text">/</span><code id="wallapatta_40126" class="code"><span id="wallapatta_40127" class="text">left</span></code><span id="wallapatta_40128" class="text"> (3d transformations are not considered) </span><a id="wallapatta_40129" class="link" href="https://news.ycombinator.com/item?id=5301731">Myth busting the HTML5 performance of transform:translate vs. top/left</a></p></div></div><div id="wallapatta_40032" class="section"><div class="content"><p id="wallapatta_40033" class="paragraph"><sup id="wallapatta_40130" class="superScript"><span id="wallapatta_40131" class="text">2</span></sup><span id="wallapatta_40132" class="text"> Some other advantages of using </span><code id="wallapatta_40133" class="code"><span id="wallapatta_40134" class="text">transform</span></code><span id="wallapatta_40135" class="text"> </span><a id="wallapatta_40136" class="link" href="http://www.paulirish.com/2012/why-moving-elements-with-translate-is-better-than-posabs-topleft/">Why Moving Elements With Translate</a></p></div></div></div>
-     </div>
-     <div style="display:none;">
-      <div class='wallapatta-code'>When animating/moving HTML elements, setting their position with ``-webkit-transform: matrix3d()`` gives two to ten times faster frame rates compared to ``top``/``left`` or ``-webkit-transform: matrix()``. On mobile devices you can observe native app like performance with ``transform: matrix3d``.
-
-##Demo
-
- &gt;&gt;&gt;
-  &lt;&lt;http://bl.ocks.org/vpj/c5468e4593319009320e(Demo 1)&gt;&gt;
-
-  &lt;&lt;http://bl.ocks.org/vpj/c5468e4593319009320e(Demo 2)&gt;&gt;
-
-It moves a panel that contains 10,000 ``div`` elements. On my macbook air running chrome, ``transform:matrix3d`` gives 30 - 40 fps while ``position:top/left`` and ``transform:matrix`` gives 10-15 fps. You can check the frame rate by selecting **Show FPS meter** on **Rendering** tab of chrome developer tools.
-
-The following image shows snapshot of frames timeline with ``top``/``left``.
-
-!img/transform/topleft.png(Timeline for top/left)
-
-This is the snapshot of frames timeline with ``transform:matrix3d``.
-
-!img/transform/matrix3d.png(Timeline for transform:matrix3d)
-
-``transform: matrix3d`` takes out the paint operation which gives increased frame.
-
-+++
- The 3d translation layers offer a way of pre-blitting all the stuff inside the DOM element into a layer, which is therefore available for direct blitting operations inside the render tree. Well, at least that's the conceptual idea behind.
-
- **martensms** on &lt;&lt;http://www.html5gamedevs.com/topic/171-myth-busting-the-html5-performance-of-transformtranslate-vs-topleft/(html5gamedevs.com)&gt;&gt;
-
-The frame rates with ``transform:matrix3d`` becomes about --10 times-- higher than other methods as the content of the panel which moves gets heavier. I tried with about a 1,000 small SVG graphs with 1,000 data points.
-
-Most of the discussions I found on the internet were comparing ``top``/``left`` to ``transform: matrix`` or ``transform: translate`` ^^1, 2^^, but not so much information about using ``transform: matrix3d``.
-
-&gt;&gt;&gt;
- ^^1^^ An old discussion on Hacker News about ``transform: translate`` and ``top``/``left`` (3d transformations are not considered) &lt;&lt;https://news.ycombinator.com/item?id=5301731(Myth busting the HTML5 performance of transform:translate vs. top/left)&gt;&gt;
-
- ^^2^^ Some other advantages of using ``transform`` &lt;&lt;http://www.paulirish.com/2012/why-moving-elements-with-translate-is-better-than-posabs-topleft/(Why Moving Elements With Translate() Is Better Than Pos:abs Top/left)&gt;&gt;
-</div>
-     </div>
-     <div class="overlay">
-      
-     </div>
-    </div>
-   </div>
-   <div class="wallapatta">
-    <h1 class="title">
-     <a href="weya.html">
-      Weya.coffee
-     </a>
-    </h1>
-    <h3 class="date">
-     March 19, 2014
-    </h3>
-    <div class="post-paginated">
-     <div class="wallapatta-main nine columns">
-      <div id="wallapatta_50000" class="article"><div id="wallapatta_50001" class="section"><div class="content"><p id="wallapatta_50002" class="paragraph"><span id="wallapatta_50038" class="text">Weya.coffee is a lightweight library with no dependencies to generate DOM elements. We developed it to replace </span><a id="wallapatta_50039" class="link" href="https://github.com/gradus/coffeecup">Coffeecup</a><span id="wallapatta_50040" class="text"> as a client side template engine. Because of its simplicity and performance, we are also using Weya to replace DOM manipulation of </span><a id="wallapatta_50041" class="link" href="http://d3js.org/">d3.js</a><span id="wallapatta_50042" class="text"> in data visualizations.</span></p></div></div><div id="wallapatta_50009" class="section"><div class="content"><p id="wallapatta_50010" class="paragraph"><span id="wallapatta_50045" class="text">Here's a small example to show the usage.</span></p></div></div><pre id="wallapatta_50011" class="codeBlock"><code class="coffee">userElems = []
-Weya container, <span class="hljs-function">-&gt;</span>
- @div <span class="hljs-string">".users"</span>, <span class="hljs-function">-&gt;</span>
-  <span class="hljs-keyword">for</span> user, i <span class="hljs-keyword">in</span> users
-   userDiv = @div <span class="hljs-string">'.user'</span>, on: {click: editUser}, <span class="hljs-function">-&gt;</span>
-    name = @span <span class="hljs-string">".name"</span>, user.name
-    @span <span class="hljs-string">".phone"</span>, user.phone
-    <span class="hljs-keyword">if</span> v.image?
-     @img src: user.image
-
-   userDiv.userId = i
-   userElems.push user: user, name: name</code></pre><div id="wallapatta_50012" class="section"><div class="content"><p id="wallapatta_50013" class="paragraph"><span id="wallapatta_50046" class="text">The above code creates a list of users. It binds the data to the dom element </span><code id="wallapatta_50047" class="code"><span id="wallapatta_50048" class="text">userDiv.userId = i</span></code><span id="wallapatta_50049" class="text"> and also keeps track of all the DOM elements in </span><code id="wallapatta_50050" class="code"><span id="wallapatta_50051" class="text">userElems</span></code><span id="wallapatta_50052" class="text">. This is important if you want to manipulate the DOM without reloading the entire user list, for example if a name of a user changes you could change it with </span><code id="wallapatta_50053" class="code"><span id="wallapatta_50054" class="text">userElems[changedUserId].name.textContent = changedUserName</span></code><span id="wallapatta_50055" class="text">.</span></p></div></div><div id="wallapatta_50014" class="section"><h1 class="heading"><span id="wallapatta_50015" class="block"><span id="wallapatta_50056" class="text">Is it a template engine?</span></span></h1><div class="content"><div id="wallapatta_50016" class="section"><div class="content"><p id="wallapatta_50017" class="paragraph"><span id="wallapatta_50057" class="text">Weya is quite similar to Coffeecup in terms of the syntax. But it's much faster, so it won't fail if you have lots of elements.</span></p></div></div><div id="wallapatta_50021" class="section"><div class="content"><p id="wallapatta_50022" class="paragraph"><span id="wallapatta_50059" class="text">Also, Weya lets you register event handlers. I feel this is much cleaner than registering events later with CSS selectors, and it's easier to maintain the code since events are register within the DOM creation code.</span></p></div></div></div></div><div id="wallapatta_50023" class="section"><h1 class="heading"><span id="wallapatta_50024" class="block"><span id="wallapatta_50060" class="text">Can it replace d3.js?</span></span></h1><div class="content"><div id="wallapatta_50025" class="section"><div class="content"><p id="wallapatta_50026" class="paragraph"><span id="wallapatta_50061" class="text">We use weya to replace most all the d3.js DOM manipulation.</span></p></div></div><div id="wallapatta_50027" class="section"><div class="content"><p id="wallapatta_50028" class="paragraph"><span id="wallapatta_50062" class="text">Code with Weya is simpler, shorter and nicely intended. Here's the code that draws bar chart in	</span><a id="wallapatta_50063" class="link" href="http://bl.ocks.org/vpj/9636655">this example</a><span id="wallapatta_50064" class="text">.</span></p></div></div><pre id="wallapatta_50029" class="codeBlock"><code class="coffee">Weya svg, <span class="hljs-function">-&gt;</span>
- <span class="hljs-keyword">for</span> d <span class="hljs-keyword">in</span> data
-  @g <span class="hljs-string">".g"</span>, transform: <span class="hljs-string">"translate(<span class="hljs-subst">#{x0 d.State}</span>,0)"</span>, <span class="hljs-function">-&gt;</span>
-   <span class="hljs-keyword">for</span> age <span class="hljs-keyword">in</span> d.ages
-    @rect
-     width: x1.rangeBand()
-     x: x1 age.name
-     y: y age.value
-     height: height - y age.value
-     fill: color age.name
-
- <span class="hljs-keyword">for</span> d, i <span class="hljs-keyword">in</span> ageNames.slice().reverse()
-  @g <span class="hljs-string">".legend"</span>, transform: <span class="hljs-string">"translate(0,<span class="hljs-subst">#{i * <span class="hljs-number">20</span>}</span>)"</span>, <span class="hljs-function">-&gt;</span>
-   @rect x: width - <span class="hljs-number">18</span>, width: <span class="hljs-number">18</span>, height: <span class="hljs-number">18</span>, fill: color d
-   @text
-    x: width - <span class="hljs-number">24</span>, y: <span class="hljs-number">9</span>, dy: <span class="hljs-string">".35em"</span>
-    style: {<span class="hljs-string">'text-anchor'</span>: <span class="hljs-string">"end"</span>}, text: d</code></pre><div id="wallapatta_50030" class="section"><div class="content"><p id="wallapatta_50031" class="paragraph"><span id="wallapatta_50065" class="text">Here's the code that does the </span><a id="wallapatta_50066" class="link" href="http://bl.ocks.org/mbostock/388705">same with d3.js</a><span id="wallapatta_50067" class="text">.</span></p></div></div><pre id="wallapatta_50032" class="codeBlock"><code class="javascript"><span class="hljs-keyword">var</span> state = svg.selectAll(<span class="hljs-string">".state"</span>)
-    .data(data)
-  .enter().append(<span class="hljs-string">"g"</span>)
-    .attr(<span class="hljs-string">"class"</span>, <span class="hljs-string">"g"</span>)
-    .attr(<span class="hljs-string">"transform"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d</span>) </span>{ <span class="hljs-keyword">return</span> <span class="hljs-string">"translate("</span> + x0(d.State) + <span class="hljs-string">",0)"</span>; });
-
-state.selectAll(<span class="hljs-string">"rect"</span>)
-    .data(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d</span>) </span>{ <span class="hljs-keyword">return</span> d.ages; })
-  .enter().append(<span class="hljs-string">"rect"</span>)
-    .attr(<span class="hljs-string">"width"</span>, x1.rangeBand())
-    .attr(<span class="hljs-string">"x"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d</span>) </span>{ <span class="hljs-keyword">return</span> x1(d.name); })
-    .attr(<span class="hljs-string">"y"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d</span>) </span>{ <span class="hljs-keyword">return</span> y(d.value); })
-    .attr(<span class="hljs-string">"height"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d</span>) </span>{ <span class="hljs-keyword">return</span> height - y(d.value); })
-    .style(<span class="hljs-string">"fill"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d</span>) </span>{ <span class="hljs-keyword">return</span> color(d.name); });
-
-<span class="hljs-keyword">var</span> legend = svg.selectAll(<span class="hljs-string">".legend"</span>)
-    .data(ageNames.slice().reverse())
-  .enter().append(<span class="hljs-string">"g"</span>)
-    .attr(<span class="hljs-string">"class"</span>, <span class="hljs-string">"legend"</span>)
-    .attr(<span class="hljs-string">"transform"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d, i</span>) </span>{ <span class="hljs-keyword">return</span> <span class="hljs-string">"translate(0,"</span> + i * <span class="hljs-number">20</span> + <span class="hljs-string">")"</span>; });
-
-legend.append(<span class="hljs-string">"rect"</span>)
-    .attr(<span class="hljs-string">"x"</span>, width - <span class="hljs-number">18</span>)
-    .attr(<span class="hljs-string">"width"</span>, <span class="hljs-number">18</span>)
-    .attr(<span class="hljs-string">"height"</span>, <span class="hljs-number">18</span>)
-    .style(<span class="hljs-string">"fill"</span>, color);
-
-legend.append(<span class="hljs-string">"text"</span>)
-    .attr(<span class="hljs-string">"x"</span>, width - <span class="hljs-number">24</span>)
-    .attr(<span class="hljs-string">"y"</span>, <span class="hljs-number">9</span>)
-    .attr(<span class="hljs-string">"dy"</span>, <span class="hljs-string">".35em"</span>)
-    .style(<span class="hljs-string">"text-anchor"</span>, <span class="hljs-string">"end"</span>)
-    .text(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d</span>) </span>{ <span class="hljs-keyword">return</span> d; });</code></pre><div id="wallapatta_50033" class="section"><div class="content"><p id="wallapatta_50034" class="paragraph"><span id="wallapatta_50068" class="text">Another problem we solved with Weya is that d3.js draws all the elements that are represented by the data at once. And with Weya we can draw progressively - this is quite useful when you have a lot of data and you don't won't the interface to go unresponsive until everything is drawn. Here's a small example to show the point.</span></p></div></div><pre id="wallapatta_50035" class="codeBlock"><code class="coffee">i = <span class="hljs-number">0</span>
-data = ...
-<span class="hljs-function">
-<span class="hljs-title">draw</span> = -&gt;</span>
- <span class="hljs-keyword">return</span> <span class="hljs-keyword">if</span> i <span class="hljs-keyword">is</span> data.length
-
- d = data[i]
- Weya container, <span class="hljs-function">-&gt;</span>
-  @div <span class="hljs-string">'.user'</span>, <span class="hljs-function">-&gt;</span>
-   ...
-
- i++
- requestAnimationFrame draw
-
-draw()</code></pre><div id="wallapatta_50036" class="section"><div class="content"><p id="wallapatta_50037" class="paragraph"><span id="wallapatta_50069" class="text">The disadvantage of Weya over d3.js is that it doesn't bind data to DOM elements like d3.js does. So you can't use </span><code id="wallapatta_50070" class="code"><span id="wallapatta_50071" class="text">enter()</span></code><span id="wallapatta_50072" class="text">, </span><code id="wallapatta_50073" class="code"><span id="wallapatta_50074" class="text">exit()</span></code><span id="wallapatta_50075" class="text"> and updates when data changes. But most users rarely need these features. We use Weya with our own data bindings with DOM elements (as in the first example with </span><code id="wallapatta_50076" class="code"><span id="wallapatta_50077" class="text">userElems</span></code><span id="wallapatta_50078" class="text">), and we find it simpler than </span><code id="wallapatta_50079" class="code"><span id="wallapatta_50080" class="text">enter()</span></code><span id="wallapatta_50081" class="text"> and </span><code id="wallapatta_50082" class="code"><span id="wallapatta_50083" class="text">exit()</span></code><span id="wallapatta_50084" class="text">.</span></p></div></div></div></div></div>
-     </div>
-     <div class="wallapatta-sidebar three columns">
-      <div id="wallapatta_50003" class="sidenote"><div id="wallapatta_50004" class="html"><iframe src="https://ghbtns.com/github-btn.html?user=vpj&amp;repo=weya&amp;type=star&amp;count=true&amp;size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
-</div><div id="wallapatta_50005" class="section"><div class="content"><p id="wallapatta_50006" class="paragraph"><a id="wallapatta_50043" class="link" href="http://jsperf.com/weya-jquery-d3-coffeecup">Performance comparison among d3, coffeecup and weya</a></p></div></div><div id="wallapatta_50007" class="section"><div class="content"><p id="wallapatta_50008" class="paragraph"><a id="wallapatta_50044" class="link" href="http://bl.ocks.org/vpj/9636655">Bar chart example</a></p></div></div></div><div id="wallapatta_50018" class="sidenote"><div id="wallapatta_50019" class="section"><div class="content"><p id="wallapatta_50020" class="paragraph"><a id="wallapatta_50058" class="link" href="http://jsperf.com/weya-jquery-d3-coffeecup">Performance comparison among d3, coffeecup and weya</a></p></div></div></div>
-     </div>
-     <div style="display:none;">
-      <div class='wallapatta-code'>Weya.coffee is a lightweight library with no dependencies to generate DOM elements. We developed it to replace &lt;&lt;https://github.com/gradus/coffeecup(Coffeecup)&gt;&gt; as a client side template engine. Because of its simplicity and performance, we are also using Weya to replace DOM manipulation of &lt;&lt;http://d3js.org/(d3.js)&gt;&gt; in data visualizations.
-
-&gt;&gt;&gt;
- &lt;&lt;&lt;
-  &lt;iframe src="https://ghbtns.com/github-btn.html?user=vpj&repo=weya&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px"&gt;&lt;/iframe&gt;
-
- &lt;&lt;http://jsperf.com/weya-jquery-d3-coffeecup(Performance comparison among d3, coffeecup and weya)&gt;&gt;
-
- &lt;&lt;http://bl.ocks.org/vpj/9636655(Bar chart example)&gt;&gt;
-
-Here's a small example to show the usage.
-
-```coffee
- userElems = []
- Weya container, -&gt;
-  @div ".users", -&gt;
-   for user, i in users
-    userDiv = @div '.user', on: {click: editUser}, -&gt;
-     name = @span ".name", user.name
-     @span ".phone", user.phone
-     if v.image?
-      @img src: user.image
-
-    userDiv.userId = i
-    userElems.push user: user, name: name
-
-The above code creates a list of users. It binds the data to the dom element ``userDiv.userId = i`` and also keeps track of all the DOM elements in ``userElems``. This is important if you want to manipulate the DOM without reloading the entire user list, for example if a name of a user changes you could change it with ``userElems[changedUserId].name.textContent = changedUserName``.
-
-#Is it a template engine?
-
- Weya is quite similar to Coffeecup in terms of the syntax. But it's much faster, so it won't fail if you have lots of elements.
-
- &gt;&gt;&gt;
-  &lt;&lt;http://jsperf.com/weya-jquery-d3-coffeecup(Performance comparison among d3, coffeecup and weya)&gt;&gt;
-
-
- Also, Weya lets you register event handlers. I feel this is much cleaner than registering events later with CSS selectors, and it's easier to maintain the code since events are register within the DOM creation code.
-
-#Can it replace d3.js?
-
- We use weya to replace most all the d3.js DOM manipulation.
-
- Code with Weya is simpler, shorter and nicely intended. Here's the code that draws bar chart in	&lt;&lt;http://bl.ocks.org/vpj/9636655(this example)&gt;&gt;.
-
- ```coffee
-  Weya svg, -&gt;
-   for d in data
-    @g ".g", transform: "translate(#{x0 d.State},0)", -&gt;
-     for age in d.ages
-      @rect
-       width: x1.rangeBand()
-       x: x1 age.name
-       y: y age.value
-       height: height - y age.value
-       fill: color age.name
-
-   for d, i in ageNames.slice().reverse()
-    @g ".legend", transform: "translate(0,#{i * 20})", -&gt;
-     @rect x: width - 18, width: 18, height: 18, fill: color d
-     @text
-      x: width - 24, y: 9, dy: ".35em"
-      style: {'text-anchor': "end"}, text: d
-
- Here's the code that does the &lt;&lt;http://bl.ocks.org/mbostock/388705(same with d3.js)&gt;&gt;.
-
- ```javascript
-  var state = svg.selectAll(".state")
-      .data(data)
-    .enter().append("g")
-      .attr("class", "g")
-      .attr("transform", function(d) { return "translate(" + x0(d.State) + ",0)"; });
-
-  state.selectAll("rect")
-      .data(function(d) { return d.ages; })
-    .enter().append("rect")
-      .attr("width", x1.rangeBand())
-      .attr("x", function(d) { return x1(d.name); })
-      .attr("y", function(d) { return y(d.value); })
-      .attr("height", function(d) { return height - y(d.value); })
-      .style("fill", function(d) { return color(d.name); });
-
-  var legend = svg.selectAll(".legend")
-      .data(ageNames.slice().reverse())
-    .enter().append("g")
-      .attr("class", "legend")
-      .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-
-  legend.append("rect")
-      .attr("x", width - 18)
-      .attr("width", 18)
-      .attr("height", 18)
-      .style("fill", color);
-
-  legend.append("text")
-      .attr("x", width - 24)
-      .attr("y", 9)
-      .attr("dy", ".35em")
-      .style("text-anchor", "end")
-      .text(function(d) { return d; });
-
-
- Another problem we solved with Weya is that d3.js draws all the elements that are represented by the data at once. And with Weya we can draw progressively - this is quite useful when you have a lot of data and you don't won't the interface to go unresponsive until everything is drawn. Here's a small example to show the point.
-
- ```coffee
-  i = 0
-  data = ...
-
-  draw = -&gt;
-   return if i is data.length
-
-   d = data[i]
-   Weya container, -&gt;
-    @div '.user', -&gt;
-     ...
-
-   i++
-   requestAnimationFrame draw
-
-  draw()
-
- The disadvantage of Weya over d3.js is that it doesn't bind data to DOM elements like d3.js does. So you can't use ``enter()``, ``exit()`` and updates when data changes. But most users rarely need these features. We use Weya with our own data bindings with DOM elements (as in the first example with ``userElems``), and we find it simpler than ``enter()`` and ``exit()``.
-</div>
-     </div>
-     <div class="overlay">
-      
-     </div>
-    </div>
-   </div>
-   <div class="paginate">
-    <a class="prev-page button" href="page2.html">
-     prev
-    </a>
-    <a class="next-page button" href="page4.html">
-     next
-    </a>
-   </div>
-  </div>
-  <script src="lib/highlightjs/highlight.pack.js">
-  </script>
-  <script src="lib/weya/weya.js">
-  </script>
-  <script src="lib/weya/base.js">
-  </script>
-  <script src="lib/mod/mod.js">
-  </script>
-  <script src="js/static.js?v=9">
-  </script>
-  <script src="js/parser.js?v=9">
-  </script>
-  <script src="js/reader.js?v=9">
-  </script>
-  <script src="js/nodes.js?v=9">
-  </script>
-  <script src="js/render.js?v=9">
-  </script>
- </body>
-</html>
+</body>
