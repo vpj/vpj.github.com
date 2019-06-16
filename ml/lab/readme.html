@@ -111,14 +111,14 @@ with logger.monitor(&quot;Create model&quot;):
 </code></pre>
 
 <p>will produce an output like
-<img style="max-width:100%" src="http://blog.varunajayasiri.com/ml/lab/images/monitored_sections.png" /></p>
+<img style="display: block; max-width:100%" src="http://blog.varunajayasiri.com/ml/lab/images/monitored_sections.png" /></p>
 <p>Library also has utility functions to monitor loops.
-<img style="max-width:100%" src="http://blog.varunajayasiri.com/ml/lab/images/loop.mov" /></p>
+<img style="display: block; max-width:100%" src="http://blog.varunajayasiri.com/ml/lab/images/loop.gif" /></p>
 <h3>Custom analysis of TensorBoard summaries</h3>
 <p>TensorBoard is nice, but sometimes you need
 custom charts to debug algorithms. Following
 is an example of a custom chart:</p>
-<p><img style="max-width:100%" src="http://blog.varunajayasiri.com/ml/lab/images/distribution.png" /></p>
+<p><img style="display: block; max-width:100%" src="http://blog.varunajayasiri.com/ml/lab/images/distribution.png" /></p>
 <p>And sometime TensorBoard is not even doing a good job;
 for instance lets say you have a histogram, with 90% of
 data points between 1 and 2 whilst there are a few outliers at 1000 -
@@ -152,7 +152,7 @@ For instance, so that you can start it with</p>
 </ul>
 <h3>Colored console outputs</h3>
 <p>The logger creates beautiful colorized console outputs that&rsquo;s easy on the eye.</p>
-<p><img style="max-width:100%" src="http://blog.varunajayasiri.com/ml/lab/images/log.png" /></p>
+<p><img style="display: block; max-width:100%" src="http://blog.varunajayasiri.com/ml/lab/images/log.png" /></p>
 <h3>Histograms and moving averages</h3>
 <p>The logger can buffer data and produce moving averages and
 TensorBoard histograms.
@@ -317,32 +317,18 @@ except KeyboardInterrupt:
 within a <code>with logger.delayed_keyboard_interrupt()</code>.</p>
 <p>Two consecutive interruptions will halt the code segment.</p>
 <h2>Background</h2>
-<p>It is based on a bunch of utility functions and classes
-I wrote while trying some machine learning algorithms.
-I recently made it to a separate repo because I&rsquo;ve been
-reusing them on different projects, and it was easier
-to keep track of them as a single project.</p>
-<p>⚠️ This project is a personal project and only a few weeks old.
-It still doesn&rsquo;t have a proper documentation and I&rsquo;m making
-improvements frequently.
-<em>So, if you wish to use it make sure you understand the code.</em>
-I have tried to keep it documented and simple.</p>
-<h3>Why I made it?</h3>
-<p>I started coding existing reinforcement learning algorithms
+<p>I was coding existing reinforcement learning algorithms
  to play Atari games for fun.
 It was not easy to keep track of things when I started
  trying variations, fixing bugs etc.
-This library helps organize experiments.
-It organizes the folders of the checkpoints, logs
- and TensorBoard summaries by each experiment.
-It also keeps track of the git commits when each experiment
- was run, so if some other change in code, affected the results
- of a experiment you can easily track what caused it.</p>
+Then I wrote some tools to organize my experiment runs.
+I found it important to keep track of git commits
+to make sure I can reproduce results.</p>
 <p>I also wrote a logger to display pretty results on screen and
  to make it easy to write TensorBoard summaries.
 It also keeps track of training times which makes it easy to spot
- what&rsquo;s taking up most resources.
-Here&rsquo;s the output of this sample program (<code>lab_getting_started.py</code>):</p>
+ what&rsquo;s taking up most resources.</p>
+<p>This library is was made by combining these bunch of tools.</p>
 <h2>Updates</h2>
 <ul>
 <li>
