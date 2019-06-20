@@ -14,12 +14,12 @@
  text-decoration: none;
 }
 
-h1.title {
+h2.title {
  margin-top: 50px;
  font-weight: bold;
 }
 
-h1.title a {
+h2.title a {
  color: #222;
  text-decoration: none;
 }
