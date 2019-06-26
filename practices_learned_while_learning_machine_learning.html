@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <title>practices_learned_while_learning_machine_learning.md</title>
+    <meta name="viewport" content="width=550, initial-scale=1.0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <link href="http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900"
+          rel="stylesheet" type="text/css"/>
+    <link href="lib/skeleton/css/skeleton.css" rel="stylesheet"/>
+    <link href="lib/highlightjs/styles/default.css" rel="stylesheet"/>
+    <link href="css/style.css" rel="stylesheet"/>
+    <link href="blog.css" rel="stylesheet"/>
+    <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-44255805-1', 'auto');
+ga('send', 'pageview');
+    </script>
+</head>
+<body>
+<div class='container'>
+    <div class="header">
+        <h1>
+            <a href="index.html">
+                VARUNA JAYASIRI
+            </a>
+        </h1>
+        <a class="button" href="https://www.twitter.com/vpj">
+            @vpj
+        </a>
+    </div>
+
+    <h1 class="title">
+        Practices Learned While Learning Machine Learning
+    </h1>
+    <h3 class="date">
+        June 26, 2019
+    </h3>
+    <div style="margin-bottom:30px;">
+        <a class="twitter-share-button" href="https://twitter.com/share" data-via="vpj"
+           data-size="large">
+            Tweet
+        </a>
+        <script>
+                  !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+        </script>
+    </div>
+
+    <div class="row">
+        <div class="nine columns">
+            <p>I started studying machine learning about 8 months ago.
+I was a programmer before that.</p>
+<p>Since then I have worked on a few problems I found interesting. 
+I spent a lot of time on reinforcement learning algorithms on
+ <a href="https://github.com/openai/gym">Atari games</a> and on another environment I developed.
+I&rsquo;ve also tried some small neural network architectural ideas 
+ and played a bit with NLP.</p>
+<p>This is a list of practices I adopted along the way that
+ I think are worth sharing.
+I&rsquo;ve also open-sourced most of the helper classes I wrote in
+ <a href="https://github.com/vpj/lab">github.com/lab</a>.</p>
+<!-- I found ["A Recipe for Training Neural Networks"](http://karpathy.github.io/2019/04/25/recipe/)
+ by [Andrej Karpathy](https://twitter.com/karpathy) very useful too. -->
+
+<h3>Be careful</h3>
+<p>Debugging machine learning projects, especially reinforcement learning,
+ is super hard.
+So you have to try your best to get it right the first time.
+Once, I spent two days trying to get code working; it was painful.
+Overestimating my self was the biggest mistake I made.
+It&rsquo;s far easier to make subtle mistakes that are very hard to catch
+in machine learning, compared to normal programming.</p>
+<p>I realized it was more efficient to spend 2x time coding than you usually would.
+I write a small bit of code, read it, then write more and so on.
+Although it feels slow,
+ overall it has been more efficient with saved debugging time.</p>
+<h3>Code simplest version first</h3>
+<p>Although this was obvious from the beginning,
+ it took me a few bugs and days of debugging to adapting it.</p>
+<p>It is better to write small pieces of code and test them before adding more.
+<em>For example, if you are trying Q-learning,
+ it makes sense to first have a simple model,
+ without double-Q, prioritized replay, recurrence, etc.</em>
+Once you get the simplest version working,
+ you can add other complexities one after the other.
+This way you will only have a small set of code
+ that you need to debug if it doesn&rsquo;t work.
+Also, since often the simpler versions run faster,
+ so it&rsquo;s easier to iterate when you are fixing things.</p>
+<p>Another advantage is that you will have
+ some tangible results from the beginning
+ and will be gradually improving.</p>
+<h3>Figure out an evaluation criterion</h3>
+<p>You should keep in mind the problem you are solving.
+The evaluation criteria should measure the success in solving that problem
+<em>For example, if the final benefit of your model is saving money,
+ you should be able to estimate how much money can be saved with a given model.</em>
+Otherwise, you could get caught in optimizing some loss
+ whilst making little progress on solving the problem.</p>
+<p>You also need baseline performance level and theoretical optimal level.
+If there are other solutions you should know the state of the art performance.
+This way you can check your relative progress and know the limits.</p>
+<h3>Save pre-processed data</h3>
+<p>This is kind of obvious.
+But, at the beginning, I didn&rsquo;t do it because I was too lazy
+ to write the code for saving and loading data.
+The pre-processing could take more than a minute depending on the dataset.
+This could amount to hours in total,
+ when repeated across many trials.</p>
+<p>Now, I save data after pre-processing all the time.
+I usually save the data in NumPy arrays
+ and meta information in JSON files.</p>
+<h3>Save models</h3>
+<p>You should start saving models from the prototyping stage,
+ especially if the training takes more than a couple of minutes.</p>
+<p>I often found myself training the simplest versions
+ (to see code correctness) without model saving/loading code.
+And regretted later,
+ when I wanted to play with the
+ trained model (try predictions, visualize, etc.).</p>
+<h3>Keep experiments</h3>
+<p>When I started off, I didn&rsquo;t keep the experiments and results organized -
+ looking through unorganized logs was hard, 
+ reproducing results was often impossible, 
+ and I had lost most of the analytics data.</p>
+<p>It&rsquo;s quite important for you to be able to re-evaluate old experiments
+ and to keep the old results.
+Most people seem to save the config files, of the experiments.</p>
+<p>I chose to use a separate python file for each experiment
+ and I keep all the key experimental variations.
+I also keep track of the git commits along with experiment results. </p>
+<p>I have open-sourced the tools I used to organize experiments 
+ in <a href="https://github.com/vpj/lab">github.com/lab</a>.</p>
+<h3>Save and keep statistics</h3>
+<p>Most of the time the ideas for analysing training logs/stats pop-up,
+ after the training is complete.
+So it&rsquo;s best to keep everything stored ready to be analyzed.</p>
+<h3>Log more with more details</h3>
+<p>I used to log only the stuff that I thought was important at the time.
+And always wanted more when analyzing.
+So now I log everything I can think of,
+ up to the gradients and weights.
+If the models are big,
+ I pick some random nodes from each layer for logging.</p>
+<p>Also histograms and distributions are way more useful than summarized statistics.
+They help you spot problems and opportunities for improvements.
+<em>For instance, with a histogram of losses,
+ you will see if you have a large loss on a few samples or if the loss is a normal distribution.</em></p>
+<p>I have included some code I wrote to log histograms of NumPy arrays,
+ or PyTorch arrays to TensorBoard summaries in <a href="https://github.com/vpj/lab">lab</a>.</p>
+<h3>Use TensorBoard</h3>
+<p>TensorBoard is super useful and easy to use.
+Use it for monitoring and analyzing.</p>
+<h3>Measure time</h3>
+<p>Measure time taken and progress for each component.
+It helps figure out where to improve efficiency.
+Also, it shows you what your program is doing when running.</p>
+<p>I time most of the initialization code,
+ and the main steps in the training loop,
+ like sampling, processing samples, training, calculating validation error, etc.</p>
+<p>Again, I&rsquo;ve included helper classes I used for monitoring in <a href="https://github.com/vpj/lab">lab</a>.</p>
+<h3>Good software design</h3>
+<p>In the first couple of weeks, I tended not to worry much about software design.
+I hacked together experiments with copy-pastes from earlier experiments and a some changes.
+It was faster to prototype, but became a problem later, like with any other software project.</p>
+<p>So if you plan on working on the project long-term better to use good design.
+Or rewrite with a well thought design after trying the prototypes
+ - which is usually what I do.</p>
+<p>Good design and code reuse saves you time because it&rsquo;s shorter,
+ is less prone to bugs because you will be writing less code, 
+ and easier to maintain and fix bugs.</p>
+<h3>Good programming practices</h3>
+<p>Good programming practices such as <strong>type hints</strong>,
+ <strong>declaring constants</strong>, <strong>meaningful names</strong>,
+  <strong>named parameters</strong>, etc. help as the code gets bigger.
+It helps you read the code and understand without having to navigate across code.</p>
+<p>I found myself reading my code a lot more than with other software projects I had worked on.
+There were occasions where I had to refer to old code that I had thrown away too.
+So it&rsquo;s good to keep the code readable even if you plan on throwing it away.</p>
+<p>Also, refactoring tools work well when the code uses type hints and named parameters.</p>
+<h3>Comment the code</h3>
+<p>Commenting complex logic and simplified equations improves code readability.
+It also helps write bug free code.
+If you see the derivations next to the code,
+ the chances of making a mistake or a typo is less.</p>
+<p>I used literate programming sometimes, with LaTeX for maths.
+Too bad the IDE doesn&rsquo;t render them, so I generate HTML pages and proof read the code.
+It also helps understand algorithms better.
+I still reference some of the old annotated RL algorithms
+ I wrote when I forget stuff.</p>
+<h3>Use an IDE</h3>
+<p>Features like <strong>refactoring</strong>, <strong>go to definition</strong>, etc.
+ are quite useful as your code base grows.
+Also a good auto-complete is handy
+ when you start using new libraries.</p>
+<h3>Notebooks are good for trying things</h3>
+<p>With Jupyter Notebooks, you can write code in small sequential steps:
+ write a small piece of code, run it, check results, go to next step.</p>
+<p>But notebooks become unfriendly, as things get more complex.</p>
+<p>Most of the time, I use a notebook when I start working on a new problem.
+Then rewrite it in Python with proper design.</p>
+<h3>Notebooks are great for visualizations</h3>
+<p>I rely on TensorBoard for the basic analytics,
+ and for everything else I use Jupyter notebooks.</p>
+<p>You can do custom analyses by writing code.
+It might be harder than clicking a button on TensorBoard,
+ but you can do precisely what you want.
+You can control everything from the type of visualization,
+ to how axes labels and axes ticks are placed.</p>
+<p>Also, notebooks keep visualizations saved,
+ so you can check them anytime without running code.</p>
+<p>I&rsquo;ve included some helper classes I used for creating custom visualizations
+ of TensorBoard summaries in <a href="https://github.com/vpj/lab">lab</a>.</p>
+<h3>Notebooks are great for data loading and parsing</h3>
+<p>On notebooks, you can check and test each step as you are parsing data.
+You can output samples and statistics after each pre-processing step.
+Since the state is in memory,
+ you don&rsquo;t have to re-run all the previous steps when you make a change.</p>
+<h3>Write the core of the algorithm yourself</h3>
+<p>When it&rsquo;s your code, it&rsquo;s easier to play with it.
+Using libraries for the core parts you want to experiment with
+ is a bad idea.
+It is difficult later when you want to make changes.</p>
+<p>This is different from using libraries
+ in other software development work,
+ when you don&rsquo;t have to deviate from standards.
+But in most machine learning scenarios a lot of things are still
+ kind of <em>alpha</em> and you want to try variations to improve those.</p>
+<h3>Reading</h3>
+<p>It&rsquo;s easy to get outdated if you stay focused on a project
+ and don&rsquo;t reading for a while.</p>
+<p>I&rsquo;ve usually get content from Twitter,
+ <a href="https://www.reddit.com/r/MachineLearning/">/r/MachineLearning</a>
+ and sometimes <a href="http://www.arxiv-sanity.com">Arxiv Sanity Preserver</a>.</p>
+<h3>Keep a journal</h3>
+<p>Journals help organize your ideas.
+It will act as a reference and will help you avoid repeating mistakes.</p>
+<p>The journal also helped me get back to work after returning from long vacations.
+You can start from where you left.</p>
+<p>I use a long Markdown document as the journal. 
+I also used a Moleskine for some projects.</p>
+<h3>Track your time</h3>
+<p>This is quite important for me because I am working by myself.
+It&rsquo;s easy to lose focus and waste time.</p>
+<p>First, I tracked time on the journal itself,
+ but later started using a calendar app.</p>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML">
+</script>
+<!-- MathJax configuration -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ['$','$'] ],
+            displayMath: [ ['$$','$$'] ],
+            processEscapes: true,
+            processEnvironments: true
+        },
+        // Center justify equations in code and markdown cells. Elsewhere
+        // we use CSS to left justify single line equations in code cells.
+        displayAlign: 'center',
+        "HTML-CSS": { fonts: ["TeX"] }
+    });
+</script>
+</body>
