@@ -66,7 +66,7 @@ I&rsquo;ve also open-sourced most of the helper classes I wrote in
 <!-- I found ["A Recipe for Training Neural Networks"](http://karpathy.github.io/2019/04/25/recipe/)
  by [Andrej Karpathy](https://twitter.com/karpathy) very useful too. -->
 
-<h3>Be careful</h3>
+<h3>1. Be careful</h3>
 <p>Debugging machine learning projects, especially reinforcement learning,
  is super hard.
 So you have to try your best to get it right the first time.
@@ -78,7 +78,7 @@ in machine learning, compared to normal programming.</p>
 I write a small bit of code, read it, then write more and so on.
 Although it feels slow,
  overall it has been more efficient with saved debugging time.</p>
-<h3>Code simplest version first</h3>
+<h3>2. Code simplest version first</h3>
 <p>Although this was obvious from the beginning,
  it took me a few bugs and days of debugging to adapting it.</p>
 <p>It is better to write small pieces of code and test them before adding more.
@@ -94,7 +94,7 @@ Also, since often the simpler versions run faster,
 <p>Another advantage is that you will have
  some tangible results from the beginning
  and will be gradually improving.</p>
-<h3>Figure out an evaluation criterion</h3>
+<h3>3. Figure out an evaluation criterion</h3>
 <p>You should keep in mind the problem you are solving.
 The evaluation criteria should measure the success in solving that problem
 <em>For example, if the final benefit of your model is saving money,
@@ -104,7 +104,7 @@ Otherwise, you could get caught in optimizing some loss
 <p>You also need baseline performance level and theoretical optimal level.
 If there are other solutions you should know the state of the art performance.
 This way you can check your relative progress and know the limits.</p>
-<h3>Save pre-processed data</h3>
+<h3>4. Save pre-processed data</h3>
 <p>This is kind of obvious.
 But, at the beginning, I didn&rsquo;t do it because I was too lazy
  to write the code for saving and loading data.
@@ -114,7 +114,7 @@ This could amount to hours in total,
 <p>Now, I save data after pre-processing all the time.
 I usually save the data in NumPy arrays
  and meta information in JSON files.</p>
-<h3>Save models</h3>
+<h3>5. Save models</h3>
 <p>You should start saving models from the prototyping stage,
  especially if the training takes more than a couple of minutes.</p>
 <p>I often found myself training the simplest versions
@@ -122,7 +122,7 @@ I usually save the data in NumPy arrays
 And regretted later,
  when I wanted to play with the
  trained model (try predictions, visualize, etc.).</p>
-<h3>Keep experiments</h3>
+<h3>6. Keep experiments</h3>
 <p>When I started off, I didn&rsquo;t keep the experiments and results organized -
  looking through unorganized logs was hard, 
  reproducing results was often impossible, 
@@ -135,11 +135,11 @@ Most people seem to save the config files, of the experiments.</p>
 I also keep track of the git commits along with experiment results. </p>
 <p>I have open-sourced the tools I used to organize experiments 
  in <a href="https://github.com/vpj/lab">github.com/lab</a>.</p>
-<h3>Save and keep statistics</h3>
+<h3>7. Save and keep statistics</h3>
 <p>Most of the time the ideas for analysing training logs/stats pop-up,
  after the training is complete.
 So it&rsquo;s best to keep everything stored ready to be analyzed.</p>
-<h3>Log more with more details</h3>
+<h3>8. Log more with more details</h3>
 <p>I used to log only the stuff that I thought was important at the time.
 And always wanted more when analyzing.
 So now I log everything I can think of,
@@ -152,10 +152,10 @@ They help you spot problems and opportunities for improvements.
  you will see if you have a large loss on a few samples or if the loss is a normal distribution.</em></p>
 <p>I have included some code I wrote to log histograms of NumPy arrays,
  or PyTorch arrays to TensorBoard summaries in <a href="https://github.com/vpj/lab">lab</a>.</p>
-<h3>Use TensorBoard</h3>
+<h3>9. Use TensorBoard</h3>
 <p>TensorBoard is super useful and easy to use.
 Use it for monitoring and analyzing.</p>
-<h3>Measure time</h3>
+<h3>10. Measure time</h3>
 <p>Measure time taken and progress for each component.
 It helps figure out where to improve efficiency.
 Also, it shows you what your program is doing when running.</p>
@@ -163,7 +163,7 @@ Also, it shows you what your program is doing when running.</p>
  and the main steps in the training loop,
  like sampling, processing samples, training, calculating validation error, etc.</p>
 <p>Again, I&rsquo;ve included helper classes I used for monitoring in <a href="https://github.com/vpj/lab">lab</a>.</p>
-<h3>Good software design</h3>
+<h3>11. Good software design</h3>
 <p>In the first couple of weeks, I tended not to worry much about software design.
 I hacked together experiments with copy-pastes from earlier experiments and a some changes.
 It was faster to prototype, but became a problem later, like with any other software project.</p>
@@ -173,7 +173,7 @@ Or rewrite with a well thought design after trying the prototypes
 <p>Good design and code reuse saves you time because it&rsquo;s shorter,
  is less prone to bugs because you will be writing less code, 
  and easier to maintain and fix bugs.</p>
-<h3>Good programming practices</h3>
+<h3>12. Good programming practices</h3>
 <p>Good programming practices such as <strong>type hints</strong>,
  <strong>declaring constants</strong>, <strong>meaningful names</strong>,
   <strong>named parameters</strong>, etc. help as the code gets bigger.
@@ -182,7 +182,7 @@ It helps you read the code and understand without having to navigate across code
 There were occasions where I had to refer to old code that I had thrown away too.
 So it&rsquo;s good to keep the code readable even if you plan on throwing it away.</p>
 <p>Also, refactoring tools work well when the code uses type hints and named parameters.</p>
-<h3>Comment the code</h3>
+<h3>13. Comment the code</h3>
 <p>Commenting complex logic and simplified equations improves code readability.
 It also helps write bug free code.
 If you see the derivations next to the code,
@@ -192,18 +192,18 @@ Too bad the IDE doesn&rsquo;t render them, so I generate HTML pages and proof re
 It also helps understand algorithms better.
 I still reference some of the old annotated RL algorithms
  I wrote when I forget stuff.</p>
-<h3>Use an IDE</h3>
+<h3>14. Use an IDE</h3>
 <p>Features like <strong>refactoring</strong>, <strong>go to definition</strong>, etc.
  are quite useful as your code base grows.
 Also a good auto-complete is handy
  when you start using new libraries.</p>
-<h3>Notebooks are good for trying things</h3>
+<h3>15. Notebooks are good for trying things</h3>
 <p>With Jupyter Notebooks, you can write code in small sequential steps:
  write a small piece of code, run it, check results, go to next step.</p>
 <p>But notebooks become unfriendly, as things get more complex.</p>
 <p>Most of the time, I use a notebook when I start working on a new problem.
 Then rewrite it in Python with proper design.</p>
-<h3>Notebooks are great for visualizations</h3>
+<h3>16. Notebooks are great for visualizations</h3>
 <p>I rely on TensorBoard for the basic analytics,
  and for everything else I use Jupyter notebooks.</p>
 <p>You can do custom analyses by writing code.
@@ -215,12 +215,12 @@ You can control everything from the type of visualization,
  so you can check them anytime without running code.</p>
 <p>I&rsquo;ve included some helper classes I used for creating custom visualizations
  of TensorBoard summaries in <a href="https://github.com/vpj/lab">lab</a>.</p>
-<h3>Notebooks are great for data loading and parsing</h3>
+<h3>17. Notebooks are great for data loading and parsing</h3>
 <p>On notebooks, you can check and test each step as you are parsing data.
 You can output samples and statistics after each pre-processing step.
 Since the state is in memory,
  you don&rsquo;t have to re-run all the previous steps when you make a change.</p>
-<h3>Write the core of the algorithm yourself</h3>
+<h3>18. Write the core of the algorithm yourself</h3>
 <p>When it&rsquo;s your code, it&rsquo;s easier to play with it.
 Using libraries for the core parts you want to experiment with
  is a bad idea.
@@ -230,20 +230,20 @@ It is difficult later when you want to make changes.</p>
  when you don&rsquo;t have to deviate from standards.
 But in most machine learning scenarios a lot of things are still
  kind of <em>alpha</em> and you want to try variations to improve those.</p>
-<h3>Reading</h3>
+<h3>19. Reading</h3>
 <p>It&rsquo;s easy to get outdated if you stay focused on a project
  and don&rsquo;t reading for a while.</p>
 <p>I&rsquo;ve usually get content from Twitter,
  <a href="https://www.reddit.com/r/MachineLearning/">/r/MachineLearning</a>
  and sometimes <a href="http://www.arxiv-sanity.com">Arxiv Sanity Preserver</a>.</p>
-<h3>Keep a journal</h3>
+<h3>20. Keep a journal</h3>
 <p>Journals help organize your ideas.
 It will act as a reference and will help you avoid repeating mistakes.</p>
 <p>The journal also helped me get back to work after returning from long vacations.
 You can start from where you left.</p>
 <p>I use a long Markdown document as the journal. 
 I also used a Moleskine for some projects.</p>
-<h3>Track your time</h3>
+<h3>21. Track your time</h3>
 <p>This is quite important for me because I am working by myself.
 It&rsquo;s easy to lose focus and waste time.</p>
 <p>First, I tracked time on the journal itself,
