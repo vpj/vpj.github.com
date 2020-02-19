@@ -1,33 +1,59 @@
-define(["require", "exports", "./line", "./util", "./hljs"], function (require, exports, line_1, util_1, hljs_1) {
+define(["require", "exports", "./line", "./util", "./hljs", "./project"], function (require, exports, line_1, util_1, hljs_1, project_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var SourceView = /** @class */ (function () {
         function SourceView(container, lineClickListener, noteAddListener) {
+            var _this = this;
+            this.onSearch = function () {
+                var search = _this.searchElem.value;
+                if (search === _this.searchTerm) {
+                    return;
+                }
+                project_1.Project.instance().searchCode(search);
+            };
             this.allLines = {};
             this.renderedLines = [];
             this.container = container;
             this.lineClickListener = lineClickListener;
             this.noteAddListener = noteAddListener;
             this.setEvents();
+            this.searchElem = document.getElementById('code_search');
+            this.searchElem.addEventListener('keyup', this.onSearch);
+            this.searchElem.addEventListener('change', this.onSearch);
+            this.searchElem.addEventListener('paste', this.onSearch);
         }
         SourceView.prototype.setEvents = function () {
             var _this = this;
             this.container.addEventListener('mousedown', function (ev) {
-                // console.log('down', ev.pageX, ev.pageY, ev);
+                // console.log('down', ev.pageX, ev.pageY, ev)
                 _this.onUserSelect(ev.clientX, ev.clientY, 'start');
             });
             this.container.addEventListener('mousemove', function (ev) {
-                // console.log('move', ev.pageX, ev.pageY, ev);
+                // console.log('move', ev.pageX, ev.pageY, ev)
                 _this.onUserSelect(ev.clientX, ev.clientY, 'move');
             });
             this.container.addEventListener('mouseup', function (ev) {
-                // console.log('up', ev.pageX, ev.pageY, ev);
+                // console.log('up', ev.pageX, ev.pageY, ev)
                 _this.onUserSelect(ev.clientX, ev.clientY, 'end');
             });
             this.container.addEventListener('mouseleave', function (ev) {
-                // console.log('leave', ev.pageX, ev.pageY, ev);
+                // console.log('leave', ev.pageX, ev.pageY, ev)
                 _this.onUserSelect(ev.clientX, ev.clientY, 'leave');
             });
+        };
+        SourceView.prototype.search = function (search) {
+            this.searchMode();
+            for (var path in this.allLines) {
+                var lines = this.allLines[path];
+                for (var i = 0; i < lines.length; ++i) {
+                    if (lines[i].code.toLowerCase().indexOf(search) !== -1) {
+                        this.selectLines(path, Math.max(0, i - 2), Math.min(lines.length - 1, i + 2));
+                    }
+                }
+            }
+            // TODO: repeat this until more lines are selected
+            project_1.Project.instance().notes.selectLines(this.selectedLines);
+            // this.renderSelectedLines()
         };
         SourceView.prototype.removeAll = function () {
             for (var _i = 0, _a = this.renderedLines; _i < _a.length; _i++) {
@@ -36,7 +62,7 @@ define(["require", "exports", "./line", "./util", "./hljs"], function (require, 
             }
             this.renderedLines = [];
         };
-        SourceView.prototype.search = function () {
+        SourceView.prototype.searchMode = function () {
             this.selectedFile = null;
             this.selectedLines = {};
             this.removeAll();
@@ -58,10 +84,13 @@ define(["require", "exports", "./line", "./util", "./hljs"], function (require, 
                 for (var lineNo in this.selectedLines[path]) {
                     lineNos.push(parseInt(lineNo));
                 }
-                lineNos.sort(function (x, y) { return x - y; });
+                lineNos.sort(function (x, y) {
+                    return x - y;
+                });
                 var prev = null;
-                for (var _i = 0, _a = lineNos.slice(1); _i < _a.length; _i++) {
-                    var lineNo = _a[_i];
+                // This was using a lineNos.slice(1), not sure why
+                for (var _i = 0, lineNos_1 = lineNos; _i < lineNos_1.length; _i++) {
+                    var lineNo = lineNos_1[_i];
                     var line = this.allLines[path][lineNo];
                     if (prev == null) {
                         line.showPath();
@@ -134,20 +163,42 @@ define(["require", "exports", "./line", "./util", "./hljs"], function (require, 
             }
         };
         SourceView.prototype.getRenderedLineRank = function (path, lineNo) {
+            if (lineNo > 1e8) {
+                return lineNo;
+            }
             return this.allLines[path][lineNo].rank;
+        };
+        SourceView.prototype.getLineNo = function (y) {
+            var line = this.renderedLines[0];
+            // console.log(x, y)
+            var height = line.lineNoElem.getBoundingClientRect().height;
+            // console.log(height, margin)
+            for (var i = 0; i < this.renderedLines.length; ++i) {
+                var l = this.renderedLines[i];
+                if (l.collapsedHeader > 0) {
+                    y -= l.elem.getBoundingClientRect().height;
+                }
+                else if (l.collapsed === 0 || l.isSelected) {
+                    y -= height;
+                }
+                if (y < 0) {
+                    return i;
+                }
+            }
+            return Math.floor(y / height);
+        };
+        SourceView.prototype.getMarginLeft = function () {
+            return this.renderedLines[0].codeElem.getBoundingClientRect().left -
+                this.container.getBoundingClientRect().left;
         };
         SourceView.prototype.onUserSelect = function (x, y, event) {
             if (this.renderedLines.length == 0)
                 return;
             x -= this.container.getBoundingClientRect().left;
             y -= this.container.getBoundingClientRect().top;
-            var line = this.renderedLines[0];
-            // console.log(x, y);
-            var height = line.elem.getBoundingClientRect().height;
-            var margin = line.codeElem.getBoundingClientRect().left -
-                this.container.getBoundingClientRect().left;
-            // console.log(height, margin);
-            var lineNo = Math.floor(y / height);
+            // console.log(x, y)
+            var margin = this.getMarginLeft();
+            var lineNo = this.getLineNo(y);
             if (event == 'start') {
                 if (x >= margin) {
                     this.clearUserSelection();
@@ -228,9 +279,10 @@ define(["require", "exports", "./line", "./util", "./hljs"], function (require, 
             var containerOffset = 0;
             while (node != null) {
                 containerOffset += node.offsetTop;
-                node = node.parentElement;
+                node = node.offsetParent;
             }
-            window.scroll(0, line.getY() + containerOffset - Math.round(offset));
+            var scroll = line.getY() + containerOffset - Math.round(offset);
+            window.scroll(0, scroll);
         };
         SourceView.prototype.getCode = function (path, lineNo) {
             var lines = this.allLines[path];

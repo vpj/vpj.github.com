@@ -21,13 +21,11 @@ define(["require", "exports"], function (require, exports) {
                 });
             }
         };
-        ;
         Router.prototype.back = function () {
             if (this.history.length > 1) {
                 return this.controller.back();
             }
         };
-        ;
         Router.prototype.canBack = function () {
             if (this.history.length > 1 && this.controller.canBack()) {
                 return true;
@@ -36,7 +34,6 @@ define(["require", "exports"], function (require, exports) {
                 return false;
             }
         };
-        ;
         Router.prototype.route = function (route, callbacks) {
             var _this = this;
             if ((Object.prototype.toString.call(route)) !== '[object RegExp]') {
@@ -78,10 +75,16 @@ define(["require", "exports"], function (require, exports) {
             else
                 return this.event.originalEvent;
         };
-        ;
         Router.prototype.navigate = function (fragment, options) {
-            if (!options)
-                options = { replace: false, trigger: true, title: '', state: null };
+            var def = { replace: false, trigger: true, title: '', state: null };
+            if (!options) {
+                options = def;
+            }
+            for (var k in def) {
+                if (!(k in options)) {
+                    options[k] = def[k];
+                }
+            }
             if (options.replace) {
                 this.history.pop();
             }
@@ -94,7 +97,6 @@ define(["require", "exports"], function (require, exports) {
             }
             return this.controller.navigate(fragment, options);
         };
-        ;
         Router.prototype._routeToRegExp = function (route) {
             route = route
                 .replace(this.escapeRegExp, '\\$&')
@@ -109,7 +111,6 @@ define(["require", "exports"], function (require, exports) {
             }).replace(this.splatParam, '(.*?)');
             return new RegExp("^" + route + "$");
         };
-        ;
         Router.prototype._extractParameters = function (route, fragment) {
             var params = route.exec(fragment).slice(1);
             var results = [];
@@ -153,15 +154,6 @@ define(["require", "exports"], function (require, exports) {
             this.hasPushState = wantsPushState && this.history && this.history.pushState != null;
             this.root = options.root || '/';
             this.root = ("/" + this.root + "/").replace(this.rootStripper, '/');
-            if (this.hasPushState) {
-                window.onpopstate = this.checkUrl;
-            }
-            else if (this.wantsHashChange && (window.onhashchange != null)) {
-                window.onhashchange = this.checkUrl;
-            }
-            else if (this.wantsHashChange) {
-                this.checkUrlInterval = setInterval(this.checkUrl, this.interval);
-            }
             if (options.onerror) {
                 this.onerror = options.onerror;
             }
@@ -171,17 +163,24 @@ define(["require", "exports"], function (require, exports) {
             if (this.emulateState && (startState != null)) {
                 this.pushEmulateState(startState.state, startState.title, startState.fragment);
             }
+            if (this.hasPushState) {
+                window.onpopstate = this.checkUrl;
+            }
+            else if (this.wantsHashChange && (window.onhashchange != null)) {
+                window.onhashchange = this.checkUrl;
+            }
+            else if (this.wantsHashChange) {
+                this.checkUrlInterval = setInterval(this.checkUrl, this.interval);
+            }
             this.fragment = this.getFragment();
             if (!silent) {
                 return this.loadUrl(null, null);
             }
         };
-        ;
         Controller.prototype.getHash = function () {
             var match = this.location.href.match(/#(.*)$/);
             return (match != null ? match[1] : '');
         };
-        ;
         Controller.prototype.getEmulateState = function () {
             if (this.stateList.length > 0) {
                 return this.stateList[this.stateList.length - 1];
@@ -197,7 +196,6 @@ define(["require", "exports"], function (require, exports) {
         Controller.prototype.popEmulateState = function () {
             return this.stateList.pop();
         };
-        ;
         Controller.prototype.pushEmulateState = function (state, title, fragment) {
             return this.stateList.push({
                 state: state,
@@ -205,7 +203,6 @@ define(["require", "exports"], function (require, exports) {
                 fragment: fragment
             });
         };
-        ;
         Controller.prototype.getFragment = function (fragment, forcePushState) {
             if (fragment === void 0) { fragment = null; }
             if (forcePushState === void 0) { forcePushState = false; }
@@ -227,7 +224,6 @@ define(["require", "exports"], function (require, exports) {
             }
             return fragment.replace(this.routeStripper, '');
         };
-        ;
         Controller.prototype.back = function () {
             if (this.emulateState === true) {
                 this.popEmulateState();
@@ -240,7 +236,6 @@ define(["require", "exports"], function (require, exports) {
                     this.history.back();
             }
         };
-        ;
         Controller.prototype.canBack = function () {
             if (this.emulateState === true) {
                 return this.stateList.length > 1;
@@ -251,14 +246,12 @@ define(["require", "exports"], function (require, exports) {
                 return typeof this.history.back === "function";
             }
         };
-        ;
         Controller.prototype.route = function (route, callback) {
             return this.handlers.unshift({
                 route: route,
                 callback: callback
             });
         };
-        ;
         Controller.prototype.checkUrl = function (e) {
             var fragment = this.getFragment();
             if (fragment === this.fragment) {
@@ -266,7 +259,6 @@ define(["require", "exports"], function (require, exports) {
             }
             return this.loadUrl(fragment, e);
         };
-        ;
         Controller.prototype.loadUrl = function (fragment, e) {
             try {
                 fragment = this.fragment = this.getFragment(fragment);
@@ -283,7 +275,6 @@ define(["require", "exports"], function (require, exports) {
                 }
             }
         };
-        ;
         Controller.prototype.navigate = function (fragment, options) {
             if (!this.started) {
                 return false;
@@ -334,7 +325,6 @@ define(["require", "exports"], function (require, exports) {
                 return this.loadUrl(fragment, null);
             }
         };
-        ;
         Controller.prototype._updateHash = function (location, fragment, replace) {
             if (replace) {
                 var href = location.href.replace(/(javascript:|#).*$/, '');

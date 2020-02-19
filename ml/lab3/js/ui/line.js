@@ -1,4 +1,4 @@
-define(["require", "exports", "./weya", "./project"], function (require, exports, weya_1, project_1) {
+define(["require", "exports", "../lib/weya/weya", "./project"], function (require, exports, weya_1, project_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var LineElem = /** @class */ (function () {
@@ -29,7 +29,7 @@ define(["require", "exports", "./weya", "./project"], function (require, exports
             this.rank = 0;
             this.isShowBreakBefore = false;
             this.isShowPath = false;
-            this.commentKeys = {};
+            this.commentKeys = new Set();
         }
         LineElem.prototype.render = function (rank) {
             var _this = this;
@@ -39,7 +39,7 @@ define(["require", "exports", "./weya", "./project"], function (require, exports
                     $('div.path', _this.path, { on: { 'click': _this.onSelectFile } });
                 }
                 if (_this.isShowBreakBefore) {
-                    $('div', '...');
+                    $('div', '...', {});
                 }
                 _this.isShowBreakBefore = false;
                 _this.isShowPath = false;
@@ -50,7 +50,7 @@ define(["require", "exports", "./weya", "./project"], function (require, exports
             });
             this.codeElem = document.createElement("span");
             if (this.code.trim() !== "") {
-                // let h = highlight(this.language, this.code, true, null);
+                // let h = highlight(this.language, this.code, true, null)
                 this.codeElem.innerHTML = this.highlighted;
                 this.elem.appendChild(this.codeElem);
             }
@@ -88,15 +88,15 @@ define(["require", "exports", "./weya", "./project"], function (require, exports
             }
         };
         LineElem.prototype.addComment = function (key) {
-            if (this.commentKeys[key] == null) {
-                this.commentKeys[key] = true;
+            if (!this.commentKeys.has(key)) {
+                this.commentKeys.add(key);
                 this.comments++;
             }
             this.setCommentsCss();
         };
         LineElem.prototype.removeComment = function (key) {
-            if (this.commentKeys[key] != null) {
-                delete this.commentKeys[key];
+            if (this.commentKeys.has(key)) {
+                this.commentKeys.delete(key);
                 this.comments--;
             }
             this.setCommentsCss();
@@ -136,6 +136,13 @@ define(["require", "exports", "./weya", "./project"], function (require, exports
             this.comments = 0;
             this.elem.classList.remove("selected");
         };
+        Object.defineProperty(LineElem.prototype, "isSelected", {
+            get: function () {
+                return this.elem.classList.contains('selected');
+            },
+            enumerable: true,
+            configurable: true
+        });
         LineElem.prototype.setSelected = function (isSelected) {
             if (isSelected) {
                 this.elem.classList.add("selected");

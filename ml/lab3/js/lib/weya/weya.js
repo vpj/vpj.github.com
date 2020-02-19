@@ -52,10 +52,15 @@ define(["require", "exports"], function (require, exports) {
             func: null,
             parent: null
         };
-        var defStr = args.length > 0 ? args[0] : 'div';
-        params.def = parseDefinition(defStr);
-        for (var _i = 0, _a = args.slice(1); _i < _a.length; _i++) {
-            var arg = _a[_i];
+        if (args.length == 0) {
+            params.def = parseDefinition('div');
+        }
+        else if (typeof (args[0]) == 'string') {
+            params.def = parseDefinition(args[0]);
+            args = args.slice(1);
+        }
+        for (var _i = 0, args_1 = args; _i < args_1.length; _i++) {
+            var arg = args_1[_i];
             switch (typeof arg) {
                 case "function":
                     params.func = arg;
@@ -96,6 +101,11 @@ define(["require", "exports"], function (require, exports) {
                 }
             }
         }
+        function setData(elem, data) {
+            for (var k in data) {
+                elem[k] = data[k];
+            }
+        }
         function setAttributes(elem, attrs) {
             for (var k in attrs) {
                 var v = attrs[k];
@@ -106,6 +116,8 @@ define(["require", "exports"], function (require, exports) {
                     case "on":
                         setEvents(elem, v);
                         break;
+                    case "data":
+                        setData(elem, v);
                     default:
                         if (v != null) {
                             elem.setAttribute(k, v);
@@ -161,22 +173,27 @@ define(["require", "exports"], function (require, exports) {
                 parent = this._elem;
             }
             var elem;
-            var tag = params.def.tag;
-            var ns = NAMESPACES[TAGS_DICT[tag]];
-            if (ns != null) {
-                elem = API.document.createElementNS(ns, tag);
+            if (params.def == null) {
+                elem = parent;
             }
             else {
-                elem = API.document.createElement(tag);
-            }
-            if (params.def != null) {
-                setIdClass(elem, params.def);
-            }
-            if (params.attrs != null) {
-                setAttributes(elem, params.attrs);
-            }
-            if (parent != null) {
-                parent.appendChild(elem);
+                var tag = params.def.tag;
+                var ns = NAMESPACES[TAGS_DICT[tag]];
+                if (ns != null) {
+                    elem = API.document.createElementNS(ns, tag);
+                }
+                else {
+                    elem = API.document.createElement(tag);
+                }
+                if (params.def != null) {
+                    setIdClass(elem, params.def);
+                }
+                if (params.attrs != null) {
+                    setAttributes(elem, params.attrs);
+                }
+                if (parent != null) {
+                    parent.appendChild(elem);
+                }
             }
             if (params.func != null) {
                 var state = {

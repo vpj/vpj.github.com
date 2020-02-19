@@ -2,9 +2,11 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var NoteMatch = /** @class */ (function () {
-        function NoteMatch(start, end) {
+        function NoteMatch(start, end, codeScore, score) {
             this.start = start;
             this.end = end;
+            this.score = score;
+            this.codeScore = codeScore;
         }
         return NoteMatch;
     }());
@@ -141,14 +143,28 @@ define(["require", "exports"], function (require, exports) {
             var match = this.getBestMatch(matches, weights);
             var start = 1e10;
             var end = -1;
+            var matchWeight = 0;
+            var totanWeight = 0;
+            var codeMatchWeight = 0;
+            var codeTotalWeight = 0;
             for (var i = 0; i < matches.length; ++i) {
-                if (weights[i] >= 1.0 && match[i] != -1) {
+                if (match[i] !== -1) {
+                    matchWeight += weights[i];
+                    if (weights[i] >= 1) {
+                        codeMatchWeight += 1;
+                    }
+                }
+                if (weights[i] >= 1) {
+                    codeTotalWeight += 1;
+                }
+                totanWeight += weights[i];
+                if (weights[i] >= 1.0 && match[i] !== -1) {
                     var line = this.actualLineNumbers[match[i]];
                     start = Math.min(start, line);
                     end = Math.max(end, line);
                 }
             }
-            return new NoteMatch(start, end);
+            return new NoteMatch(start, end, codeMatchWeight / codeTotalWeight, matchWeight / totanWeight);
         };
         return FileSourceCodeMatcher;
     }());
