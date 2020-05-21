@@ -2,10 +2,11 @@
 <html>
 <head><meta charset="utf-8" />
 
-<title>Counterfactual Regret Minization with Kuhn Poker</title>
+<title>Counterfactual Regret Minimization with Kuhn Poker</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -16,7 +17,6 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 ga('create', 'UA-44255805-1', 'auto');
 ga('send', 'pageview');
 </script>
-
 
 <style type="text/css">
     /*!
@@ -13122,6 +13122,12 @@ the first player can either pass or bet $1$ chip.</p>
 </ul>
 <p>This game is played repeatedly and a good strategy will optimize for the
 long term utility (or winnings).</p>
+<p>Here's some example games:</p>
+<ul>
+<li><code>KAp</code> - Player 1 gets <em>K</em>. Player 2 gets <em>A</em>. Player 1 passes. Player 2 doesn't get a betting chance and Player 2 wins the pot of $2S$ chips.</li>
+<li><code>QKbp</code> - Player 1 gets <em>Q</em>. Player 2 gets <em>K</em>. Player 1 bets a chip. Player 2 passes (folds). Player 1 gets the pot of $2S+1$ because Player 2 folded.</li>
+<li><code>QAbb</code> - Player 1 gets <em>Q</em>. Player 2 gets <em>A</em>. Player 2 bets a chips. Player 2 also bets (calls). Player 2 wins the pot of $2S+2$.</li>
+</ul>
 
 </div>
 </div>
@@ -13539,6 +13545,14 @@ or a card dealt (<code>A</code>, <code>K</code>, <code>Q</code>).</p>
 That is, the cards dealt and actions taken by the players.
 We represent $h$ is a string where the first two letters are the
 cards dealt to the two players and the rest are betting actions.</p>
+<p>Here are some example histories:</p>
+<ol>
+<li><code>KA</code> - Player 1 gets <em>K</em>. Player 2 gets <em>A</em>. It is the Player 2's chance to take an action.</li>
+<li><code>KAp</code> - Player 1 gets <em>K</em>. Player 2 gets <em>A</em>. Player 1 passes. The game ends. This is a terminal history.</li>
+<li><code>KAb</code> - Player 1 gets <em>K</em>. Player 2 gets <em>A</em>. Player 1 bets a chips. It is the Player 2's chance to take an action.</li>
+<li><code>KAbp</code> - Player 1 gets <em>K</em>. Player 2 gets <em>A</em>. Player 1 bets a chips. Player 2 passes. Game ends. This is a terminal history.</li>
+<li><code>KAbb</code> - Player 1 gets <em>K</em>. Player 2 gets <em>A</em>. Player 2 bets a chips. Player 2 calls by betting a chip. Game ends. This is a terminal history.</li>
+</ol>
 
 </div>
 </div>
@@ -13602,7 +13616,34 @@ In case of Kuhn poker, it's the card in their hand and the betting info.</p>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Function <code>info_set</code> gives the Information set $I$ for a given history $h$</p>
+<p><code>player</code> gives the current player.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">player</span><span class="p">(</span><span class="n">h</span><span class="p">:</span> <span class="n">History</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">Player</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Function <code>info_set</code> gives the Information set $I$ for a given history $h$.</p>
+<p>Here are some example history &amp; infoormation set pairs:</p>
+<ul>
+<li><code>KA</code> - Player 1 is the current player. He can see his card <em>K</em>. So the information set is <code>K</code>.</li>
+<li><code>KAb</code> - Player 2 is the current player. He can see his card <em>A</em> and the betting history <em>b</em>. So the information set is <code>Ab</code>.</li>
+</ul>
 
 </div>
 </div>
@@ -13701,28 +13742,6 @@ information set $I$. It gives the probabilities for actions $a \in A(I)$.</p>
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">strategy</span><span class="p">(</span><span class="n">I</span><span class="p">:</span> <span class="n">InfoSet</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">I</span><span class="o">.</span><span class="n">strategy</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><code>player</code> gives the current player.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">player</span><span class="p">(</span><span class="n">h</span><span class="p">:</span> <span class="n">History</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">Player</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span>
 </pre></div>
 
     </div>
