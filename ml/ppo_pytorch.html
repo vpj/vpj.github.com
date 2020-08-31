@@ -6,7 +6,7 @@
     <link href="http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900"
           rel="stylesheet"
           type="text/css"/>
-  <link rel="stylesheet" href="lab/pylit.css">
+    <link rel="stylesheet" href="lab/pylit.css">
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -20,32 +20,28 @@
 <div id='container'>
     <div id="background"></div>
     <div class='section'>
-        <div class='docs'><h1>Proximal Policy Optimization - PPO in PyTorch</h1></div>
-    </div>
+        <div class='docs'><h1>Proximal Policy Optimization - PPO in PyTorch
+            </div>
     <div class='section' id='section-0'>
         <div class='docs doc-strings'>
                 <div class='octowrap'>
                     <a class='octothorpe' href='#section-0'>#</a>
                 </div>
-                <p>The code for this tutorial is available at
-<a href="https://github.com/lab-ml/rl_samples">Github labml/rl_samples</a>.
+                <p>This is a minimalistic implementation of <a href="https://arxiv.org/abs/1707.06347">Proximal Policy Optimization - PPO</a>
+ clipped version for Atari Breakout game on OpenAI Gym.
+This has less than 250 lines of code.
+It runs the game environments on multiple processes to sample efficiently.
+Advantages are calculated using <a href="https://arxiv.org/abs/1506.02438">Generalized Advantage Estimation</a>.</p>
+<p><strong>The code for this tutorial is available at
+<a href="https://github.com/lab-ml/rl_samples">Github labml/rl_samples</a>.</strong>
 And the web version of the tutorial is available
 <a href="http://blog.varunajayasiri.com/ml/ppo_pytorch.html">on my blog</a>.</p>
-<p>The implementation has four main classes.</p>
-<ul>
-<li><a href="#game">Game</a> - a wrapper for gym environment</li>
-<li><a href="#model">Model</a> - neural network model for policy and value function</li>
-<li><a href="#trainer">Trainer</a> - policy and value function updater</li>
-<li><a href="#main">Math</a> - runs the training loop; sampling and training</li>
-</ul>
 <p>If someone reading this has any questions or comments
- please find me on Twitter,
- <strong><a href="https://twitter.com/vpj">@vpj</a></strong>.</p>
+ please find me on Twitter, <strong><a href="https://twitter.com/vpj">@vpj</a></strong>.</p>
             </div>
             <div class='code'>
                 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">multiprocessing</span>
 <span class="kn">import</span> <span class="nn">multiprocessing.connection</span>
-<span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
 
 <span class="kn">import</span> <span class="nn">cv2</span>
@@ -59,7 +55,7 @@ And the web version of the tutorial is available
 <span class="kn">from</span> <span class="nn">torch.nn</span> <span class="kn">import</span> <span class="n">functional</span> <span class="k">as</span> <span class="n">F</span>
 
 <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
-    <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda:0&quot;</span><span class="p">)</span>
+    <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda:1&quot;</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">)</span></pre></div>
             </div>
@@ -73,22 +69,16 @@ And the web version of the tutorial is available
 <p>This is a wrapper for OpenAI gym game environment.
 We do a few things here:</p>
 <ol>
-<li>Apply the same action on four frames</li>
+<li>Apply the same action on four frames and get the last frame</li>
 <li>Convert observation frames to gray and scale it to (84, 84)</li>
-<li>Take the maximum of last two of those four frames</li>
-<li>Collect four such frames for last three actions</li>
+<li>Stack four frames of the last four actions</li>
 <li>Add episode information (total reward for the entire episode) for monitoring</li>
 <li>Restrict an episode to a single life (game has 5 lives, we reset after every single life)</li>
 </ol>
 <h4>Observation format</h4>
-<p>Observation is tensor of size (84, 84, 4). It is four frames
-(images of the game screen) stacked on last axis.
+<p>Observation is tensor of size (4, 84, 84). It is four frames
+(images of the game screen) stacked on first axis.
 i.e, each channel is a frame.</p>
-<pre><code>Frames    00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15
-Actions   a1 a1 a1 a1 a2 a2 a2 a2 a3 a3 a3 a3 a4 a4 a4 a4
-Max       -- -- MM MM -- -- MM MM -- -- MM MM -- -- MM MM
-Stacked   -- -- Stack -- -- Stack -- -- Stack -- -- Stack
-</code></pre>
             </div>
             <div class='code'>
                 <div class="highlight"><pre><span class="k">class</span> <span class="nc">Game</span><span class="p">:</span></pre></div>
@@ -106,11 +96,11 @@ Stacked   -- -- Stack -- -- Stack -- -- Stack -- -- Stack
             </div>
         </div>
     <div class='section' id='section-3'>
-        <div class='docs doc-strings'>
+            <div class='docs'>
                 <div class='octowrap'>
                     <a class='octothorpe' href='#section-3'>#</a>
                 </div>
-                <h3>Initialize</h3>
+                
             </div>
             <div class='code'>
                 <div class="highlight"><pre>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span></pre></div>
@@ -121,17 +111,6 @@ Stacked   -- -- Stack -- -- Stack -- -- Stack -- -- Stack
                 <div class='octowrap'>
                     <a class='octothorpe' href='#section-4'>#</a>
                 </div>
-                
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-5'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-5'>#</a>
-                </div>
                 <p>create environment</p>
             </div>
             <div class='code'>
@@ -139,32 +118,21 @@ Stacked   -- -- Stack -- -- Stack -- -- Stack -- -- Stack
         <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-6'>
+    <div class='section' id='section-5'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-6'>#</a>
-                </div>
-                <p>buffer to take the maximum of last 2 frames for each action</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">obs_2_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">84</span><span class="p">,</span> <span class="mi">84</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-7'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-7'>#</a>
+                    <a class='octothorpe' href='#section-5'>#</a>
                 </div>
                 <p>tensor for a stack of 4 frames</p>
             </div>
             <div class='code'>
-                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">obs_4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">84</span><span class="p">,</span> <span class="mi">84</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span></pre></div>
+                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">obs_4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">84</span><span class="p">,</span> <span class="mi">84</span><span class="p">))</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-8'>
+    <div class='section' id='section-6'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-8'>#</a>
+                    <a class='octothorpe' href='#section-6'>#</a>
                 </div>
                 <p>keep track of the episode rewards</p>
             </div>
@@ -172,10 +140,10 @@ Stacked   -- -- Stack -- -- Stack -- -- Stack -- -- Stack
                 <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span> <span class="o">=</span> <span class="p">[]</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-9'>
+    <div class='section' id='section-7'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-9'>#</a>
+                    <a class='octothorpe' href='#section-7'>#</a>
                 </div>
                 <p>and number of lives left</p>
             </div>
@@ -183,16 +151,16 @@ Stacked   -- -- Stack -- -- Stack -- -- Stack -- -- Stack
                 <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">lives</span> <span class="o">=</span> <span class="mi">0</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-10'>
+    <div class='section' id='section-8'>
         <div class='docs doc-strings'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-10'>#</a>
+                    <a class='octothorpe' href='#section-8'>#</a>
                 </div>
                 <h3>Step</h3>
 <p>Executes <code>action</code> for 4 time steps and
  returns a tuple of (observation, reward, done, episode_info).</p>
 <ul>
-<li><code>observation</code>: stacked 4 frames (this frame and frames for last 3 actions) as described above</li>
+<li><code>observation</code>: stacked 4 frames (this frame and frames for last 3 actions)</li>
 <li><code>reward</code>: total reward while the action was executed</li>
 <li><code>done</code>: whether the episode finished (a life lost)</li>
 <li><code>episode_info</code>: episode information if completed</li>
@@ -202,10 +170,10 @@ Stacked   -- -- Stack -- -- Stack -- -- Stack -- -- Stack
                 <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-11'>
+    <div class='section' id='section-9'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-11'>#</a>
+                    <a class='octothorpe' href='#section-9'>#</a>
                 </div>
                 
             </div>
@@ -214,10 +182,10 @@ Stacked   -- -- Stack -- -- Stack -- -- Stack -- -- Stack
         <span class="n">done</span> <span class="o">=</span> <span class="kc">None</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-12'>
+    <div class='section' id='section-10'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-12'>#</a>
+                    <a class='octothorpe' href='#section-10'>#</a>
                 </div>
                 <p>run for 4 steps</p>
             </div>
@@ -225,35 +193,23 @@ Stacked   -- -- Stack -- -- Stack -- -- Stack -- -- Stack
                 <div class="highlight"><pre>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-13'>
+    <div class='section' id='section-11'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-13'>#</a>
+                    <a class='octothorpe' href='#section-11'>#</a>
                 </div>
                 <p>execute the action in the OpenAI Gym environment</p>
             </div>
             <div class='code'>
-                <div class="highlight"><pre>            <span class="n">obs</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-14'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-14'>#</a>
-                </div>
-                <p>add last two frames to buffer</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>            <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">obs_2_max</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_obs</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
+                <div class="highlight"><pre>            <span class="n">obs</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
 
             <span class="n">reward</span> <span class="o">+=</span> <span class="n">r</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-15'>
+    <div class='section' id='section-12'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-15'>#</a>
+                    <a class='octothorpe' href='#section-12'>#</a>
                 </div>
                 <p>get number of lives left</p>
             </div>
@@ -261,35 +217,34 @@ Stacked   -- -- Stack -- -- Stack -- -- Stack -- -- Stack
                 <div class="highlight"><pre>            <span class="n">lives</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">unwrapped</span><span class="o">.</span><span class="n">ale</span><span class="o">.</span><span class="n">lives</span><span class="p">()</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-16'>
+    <div class='section' id='section-13'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-16'>#</a>
+                    <a class='octothorpe' href='#section-13'>#</a>
                 </div>
                 <p>reset if a life is lost</p>
             </div>
             <div class='code'>
                 <div class="highlight"><pre>            <span class="k">if</span> <span class="n">lives</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">lives</span><span class="p">:</span>
                 <span class="n">done</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">lives</span> <span class="o">=</span> <span class="n">lives</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-17'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-17'>#</a>
-                </div>
-                <p>stop if episode finished</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>            <span class="k">if</span> <span class="n">done</span><span class="p">:</span>
                 <span class="k">break</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-18'>
+    <div class='section' id='section-14'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-18'>#</a>
+                    <a class='octothorpe' href='#section-14'>#</a>
+                </div>
+                <p>Transform the last observation to (84, 84)</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>        <span class="n">obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_obs</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-15'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-15'>#</a>
                 </div>
                 <p>maintain rewards for each step</p>
             </div>
@@ -299,50 +254,50 @@ Stacked   -- -- Stack -- -- Stack -- -- Stack -- -- Stack
         <span class="k">if</span> <span class="n">done</span><span class="p">:</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-19'>
+    <div class='section' id='section-16'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-19'>#</a>
+                    <a class='octothorpe' href='#section-16'>#</a>
                 </div>
                 <p>if finished, set episode information if episode is over, and reset</p>
             </div>
             <div class='code'>
-                <div class="highlight"><pre>            <span class="n">episode_info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;reward&quot;</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">),</span>
-                            <span class="s2">&quot;length&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">)}</span>
+                <div class="highlight"><pre>            <span class="n">episode_info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;reward&quot;</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">),</span> <span class="s2">&quot;length&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">)}</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">episode_info</span> <span class="o">=</span> <span class="kc">None</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-20'>
+    <div class='section' id='section-17'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-20'>#</a>
+                    <a class='octothorpe' href='#section-17'>#</a>
                 </div>
-                <p>get the max of last two frames</p>
+                <p>get the max of last two frames
+obs = self.obs_2_max.max(axis=0)</p>
             </div>
             <div class='code'>
-                <div class="highlight"><pre>            <span class="n">obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obs_2_max</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></pre></div>
+                <div class="highlight"><pre></pre></div>
             </div>
         </div>
-    <div class='section' id='section-21'>
+    <div class='section' id='section-18'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-21'>#</a>
+                    <a class='octothorpe' href='#section-18'>#</a>
                 </div>
                 <p>push it to the stack of 4 frames</p>
             </div>
             <div class='code'>
-                <div class="highlight"><pre>            <span class="bp">self</span><span class="o">.</span><span class="n">obs_4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obs_4</span><span class="p">,</span> <span class="n">shift</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">obs_4</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">obs</span>
+                <div class="highlight"><pre>            <span class="bp">self</span><span class="o">.</span><span class="n">obs_4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obs_4</span><span class="p">,</span> <span class="n">shift</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">obs_4</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">obs</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">obs_4</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">episode_info</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-22'>
+    <div class='section' id='section-19'>
         <div class='docs doc-strings'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-22'>#</a>
+                    <a class='octothorpe' href='#section-19'>#</a>
                 </div>
                 <h3>Reset environment</h3>
 <p>Clean up episode info and 4 frame stack</p>
@@ -351,10 +306,10 @@ Stacked   -- -- Stack -- -- Stack -- -- Stack -- -- Stack
                 <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-23'>
+    <div class='section' id='section-20'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-23'>#</a>
+                    <a class='octothorpe' href='#section-20'>#</a>
                 </div>
                 
             </div>
@@ -362,10 +317,10 @@ Stacked   -- -- Stack -- -- Stack -- -- Stack -- -- Stack
                 <div class="highlight"><pre></pre></div>
             </div>
         </div>
-    <div class='section' id='section-24'>
+    <div class='section' id='section-21'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-24'>#</a>
+                    <a class='octothorpe' href='#section-21'>#</a>
                 </div>
                 <p>reset OpenAI Gym environment</p>
             </div>
@@ -373,19 +328,17 @@ Stacked   -- -- Stack -- -- Stack -- -- Stack -- -- Stack
                 <div class="highlight"><pre>        <span class="n">obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-25'>
+    <div class='section' id='section-22'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-25'>#</a>
+                    <a class='octothorpe' href='#section-22'>#</a>
                 </div>
                 <p>reset caches</p>
             </div>
             <div class='code'>
                 <div class="highlight"><pre>        <span class="n">obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_obs</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">obs_4</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">:]</span> <span class="o">=</span> <span class="n">obs</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">obs_4</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">obs</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">obs_4</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">2</span><span class="p">:]</span> <span class="o">=</span> <span class="n">obs</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">obs_4</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">3</span><span class="p">:]</span> <span class="o">=</span> <span class="n">obs</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">obs_4</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">obs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">lives</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">unwrapped</span><span class="o">.</span><span class="n">ale</span><span class="o">.</span><span class="n">lives</span><span class="p">()</span>
@@ -393,10 +346,10 @@ Stacked   -- -- Stack -- -- Stack -- -- Stack -- -- Stack
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">obs_4</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-26'>
+    <div class='section' id='section-23'>
         <div class='docs doc-strings'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-26'>#</a>
+                    <a class='octothorpe' href='#section-23'>#</a>
                 </div>
                 <h4>Process game frames</h4>
 <p>Convert game frames to gray and rescale to 84x84</p>
@@ -406,23 +359,23 @@ Stacked   -- -- Stack -- -- Stack -- -- Stack -- -- Stack
     <span class="k">def</span> <span class="nf">_process_obs</span><span class="p">(</span><span class="n">obs</span><span class="p">):</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-27'>
+    <div class='section' id='section-24'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-27'>#</a>
+                    <a class='octothorpe' href='#section-24'>#</a>
                 </div>
                 
             </div>
             <div class='code'>
                 <div class="highlight"><pre>        <span class="n">obs</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2GRAY</span><span class="p">)</span>
         <span class="n">obs</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="p">(</span><span class="mi">84</span><span class="p">,</span> <span class="mi">84</span><span class="p">),</span> <span class="n">interpolation</span><span class="o">=</span><span class="n">cv2</span><span class="o">.</span><span class="n">INTER_AREA</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">obs</span><span class="p">[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">]</span>  <span class="c1"># Shape (84, 84, 1)</span></pre></div>
+        <span class="k">return</span> <span class="n">obs</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-28'>
+    <div class='section' id='section-25'>
         <div class='docs doc-strings'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-28'>#</a>
+                    <a class='octothorpe' href='#section-25'>#</a>
                 </div>
                 <h2>Worker Process</h2>
 <p>Each worker process runs this method</p>
@@ -431,10 +384,10 @@ Stacked   -- -- Stack -- -- Stack -- -- Stack -- -- Stack
                 <div class="highlight"><pre><span class="k">def</span> <span class="nf">worker_process</span><span class="p">(</span><span class="n">remote</span><span class="p">:</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">Connection</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-29'>
+    <div class='section' id='section-26'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-29'>#</a>
+                    <a class='octothorpe' href='#section-26'>#</a>
                 </div>
                 
             </div>
@@ -442,10 +395,10 @@ Stacked   -- -- Stack -- -- Stack -- -- Stack -- -- Stack
                 <div class="highlight"><pre></pre></div>
             </div>
         </div>
-    <div class='section' id='section-30'>
+    <div class='section' id='section-27'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-30'>#</a>
+                    <a class='octothorpe' href='#section-27'>#</a>
                 </div>
                 <p>create game</p>
             </div>
@@ -453,10 +406,10 @@ Stacked   -- -- Stack -- -- Stack -- -- Stack -- -- Stack
                 <div class="highlight"><pre>    <span class="n">game</span> <span class="o">=</span> <span class="n">Game</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-31'>
+    <div class='section' id='section-28'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-31'>#</a>
+                    <a class='octothorpe' href='#section-28'>#</a>
                 </div>
                 <p>wait for instructions from the connection and execute them</p>
             </div>
@@ -474,34 +427,32 @@ Stacked   -- -- Stack -- -- Stack -- -- Stack -- -- Stack
             <span class="k">raise</span> <span class="ne">NotImplementedError</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-32'>
+    <div class='section' id='section-29'>
         <div class='docs doc-strings'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-32'>#</a>
+                    <a class='octothorpe' href='#section-29'>#</a>
                 </div>
-                <h2>Worker</h2>
-<p>Creates a new worker and runs it in a separate process.</p>
+                <p>Creates a new worker and runs it in a separate process.</p>
             </div>
             <div class='code'>
                 <div class="highlight"><pre><span class="k">class</span> <span class="nc">Worker</span><span class="p">:</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-33'>
+    <div class='section' id='section-30'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-33'>#</a>
+                    <a class='octothorpe' href='#section-30'>#</a>
                 </div>
                 
             </div>
             <div class='code'>
-                <div class="highlight"><pre>    <span class="n">child</span><span class="p">:</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">Connection</span>
-    <span class="n">process</span><span class="p">:</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Process</span></pre></div>
+                <div class="highlight"><pre></pre></div>
             </div>
         </div>
-    <div class='section' id='section-34'>
+    <div class='section' id='section-31'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-34'>#</a>
+                    <a class='octothorpe' href='#section-31'>#</a>
                 </div>
                 
             </div>
@@ -512,10 +463,10 @@ Stacked   -- -- Stack -- -- Stack -- -- Stack -- -- Stack
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-35'>
+    <div class='section' id='section-32'>
         <div class='docs doc-strings'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-35'>#</a>
+                    <a class='octothorpe' href='#section-32'>#</a>
                 </div>
                 <h2>Model</h2>
             </div>
@@ -523,10 +474,10 @@ Stacked   -- -- Stack -- -- Stack -- -- Stack -- -- Stack
                 <div class="highlight"><pre><span class="k">class</span> <span class="nc">Model</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-36'>
+    <div class='section' id='section-33'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-36'>#</a>
+                    <a class='octothorpe' href='#section-33'>#</a>
                 </div>
                 
             </div>
@@ -534,10 +485,10 @@ Stacked   -- -- Stack -- -- Stack -- -- Stack -- -- Stack
                 <div class="highlight"><pre></pre></div>
             </div>
         </div>
-    <div class='section' id='section-37'>
+    <div class='section' id='section-34'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-37'>#</a>
+                    <a class='octothorpe' href='#section-34'>#</a>
                 </div>
                 
             </div>
@@ -546,21 +497,53 @@ Stacked   -- -- Stack -- -- Stack -- -- Stack -- -- Stack
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-38'>
+    <div class='section' id='section-35'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-38'>#</a>
+                    <a class='octothorpe' href='#section-35'>#</a>
                 </div>
                 <p>The first convolution layer takes a
 84x84 frame and produces a 20x20 frame</p>
             </div>
             <div class='code'>
-                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-                               <span class="n">out_channels</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
-                               <span class="n">kernel_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
-                               <span class="n">stride</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-                               <span class="n">padding</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">orthogonal_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span></pre></div>
+                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-36'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-36'>#</a>
+                </div>
+                <p>The second convolution layer takes a
+20x20 frame and produces a 9x9 frame</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-37'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-37'>#</a>
+                </div>
+                <p>The third convolution layer takes a
+9x9 frame and produces a 7x7 frame</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">conv3</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-38'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-38'>#</a>
+                </div>
+                <p>A fully connected layer takes the flattened
+frame from third convolution layer, and outputs
+512 features</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">lin</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_features</span><span class="o">=</span><span class="mi">7</span> <span class="o">*</span> <span class="mi">7</span> <span class="o">*</span> <span class="mi">64</span><span class="p">,</span> <span class="n">out_features</span><span class="o">=</span><span class="mi">512</span><span class="p">)</span></pre></div>
             </div>
         </div>
     <div class='section' id='section-39'>
@@ -568,16 +551,10 @@ Stacked   -- -- Stack -- -- Stack -- -- Stack -- -- Stack
                 <div class='octowrap'>
                     <a class='octothorpe' href='#section-39'>#</a>
                 </div>
-                <p>The second convolution layer takes a
-20x20 frame and produces a 9x9 frame</p>
+                <p>A fully connected layer to get logits for $\pi$</p>
             </div>
             <div class='code'>
-                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
-                               <span class="n">out_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
-                               <span class="n">kernel_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-                               <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-                               <span class="n">padding</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">orthogonal_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv2</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span></pre></div>
+                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">pi_logits</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_features</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">out_features</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></pre></div>
             </div>
         </div>
     <div class='section' id='section-40'>
@@ -585,16 +562,10 @@ Stacked   -- -- Stack -- -- Stack -- -- Stack -- -- Stack
                 <div class='octowrap'>
                     <a class='octothorpe' href='#section-40'>#</a>
                 </div>
-                <p>The third convolution layer takes a
-9x9 frame and produces a 7x7 frame</p>
+                <p>A fully connected layer to get value function</p>
             </div>
             <div class='code'>
-                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">conv3</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
-                               <span class="n">out_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
-                               <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-                               <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                               <span class="n">padding</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">orthogonal_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv3</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span></pre></div>
+                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_features</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">out_features</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></pre></div>
             </div>
         </div>
     <div class='section' id='section-41'>
@@ -602,53 +573,10 @@ Stacked   -- -- Stack -- -- Stack -- -- Stack -- -- Stack
                 <div class='octowrap'>
                     <a class='octothorpe' href='#section-41'>#</a>
                 </div>
-                <p>A fully connected layer takes the flattened
-frame from thrid convolution layer, and outputs
-512 features</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">lin</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_features</span><span class="o">=</span><span class="mi">7</span> <span class="o">*</span> <span class="mi">7</span> <span class="o">*</span> <span class="mi">64</span><span class="p">,</span>
-                             <span class="n">out_features</span><span class="o">=</span><span class="mi">512</span><span class="p">)</span>
-        <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">orthogonal_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lin</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-42'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-42'>#</a>
-                </div>
-                <p>A fully connected layer to get logits for $\pi$</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">pi_logits</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_features</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span>
-                                   <span class="n">out_features</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-        <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">orthogonal_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pi_logits</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.01</span><span class="p">))</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-43'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-43'>#</a>
-                </div>
-                <p>A fully connected layer to get value function</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_features</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span>
-                               <span class="n">out_features</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">orthogonal_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-44'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-44'>#</a>
-                </div>
                 
             </div>
             <div class='code'>
                 <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
-        <span class="n">h</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span>
-
         <span class="n">h</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">(</span><span class="n">obs</span><span class="p">))</span>
         <span class="n">h</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv2</span><span class="p">(</span><span class="n">h</span><span class="p">))</span>
         <span class="n">h</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv3</span><span class="p">(</span><span class="n">h</span><span class="p">))</span>
@@ -662,6 +590,39 @@ frame from thrid convolution layer, and outputs
         <span class="k">return</span> <span class="n">pi</span><span class="p">,</span> <span class="n">value</span></pre></div>
             </div>
         </div>
+    <div class='section' id='section-42'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-42'>#</a>
+                </div>
+                
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre><span class="k">def</span> <span class="nf">obs_to_torch</span><span class="p">(</span><span class="n">obs</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-43'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-43'>#</a>
+                </div>
+                <p>scale to <code>[0, 1]</code></p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-44'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-44'>#</a>
+                </div>
+                
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre><span class="k">class</span> <span class="nc">Main</span><span class="p">:</span></pre></div>
+            </div>
+        </div>
     <div class='section' id='section-45'>
             <div class='docs'>
                 <div class='octowrap'>
@@ -670,7 +631,7 @@ frame from thrid convolution layer, and outputs
                 
             </div>
             <div class='code'>
-                <div class="highlight"><pre><span class="k">def</span> <span class="nf">obs_to_torch</span><span class="p">(</span><span class="n">obs</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span></pre></div>
+                <div class="highlight"><pre>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
             </div>
         </div>
     <div class='section' id='section-46'>
@@ -678,11 +639,10 @@ frame from thrid convolution layer, and outputs
                 <div class='octowrap'>
                     <a class='octothorpe' href='#section-46'>#</a>
                 </div>
-                <p><code>[N, H, W, C]</code> to <code>[N, C, H, W]</code></p>
+                <h4>Configurations</h4>
             </div>
             <div class='code'>
-                <div class="highlight"><pre>    <span class="n">obs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-    <span class="n">obs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span></pre></div>
+                <div class="highlight"><pre></pre></div>
             </div>
         </div>
     <div class='section' id='section-47'>
@@ -690,18 +650,559 @@ frame from thrid convolution layer, and outputs
                 <div class='octowrap'>
                     <a class='octothorpe' href='#section-47'>#</a>
                 </div>
-                <p>scale to <code>[0, 1]</code></p>
+                <p>$\gamma$ and $\lambda$ for advantage calculation</p>
             </div>
             <div class='code'>
-                <div class="highlight"><pre>    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.</span></pre></div>
+                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="mf">0.99</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lamda</span> <span class="o">=</span> <span class="mf">0.95</span></pre></div>
             </div>
         </div>
     <div class='section' id='section-48'>
-        <div class='docs doc-strings'>
+            <div class='docs'>
                 <div class='octowrap'>
                     <a class='octothorpe' href='#section-48'>#</a>
                 </div>
-                <h2><a name="trainer"></a>Trainer</h2>
+                <p>number of updates</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">updates</span> <span class="o">=</span> <span class="mi">10000</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-49'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-49'>#</a>
+                </div>
+                <p>number of epochs to train the model with sampled data</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">epochs</span> <span class="o">=</span> <span class="mi">4</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-50'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-50'>#</a>
+                </div>
+                <p>number of worker processes</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span> <span class="o">=</span> <span class="mi">8</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-51'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-51'>#</a>
+                </div>
+                <p>number of steps to run on each process for a single update</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">worker_steps</span> <span class="o">=</span> <span class="mi">128</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-52'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-52'>#</a>
+                </div>
+                <p>number of mini batches</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">n_mini_batch</span> <span class="o">=</span> <span class="mi">4</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-53'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-53'>#</a>
+                </div>
+                <p>total number of samples for a single update</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">worker_steps</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-54'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-54'>#</a>
+                </div>
+                <p>size of a mini batch</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">mini_batch_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_mini_batch</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_mini_batch</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-55'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-55'>#</a>
+                </div>
+                <h4>Initialize</h4>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-56'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-56'>#</a>
+                </div>
+                <p>create workers</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">workers</span> <span class="o">=</span> <span class="p">[</span><span class="n">Worker</span><span class="p">(</span><span class="mi">47</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span><span class="p">)]</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-57'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-57'>#</a>
+                </div>
+                <p>initialize tensors for observations</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">obs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">84</span><span class="p">,</span> <span class="mi">84</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">worker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">workers</span><span class="p">:</span>
+            <span class="n">worker</span><span class="o">.</span><span class="n">child</span><span class="o">.</span><span class="n">send</span><span class="p">((</span><span class="s2">&quot;reset&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">worker</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">workers</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">worker</span><span class="o">.</span><span class="n">child</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-58'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-58'>#</a>
+                </div>
+                <p>model for sampling</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-59'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-59'>#</a>
+                </div>
+                <p>optimizer</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">2.5e-4</span><span class="p">)</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-60'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-60'>#</a>
+                </div>
+                <h3>Sample data with current policy</h3>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">List</span><span class="p">):</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-61'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-61'>#</a>
+                </div>
+                
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>        <span class="n">rewards</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">worker_steps</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="n">actions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">worker_steps</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+        <span class="n">done</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">worker_steps</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">bool</span><span class="p">)</span>
+        <span class="n">obs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">worker_steps</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">84</span><span class="p">,</span> <span class="mi">84</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+        <span class="n">log_pis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">worker_steps</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">worker_steps</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-62'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-62'>#</a>
+                </div>
+                <p>sample <code>worker_steps</code> from each worker</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">worker_steps</span><span class="p">):</span>
+            <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-63'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-63'>#</a>
+                </div>
+                <p><code>self.obs</code> keeps track of the last observation from each worker,
+ which is the input for the model to sample the next action</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>                <span class="n">obs</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obs</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-64'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-64'>#</a>
+                </div>
+                <p>sample actions from $\pi_{\theta_{OLD}}$ for each worker;
+ this returns arrays of size <code>n_workers</code></p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>                <span class="n">pi</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">obs_to_torch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obs</span><span class="p">))</span>
+                <span class="n">values</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+                <span class="n">a</span> <span class="o">=</span> <span class="n">pi</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+                <span class="n">actions</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+                <span class="n">log_pis</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">pi</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-65'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-65'>#</a>
+                </div>
+                <p>run sampled actions on each worker</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>            <span class="k">for</span> <span class="n">w</span><span class="p">,</span> <span class="n">worker</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">workers</span><span class="p">):</span>
+                <span class="n">worker</span><span class="o">.</span><span class="n">child</span><span class="o">.</span><span class="n">send</span><span class="p">((</span><span class="s2">&quot;step&quot;</span><span class="p">,</span> <span class="n">actions</span><span class="p">[</span><span class="n">w</span><span class="p">,</span> <span class="n">t</span><span class="p">]))</span>
+
+            <span class="k">for</span> <span class="n">w</span><span class="p">,</span> <span class="n">worker</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">workers</span><span class="p">):</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-66'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-66'>#</a>
+                </div>
+                <p>get results after executing the actions</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>                <span class="bp">self</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="n">w</span><span class="p">],</span> <span class="n">rewards</span><span class="p">[</span><span class="n">w</span><span class="p">,</span> <span class="n">t</span><span class="p">],</span> <span class="n">done</span><span class="p">[</span><span class="n">w</span><span class="p">,</span> <span class="n">t</span><span class="p">],</span> <span class="n">info</span> <span class="o">=</span> <span class="n">worker</span><span class="o">.</span><span class="n">child</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-67'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-67'>#</a>
+                </div>
+                <p>collect episode info, which is available if an episode finished;
+ this includes total reward and length of the episode -
+ look at <code>Game</code> to see how it works.
+We also add a game frame to it for monitoring.</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>                <span class="k">if</span> <span class="n">info</span><span class="p">:</span>
+                    <span class="n">tracker</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;reward&#39;</span><span class="p">,</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;reward&#39;</span><span class="p">])</span>
+                    <span class="n">tracker</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;length&#39;</span><span class="p">,</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;length&#39;</span><span class="p">])</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-68'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-68'>#</a>
+                </div>
+                <p>calculate advantages</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>        <span class="n">advantages</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calc_advantages</span><span class="p">(</span><span class="n">done</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+        <span class="n">samples</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;obs&#39;</span><span class="p">:</span> <span class="n">obs</span><span class="p">,</span>
+            <span class="s1">&#39;actions&#39;</span><span class="p">:</span> <span class="n">actions</span><span class="p">,</span>
+            <span class="s1">&#39;values&#39;</span><span class="p">:</span> <span class="n">values</span><span class="p">,</span>
+            <span class="s1">&#39;log_pis&#39;</span><span class="p">:</span> <span class="n">log_pis</span><span class="p">,</span>
+            <span class="s1">&#39;advantages&#39;</span><span class="p">:</span> <span class="n">advantages</span>
+        <span class="p">}</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-69'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-69'>#</a>
+                </div>
+                <p>samples are currently in [workers, time] table,
+ we should flatten it</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>        <span class="n">samples_flat</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">samples</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s1">&#39;obs&#39;</span><span class="p">:</span>
+                <span class="n">samples_flat</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">obs_to_torch</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">samples_flat</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">samples_flat</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-70'>
+        <div class='docs doc-strings'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-70'>#</a>
+                </div>
+                <h3>Calculate advantages</h3>
+<p>
+<script type="math/tex; mode=display">\begin{align}
+\hat{A_t^{(1)}} &= r_t + \gamma V(s_{t+1}) - V(s)
+\\
+\hat{A_t^{(2)}} &= r_t + \gamma r_{t+1} +\gamma^2 V(s_{t+2}) - V(s)
+\\
+...
+\\
+\hat{A_t^{(\infty)}} &= r_t + \gamma r_{t+1} +\gamma^2 r_{t+1} + ... - V(s)
+\end{align}</script>
+</p>
+<p>$\hat{A_t^{(1)}}$ is high bias, low variance whilst
+$\hat{A_t^{(\infty)}}$ is unbiased, high variance.</p>
+<p>We take a weighted average of $\hat{A_t^{(k)}}$ to balance bias and variance.
+This is called Generalized Advantage Estimation.
+<script type="math/tex; mode=display">\hat{A_t} = \hat{A_t^{GAE}} = \sum_k w_k \hat{A_t^{(k)}}</script>
+We set $w_k = \lambda^{k-1}$, this gives clean calculation for
+$\hat{A_t}$</p>
+<p>
+<script type="math/tex; mode=display">\begin{align}
+\delta_t &= r_t + \gamma V(s_{t+1}) - V(s_t)$
+\\
+\hat{A_t} &= \delta_t + \gamma \lambda \delta_{t+1} + ... +
+                     (\gamma \lambda)^{T - t + 1} \delta_{T - 1}$
+\\
+&= \delta_t + \gamma \lambda \hat{A_{t+1}}
+\end{align}</script>
+</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">_calc_advantages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">done</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">rewards</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">values</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-71'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-71'>#</a>
+                </div>
+                
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-72'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-72'>#</a>
+                </div>
+                <p>advantages table</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>        <span class="n">advantages</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">worker_steps</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="n">last_advantage</span> <span class="o">=</span> <span class="mi">0</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-73'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-73'>#</a>
+                </div>
+                <p>$V(s_{t+1})$</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>        <span class="n">_</span><span class="p">,</span> <span class="n">last_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">obs_to_torch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obs</span><span class="p">))</span>
+        <span class="n">last_value</span> <span class="o">=</span> <span class="n">last_value</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">worker_steps</span><span class="p">)):</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-74'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-74'>#</a>
+                </div>
+                <p>mask if episode completed after step $t$</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>            <span class="n">mask</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">done</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span>
+            <span class="n">last_value</span> <span class="o">=</span> <span class="n">last_value</span> <span class="o">*</span> <span class="n">mask</span>
+            <span class="n">last_advantage</span> <span class="o">=</span> <span class="n">last_advantage</span> <span class="o">*</span> <span class="n">mask</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-75'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-75'>#</a>
+                </div>
+                <p>$\delta_t$</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>            <span class="n">delta</span> <span class="o">=</span> <span class="n">rewards</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">last_value</span> <span class="o">-</span> <span class="n">values</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-76'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-76'>#</a>
+                </div>
+                <p>$\hat{A_t} = \delta_t + \gamma \lambda \hat{A_{t+1}}$</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>            <span class="n">last_advantage</span> <span class="o">=</span> <span class="n">delta</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">lamda</span> <span class="o">*</span> <span class="n">last_advantage</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-77'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-77'>#</a>
+                </div>
+                <p>note that we are collecting in reverse order.
+<em>My initial code was appending to a list and
+  I forgot to reverse it later.
+It took me around 4 to 5 hours to find the bug.
+The performance of the model was improving
+ slightly during initial runs,
+ probably because the samples are similar.</em></p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>            <span class="n">advantages</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">last_advantage</span>
+
+            <span class="n">last_value</span> <span class="o">=</span> <span class="n">values</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">advantages</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-78'>
+        <div class='docs doc-strings'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-78'>#</a>
+                </div>
+                <h3>Train the model based on samples</h3>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">samples</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">learning_rate</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">clip_range</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-79'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-79'>#</a>
+                </div>
+                
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-80'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-80'>#</a>
+                </div>
+                <p>It learns faster with a higher number of epochs,
+ but becomes a little unstable; that is,
+ the average episode reward does not monotonically increase
+ over time.
+May be reducing the clipping range might solve it.</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">epochs</span><span class="p">):</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-81'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-81'>#</a>
+                </div>
+                <p>shuffle for each epoch</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>            <span class="n">indexes</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randperm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-82'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-82'>#</a>
+                </div>
+                <p>for each mini batch</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>            <span class="k">for</span> <span class="n">start</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mini_batch_size</span><span class="p">):</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-83'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-83'>#</a>
+                </div>
+                <p>get mini batch</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>                <span class="n">end</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mini_batch_size</span>
+                <span class="n">mini_batch_indexes</span> <span class="o">=</span> <span class="n">indexes</span><span class="p">[</span><span class="n">start</span><span class="p">:</span> <span class="n">end</span><span class="p">]</span>
+                <span class="n">mini_batch</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">samples</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">mini_batch</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="n">mini_batch_indexes</span><span class="p">]</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-84'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-84'>#</a>
+                </div>
+                <p>train</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>                <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calc_loss</span><span class="p">(</span><span class="n">clip_range</span><span class="o">=</span><span class="n">clip_range</span><span class="p">,</span>
+                                       <span class="n">samples</span><span class="o">=</span><span class="n">mini_batch</span><span class="p">)</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-85'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-85'>#</a>
+                </div>
+                <p>compute gradients</p>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>                <span class="k">for</span> <span class="n">pg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">param_groups</span><span class="p">:</span>
+                    <span class="n">pg</span><span class="p">[</span><span class="s1">&#39;lr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">learning_rate</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+                <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">clip_grad_norm_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">max_norm</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-86'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-86'>#</a>
+                </div>
+                <h4>Normalize advantage function</h4>
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_normalize</span><span class="p">(</span><span class="n">adv</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-87'>
+            <div class='docs'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-87'>#</a>
+                </div>
+                
+            </div>
+            <div class='code'>
+                <div class="highlight"><pre>        <span class="k">return</span> <span class="p">(</span><span class="n">adv</span> <span class="o">-</span> <span class="n">adv</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">adv</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">+</span> <span class="mf">1e-8</span><span class="p">)</span></pre></div>
+            </div>
+        </div>
+    <div class='section' id='section-88'>
+        <div class='docs doc-strings'>
+                <div class='octowrap'>
+                    <a class='octothorpe' href='#section-88'>#</a>
+                </div>
+                <h2>PPO Loss</h2>
 <p>We want to maximize policy reward
  <script type="math/tex; mode=display">\max_\theta J(\pi_\theta) =
    \mathop{\mathbb{E}}_{\tau \sim \pi_\theta}\Biggl[\sum_{t=0}^\infty \gamma^t r_t \Biggr]</script>
@@ -712,12 +1213,6 @@ frame from thrid convolution layer, and outputs
 \mathbb{E}_{\tau \sim \pi_\theta} \Biggl[
  \sum_{t=0}^\infty \gamma^t A^{\pi_{OLD}}(s_t, a_t)
 \Biggr] &=
-\\
-\mathbb{E}_{\tau \sim \pi_\theta} \Biggl[
-  \sum_{t=0}^\infty \gamma^t \Bigl(
-   Q^{\pi_{OLD}}(s_t, a_t) - V^{\pi_{OLD}}(s_t)
-  \Bigr)
- \Biggr] &=
 \\
 \mathbb{E}_{\tau \sim \pi_\theta} \Biggl[
   \sum_{t=0}^\infty \gamma^t \Bigl(
@@ -803,13 +1298,13 @@ J(\pi_\theta) - J(\pi_{\theta_{OLD}})
 </p>
             </div>
             <div class='code'>
-                <div class="highlight"><pre><span class="k">class</span> <span class="nc">Trainer</span><span class="p">:</span></pre></div>
+                <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">_calc_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">samples</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">clip_range</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-49'>
+    <div class='section' id='section-89'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-49'>#</a>
+                    <a class='octothorpe' href='#section-89'>#</a>
                 </div>
                 
             </div>
@@ -817,83 +1312,10 @@ J(\pi_\theta) - J(\pi_{\theta_{OLD}})
                 <div class="highlight"><pre></pre></div>
             </div>
         </div>
-    <div class='section' id='section-50'>
-        <div class='docs doc-strings'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-50'>#</a>
-                </div>
-                <h3>Initialization</h3>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Model</span><span class="p">):</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-51'>
+    <div class='section' id='section-90'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-51'>#</a>
-                </div>
-                
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-52'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-52'>#</a>
-                </div>
-                <p>model for training, $\pi_\theta$ and $V_\theta$.
-This model shares parameters with the sampling model so,
- updating variables affect both.</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">2.5e-4</span><span class="p">)</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-53'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-53'>#</a>
-                </div>
-                
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-              <span class="n">samples</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>
-              <span class="n">learning_rate</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-              <span class="n">clip_range</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-54'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-54'>#</a>
-                </div>
-                <p>sampled observations are fed into the model to get $\pi_\theta(a_t|s_t)$;
- we are treating observations as state</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="n">sampled_obs</span> <span class="o">=</span> <span class="n">samples</span><span class="p">[</span><span class="s1">&#39;obs&#39;</span><span class="p">]</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-55'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-55'>#</a>
-                </div>
-                <p>$a_t$ actions sampled from $\pi_{\theta_{OLD}}$</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="n">sampled_action</span> <span class="o">=</span> <span class="n">samples</span><span class="p">[</span><span class="s1">&#39;actions&#39;</span><span class="p">]</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-56'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-56'>#</a>
+                    <a class='octothorpe' href='#section-90'>#</a>
                 </div>
                 <p>$R_t$ returns sampled from $\pi_{\theta_{OLD}}$</p>
             </div>
@@ -901,10 +1323,10 @@ This model shares parameters with the sampling model so,
                 <div class="highlight"><pre>        <span class="n">sampled_return</span> <span class="o">=</span> <span class="n">samples</span><span class="p">[</span><span class="s1">&#39;values&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">samples</span><span class="p">[</span><span class="s1">&#39;advantages&#39;</span><span class="p">]</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-57'>
+    <div class='section' id='section-91'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-57'>#</a>
+                    <a class='octothorpe' href='#section-91'>#</a>
                 </div>
                 <p>$\bar{A_t} = \frac{\hat{A_t} - \mu(\hat{A_t})}{\sigma(\hat{A_t})}$,
 where $\hat{A_t}$ is advantages sampled from $\pi_{\theta_{OLD}}$.
@@ -912,46 +1334,25 @@ Refer to sampling function in <a href="#main">Main class</a> below
  for the calculation of $\hat{A}_t$.</p>
             </div>
             <div class='code'>
-                <div class="highlight"><pre>        <span class="n">sampled_normalized_advantage</span> <span class="o">=</span> <span class="n">Trainer</span><span class="o">.</span><span class="n">_normalize</span><span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="s1">&#39;advantages&#39;</span><span class="p">])</span></pre></div>
+                <div class="highlight"><pre>        <span class="n">sampled_normalized_advantage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_normalize</span><span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="s1">&#39;advantages&#39;</span><span class="p">])</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-58'>
+    <div class='section' id='section-92'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-58'>#</a>
+                    <a class='octothorpe' href='#section-92'>#</a>
                 </div>
-                <p>$-\log \pi_{\theta_{OLD}} (a_t|s_t)$ log probabilities</p>
+                <p>Sampled observations are fed into the model to get $\pi_\theta(a_t|s_t)$ and $V^{\pi_\theta}(s_t)$;
+ we are treating observations as state</p>
             </div>
             <div class='code'>
-                <div class="highlight"><pre>        <span class="n">sampled_neg_log_pi</span> <span class="o">=</span> <span class="n">samples</span><span class="p">[</span><span class="s1">&#39;neg_log_pis&#39;</span><span class="p">]</span></pre></div>
+                <div class="highlight"><pre>        <span class="n">pi</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="s1">&#39;obs&#39;</span><span class="p">])</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-59'>
+    <div class='section' id='section-93'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-59'>#</a>
-                </div>
-                <p>$\hat{V_t}$ value estimates</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="n">sampled_value</span> <span class="o">=</span> <span class="n">samples</span><span class="p">[</span><span class="s1">&#39;values&#39;</span><span class="p">]</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-60'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-60'>#</a>
-                </div>
-                <p><code>pi_logits</code> and $V^{\pi_\theta}(s_t)$</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="n">pi</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">sampled_obs</span><span class="p">)</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-61'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-61'>#</a>
+                    <a class='octothorpe' href='#section-93'>#</a>
                 </div>
                 <h4>Policy</h4>
             </div>
@@ -959,33 +1360,33 @@ Refer to sampling function in <a href="#main">Main class</a> below
                 <div class="highlight"><pre></pre></div>
             </div>
         </div>
-    <div class='section' id='section-62'>
+    <div class='section' id='section-94'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-62'>#</a>
+                    <a class='octothorpe' href='#section-94'>#</a>
                 </div>
-                <p>$-\log \pi_\theta (a_t|s_t)$</p>
+                <p>$-\log \pi_\theta (a_t|s_t)$, $a_t$ are actions sampled from $\pi_{\theta_{OLD}}$</p>
             </div>
             <div class='code'>
-                <div class="highlight"><pre>        <span class="n">neg_log_pi</span> <span class="o">=</span> <span class="o">-</span><span class="n">pi</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">sampled_action</span><span class="p">)</span></pre></div>
+                <div class="highlight"><pre>        <span class="n">log_pi</span> <span class="o">=</span> <span class="n">pi</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="s1">&#39;actions&#39;</span><span class="p">])</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-63'>
+    <div class='section' id='section-95'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-63'>#</a>
+                    <a class='octothorpe' href='#section-95'>#</a>
                 </div>
                 <p>ratio $r_t(\theta) = \frac{\pi_\theta (a_t|s_t)}{\pi_{\theta_{OLD}} (a_t|s_t)}$;
 <em>this is different from rewards</em> $r_t$.</p>
             </div>
             <div class='code'>
-                <div class="highlight"><pre>        <span class="n">ratio</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">sampled_neg_log_pi</span> <span class="o">-</span> <span class="n">neg_log_pi</span><span class="p">)</span></pre></div>
+                <div class="highlight"><pre>        <span class="n">ratio</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">log_pi</span> <span class="o">-</span> <span class="n">samples</span><span class="p">[</span><span class="s1">&#39;log_pis&#39;</span><span class="p">])</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-64'>
+    <div class='section' id='section-96'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-64'>#</a>
+                    <a class='octothorpe' href='#section-96'>#</a>
                 </div>
                 <p>
 <script type="math/tex; mode=display">\begin{align}
@@ -1021,10 +1422,10 @@ Large deviation can cause performance collapse;
         <span class="n">policy_reward</span> <span class="o">=</span> <span class="n">policy_reward</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-65'>
+    <div class='section' id='section-97'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-65'>#</a>
+                    <a class='octothorpe' href='#section-97'>#</a>
                 </div>
                 <h4>Entropy Bonus</h4>
             </div>
@@ -1032,10 +1433,10 @@ Large deviation can cause performance collapse;
                 <div class="highlight"><pre></pre></div>
             </div>
         </div>
-    <div class='section' id='section-66'>
+    <div class='section' id='section-98'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-66'>#</a>
+                    <a class='octothorpe' href='#section-98'>#</a>
                 </div>
                 <p>$\mathcal{L}^{EB}(\theta) =
  \mathbb{E}\Bigl[ S\bigl[\pi_\theta\bigr] (s_t) \Bigr]$</p>
@@ -1045,10 +1446,10 @@ Large deviation can cause performance collapse;
         <span class="n">entropy_bonus</span> <span class="o">=</span> <span class="n">entropy_bonus</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-67'>
+    <div class='section' id='section-99'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-67'>#</a>
+                    <a class='octothorpe' href='#section-99'>#</a>
                 </div>
                 <h4>Value</h4>
             </div>
@@ -1056,10 +1457,10 @@ Large deviation can cause performance collapse;
                 <div class="highlight"><pre></pre></div>
             </div>
         </div>
-    <div class='section' id='section-68'>
+    <div class='section' id='section-100'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-68'>#</a>
+                    <a class='octothorpe' href='#section-100'>#</a>
                 </div>
                 <p>
 <script type="math/tex; mode=display">\begin{align}
@@ -1077,16 +1478,16 @@ V^{\pi_\theta}_{CLIP}(s_t)
  significantly from $V_{\theta_{OLD}}$.</p>
             </div>
             <div class='code'>
-                <div class="highlight"><pre>        <span class="n">clipped_value</span> <span class="o">=</span> <span class="n">sampled_value</span> <span class="o">+</span> <span class="p">(</span><span class="n">value</span> <span class="o">-</span> <span class="n">sampled_value</span><span class="p">)</span><span class="o">.</span><span class="n">clamp</span><span class="p">(</span><span class="nb">min</span><span class="o">=-</span><span class="n">clip_range</span><span class="p">,</span>
-                                                                      <span class="nb">max</span><span class="o">=</span><span class="n">clip_range</span><span class="p">)</span>
+                <div class="highlight"><pre>        <span class="n">clipped_value</span> <span class="o">=</span> <span class="n">samples</span><span class="p">[</span><span class="s1">&#39;values&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">value</span> <span class="o">-</span> <span class="n">samples</span><span class="p">[</span><span class="s1">&#39;values&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">clamp</span><span class="p">(</span><span class="nb">min</span><span class="o">=-</span><span class="n">clip_range</span><span class="p">,</span>
+                                                                              <span class="nb">max</span><span class="o">=</span><span class="n">clip_range</span><span class="p">)</span>
         <span class="n">vf_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">max</span><span class="p">((</span><span class="n">value</span> <span class="o">-</span> <span class="n">sampled_return</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="n">clipped_value</span> <span class="o">-</span> <span class="n">sampled_return</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
         <span class="n">vf_loss</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">vf_loss</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span></pre></div>
             </div>
         </div>
-    <div class='section' id='section-69'>
+    <div class='section' id='section-101'>
             <div class='docs'>
                 <div class='octowrap'>
-                    <a class='octothorpe' href='#section-69'>#</a>
+                    <a class='octothorpe' href='#section-101'>#</a>
                 </div>
                 <p>$\mathcal{L}^{CLIP+VF+EB} (\theta) =
  \mathcal{L}^{CLIP} (\theta) -
@@ -1096,477 +1497,47 @@ V^{\pi_\theta}_{CLIP}(s_t)
                 <div class="highlight"><pre></pre></div>
             </div>
         </div>
-    <div class='section' id='section-70'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-70'>#</a>
-                </div>
-                <p>we want to maximize $\mathcal{L}^{CLIP+VF+EB}(\theta)$
-so we take the negative of it as the loss</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="n">loss</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">policy_reward</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">vf_loss</span> <span class="o">+</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">entropy_bonus</span><span class="p">)</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-71'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-71'>#</a>
-                </div>
-                <p>compute gradients</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="k">for</span> <span class="n">pg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">param_groups</span><span class="p">:</span>
-            <span class="n">pg</span><span class="p">[</span><span class="s1">&#39;lr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">learning_rate</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
-        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
-        <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">clip_grad_norm_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">max_norm</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-72'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-72'>#</a>
-                </div>
-                <p>for monitoring</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="n">approx_kl_divergence</span> <span class="o">=</span> <span class="o">.</span><span class="mi">5</span> <span class="o">*</span> <span class="p">((</span><span class="n">neg_log_pi</span> <span class="o">-</span> <span class="n">sampled_neg_log_pi</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-        <span class="n">clip_fraction</span> <span class="o">=</span> <span class="p">(</span><span class="nb">abs</span><span class="p">((</span><span class="n">ratio</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">clip_range</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-
-        <span class="k">return</span> <span class="p">[</span><span class="n">policy_reward</span><span class="p">,</span>
-                <span class="n">vf_loss</span><span class="p">,</span>
-                <span class="n">entropy_bonus</span><span class="p">,</span>
-                <span class="n">approx_kl_divergence</span><span class="p">,</span>
-                <span class="n">clip_fraction</span><span class="p">]</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-73'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-73'>#</a>
-                </div>
-                <h4>Normalize advantage function</h4>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_normalize</span><span class="p">(</span><span class="n">adv</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-74'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-74'>#</a>
-                </div>
-                
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="k">return</span> <span class="p">(</span><span class="n">adv</span> <span class="o">-</span> <span class="n">adv</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">adv</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">+</span> <span class="mf">1e-8</span><span class="p">)</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-75'>
-        <div class='docs doc-strings'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-75'>#</a>
-                </div>
-                <h2><a name="main"></a>Main class</h2>
-<p>This class runs the training loop.
-It initializes TensorFlow, handles logging and monitoring,
- and runs workers as multiple processes.</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre><span class="k">class</span> <span class="nc">Main</span><span class="p">:</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-76'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-76'>#</a>
-                </div>
-                
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-77'>
-        <div class='docs doc-strings'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-77'>#</a>
-                </div>
-                <h3>Initialize</h3>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-78'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-78'>#</a>
-                </div>
-                
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-79'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-79'>#</a>
-                </div>
-                <h4>Configurations</h4>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-80'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-80'>#</a>
-                </div>
-                <p>$\gamma$ and $\lambda$ for advantage calculation</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="mf">0.99</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lamda</span> <span class="o">=</span> <span class="mf">0.95</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-81'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-81'>#</a>
-                </div>
-                <p>number of updates</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">updates</span> <span class="o">=</span> <span class="mi">10000</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-82'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-82'>#</a>
-                </div>
-                <p>number of epochs to train the model with sampled data</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">epochs</span> <span class="o">=</span> <span class="mi">4</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-83'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-83'>#</a>
-                </div>
-                <p>number of worker processes</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span> <span class="o">=</span> <span class="mi">8</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-84'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-84'>#</a>
-                </div>
-                <p>number of steps to run on each process for a single update</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">worker_steps</span> <span class="o">=</span> <span class="mi">128</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-85'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-85'>#</a>
-                </div>
-                <p>number of mini batches</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">n_mini_batch</span> <span class="o">=</span> <span class="mi">4</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-86'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-86'>#</a>
-                </div>
-                <p>total number of samples for a single update</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">worker_steps</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-87'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-87'>#</a>
-                </div>
-                <p>size of a mini batch</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">mini_batch_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_mini_batch</span>
-        <span class="k">assert</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_mini_batch</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-88'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-88'>#</a>
-                </div>
-                <h4>Initialize</h4>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-89'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-89'>#</a>
-                </div>
-                <p>create workers</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">workers</span> <span class="o">=</span> <span class="p">[</span><span class="n">Worker</span><span class="p">(</span><span class="mi">47</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span><span class="p">)]</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-90'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-90'>#</a>
-                </div>
-                <p>initialize tensors for observations</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">obs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span><span class="p">,</span> <span class="mi">84</span><span class="p">,</span> <span class="mi">84</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">worker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">workers</span><span class="p">:</span>
-            <span class="n">worker</span><span class="o">.</span><span class="n">child</span><span class="o">.</span><span class="n">send</span><span class="p">((</span><span class="s2">&quot;reset&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">worker</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">workers</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">worker</span><span class="o">.</span><span class="n">child</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-91'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-91'>#</a>
-                </div>
-                <p>model for sampling</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-92'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-92'>#</a>
-                </div>
-                <p>trainer</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span> <span class="o">=</span> <span class="n">Trainer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-93'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-93'>#</a>
-                </div>
-                <h3>Sample data with current policy</h3>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">List</span><span class="p">):</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-94'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-94'>#</a>
-                </div>
-                
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="n">rewards</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">worker_steps</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-        <span class="n">actions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">worker_steps</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
-        <span class="n">dones</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">worker_steps</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">bool</span><span class="p">)</span>
-        <span class="n">obs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">worker_steps</span><span class="p">,</span> <span class="mi">84</span><span class="p">,</span> <span class="mi">84</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
-        <span class="n">neg_log_pis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">worker_steps</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-        <span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">worker_steps</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-95'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-95'>#</a>
-                </div>
-                <p>sample <code>worker_steps</code> from each worker</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">worker_steps</span><span class="p">):</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-96'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-96'>#</a>
-                </div>
-                <p><code>self.obs</code> keeps track of the last observation from each worker,
- which is the input for the model to sample the next action</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>            <span class="n">obs</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obs</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-97'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-97'>#</a>
-                </div>
-                <p>sample actions from $\pi_{\theta_{OLD}}$ for each worker;
- this returns arrays of size <code>n_workers</code></p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>            <span class="n">pi</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">obs_to_torch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obs</span><span class="p">))</span>
-            <span class="n">values</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
-            <span class="n">a</span> <span class="o">=</span> <span class="n">pi</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
-            <span class="n">actions</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
-            <span class="n">neg_log_pis</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">pi</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-98'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-98'>#</a>
-                </div>
-                <p>run sampled actions on each worker</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>            <span class="k">for</span> <span class="n">w</span><span class="p">,</span> <span class="n">worker</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">workers</span><span class="p">):</span>
-                <span class="n">worker</span><span class="o">.</span><span class="n">child</span><span class="o">.</span><span class="n">send</span><span class="p">((</span><span class="s2">&quot;step&quot;</span><span class="p">,</span> <span class="n">actions</span><span class="p">[</span><span class="n">w</span><span class="p">,</span> <span class="n">t</span><span class="p">]))</span>
-
-            <span class="k">for</span> <span class="n">w</span><span class="p">,</span> <span class="n">worker</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">workers</span><span class="p">):</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-99'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-99'>#</a>
-                </div>
-                <p>get results after executing the actions</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>                <span class="bp">self</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="n">w</span><span class="p">],</span> <span class="n">rewards</span><span class="p">[</span><span class="n">w</span><span class="p">,</span> <span class="n">t</span><span class="p">],</span> <span class="n">dones</span><span class="p">[</span><span class="n">w</span><span class="p">,</span> <span class="n">t</span><span class="p">],</span> <span class="n">info</span> <span class="o">=</span> <span class="n">worker</span><span class="o">.</span><span class="n">child</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-100'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-100'>#</a>
-                </div>
-                <p>collect episode info, which is available if an episode finished;
- this includes total reward and length of the episode -
- look at <code>Game</code> to see how it works.
-We also add a game frame to it for monitoring.</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>                <span class="k">if</span> <span class="n">info</span><span class="p">:</span>
-                    <span class="n">tracker</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;reward&#39;</span><span class="p">,</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;reward&#39;</span><span class="p">])</span>
-                    <span class="n">tracker</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;length&#39;</span><span class="p">,</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;length&#39;</span><span class="p">])</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-101'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-101'>#</a>
-                </div>
-                <p>calculate advantages</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="n">advantages</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calc_advantages</span><span class="p">(</span><span class="n">dones</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
-        <span class="n">samples</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;obs&#39;</span><span class="p">:</span> <span class="n">obs</span><span class="p">,</span>
-            <span class="s1">&#39;actions&#39;</span><span class="p">:</span> <span class="n">actions</span><span class="p">,</span>
-            <span class="s1">&#39;values&#39;</span><span class="p">:</span> <span class="n">values</span><span class="p">,</span>
-            <span class="s1">&#39;neg_log_pis&#39;</span><span class="p">:</span> <span class="n">neg_log_pis</span><span class="p">,</span>
-            <span class="s1">&#39;advantages&#39;</span><span class="p">:</span> <span class="n">advantages</span>
-        <span class="p">}</span></pre></div>
-            </div>
-        </div>
     <div class='section' id='section-102'>
             <div class='docs'>
                 <div class='octowrap'>
                     <a class='octothorpe' href='#section-102'>#</a>
                 </div>
-                <p>samples are currently in [workers, time] table,
- we should flatten it</p>
+                <p>we want to maximize $\mathcal{L}^{CLIP+VF+EB}(\theta)$
+so we take the negative of it as the loss</p>
             </div>
             <div class='code'>
-                <div class="highlight"><pre>        <span class="n">samples_flat</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">samples</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span>
-            <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s1">&#39;obs&#39;</span><span class="p">:</span>
-                <span class="n">samples_flat</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">obs_to_torch</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">samples_flat</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">samples_flat</span></pre></div>
+                <div class="highlight"><pre>        <span class="n">loss</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">policy_reward</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">vf_loss</span> <span class="o">+</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">entropy_bonus</span><span class="p">)</span></pre></div>
             </div>
         </div>
     <div class='section' id='section-103'>
-        <div class='docs doc-strings'>
+            <div class='docs'>
                 <div class='octowrap'>
                     <a class='octothorpe' href='#section-103'>#</a>
                 </div>
-                <h3>Calculate advantages</h3>
-<p>
-<script type="math/tex; mode=display">\begin{align}
-\hat{A_t^{(1)}} &= r_t + \gamma V(s_{t+1}) - V(s)
-\\
-\hat{A_t^{(2)}} &= r_t + \gamma r_{t+1} +\gamma^2 V(s_{t+2}) - V(s)
-\\
-...
-\\
-\hat{A_t^{(\infty)}} &= r_t + \gamma r_{t+1} +\gamma^2 r_{t+1} + ... - V(s)
-\end{align}</script>
-</p>
-<p>$\hat{A_t^{(1)}}$ is high bias, low variance whilst
-$\hat{A_t^{(\infty)}}$ is unbiased, high variance.</p>
-<p>We take a weighted average of $\hat{A_t^{(k)}}$ to balance bias and variance.
-This is called Generalized Advantage Estimation.
-<script type="math/tex; mode=display">\hat{A_t} = \hat{A_t^{GAE}} = \sum_k w_k \hat{A_t^{(k)}}</script>
-We set $w_k = \lambda^{k-1}$, this gives clean calculation for
-$\hat{A_t}$</p>
-<p>
-<script type="math/tex; mode=display">\begin{align}
-\delta_t &= r_t + \gamma V(s_{t+1}) - V(s_t)$
-\\
-\hat{A_t} &= \delta_t + \gamma \lambda \delta_{t+1} + ... +
-                     (\gamma \lambda)^{T - t + 1} \delta_{T - 1}$
-\\
-&= \delta_t + \gamma \lambda \hat{A_{t+1}}
-\end{align}</script>
-</p>
+                <p>for monitoring</p>
             </div>
             <div class='code'>
-                <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">_calc_advantages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dones</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">rewards</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-                         <span class="n">values</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span></pre></div>
+                <div class="highlight"><pre>        <span class="n">approx_kl_divergence</span> <span class="o">=</span> <span class="o">.</span><span class="mi">5</span> <span class="o">*</span> <span class="p">((</span><span class="n">samples</span><span class="p">[</span><span class="s1">&#39;log_pis&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">log_pi</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="n">clip_fraction</span> <span class="o">=</span> <span class="p">(</span><span class="nb">abs</span><span class="p">((</span><span class="n">ratio</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">clip_range</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+        <span class="n">tracker</span><span class="o">.</span><span class="n">add</span><span class="p">({</span><span class="s1">&#39;policy_reward&#39;</span><span class="p">:</span> <span class="n">policy_reward</span><span class="p">,</span>
+                     <span class="s1">&#39;vf_loss&#39;</span><span class="p">:</span> <span class="n">vf_loss</span><span class="p">,</span>
+                     <span class="s1">&#39;entropy_bonus&#39;</span><span class="p">:</span> <span class="n">entropy_bonus</span><span class="p">,</span>
+                     <span class="s1">&#39;kl_div&#39;</span><span class="p">:</span> <span class="n">approx_kl_divergence</span><span class="p">,</span>
+                     <span class="s1">&#39;clip_fraction&#39;</span><span class="p">:</span> <span class="n">clip_fraction</span><span class="p">})</span>
+
+        <span class="k">return</span> <span class="n">loss</span></pre></div>
             </div>
         </div>
     <div class='section' id='section-104'>
-            <div class='docs'>
+        <div class='docs doc-strings'>
                 <div class='octowrap'>
                     <a class='octothorpe' href='#section-104'>#</a>
                 </div>
-                
+                <h3>Run training loop</h3>
             </div>
             <div class='code'>
-                <div class="highlight"><pre></pre></div>
+                <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">run_training_loop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
             </div>
         </div>
     <div class='section' id='section-105'>
@@ -1574,11 +1545,10 @@ $\hat{A_t}$</p>
                 <div class='octowrap'>
                     <a class='octothorpe' href='#section-105'>#</a>
                 </div>
-                <p>advantages table</p>
+                
             </div>
             <div class='code'>
-                <div class="highlight"><pre>        <span class="n">advantages</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">worker_steps</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-        <span class="n">last_advantage</span> <span class="o">=</span> <span class="mi">0</span></pre></div>
+                <div class="highlight"><pre></pre></div>
             </div>
         </div>
     <div class='section' id='section-106'>
@@ -1586,13 +1556,14 @@ $\hat{A_t}$</p>
                 <div class='octowrap'>
                     <a class='octothorpe' href='#section-106'>#</a>
                 </div>
-                <p>$V(s_{t+1})$</p>
+                <p>last 100 episode information</p>
             </div>
             <div class='code'>
-                <div class="highlight"><pre>        <span class="n">_</span><span class="p">,</span> <span class="n">last_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">obs_to_torch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obs</span><span class="p">))</span>
-        <span class="n">last_value</span> <span class="o">=</span> <span class="n">last_value</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+                <div class="highlight"><pre>        <span class="n">tracker</span><span class="o">.</span><span class="n">set_queue</span><span class="p">(</span><span class="s1">&#39;reward&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">tracker</span><span class="o">.</span><span class="n">set_queue</span><span class="p">(</span><span class="s1">&#39;length&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">worker_steps</span><span class="p">)):</span></pre></div>
+        <span class="k">for</span> <span class="n">update</span> <span class="ow">in</span> <span class="n">monit</span><span class="o">.</span><span class="n">loop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">updates</span><span class="p">):</span>
+            <span class="n">progress</span> <span class="o">=</span> <span class="n">update</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">updates</span></pre></div>
             </div>
         </div>
     <div class='section' id='section-107'>
@@ -1600,12 +1571,11 @@ $\hat{A_t}$</p>
                 <div class='octowrap'>
                     <a class='octothorpe' href='#section-107'>#</a>
                 </div>
-                <p>mask if episode completed after step $t$</p>
+                <p>decreasing <code>learning_rate</code> and <code>clip_range</code> $\epsilon$</p>
             </div>
             <div class='code'>
-                <div class="highlight"><pre>            <span class="n">mask</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">dones</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span>
-            <span class="n">last_value</span> <span class="o">=</span> <span class="n">last_value</span> <span class="o">*</span> <span class="n">mask</span>
-            <span class="n">last_advantage</span> <span class="o">=</span> <span class="n">last_advantage</span> <span class="o">*</span> <span class="n">mask</span></pre></div>
+                <div class="highlight"><pre>            <span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">2.5e-4</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">progress</span><span class="p">)</span>
+            <span class="n">clip_range</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">progress</span><span class="p">)</span></pre></div>
             </div>
         </div>
     <div class='section' id='section-108'>
@@ -1613,10 +1583,10 @@ $\hat{A_t}$</p>
                 <div class='octowrap'>
                     <a class='octothorpe' href='#section-108'>#</a>
                 </div>
-                <p>$\delta_t$</p>
+                <p>sample with current policy</p>
             </div>
             <div class='code'>
-                <div class="highlight"><pre>            <span class="n">delta</span> <span class="o">=</span> <span class="n">rewards</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">last_value</span> <span class="o">-</span> <span class="n">values</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span></pre></div>
+                <div class="highlight"><pre>            <span class="n">samples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span></pre></div>
             </div>
         </div>
     <div class='section' id='section-109'>
@@ -1624,10 +1594,10 @@ $\hat{A_t}$</p>
                 <div class='octowrap'>
                     <a class='octothorpe' href='#section-109'>#</a>
                 </div>
-                <p>$\hat{A_t} = \delta_t + \gamma \lambda \hat{A_{t+1}}$</p>
+                <p>train the model</p>
             </div>
             <div class='code'>
-                <div class="highlight"><pre>            <span class="n">last_advantage</span> <span class="o">=</span> <span class="n">delta</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">lamda</span> <span class="o">*</span> <span class="n">last_advantage</span></pre></div>
+                <div class="highlight"><pre>            <span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">,</span> <span class="n">clip_range</span><span class="p">)</span></pre></div>
             </div>
         </div>
     <div class='section' id='section-110'>
@@ -1635,20 +1605,12 @@ $\hat{A_t}$</p>
                 <div class='octowrap'>
                     <a class='octothorpe' href='#section-110'>#</a>
                 </div>
-                <p>note that we are collecting in reverse order.
-<em>My initial code was appending to a list and
-  I forgot to reverse it later.
-It took me around 4 to 5 hours to find the bug.
-The performance of the model was improving
- slightly during initial runs,
- probably because the samples are similar.</em></p>
+                <p>write summary info to the writer, and log to the screen</p>
             </div>
             <div class='code'>
-                <div class="highlight"><pre>            <span class="n">advantages</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">last_advantage</span>
-
-            <span class="n">last_value</span> <span class="o">=</span> <span class="n">values</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span>
-
-        <span class="k">return</span> <span class="n">advantages</span></pre></div>
+                <div class="highlight"><pre>            <span class="n">tracker</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">update</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">1_000</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">log</span><span class="p">()</span></pre></div>
             </div>
         </div>
     <div class='section' id='section-111'>
@@ -1656,10 +1618,11 @@ The performance of the model was improving
                 <div class='octowrap'>
                     <a class='octothorpe' href='#section-111'>#</a>
                 </div>
-                <h3>Train the model based on samples</h3>
+                <h3>Destroy</h3>
+<p>Stop the workers</p>
             </div>
             <div class='code'>
-                <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">samples</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">learning_rate</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">clip_range</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span></pre></div>
+                <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">destroy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
             </div>
         </div>
     <div class='section' id='section-112'>
@@ -1670,244 +1633,14 @@ The performance of the model was improving
                 
             </div>
             <div class='code'>
-                <div class="highlight"><pre></pre></div>
+                <div class="highlight"><pre>        <span class="k">for</span> <span class="n">worker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">workers</span><span class="p">:</span>
+            <span class="n">worker</span><span class="o">.</span><span class="n">child</span><span class="o">.</span><span class="n">send</span><span class="p">((</span><span class="s2">&quot;close&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span></pre></div>
             </div>
         </div>
     <div class='section' id='section-113'>
             <div class='docs'>
                 <div class='octowrap'>
                     <a class='octothorpe' href='#section-113'>#</a>
-                </div>
-                <p>collect training information like losses for monitoring</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="n">train_info</span> <span class="o">=</span> <span class="p">[]</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-114'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-114'>#</a>
-                </div>
-                <p>It learns faster with a higher number of epochs,
- but becomes a little unstable; that is,
- the average episode reward does not monotonically increase
- over time.
-May be reducing the clipping range might solve it.</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">epochs</span><span class="p">):</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-115'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-115'>#</a>
-                </div>
-                <p>shuffle for each epoch</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>            <span class="n">indexes</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randperm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-116'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-116'>#</a>
-                </div>
-                <p>for each mini batch</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>            <span class="k">for</span> <span class="n">start</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mini_batch_size</span><span class="p">):</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-117'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-117'>#</a>
-                </div>
-                <p>get mini batch</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>                <span class="n">end</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mini_batch_size</span>
-                <span class="n">mini_batch_indexes</span> <span class="o">=</span> <span class="n">indexes</span><span class="p">[</span><span class="n">start</span><span class="p">:</span> <span class="n">end</span><span class="p">]</span>
-                <span class="n">mini_batch</span> <span class="o">=</span> <span class="p">{}</span>
-                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">samples</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                    <span class="n">mini_batch</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="n">mini_batch_indexes</span><span class="p">]</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-118'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-118'>#</a>
-                </div>
-                <p>train</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>                <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="n">learning_rate</span><span class="p">,</span>
-                                         <span class="n">clip_range</span><span class="o">=</span><span class="n">clip_range</span><span class="p">,</span>
-                                         <span class="n">samples</span><span class="o">=</span><span class="n">mini_batch</span><span class="p">)</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-119'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-119'>#</a>
-                </div>
-                <p>append to training information</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>                <span class="n">train_info</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="p">)</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-120'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-120'>#</a>
-                </div>
-                <p>return average of training information</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">train_info</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-121'>
-        <div class='docs doc-strings'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-121'>#</a>
-                </div>
-                <h3>Run training loop</h3>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">run_training_loop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-122'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-122'>#</a>
-                </div>
-                
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-123'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-123'>#</a>
-                </div>
-                <p>last 100 episode information</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="n">tracker</span><span class="o">.</span><span class="n">set_queue</span><span class="p">(</span><span class="s1">&#39;reward&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-        <span class="n">tracker</span><span class="o">.</span><span class="n">set_queue</span><span class="p">(</span><span class="s1">&#39;length&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-
-        <span class="k">for</span> <span class="n">update</span> <span class="ow">in</span> <span class="n">monit</span><span class="o">.</span><span class="n">loop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">updates</span><span class="p">):</span>
-            <span class="n">time_start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-            <span class="n">progress</span> <span class="o">=</span> <span class="n">update</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">updates</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-124'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-124'>#</a>
-                </div>
-                <p>decreasing <code>learning_rate</code> and <code>clip_range</code> $\epsilon$</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>            <span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">2.5e-4</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">progress</span><span class="p">)</span>
-            <span class="n">clip_range</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">progress</span><span class="p">)</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-125'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-125'>#</a>
-                </div>
-                <p>sample with current policy</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>            <span class="n">samples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-126'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-126'>#</a>
-                </div>
-                <p>train the model</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>            <span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">,</span> <span class="n">clip_range</span><span class="p">)</span>
-
-            <span class="n">time_end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-127'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-127'>#</a>
-                </div>
-                <p>frame rate</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>            <span class="n">fps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">/</span> <span class="p">(</span><span class="n">time_end</span> <span class="o">-</span> <span class="n">time_start</span><span class="p">))</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-128'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-128'>#</a>
-                </div>
-                <p>write summary info to the writer, and log to the screen</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>            <span class="n">tracker</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">fps</span><span class="o">=</span><span class="n">fps</span><span class="p">)</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">update</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">1_000</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">log</span><span class="p">()</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-129'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-129'>#</a>
-                </div>
-                <p>print(f&rdquo;{update:4}: fps={fps:3} reward={reward_mean:.2f} length={length_mean:.3f}&rdquo;)</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-130'>
-        <div class='docs doc-strings'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-130'>#</a>
-                </div>
-                <h3>Destroy</h3>
-<p>Stop the workers</p>
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">destroy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-131'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-131'>#</a>
-                </div>
-                
-            </div>
-            <div class='code'>
-                <div class="highlight"><pre>        <span class="k">for</span> <span class="n">worker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">workers</span><span class="p">:</span>
-            <span class="n">worker</span><span class="o">.</span><span class="n">child</span><span class="o">.</span><span class="n">send</span><span class="p">((</span><span class="s2">&quot;close&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span></pre></div>
-            </div>
-        </div>
-    <div class='section' id='section-132'>
-            <div class='docs'>
-                <div class='octowrap'>
-                    <a class='octothorpe' href='#section-132'>#</a>
                 </div>
                 <h2>Run it</h2>
             </div>
