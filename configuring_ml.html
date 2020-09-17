@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <title>Configurations for Machine Learning projects</title>
+    <meta name="viewport" content="width=550, initial-scale=1.0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <link href="http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900"
+          rel="stylesheet" type="text/css"/>
+    <link href="lib/skeleton/css/skeleton.css" rel="stylesheet"/>
+    <link href="lib/highlightjs/styles/default.css" rel="stylesheet"/>
+    <link href="css/style.css" rel="stylesheet"/>
+    <link href="blog.css" rel="stylesheet"/>
+    <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-44255805-1', 'auto');
+ga('send', 'pageview');
+    </script>
+</head>
+<body>
+<div class='container'>
+    <div class="header">
+        <h1>
+            <a href="index.html">
+                VARUNA JAYASIRI
+            </a>
+        </h1>
+        <a class="button" href="https://www.twitter.com/vpj">
+            @vpj
+        </a>
+    </div>
+
+    <h1 class="title">
+        Configurations for Machine Learning projects
+    </h1>
+    <h3 class="date">
+        September 17, 2020
+    </h3>
+    <div style="margin-bottom:30px;">
+        <a class="twitter-share-button" href="https://twitter.com/share" data-via="vpj"
+           data-size="large">
+            Tweet
+        </a>
+        <script>
+                  !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+        </script>
+    </div>
+
+    <div class="row">
+        <div class="nine columns">
+            <p><em>TLDR: This is a discussion about difficulties faced when managing configurations and how we tackle it.
+We developed a configurations library that let you define modules and experiments, that are configurable, reusable, and extendable.</em></p>
+<p><strong><a href="https://github.com/lab-ml/labml">LabML Github repository</a></strong></p>
+<p>In normal software projects, you have a good idea of what you are building and it&rsquo;s less experimental - you know what behaviors need to be configurable from the beginning.
+You make behaviors that change from user-to-user configurable;
+use constants for things that change between builds; and so on.</p>
+<p>However, with ML experiments you don&rsquo;t know much about the future - it&rsquo;s a bunch of experiments; you could be using <em>Adam</em> optimizer and after some thought, you want to see how well a simple SGD would perform.
+Often you want to include new experimental options to a currently configurable parameter.
+Say you have it configurable to chose between Adam and SGD optimizers.
+Now you want to try <em>RAdam</em>. You might try this and then discard it.
+It&rsquo;s great if you can do this without making changes to the existing working code.
+Another difference is since you are running experiments,
+you want to record the results and configurations.</p>
+<h3>Existing methods</h3>
+<h4>No configurations</h4>
+<p>The simplest form is to not explicitly make anything configurable, and to make changes to source code when you want the program to behave differently. Like the following piece of code:</p>
+<pre><code class="python">class Net:
+    def __init__(self):
+        self.conv = nn.Conv(10, 20)
+        ...
+
+model = Net()
+optimizer = Adam(model.parameters(), lr=0.001)
+</code></pre>
+
+<p>This code is short, simple, and easy to read.
+When you want to try to change the <em>learning rate</em>,
+you find where it was specified and change the code.</p>
+<h4>Define constants</h4>
+<p>If we can identify the things that you would want to change, you could define all these constants at a single place (often at the top of the program).
+So it would be easy to alter them, and there would be fewer chances of you breaking the program by making unintended edits.</p>
+<pre><code class="python">learning_rate = 0.001
+hidden_layer_size = 20
+
+class Net:
+    def __init__(self, h_size):
+        self.conv = nn.Conv(10, h_size)
+        ...
+
+model = Net(hidden_layer_size)
+optimizer = Adam(model.parameters(), lr=learning_rate)
+</code></pre>
+
+<h4>Command-line arguments or configuration files</h4>
+<p>If you want to change these very often, it&rsquo;s better to consider them as inputs to your program.
+The most common method is to accept them as command-line arguments or from a configuration file.</p>
+<pre><code class="python">args.parameter('learning_rate', default=0.001)
+args = args.parse()
+
+class Net:
+    def __init__(self, h_size):
+        self.conv = nn.Conv(10, h_size)
+        ...
+
+model = Net(args.hidden_layer_size)
+optimizer = Adam(model.parameters(), lr=args.learning_rate)
+</code></pre>
+
+<p>Most machine learning projects use this option.</p>
+<h4>Libraries to record configs</h4>
+<p>These generally record the configurations along with results of the experiment.
+The configurations need to be provided in a dictionary or a similar structure.</p>
+<p>These often lead to a 
+<a href="https://www.reddit.com/r/MachineLearning/comments/g1vku4/d_antipatterns_in_open_sourced_ml_research_code/">monolithic configuration object that gets passed around</a>.</p>
+<h3>Other Problems</h3>
+<h4>Complex configurations</h4>
+<p>You also want to configure things like what type of optimizer you want to use.
+And most of the time we resort to conditions to create these configurable objects.</p>
+<pre><code class="python">if optimizer_name == 'adam':
+    optimizer = Adam(model.parameters(), lr=learning_rate, epsilon=...)
+elif optimizer_name == 'sgd':
+    optimizer = SGD(model.parameters(), lr=learning_rate)
+</code></pre>
+
+<p>In such a setup if you want to try <code>RAdam</code> optimizer you need to change the current code (above) that creates the optimizer.
+It would be great if you could try new stuff without changing the original code.
+And then add it later to the original code after testing. 
+This way we minimize the number of times we touch the working code.</p>
+<p>The other problem with this is that you wouldn’t know what options are available without looking at the code of <code>create_optimizer</code> or it’s documentation.
+And it&rsquo;s really hard to programmatically find the available options, in case you want to do an automatic hyper-parameter search or create a user interface to pick options.</p>
+<h4>Un-exposed configurations</h4>
+<p>In the above example, <code>learning_rate</code> can be easily changed.
+But there are other parameters of <code>Adam</code> like <code>betas</code> which get default values.
+If you want to change these, you need to make a bunch of changes to the code.
+It doesn&rsquo;t sound like a bad thing, but it is nicer if you can set those values directly, with minimal and isolated code changes to expose them as configurations.</p>
+<h4>Many configurations</h4>
+<p>But as the models and algorithms grow complex, you start needing a lot of configurations.
+These make the definition of configurations rather lengthy.
+It becomes hard to understand too. 
+With all the terminology and abbreviations in complex projects, it is not easy to figure out which configurations effect which behaviors.
+Also, this leads to the problems of passing around a large monolithic configurations object.</p>
+<p>The solution is to make them modular.
+For instance, in a NLP project configurations for the optimizer, the model, tokenizer, etc. should be 
+defined separately, instead of large flat configs object.</p>
+<h4>Reusablity</h4>
+<p>Another problem is most of the configurations, or hyperparameters are not reusable.
+For instance, the above code to create an optimizer will be needed for many projects since it&rsquo;s common.
+You can make it reusable by creating a function:</p>
+<pre><code class="python">def create_optimizer(name, parameters, learning_rate, momentum, ...):
+    if name == 'sgq':
+        return SGD(parameters, lr=learning_rate)
+    elif name == 'Adam':
+        return Adam(parameters, lr=learning_rate, epsilon=...)
+    elif name == 'RMSProp':
+        ...
+</code></pre>
+
+<p>Then from each experiment, you can call this with the hyperparameters.
+Still, you will have to define the list of hyper-parameters related to it repeatedly.</p>
+<p>Ideally, the function along with hyper-parameters should be a single reusable module.</p>
+<p>A problem with reusability without extendability is that now when you want to try <code>RAdam</code> you&rsquo;ll be changing <code>create_optimizer</code> which affects all your projects. And a bug would be disastrous.</p>
+<h3>What we did</h3>
+<p>We created a configs library, that lets you define modules, that are configurable, reusable, and extendable.
+It loads the modules by finding the dependency graph; therefore, the order of definitions in the source code doesn&rsquo;t matter.</p>
+<p>The code is part of <a href="http://github.com/lab-ml/labml">lab-ml/labml Github repository</a>. You can find the
+documentation <a href="http://lab-ml.com/guide/configs.html">here</a>.</p>
+<h4>Define configuration options separately</h4>
+<p>Options for a configurable parameter can be defined independently, without messing around with existing code.</p>
+<pre><code class="python">@option(Configs.model)
+def one_hidden_layer(c: Configs):
+    return OneHiddenLayerModule(c.input_size, c.model_size, c.output_size)
+</code></pre>
+
+<p>The above code defines a new option for <code>model</code>. You can define this anywhere you want.
+In my experiments, I tend to create a new python file for any new substantially different experiment and include the new options there.</p>
+<h4>Modular</h4>
+<p>For each module, you can define a configurations class and set defaults.
+You can use configurable modules recursively, and all these can be changed globally.</p>
+<p>The following code overrides configurations with at the second level.</p>
+<pre><code class="python">experiment.configs(conf, {
+        'optimizer.optimizer': 'Adam',
+        'optimizer.learning_rate': 2.5e-4,
+        'device.cuda_device': 1
+    })
+</code></pre>
+
+<p>It solves the problem of having to pass around a large configurations object.</p>
+<h3>Design decisions</h3>
+<p>We wanted it to have static type checking as much as possible.
+This was at a cost to simplicity.
+We inclined towards this to be able to find errors, and refractor quickly.</p>
+<p>The alternative method we tried and deprecated used variable names to identify configurations.
+Something along the lines of the following:</p>
+<pre><code class="python">@option(Configs.model)
+def one_hidden_layer(input_size, model_size, output_size):
+    return OneHiddenLayerModule(input_size, model_size, output_size)
+</code></pre>
+
+<p>This had a big refactoring problem. If we wanted to change the name of a configuration, we had to manually search through all the places where it was used. So we opted-out of it although it&rsquo;s simpler.</p>
+<p>This is still not a mature API. If you have any suggestions or any alternative ideas, please feel free to send me message <a href="https://twitter.com/vpj">on @vpj Twitter</a>, or <a href="https://github.com/lab-ml/labml">open an issue on Github</a>.</p>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML">
+</script>
+<!-- MathJax configuration -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ['$','$'] ],
+            displayMath: [ ['$$','$$'] ],
+            processEscapes: true,
+            processEnvironments: true
+        },
+        // Center justify equations in code and markdown cells. Elsewhere
+        // we use CSS to left justify single line equations in code cells.
+        displayAlign: 'center',
+        "HTML-CSS": { fonts: ["TeX"] }
+    });
+</script>
+</body>
