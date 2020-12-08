@@ -135,6 +135,12 @@ div.section div.docs .section-link a {
   opacity: 0;
   -webkit-transition: opacity 0.2s linear;
 }
+div.section div.docs p {
+  overflow-x: scroll;
+}
+div.section div.docs pre code {
+  overflow-x: scroll;
+}
 div.section div.code {
   background: #282a36;
   /*#1d2127;*/
