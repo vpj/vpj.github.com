@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>H-Net - Toy Experiment</title>
+    <meta name="description" content="A small 1-stage H-Net trained on Tiny Shakespeare on a CPU, with its loss, its compression and the chunks it learns."/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"/>
+    <link rel="stylesheet" href="assets/style.css"/>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script defer src="assets/annotate.js"></script>
+</head>
+<body>
+<main class="page">
+<div class="section header"><div class="docs"><nav class="breadcrumbs"><a class="parent" href="index.html">H-Net</a>
+<a class="parent" href="experiment.html">Experiment</a></nav></div><div class="code"></div></div>
+<div class="section" id="s0">
+<div class="docs doc-strings"><a class="anchor" href="#s0">#</a>
+<h1>Toy Experiment</h1>
+  <p>This experiment trains a small 1-stage <a href="hnet.html">H-Net</a> on raw bytes, on a CPU. It
+     shows that the model learns where to put boundaries without a tokenizer. It is not a reproduction
+     of the results of the paper.</p>
+  <ul>
+    <li><strong>Data:</strong> Tiny Shakespeare, 1.1 MB of text. The first 90% is for training and the
+        last 10% for validation.</li>
+    <li><strong>Model:</strong> encoder and decoder of 2 Transformer blocks at width 128, a main
+        network of 4 blocks at width 192, and a target of $N = 4$ bytes for each chunk. It has 2.67 M
+        parameters: 1.77 M in the main network, 0.84 M in the encoder, the decoder and the routing
+        module, and 0.07 M in the byte embedding and the output head.</li>
+    <li><strong>Training:</strong> 1,500 steps of 16 sequences of 256 bytes. It took 448 seconds on an
+        Apple M1 CPU.</li>
+  </ul>
+  <p>Run <code>experiments/run_toy.py</code> to train the model and save the results. Then
+     <code>scripts/figures.py</code> draws the figures from the saved results.</p>
+  <figure id="fig-training">
+<!-- figure:training-curves -->
+<svg viewBox="0 0 400 196" width="100%" fill="currentColor" role="img" aria-label="Validation bits per byte and bytes per chunk during training of the toy H-Net"><text x="116.0" y="12" text-anchor="middle" font-size="12">validation loss</text><line x1="46" x2="186" y1="144" y2="144" stroke="currentColor" stroke-opacity="0.5"/><line x1="46" x2="46" y1="22" y2="144" stroke="currentColor" stroke-opacity="0.5"/><text x="42" y="148.0" text-anchor="end" font-size="10">2</text><text x="42" y="87.0" text-anchor="end" font-size="10">3.25</text><text x="42" y="26.0" text-anchor="end" font-size="10">4.5</text><text x="46.0" y="157" text-anchor="middle" font-size="10">50</text><text x="116.5" y="157" text-anchor="middle" font-size="10">780</text><text x="186.0" y="157" text-anchor="middle" font-size="10">1500</text><text x="116.0" y="168" text-anchor="middle" font-size="10">training step</text><text x="10" y="83.0" text-anchor="middle" font-size="10" transform="rotate(-90 10 83.0)">bits per byte</text><polyline points="46.0,45.4 50.8,84.5 55.7,96.3 60.5,104.8 65.3,107.3 70.1,109.3 75.0,113.8 79.8,117.1 84.6,117.3 89.4,118.7 94.3,120.9 99.1,121.8 103.9,122.8 108.8,121.3 113.6,123.7 118.4,123.1 123.2,124.8 128.1,125.4 132.9,124.3 137.7,126.4 142.6,127.3 147.4,127.3 152.2,127.3 157.0,128.0 161.9,128.6 166.7,128.1 171.5,128.9 176.3,130.1 181.2,129.8 186.0,129.1" fill="none" stroke="var(--hl-nb)" stroke-width="1.8"/><text x="316.0" y="12" text-anchor="middle" font-size="12">compression</text><line x1="246" x2="386" y1="144" y2="144" stroke="currentColor" stroke-opacity="0.5"/><line x1="246" x2="246" y1="22" y2="144" stroke="currentColor" stroke-opacity="0.5"/><text x="242" y="148.0" text-anchor="end" font-size="10">2</text><text x="242" y="87.0" text-anchor="end" font-size="10">3.25</text><text x="242" y="26.0" text-anchor="end" font-size="10">4.5</text><text x="246.0" y="157" text-anchor="middle" font-size="10">50</text><text x="316.5" y="157" text-anchor="middle" font-size="10">780</text><text x="386.0" y="157" text-anchor="middle" font-size="10">1500</text><text x="316.0" y="168" text-anchor="middle" font-size="10">training step</text><text x="210" y="83.0" text-anchor="middle" font-size="10" transform="rotate(-90 210 83.0)">bytes per chunk</text><polyline points="246.0,46.4 250.8,46.4 255.7,46.4 260.5,46.4 265.3,46.4 270.1,46.4 275.0,46.4 279.8,46.4 284.6,46.4 289.4,46.4 294.3,46.4 299.1,46.4 303.9,46.4 308.8,46.4 313.6,46.4 318.4,46.4 323.2,46.4 328.1,46.4 332.9,46.4 337.7,46.4 342.6,46.4 347.4,46.4 352.2,46.4 357.0,46.4 361.9,46.4 366.7,46.4 371.5,46.4 376.3,46.4 381.2,46.4 386.0,46.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-dasharray="5 3"/><polyline points="246.0,136.7 250.8,116.8 255.7,113.1 260.5,109.1 265.3,113.2 270.1,116.4 275.0,107.9 279.8,110.6 284.6,113.6 289.4,106.9 294.3,103.7 299.1,105.4 303.9,105.9 308.8,100.5 313.6,99.6 318.4,102.5 323.2,103.5 328.1,104.1 332.9,102.1 337.7,102.2 342.6,104.3 347.4,99.1 352.2,101.1 357.0,103.7 361.9,102.6 366.7,100.1 371.5,101.3 376.3,97.0 381.2,102.0 386.0,101.8" fill="none" stroke="var(--hl-nf)" stroke-width="1.8"/><line x1="46" x2="62" y1="186" y2="186" stroke="var(--hl-nb)" stroke-width="2"/><text x="66" y="190" font-size="11">bits per byte</text><line x1="176" x2="192" y1="186" y2="186" stroke="var(--hl-nf)" stroke-width="2"/><text x="196" y="190" font-size="11">bytes per chunk</text><line x1="306" x2="322" y1="186" y2="186" stroke="currentColor" stroke-width="2" stroke-dasharray="5 3"/><text x="326" y="190" font-size="11">target $N$</text></svg>
+<!-- /figure:training-curves -->
+    <figcaption>Left: the validation loss in bits per byte, on the same 8 batches of 16 sequences at
+      each point. Right: the number of bytes for each chunk on those batches, and the target $N = 4$
+      (dashed). One seed. Step 0 is not shown: there the loss is 8.36 bits per byte, a little more
+      than the 8 bits of a uniform guess over 256 bytes.</figcaption>
+  </figure>
+  <p>The loss fell to 2.31 bits per byte. The compression started at 2.99 bytes for each chunk, because
+     the routing module starts as a cosine distance of the encoder outputs. It went down to 2.15 in the
+     first 50 steps, then up to 2.87 at the end. It did not get to the target of 4 in 1,500 steps. The
+     ratio loss has a small weight, $\alpha = 0.03$, so the next-byte loss controls the start of
+     training.</p>
+  <figure id="fig-learned-chunks">
+<!-- figure:learned-chunks -->
+<div style="margin: 6px 0; line-height: 1.9"><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">F</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">irst&#9251;Cit</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">izen</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">:&#9251;</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">Before</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">&#9251;</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">we</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">&#9251;</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">proceed&#9251;any&#9251;</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">fu</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">rt</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">her</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">,&#9251;</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">hear</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">&#9251;</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">me</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">&#9251;</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">spe</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">ak</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">.</span></div>
+<div style="margin: 6px 0; line-height: 1.9"><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">The</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">&#9251;</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">q</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">uick</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">&#9251;</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">b</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">rown</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">&#9251;</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">fox</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">&#9251;</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">jump</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">s</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">&#9251;</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">over</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">&#9251;</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">the</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">&#9251;</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">lazy&#9251;</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">dog</span><span style="display: inline-block; border: 1px solid var(--hl-nf); border-radius: 3px; padding: 0 3px; margin: 1px; font-family: monospace; white-space: pre">.</span></div>
+<!-- /figure:learned-chunks -->
+    <figcaption>The chunks of the trained model on two sentences. Each box is one chunk; ␣ is a space.
+      The first sentence is the first line of the training data. The second sentence is not in the
+      data.</figcaption>
+  </figure>
+  <p>Nothing in the model knows about words, but most chunks are words or parts of words. Most spaces
+     are a chunk of their own. Thus the first byte of each word is predicted from a chunk that ends at
+     the space. Common words ("we", "me", "the", "fox", "over") are one chunk. Less common words are cut
+     into parts ("q|uick", "fu|rt|her"). Some chunks join a word to the next space ("lazy␣") or span two
+     words ("irst Cit", "proceed any␣").</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">1</span><span class="kn">import</span> <span class="nn">math</span>
+<span class="lineno">2</span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="lineno">3</span>
+<span class="lineno">4</span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="lineno">5</span>
+<span class="lineno">6</span><span class="kn">from</span> <span class="nn">hnet</span><span class="nn">.</span><span class="nn">hnet</span> <span class="kn">import</span> <span class="n">HNetConfig</span><span class="p">,</span> <span class="n">HNetLM</span></pre></div></div>
+</div>
+<div class="section" id="s1">
+<div class="docs doc-strings"><a class="anchor" href="#s1">#</a>
+<h2>Settings</h2>
+  <p>The training settings. <code>log_every</code> is the number of steps between two evaluations, and
+     <code>eval_batches</code> is the number of validation batches in each evaluation.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">9</span><span class="nd">@</span><span class="nd">dataclass</span>
+<span class="lineno">10</span><span class="k">class</span> <span class="nc">ToyConfig</span><span class="p">:</span>
+<span class="lineno">11</span>    <span class="n">seq_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">256</span>
+<span class="lineno">12</span>    <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="lineno">13</span>    <span class="n">steps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1500</span>
+<span class="lineno">14</span>    <span class="n">warmup</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="lineno">15</span>    <span class="n">lr</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-3</span>
+<span class="lineno">16</span>    <span class="n">log_every</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="lineno">17</span>    <span class="n">eval_batches</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="lineno">18</span>    <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></pre></div></div>
+</div>
+<div class="section" id="s2">
+<div class="docs doc-strings"><a class="anchor" href="#s2">#</a>
+<h2>Model</h2>
+  <p>A 1-stage H-Net: widths $D^0 = 128$ and $D^1 = 192$, and $N^0 = 4$. The other settings are the
+     defaults in <a href="hnet.html">the configuration</a>, with $\alpha = 0.03$.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">21</span><span class="k">def</span> <span class="nf">model_config</span><span class="p">(</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HNetConfig</span><span class="p">:</span>
+<span class="lineno">22</span>    <span class="k">return</span> <span class="n">HNetConfig</span><span class="p">(</span><span class="n">d_model</span><span class="o">=</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">192</span><span class="p">)</span><span class="p">,</span> <span class="n">target_ratio</span><span class="o">=</span><span class="p">(</span><span class="mf">4.0</span><span class="p">,</span><span class="p">)</span><span class="p">,</span> <span class="n">outer_layers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">main_layers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">n_heads</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s3">
+<div class="docs doc-strings"><a class="anchor" href="#s3">#</a>
+<h2>Batches</h2>
+  <p>Windows of 257 bytes from random positions in the data: 256 inputs and the next byte for each.
+     All windows have the same length, so there is no padding at the byte level. The chunks of each
+     window still have different lengths.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">25</span><span class="k">def</span> <span class="nf">batch</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">seq_len</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">generator</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Generator</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="lineno">26</span>    <span class="n">starts</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">-</span> <span class="n">seq_len</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">batch_size</span><span class="p">,</span><span class="p">)</span><span class="p">,</span> <span class="n">generator</span><span class="o">=</span><span class="n">generator</span><span class="p">)</span>
+<span class="lineno">27</span>    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="n">start</span> <span class="p">:</span> <span class="n">start</span> <span class="o">+</span> <span class="n">seq_len</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">start</span> <span class="ow">in</span> <span class="n">starts</span><span class="p">]</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s4">
+<div class="docs doc-strings"><a class="anchor" href="#s4">#</a>
+<h2>Evaluation</h2>
+  <p>The loss in bits per byte, and the mean number of bytes for each chunk. A fixed seed gives the same
+     batches at each evaluation, so that the points of the curves can be compared.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">30</span><span class="nd">@</span><span class="nd">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">(</span><span class="p">)</span>
+<span class="lineno">31</span><span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">HNetLM</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">ToyConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span><span class="p">:</span>
+<span class="lineno">32</span>    <span class="n">generator</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Generator</span><span class="p">(</span><span class="p">)</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">1234</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s5">
+<div class="docs"><a class="anchor" href="#s5">#</a>
+<p>For each validation batch: the loss, and the routing output of stage 0. All windows hold data, so
+     the mask is true everywhere.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">33</span>    <span class="n">nats</span><span class="p">,</span> <span class="n">ratios</span> <span class="o">=</span> <span class="p">[</span><span class="p">]</span><span class="p">,</span> <span class="p">[</span><span class="p">]</span>
+<span class="lineno">34</span>    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">eval_batches</span><span class="p">)</span><span class="p">:</span>
+<span class="lineno">35</span>        <span class="n">tokens</span> <span class="o">=</span> <span class="n">batch</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">seq_len</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">generator</span><span class="p">)</span>
+<span class="lineno">36</span>        <span class="n">loss</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">)</span><span class="p">)</span>
+<span class="lineno">37</span>        <span class="n">routing</span> <span class="o">=</span> <span class="n">loss</span><span class="o">.</span><span class="n">routings</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></pre></div></div>
+</div>
+<div class="section" id="s6">
+<div class="docs"><a class="anchor" href="#s6">#</a>
+<p>$\mathcal{L}_{\text{AR}}$ in nats, and $L / M$, the number of positions divided by the number of
+     chunks.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">38</span>        <span class="n">nats</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">loss</span><span class="o">.</span><span class="n">autoregressive</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="p">)</span><span class="p">)</span>
+<span class="lineno">39</span>        <span class="n">ratios</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="p">(</span><span class="n">routing</span><span class="o">.</span><span class="n">mask</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="p">)</span> <span class="o">/</span> <span class="n">routing</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="p">)</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s7">
+<div class="docs"><a class="anchor" href="#s7">#</a>
+$$\text{bits per byte} = \mathcal{L}_{\text{AR}} / \ln 2$$
+  <p>Dividing by $\ln 2$ changes nats to bits, and $\mathcal{L}_{\text{AR}}$ is a mean over bytes.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">40</span>    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">nats</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">nats</span><span class="p">)</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="p">,</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ratios</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">ratios</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s8">
+<div class="docs doc-strings"><a class="anchor" href="#s8">#</a>
+<h2>Training</h2>
+  <p>Train the model from a fixed seed and return it with the curves. The optimizer settings below are
+     common settings for small language models, not settings from the paper.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">43</span><span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="n">train_data</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">valid_data</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">ToyConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">HNetLM</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span><span class="p">:</span>
+<span class="lineno">44</span>    <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+<span class="lineno">45</span>    <span class="n">model</span> <span class="o">=</span> <span class="n">HNetLM</span><span class="p">(</span><span class="n">model_config</span><span class="p">(</span><span class="p">)</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s9">
+<div class="docs"><a class="anchor" href="#s9">#</a>
+<p>AdamW with $\beta = (0.9, 0.95)$ and weight decay 0.1, with one learning rate for each stage, from
+     $N_{\text{GPT}} = N^0$ as in <a href="hnet.html#eq-lr">the learning rate for each stage</a>. The outer
+     stage gets 2.45 times the base rate of $10^{-3}$.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">46</span>    <span class="n">n_gpt</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">target_ratio</span><span class="p">)</span>
+<span class="lineno">47</span>    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">AdamW</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">param_groups</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">lr</span><span class="p">,</span> <span class="n">n_gpt</span><span class="p">)</span><span class="p">,</span> <span class="n">betas</span><span class="o">=</span><span class="p">(</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">)</span><span class="p">,</span> <span class="n">weight_decay</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s10">
+<div class="docs"><a class="anchor" href="#s10">#</a>
+<p>A linear warmup over the first 100 steps, then a constant learning rate.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">48</span>    <span class="n">schedule</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">lr_scheduler</span><span class="o">.</span><span class="n">LambdaLR</span><span class="p">(</span>
+<span class="lineno">49</span>        <span class="n">optimizer</span><span class="p">,</span>
+<span class="lineno">50</span>        <span class="k">lambda</span> <span class="n">step</span><span class="p">:</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="p">(</span><span class="n">step</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">config</span><span class="o">.</span><span class="n">warmup</span><span class="p">)</span><span class="p">,</span>
+<span class="lineno">51</span>    <span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s11">
+<div class="docs"><a class="anchor" href="#s11">#</a>
+
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">52</span>    <span class="n">generator</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Generator</span><span class="p">(</span><span class="p">)</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+<span class="lineno">53</span>    <span class="n">curves</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">step</span><span class="o">=</span><span class="p">[</span><span class="p">]</span><span class="p">,</span> <span class="n">train_bpb</span><span class="o">=</span><span class="p">[</span><span class="p">]</span><span class="p">,</span> <span class="n">valid_bpb</span><span class="o">=</span><span class="p">[</span><span class="p">]</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="p">[</span><span class="p">]</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s12">
+<div class="docs"><a class="anchor" href="#s12">#</a>
+<p>Evaluate at step 0 and every <code>log_every</code> steps, including after the last step.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">54</span>    <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">steps</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="p">:</span>
+<span class="lineno">55</span>        <span class="k">if</span> <span class="n">step</span> <span class="o">%</span> <span class="n">config</span><span class="o">.</span><span class="n">log_every</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+<span class="lineno">56</span>            <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="p">)</span>
+<span class="lineno">57</span>            <span class="n">valid_bpb</span><span class="p">,</span> <span class="n">ratio</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">valid_data</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+<span class="lineno">58</span>            <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="p">)</span>
+<span class="lineno">59</span>            <span class="n">curves</span><span class="p">[</span><span class="s1">'step'</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">step</span><span class="p">)</span>
+<span class="lineno">60</span>            <span class="n">curves</span><span class="p">[</span><span class="s1">'valid_bpb'</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">valid_bpb</span><span class="p">)</span>
+<span class="lineno">61</span>            <span class="n">curves</span><span class="p">[</span><span class="s1">'ratio'</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ratio</span><span class="p">)</span>
+<span class="lineno">62</span>        <span class="k">if</span> <span class="n">step</span> <span class="o">==</span> <span class="n">config</span><span class="o">.</span><span class="n">steps</span><span class="p">:</span>
+<span class="lineno">63</span>            <span class="k">break</span></pre></div></div>
+</div>
+<div class="section" id="s13">
+<div class="docs"><a class="anchor" href="#s13">#</a>
+<p>One training step on $\mathcal{L}$, the next-byte loss plus the ratio loss, with the gradient norm
+     clipped to 1.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">64</span>        <span class="n">tokens</span> <span class="o">=</span> <span class="n">batch</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">seq_len</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">generator</span><span class="p">)</span>
+<span class="lineno">65</span>        <span class="n">loss</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">)</span><span class="p">)</span>
+<span class="lineno">66</span>        <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">(</span><span class="p">)</span>
+<span class="lineno">67</span>        <span class="n">loss</span><span class="o">.</span><span class="n">total</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="p">)</span>
+<span class="lineno">68</span>        <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">clip_grad_norm_</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(</span><span class="p">)</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="lineno">69</span>        <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="p">)</span>
+<span class="lineno">70</span>        <span class="n">schedule</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s14">
+<div class="docs"><a class="anchor" href="#s14">#</a>
+
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">71</span>        <span class="k">if</span> <span class="n">step</span> <span class="o">%</span> <span class="n">config</span><span class="o">.</span><span class="n">log_every</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+<span class="lineno">72</span>            <span class="n">curves</span><span class="p">[</span><span class="s1">'train_bpb'</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">loss</span><span class="o">.</span><span class="n">autoregressive</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="p">)</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="p">)</span>
+<span class="lineno">73</span>    <span class="k">return</span> <span class="n">model</span><span class="p">,</span> <span class="n">curves</span></pre></div></div>
+</div>
+<div class="section" id="s15">
+<div class="docs doc-strings"><a class="anchor" href="#s15">#</a>
+<h2>Chunks of a text</h2>
+  <p>Run the model on one text and cut the text where $b_t = 1$. This gives the chunks in
+     <a href="#fig-learned-chunks">the figure above</a>.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">76</span><span class="nd">@</span><span class="nd">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">(</span><span class="p">)</span>
+<span class="lineno">77</span><span class="k">def</span> <span class="nf">chunk_text</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">HNetLM</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="p">:</span>
+<span class="lineno">78</span>    <span class="n">tokens</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="p">]</span><span class="p">)</span>
+<span class="lineno">79</span>    <span class="n">_</span><span class="p">,</span> <span class="n">routings</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">)</span><span class="p">)</span>
+<span class="lineno">80</span>    <span class="n">starts</span> <span class="o">=</span> <span class="n">routings</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">(</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="n">tokens</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="p">]</span>
+<span class="lineno">81</span>    <span class="n">raw</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="p">)</span>
+<span class="lineno">82</span>    <span class="k">return</span> <span class="p">[</span><span class="n">raw</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">errors</span><span class="o">=</span><span class="s1">'replace'</span><span class="p">)</span> <span class="k">for</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">starts</span><span class="p">,</span> <span class="n">starts</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="p">]</span><span class="p">)</span><span class="p">]</span></pre></div></div>
+</div>
+</main>
+</body>
+</html>

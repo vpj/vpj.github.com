@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>H-Net - Dynamic Chunking for End-to-End Hierarchical Sequence Modeling</title>
+    <meta name="description" content="Annotated PyTorch implementation of H-Net, a byte-level language model that learns where to cut its input into chunks."/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"/>
+    <link rel="stylesheet" href="assets/style.css"/>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script defer src="assets/annotate.js"></script>
+</head>
+<body>
+<main class="page">
+<div class="section header"><div class="docs"><nav class="breadcrumbs"><a class="parent" href="index.html">H-Net</a></nav></div><div class="code"></div></div>
+<div class="section" id="s0">
+<div class="docs doc-strings"><a class="anchor" href="#s0">#</a>
+<h1>H-Net: Dynamic Chunking for End-to-End Hierarchical Sequence Modeling</h1>
+  <p>This is a <a href="https://pytorch.org">PyTorch</a> implementation of
+     <a href="https://arxiv.org/abs/2507.07955">Dynamic Chunking for End-to-End Hierarchical Sequence
+     Modeling</a> (Hwang, Wang and Gu, 2025).</p>
+  <p>A usual language model does not read text. It reads tokens from a tokenizer, and the tokenizer is
+     made before the model trains. The tokenizer does not learn with the model, and it fixes where
+     each token starts. An H-Net reads raw bytes. A small encoder processes the bytes. Then the model
+     itself decides where each chunk starts, and a large main network works on the chunks. A
+     decoder changes the output back to one vector for each byte. The whole model trains end to end
+     on next-byte prediction. Thus the chunks are a result of the training, not an input to it.</p>
+  <figure id="fig-architecture">
+<!-- figure:architecture -->
+<svg viewBox="0 0 400 232" width="100%" fill="currentColor" role="img" aria-label="A 1-stage H-Net: encoder, routing, chunk, main network, dechunk, residual, decoder"><defs><marker id="arrow-arch" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="currentColor"/></marker></defs><rect x="25.0" y="8.0" width="110" height="24" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="80" y="24" text-anchor="middle" font-size="11">bytes $x^0$</text><rect x="25.0" y="53.0" width="110" height="24" rx="4" fill="none" stroke="var(--hl-nb)" stroke-width="1.5"/><text x="80" y="69" text-anchor="middle" font-size="11">encoder $\mathcal{E}^0$</text><rect x="265.0" y="8.0" width="110" height="24" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="320" y="24" text-anchor="middle" font-size="11">next-byte logits</text><rect x="265.0" y="53.0" width="110" height="24" rx="4" fill="none" stroke="var(--hl-nb)" stroke-width="1.5"/><text x="320" y="69" text-anchor="middle" font-size="11">decoder $\mathcal{D}^0$</text><path d="M80 32 V52" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#arrow-arch)"/><path d="M320 52 V33" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#arrow-arch)"/><g data-group="chunks routing"><line x1="80" x2="80" y1="77" y2="110" stroke="currentColor" stroke-width="1.2"/><circle cx="80" cy="110" r="2.5" fill="currentColor"/><text x="74" y="100" text-anchor="end" font-size="11">$\hat{x}^0$</text></g><g data-group="chunks"><path d="M80 110 V142" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#arrow-arch)"/></g><g data-group="chunks routing"><rect x="25.0" y="143.0" width="110" height="24" rx="4" fill="none" stroke="var(--hl-k)" stroke-width="1.5"/><text x="80" y="159" text-anchor="middle" font-size="11">chunk</text></g><g data-group="chunks"><path d="M80 167 V215 H129" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#arrow-arch)"/><text x="86" y="196" text-anchor="start" font-size="11">$x^1$</text></g><g data-group="chunks"><rect x="130.0" y="203.0" width="140" height="24" rx="4" fill="none" stroke="var(--hl-nf)" stroke-width="1.5"/><text x="200" y="219" text-anchor="middle" font-size="11">main network $\mathcal{M}$</text></g><g data-group="chunks"><path d="M270 215 H320 V168" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#arrow-arch)"/><text x="314" y="196" text-anchor="end" font-size="11">$\hat{z}^1$</text></g><g data-group="chunks routing"><rect x="265.0" y="143.0" width="110" height="24" rx="4" fill="none" stroke="var(--hl-k)" stroke-width="1.5"/><text x="320" y="159" text-anchor="middle" font-size="11">dechunk</text></g><g data-group="chunks"><path d="M320 143 V118" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#arrow-arch)"/></g><g data-group="chunks residual"><circle cx="320" cy="110" r="7" fill="none" stroke="currentColor" stroke-width="1.2"/><text x="320" y="114" text-anchor="middle" font-size="11">+</text><path d="M320 103 V78" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#arrow-arch)"/><text x="326" y="94" text-anchor="start" font-size="11">$z^0$</text></g><g data-group="routing"><path d="M80 110 H159" fill="none" stroke="var(--hl-k)" stroke-width="1.2" marker-end="url(#arrow-arch)"/><rect x="160.0" y="99.0" width="80" height="22" rx="4" fill="none" stroke="var(--hl-k)" stroke-width="1.5"/><text x="200" y="114" text-anchor="middle" font-size="11">routing</text><path d="M180 121 V155 H136" fill="none" stroke="var(--hl-k)" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#arrow-arch)"/><path d="M220 121 V155 H264" fill="none" stroke="var(--hl-k)" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#arrow-arch)"/><text x="174" y="142" text-anchor="end" font-size="11">$p^0$</text><text x="226" y="142" text-anchor="start" font-size="11">$p^0$</text></g><g data-group="residual"><path d="M135 65 H164" fill="none" stroke="var(--hl-bp)" stroke-width="1.2" marker-end="url(#arrow-arch)"/><rect x="165.0" y="54.0" width="70" height="22" rx="4" fill="none" stroke="var(--hl-bp)" stroke-width="1.5"/><text x="200" y="69" text-anchor="middle" font-size="11">Linear</text><path d="M235 65 H250 V110 H312" fill="none" stroke="var(--hl-bp)" stroke-width="1.2" marker-end="url(#arrow-arch)"/><text x="200" y="90" text-anchor="middle" font-size="10">residual</text></g></svg>
+<!-- /figure:architecture -->
+    <figcaption>A 1-stage H-Net that reads $L$ bytes. The encoder (cyan) gives one vector for each
+      byte, $\hat{x}^0$. Three paths start there. <strong>Chunks:</strong> the chunk layer keeps the
+      vectors where a chunk starts. The main network (orange) reads these $x^1$, about $L / N$ vectors,
+      where $N$ is the target number of bytes for each chunk. The dechunk layer changes its outputs
+      $\hat{z}^1$ back to $L$ vectors. <strong>Routing</strong> (pink): the routing module computes a
+      boundary probability $p^0$ for each byte. The chunk layer uses it to select the positions, and the
+      dechunk layer uses it to smooth and weight the outputs. <strong>Residual</strong> (green): a linear
+      layer of $\hat{x}^0$ is added to the dechunk output, so $z^0$ keeps the detail of each byte that
+      the chunks do not have. The decoder reads $z^0$. The main network can itself be an H-Net, which
+      gives two or more stages. Click a path to light it up.</figcaption>
+  </figure>
+  <p>The new part is dynamic chunking. It is one mechanism, so all its parts are in one file:</p>
+  <ul>
+    <li><a href="dynamic_chunking.html">Dynamic chunking</a> - the routing module that predicts
+        boundaries, the chunk layer, the dechunk layer that smooths and upsamples, and the ratio loss
+        that sets the compression.</li>
+    <li><a href="hnet.html">H-Net</a> - the recursive model that puts the encoder, the chunking, the
+        main network and the decoder together, and the byte-level language model with its loss.</li>
+    <li><a href="layers.html">Layers</a> - the Transformer blocks that we use for every network.</li>
+    <li><a href="experiment.html">Experiment</a> - a 1-stage H-Net that trains on a CPU in a few
+        minutes, and the chunks that it learns.</li>
+  </ul>
+  <p>The paper uses Mamba-2 layers in the encoder and the decoder. Mamba-2 needs custom GPU kernels.
+     This implementation uses Transformer blocks for all networks, so that it runs on a CPU. The
+     annotations say where this changes the method.</p>
+  <p>The method is also the subject of two posts from Cartesia,
+     <a href="https://www.cartesia.ai/blog/from-tokens-to-bytes-part-1">From Tokens to Bytes I</a> and
+     <a href="https://www.cartesia.ai/blog/from-tokens-to-bytes-part-2">II</a>. They compare the scaling of
+     H-Nets with tokenized and byte-level models. The comparisons are not part of this implementation.
+     The authors' code is at <a href="https://github.com/goombalab/hnet">goombalab/hnet</a>.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">1</span><span class="kn">from</span> <span class="nn">hnet</span><span class="nn">.</span><span class="nn">dynamic_chunking</span> <span class="kn">import</span> <span class="n">ChunkLayer</span><span class="p">,</span> <span class="n">DechunkLayer</span><span class="p">,</span> <span class="n">RatioLoss</span><span class="p">,</span> <span class="n">Routing</span><span class="p">,</span> <span class="n">RoutingModule</span>
+<span class="lineno">2</span><span class="kn">from</span> <span class="nn">hnet</span><span class="nn">.</span><span class="nn">hnet</span> <span class="kn">import</span> <span class="n">HNet</span><span class="p">,</span> <span class="n">HNetConfig</span><span class="p">,</span> <span class="n">HNetLM</span></pre></div></div>
+</div>
+</main>
+</body>
+</html>

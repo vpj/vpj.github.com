@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>H-Net - Dynamic Chunking</title>
+    <meta name="description" content="The routing module, chunk layer, dechunk layer and ratio loss of H-Net, with the derivations of how the boundaries learn."/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"/>
+    <link rel="stylesheet" href="assets/style.css"/>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script defer src="assets/annotate.js"></script>
+</head>
+<body>
+<main class="page">
+<div class="section header"><div class="docs"><nav class="breadcrumbs"><a class="parent" href="index.html">H-Net</a>
+<a class="parent" href="dynamic_chunking.html">Dynamic chunking</a></nav></div><div class="code"></div></div>
+<div class="section" id="s0">
+<div class="docs doc-strings"><a class="anchor" href="#s0">#</a>
+<h1>Dynamic Chunking</h1>
+  <p>This file implements dynamic chunking from
+     <a href="https://arxiv.org/abs/2507.07955">Dynamic Chunking for End-to-End Hierarchical Sequence
+     Modeling</a> <span class="paper-ref">(Section 2.2 in the paper)</span>. Dynamic chunking cuts the
+     output of the encoder into chunks, gives the chunks to the main network, and changes the result
+     back to one vector for each position.</p>
+  <p>The input is the encoder output $\hat{x}_t$ for the positions $t = 1, \dots, L$. These steps
+     happen, in this order:</p>
+  <ol>
+    <li>The <strong>routing module</strong> gives each position a boundary probability $p_t$. A
+        position starts a chunk if $p_t \ge 0.5$.</li>
+    <li>The <strong>chunk layer</strong> keeps only the vectors at the start of each chunk.</li>
+    <li>The main network processes the chunks. It is not in this file.</li>
+    <li>The <strong>dechunk layer</strong> smooths the chunk outputs with the probabilities, then
+        repeats each one over the positions of its chunk.</li>
+    <li>The <strong>ratio loss</strong> keeps the number of chunks near a target.</li>
+  </ol>
+  <figure id="fig-layout">
+<!-- figure:layout -->
+<svg viewBox="0 0 400 236" width="100%" fill="currentColor" role="img" aria-label="Chunking, upsampling and next-byte prediction for the bytes of &quot;the cat sat&quot;"><defs><marker id="arrow-layout" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="currentColor"/></marker></defs><text x="4" y="24" text-anchor="start" font-size="11">bytes</text><text x="4" y="52" text-anchor="start" font-size="11">$p_t$</text><text x="4" y="118" text-anchor="start" font-size="10">chunks in</text><text x="4" y="131" text-anchor="start" font-size="10">main net</text><text x="4" y="176" text-anchor="start" font-size="10">chunk of</text><text x="4" y="189" text-anchor="start" font-size="10">byte $t$</text><text x="4" y="212" text-anchor="start" font-size="10">decoder</text><text x="4" y="225" text-anchor="start" font-size="10">predicts</text><g data-group="chunk1"><rect x="64" y="8" width="26" height="24" rx="3" fill="none" stroke="var(--hl-k)" stroke-width="2" stroke-opacity="1"/><text x="77.0" y="24" text-anchor="middle" font-size="11">t</text><text x="77.0" y="52" text-anchor="middle" font-size="10">1.0</text><rect x="64" y="166" width="26" height="24" rx="3" fill="none" stroke="var(--hl-nb)" stroke-width="1"/><text x="77.0" y="182" text-anchor="middle" font-size="11">1</text><path d="M77.0 191 V204" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#arrow-layout)"/><rect x="64" y="206" width="26" height="24" rx="3" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2"/><text x="77.0" y="222" text-anchor="middle" font-size="11">h</text></g><g data-group="chunk1"><rect x="94" y="8" width="26" height="24" rx="3" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.5"/><text x="107.0" y="24" text-anchor="middle" font-size="11">h</text><text x="107.0" y="52" text-anchor="middle" font-size="10">0.1</text><rect x="94" y="166" width="26" height="24" rx="3" fill="none" stroke="var(--hl-nb)" stroke-width="1"/><text x="107.0" y="182" text-anchor="middle" font-size="11">1</text><path d="M107.0 191 V204" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#arrow-layout)"/><rect x="94" y="206" width="26" height="24" rx="3" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2"/><text x="107.0" y="222" text-anchor="middle" font-size="11">e</text></g><g data-group="chunk1"><rect x="124" y="8" width="26" height="24" rx="3" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.5"/><text x="137.0" y="24" text-anchor="middle" font-size="11">e</text><text x="137.0" y="52" text-anchor="middle" font-size="10">0.2</text><rect x="124" y="166" width="26" height="24" rx="3" fill="none" stroke="var(--hl-nb)" stroke-width="1"/><text x="137.0" y="182" text-anchor="middle" font-size="11">1</text><path d="M137.0 191 V204" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#arrow-layout)"/><rect x="124" y="206" width="26" height="24" rx="3" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2"/><text x="137.0" y="222" text-anchor="middle" font-size="11">␣</text></g><g data-group="chunk2"><rect x="154" y="8" width="26" height="24" rx="3" fill="none" stroke="var(--hl-k)" stroke-width="2" stroke-opacity="1"/><text x="167.0" y="24" text-anchor="middle" font-size="11">␣</text><text x="167.0" y="52" text-anchor="middle" font-size="10">0.8</text><rect x="154" y="166" width="26" height="24" rx="3" fill="none" stroke="var(--hl-nb)" stroke-width="1"/><text x="167.0" y="182" text-anchor="middle" font-size="11">2</text><path d="M167.0 191 V204" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#arrow-layout)"/><rect x="154" y="206" width="26" height="24" rx="3" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2"/><text x="167.0" y="222" text-anchor="middle" font-size="11">c</text></g><g data-group="chunk3"><rect x="184" y="8" width="26" height="24" rx="3" fill="none" stroke="var(--hl-k)" stroke-width="2" stroke-opacity="1"/><text x="197.0" y="24" text-anchor="middle" font-size="11">c</text><text x="197.0" y="52" text-anchor="middle" font-size="10">0.7</text><rect x="184" y="166" width="26" height="24" rx="3" fill="none" stroke="var(--hl-nb)" stroke-width="1"/><text x="197.0" y="182" text-anchor="middle" font-size="11">3</text><path d="M197.0 191 V204" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#arrow-layout)"/><rect x="184" y="206" width="26" height="24" rx="3" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2"/><text x="197.0" y="222" text-anchor="middle" font-size="11">a</text></g><g data-group="chunk3"><rect x="214" y="8" width="26" height="24" rx="3" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.5"/><text x="227.0" y="24" text-anchor="middle" font-size="11">a</text><text x="227.0" y="52" text-anchor="middle" font-size="10">0.1</text><rect x="214" y="166" width="26" height="24" rx="3" fill="none" stroke="var(--hl-nb)" stroke-width="1"/><text x="227.0" y="182" text-anchor="middle" font-size="11">3</text><path d="M227.0 191 V204" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#arrow-layout)"/><rect x="214" y="206" width="26" height="24" rx="3" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2"/><text x="227.0" y="222" text-anchor="middle" font-size="11">t</text></g><g data-group="chunk3"><rect x="244" y="8" width="26" height="24" rx="3" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.5"/><text x="257.0" y="24" text-anchor="middle" font-size="11">t</text><text x="257.0" y="52" text-anchor="middle" font-size="10">0.3</text><rect x="244" y="166" width="26" height="24" rx="3" fill="none" stroke="var(--hl-nb)" stroke-width="1"/><text x="257.0" y="182" text-anchor="middle" font-size="11">3</text><path d="M257.0 191 V204" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#arrow-layout)"/><rect x="244" y="206" width="26" height="24" rx="3" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2"/><text x="257.0" y="222" text-anchor="middle" font-size="11">␣</text></g><g data-group="chunk4"><rect x="274" y="8" width="26" height="24" rx="3" fill="none" stroke="var(--hl-k)" stroke-width="2" stroke-opacity="1"/><text x="287.0" y="24" text-anchor="middle" font-size="11">␣</text><text x="287.0" y="52" text-anchor="middle" font-size="10">0.9</text><rect x="274" y="166" width="26" height="24" rx="3" fill="none" stroke="var(--hl-nb)" stroke-width="1"/><text x="287.0" y="182" text-anchor="middle" font-size="11">4</text><path d="M287.0 191 V204" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#arrow-layout)"/><rect x="274" y="206" width="26" height="24" rx="3" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2"/><text x="287.0" y="222" text-anchor="middle" font-size="11">s</text></g><g data-group="chunk5"><rect x="304" y="8" width="26" height="24" rx="3" fill="none" stroke="var(--hl-k)" stroke-width="2" stroke-opacity="1"/><text x="317.0" y="24" text-anchor="middle" font-size="11">s</text><text x="317.0" y="52" text-anchor="middle" font-size="10">0.6</text><rect x="304" y="166" width="26" height="24" rx="3" fill="none" stroke="var(--hl-nb)" stroke-width="1"/><text x="317.0" y="182" text-anchor="middle" font-size="11">5</text><path d="M317.0 191 V204" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#arrow-layout)"/><rect x="304" y="206" width="26" height="24" rx="3" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2"/><text x="317.0" y="222" text-anchor="middle" font-size="11">a</text></g><g data-group="chunk5"><rect x="334" y="8" width="26" height="24" rx="3" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.5"/><text x="347.0" y="24" text-anchor="middle" font-size="11">a</text><text x="347.0" y="52" text-anchor="middle" font-size="10">0.2</text><rect x="334" y="166" width="26" height="24" rx="3" fill="none" stroke="var(--hl-nb)" stroke-width="1"/><text x="347.0" y="182" text-anchor="middle" font-size="11">5</text><path d="M347.0 191 V204" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#arrow-layout)"/><rect x="334" y="206" width="26" height="24" rx="3" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2"/><text x="347.0" y="222" text-anchor="middle" font-size="11">t</text></g><g data-group="chunk5"><rect x="364" y="8" width="26" height="24" rx="3" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.5"/><text x="377.0" y="24" text-anchor="middle" font-size="11">t</text><text x="377.0" y="52" text-anchor="middle" font-size="10">0.1</text><rect x="364" y="166" width="26" height="24" rx="3" fill="none" stroke="var(--hl-nb)" stroke-width="1"/><text x="377.0" y="182" text-anchor="middle" font-size="11">5</text><path d="M377.0 191 V204" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#arrow-layout)"/><rect x="364" y="206" width="26" height="24" rx="3" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2"/><text x="377.0" y="222" text-anchor="middle" font-size="11">…</text></g><g data-group="chunk1"><rect x="114.0" y="108.0" width="28" height="24" rx="4" fill="none" stroke="var(--hl-nf)" stroke-width="1.5"/><text x="128" y="124" text-anchor="middle" font-size="11">1</text><path d="M77.0 60 L128 106" fill="none" stroke="var(--hl-k)" stroke-width="1.2" marker-end="url(#arrow-layout)"/><path d="M128 132 L77.0 164" fill="none" stroke="var(--hl-nf)" stroke-width="1.2" marker-end="url(#arrow-layout)"/></g><g data-group="chunk2"><rect x="150.0" y="108.0" width="28" height="24" rx="4" fill="none" stroke="var(--hl-nf)" stroke-width="1.5"/><text x="164" y="124" text-anchor="middle" font-size="11">2</text><path d="M167.0 60 L164 106" fill="none" stroke="var(--hl-k)" stroke-width="1.2" marker-end="url(#arrow-layout)"/><path d="M164 132 L167.0 164" fill="none" stroke="var(--hl-nf)" stroke-width="1.2" marker-end="url(#arrow-layout)"/></g><g data-group="chunk3"><rect x="186.0" y="108.0" width="28" height="24" rx="4" fill="none" stroke="var(--hl-nf)" stroke-width="1.5"/><text x="200" y="124" text-anchor="middle" font-size="11">3</text><path d="M197.0 60 L200 106" fill="none" stroke="var(--hl-k)" stroke-width="1.2" marker-end="url(#arrow-layout)"/><path d="M200 132 L197.0 164" fill="none" stroke="var(--hl-nf)" stroke-width="1.2" marker-end="url(#arrow-layout)"/></g><g data-group="chunk4"><rect x="222.0" y="108.0" width="28" height="24" rx="4" fill="none" stroke="var(--hl-nf)" stroke-width="1.5"/><text x="236" y="124" text-anchor="middle" font-size="11">4</text><path d="M287.0 60 L236 106" fill="none" stroke="var(--hl-k)" stroke-width="1.2" marker-end="url(#arrow-layout)"/><path d="M236 132 L287.0 164" fill="none" stroke="var(--hl-nf)" stroke-width="1.2" marker-end="url(#arrow-layout)"/></g><g data-group="chunk5"><rect x="258.0" y="108.0" width="28" height="24" rx="4" fill="none" stroke="var(--hl-nf)" stroke-width="1.5"/><text x="272" y="124" text-anchor="middle" font-size="11">5</text><path d="M317.0 60 L272 106" fill="none" stroke="var(--hl-k)" stroke-width="1.2" marker-end="url(#arrow-layout)"/><path d="M272 132 L317.0 164" fill="none" stroke="var(--hl-nf)" stroke-width="1.2" marker-end="url(#arrow-layout)"/></g></svg>
+<!-- /figure:layout -->
+    <figcaption>Dynamic chunking of the bytes of "the cat sat", with example probabilities $p_t$. The
+      five positions with $p_t \ge 0.5$ (pink) start chunks. The chunk layer sends their vectors to
+      the main network as five chunks (orange). The dechunk layer gives each position the output of
+      the chunk $j(t)$ that it is in (cyan). From there, the decoder predicts the next byte at each
+      position (dashed). For example, position "c" is in chunk 3 and predicts "a". The positions of
+      one chunk get the same chunk output, but they predict different bytes: the decoder also gets
+      the encoder output of each byte through a residual, shown in
+      <a href="index.html#fig-architecture">the architecture</a>. A chunk starts at
+      or before each position in it, so a prediction never uses a later byte. The model, not a rule,
+      sets the probabilities. Here, each space is a chunk of its own, as in the chunks that
+      <a href="experiment.html">the experiment</a> learns. Thus the first byte of the next word ("c",
+      "s") is predicted from a chunk that contains only the space. Click a byte, a chunk or a prediction
+      to light up its chunk: the byte that starts it, its vector in the main network, and the positions
+      that get its output.</figcaption>
+  </figure>
+  <p>The selection of positions is discrete and has no gradient. Two parts give the routing module a
+     gradient. The smoothing in the dechunk layer uses $p_t$ as a weight. The upsampler multiplies
+     each output by a confidence that depends on $p_t$. The derivations below show what each
+     gradient tells the routing module.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">1</span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="lineno">2</span>
+<span class="lineno">3</span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="lineno">4</span><span class="kn">import</span> <span class="nn">torch</span><span class="nn">.</span><span class="nn">nn</span><span class="nn">.</span><span class="nn">functional</span> <span class="k">as</span> <span class="nn">F</span>
+<span class="lineno">5</span><span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span></pre></div></div>
+</div>
+<div class="section" id="s1">
+<div class="docs doc-strings"><a class="anchor" href="#s1">#</a>
+<h2>Routing</h2>
+  <p>The result of the routing module for one stage. The chunk layer, the dechunk layer and the ratio
+     loss all use it.</p>
+  <ul>
+    <li><code>p</code> is $p_t$, the boundary probability of each position, shape
+        <code>[batch, L]</code>.</li>
+    <li><code>b</code> is $b_t$, true where a chunk starts.</li>
+    <li><code>mask</code> is true at the positions that hold data. The other positions are padding.</li>
+  </ul>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">8</span><span class="nd">@</span><span class="nd">dataclass</span>
+<span class="lineno">9</span><span class="k">class</span> <span class="nc">Routing</span><span class="p">:</span>
+<span class="lineno">10</span>    <span class="n">p</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span>
+<span class="lineno">11</span>    <span class="n">b</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span>
+<span class="lineno">12</span>    <span class="n">mask</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span></pre></div></div>
+</div>
+<div class="section" id="s2">
+<div class="docs doc-strings"><a class="anchor" href="#s2">#</a>
+<h2>Routing module</h2>
+  <p>A boundary is likely where the meaning of the data changes, for example between two words. Then
+     the encoder outputs on the two sides of the boundary are not similar. The routing module measures
+     this with the cosine similarity of two adjacent positions
+     <span class="paper-ref">(Eq. 4 in the paper)</span>:</p>
+  <div id="eq-routing">
+  \begin{align*}
+  q_t &= W_q \hat{x}_t, \qquad k_t = W_k \hat{x}_t \\
+  p_t &= \frac{1}{2} \left( 1 - \frac{q_t^\top k_{t-1}}{\lVert q_t \rVert \lVert k_{t-1} \rVert} \right) \\
+  b_t &= \mathbb{1}\{p_t \ge 0.5\}
+  \end{align*}
+  </div>
+  <p>The cosine is in $[-1, 1]$, so $p_t$ is in $[0, 1]$. If the two vectors point in the same
+     direction, $p_t = 0$. If they are orthogonal, $p_t = 0.5$ and the position starts a chunk. The
+     first position has no neighbour. It always starts a chunk, with $p_1 = 1$.</p>
+  <p>$W_q$ and $W_k$ are learned. Thus the model learns which kind of difference marks a boundary.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">15</span><span class="k">class</span> <span class="nc">RoutingModule</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">)</span><span class="p">:</span></pre></div></div>
+</div>
+<div class="section" id="s3">
+<div class="docs"><a class="anchor" href="#s3">#</a>
+
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">16</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d_model</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span><span class="p">:</span>
+<span class="lineno">17</span>        <span class="nb">super</span><span class="p">(</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s4">
+<div class="docs"><a class="anchor" href="#s4">#</a>
+<p>$W_q$ and $W_k$, without bias.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">18</span>        <span class="bp">self</span><span class="o">.</span><span class="n">w_q</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">d_model</span><span class="p">,</span> <span class="n">d_model</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="lineno">19</span>        <span class="bp">self</span><span class="o">.</span><span class="n">w_k</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">d_model</span><span class="p">,</span> <span class="n">d_model</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s5">
+<div class="docs"><a class="anchor" href="#s5">#</a>
+<p>Both start as the identity. Then, at the start of training, $p_t$ is the cosine distance of the
+     encoder outputs themselves.</p>
+  <details class="note"><summary>Initialization from the authors' code</summary>
+     <p>The paper does not give this initialization. We take it from the authors'
+     code.</p></details>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">20</span>        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">(</span><span class="p">)</span><span class="p">:</span>
+<span class="lineno">21</span>            <span class="bp">self</span><span class="o">.</span><span class="n">w_q</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">copy_</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">d_model</span><span class="p">)</span><span class="p">)</span>
+<span class="lineno">22</span>            <span class="bp">self</span><span class="o">.</span><span class="n">w_k</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">copy_</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">d_model</span><span class="p">)</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s6">
+<div class="docs"><a class="anchor" href="#s6">#</a>
+<h3>Boundary probabilities</h3>
+  <p><code>x_hat</code> is $\hat{x}_t$, shape <code>[batch, L, d_model]</code>.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">24</span>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_hat</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">mask</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Routing</span><span class="p">:</span></pre></div></div>
+</div>
+<div class="section" id="s7">
+<div class="docs"><a class="anchor" href="#s7">#</a>
+<p>$q_t / \lVert q_t \rVert$ for $t = 2, \dots, L$, and $k_{t-1} / \lVert k_{t-1} \rVert$ for the
+     same $t$. The two slices are one position apart, so element $i$ of <code>q</code> and element $i$
+     of <code>k</code> are adjacent positions.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">25</span>        <span class="n">q</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w_q</span><span class="p">(</span><span class="n">x_hat</span><span class="p">[</span><span class="p">:</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="p">]</span><span class="p">)</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="lineno">26</span>        <span class="n">k</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w_k</span><span class="p">(</span><span class="n">x_hat</span><span class="p">[</span><span class="p">:</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="p">)</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s8">
+<div class="docs"><a class="anchor" href="#s8">#</a>
+$$p_t = \frac{1}{2} \left( 1 - \frac{q_t^\top k_{t-1}}{\lVert q_t \rVert \lVert k_{t-1} \rVert} \right)$$
+  <p>The clamp only removes rounding errors outside $[0, 1]$.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">27</span>        <span class="n">cos</span> <span class="o">=</span> <span class="p">(</span><span class="n">q</span> <span class="o">*</span> <span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="lineno">28</span>        <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">cos</span><span class="p">)</span><span class="p">)</span><span class="o">.</span><span class="n">clamp</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s9">
+<div class="docs"><a class="anchor" href="#s9">#</a>
+<p>$p_1 = 1$: the first position starts a chunk.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">29</span>        <span class="n">p</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s10">
+<div class="docs"><a class="anchor" href="#s10">#</a>
+<p>$b_t = \mathbb{1}\{p_t \ge 0.5\}$. Padding never starts a chunk.</p>
+  <details class="note"><summary>Authors' code: $p_t \gt 0.5$</summary>
+     <p>The authors' code selects a boundary only if $p_t \gt 0.5$. We follow the paper.
+     The two rules differ only when $p_t$ is exactly $0.5$.</p></details>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">30</span>        <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="n">p</span> <span class="o">&gt;=</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">mask</span></pre></div></div>
+</div>
+<div class="section" id="s11">
+<div class="docs"><a class="anchor" href="#s11">#</a>
+
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">31</span>        <span class="k">return</span> <span class="n">Routing</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s12">
+<div class="docs doc-strings"><a class="anchor" href="#s12">#</a>
+<h2>Chunk layer</h2>
+  <p>The chunk layer keeps the vectors $\hat{x}_t$ where $b_t = 1$, in their order, and discards the
+     others <span class="paper-ref">(the downsampler in the paper)</span>. The $j$-th chunk is the
+     vector at the $j$-th boundary. The main network reads these $M = \sum_t b_t$ vectors. The paper
+     also tried mean pooling and attention over each chunk. The simple selection worked as well.</p>
+  <p>Each example in a batch can have a different number of chunks. We put the chunks of each example
+     at the start of its row and pad the rest. A mask marks the chunks that hold data. The padding is
+     always at the end of a row. All the networks are causal, so a padded position never changes a
+     position with data.</p>
+  <details class="note"><summary>Authors' code: packed rows, not padding</summary>
+     <p>The authors' code puts all examples in one long row without padding, and gives
+     the start of each example to its kernels. Padding is simpler to read. It costs computation on
+     positions with no data.</p></details>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">34</span><span class="k">class</span> <span class="nc">ChunkLayer</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">)</span><span class="p">:</span></pre></div></div>
+</div>
+<div class="section" id="s13">
+<div class="docs"><a class="anchor" href="#s13">#</a>
+
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">35</span>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_hat</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span><span class="p">:</span></pre></div></div>
+</div>
+<div class="section" id="s14">
+<div class="docs"><a class="anchor" href="#s14">#</a>
+<p>$M = \sum_t b_t$, the number of chunks of each example.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">36</span>        <span class="n">n_chunks</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s15">
+<div class="docs"><a class="anchor" href="#s15">#</a>
+<p>The positions of the boundaries, in their order. The sort key is 0 at a boundary and 1 elsewhere.
+     A stable sort keeps the order inside each group, so the boundaries come first and in order. We keep
+     as many columns as the example with the most chunks has.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">37</span>        <span class="n">order</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="p">(</span><span class="o">~</span><span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">long</span><span class="p">(</span><span class="p">)</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">stable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="p">[</span><span class="p">:</span><span class="p">,</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_chunks</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="p">]</span></pre></div></div>
+</div>
+<div class="section" id="s16">
+<div class="docs"><a class="anchor" href="#s16">#</a>
+<p>The chunk vectors. The gradient flows back to $\hat{x}_t$ through these vectors, but not to the
+     choice of positions.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">38</span>        <span class="n">x</span> <span class="o">=</span> <span class="n">x_hat</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">order</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">x_hat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="p">)</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s17">
+<div class="docs"><a class="anchor" href="#s17">#</a>
+<p>The mask of the chunks: true for the first $M$ columns of each row.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">39</span>        <span class="n">mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">order</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">b</span><span class="o">.</span><span class="n">device</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">n_chunks</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s18">
+<div class="docs"><a class="anchor" href="#s18">#</a>
+
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">40</span>        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">order</span></pre></div></div>
+</div>
+<div class="section" id="s19">
+<div class="docs doc-strings"><a class="anchor" href="#s19">#</a>
+<h2>Straight-through estimator</h2>
+  <p>The straight-through estimator (STE) has the value 1, and the gradient of $c$
+     <span class="paper-ref">(Eq. 7 in the paper)</span>:</p>
+  <div id="eq-ste">
+  $$\operatorname{STE}(c) = c + \operatorname{sg}(1 - c)$$
+  </div>
+  <p>where $\operatorname{sg}$ stops the gradient. In the forward pass the two terms add to 1. In the
+     backward pass the second term is a constant, so
+     $\partial \operatorname{STE}(c) / \partial c = 1$. The upsampler uses it to multiply by the
+     confidence without a change to the values.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">43</span><span class="k">def</span> <span class="nf">ste</span><span class="p">(</span><span class="n">c</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="lineno">44</span>    <span class="k">return</span> <span class="n">c</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">(</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s20">
+<div class="docs doc-strings"><a class="anchor" href="#s20">#</a>
+<h2>Dechunk layer</h2>
+  <p>The main network gives one output $\hat{z}_j$ for each chunk $j = 1, \dots, M$. The dechunk
+     layer changes these $M$ vectors back to $L$ vectors, in two steps: it smooths the chunk outputs,
+     then it upsamples them.</p>
+  <p>Let $P_j$ be the boundary probability at the position where chunk $j$ starts. All $P_j$ are at
+     least $0.5$, and $P_1 = 1$.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">47</span><span class="k">class</span> <span class="nc">DechunkLayer</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">)</span><span class="p">:</span></pre></div></div>
+</div>
+<div class="section" id="s21">
+<div class="docs"><a class="anchor" href="#s21">#</a>
+
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">48</span>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z_hat</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">routing</span><span class="p">:</span> <span class="n">Routing</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span></pre></div></div>
+</div>
+<div class="section" id="s22">
+<div class="docs"><a class="anchor" href="#s22">#</a>
+<p>$P_j$ comes from the same positions that the chunk layer selected.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">49</span>        <span class="n">z_bar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">smooth</span><span class="p">(</span><span class="n">z_hat</span><span class="p">,</span> <span class="n">routing</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s23">
+<div class="docs"><a class="anchor" href="#s23">#</a>
+
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">50</span>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">upsample</span><span class="p">(</span><span class="n">z_bar</span><span class="p">,</span> <span class="n">routing</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s24">
+<div class="docs doc-strings"><a class="anchor" href="#s24">#</a>
+<h3>Smoothing</h3>
+  <p>The smoothing module makes an exponential moving average of the chunk outputs
+     <span class="paper-ref">(Eq. 5 in the paper)</span>:</p>
+  <div id="eq-smooth">
+  $$\bar{z}_j = P_j \hat{z}_j + (1 - P_j) \bar{z}_{j-1}$$
+  </div>
+  <p>If the routing module is sure of a boundary ($P_j = 1$), then $\bar{z}_j = \hat{z}_j$. If it is
+     not sure ($P_j$ near $0.5$), the chunk gets part of the earlier chunks.</p>
+  <h4>A weighted average of the earlier chunks</h4>
+  <p>Put the recursion into itself:</p>
+  \begin{align*}
+  \bar{z}_j &= P_j \hat{z}_j + (1 - P_j) \bar{z}_{j-1} \\
+  &= P_j \hat{z}_j + (1 - P_j) P_{j-1} \hat{z}_{j-1} \\
+  &\quad + (1 - P_j)(1 - P_{j-1}) \bar{z}_{j-2} \\
+  &= \sum_{i=1}^{j} w_{j,i} \, \hat{z}_i
+  \end{align*}
+  <p>with the weights</p>
+  <div id="eq-smooth-weights">
+  $$w_{j,i} = P_i \prod_{k=i+1}^{j} (1 - P_k)$$
+  </div>
+  <p>The sum of the weights telescopes. Each step moves part of the remaining weight to the newest
+     chunk:</p>
+  $$\sum_{i=1}^{j} w_{j,i} = 1 - \prod_{i=1}^{j} (1 - P_i) = 1$$
+  <p>The product is zero because $P_1 = 1$. Thus $\bar{z}_j$ is a weighted average of the outputs of
+     chunks $1, \dots, j$. It never uses a later chunk, so the smoothing is causal.</p>
+  <figure id="fig-smoothing">
+<!-- figure:smoothing -->
+<svg viewBox="0 0 400 200" width="100%" fill="currentColor" role="img" aria-label="Weights of the earlier chunks in the smoothed vector of chunk 5"><line x1="60" x2="380" y1="142" y2="142" stroke="currentColor" stroke-opacity="0.15"/><text x="56" y="146" text-anchor="end" font-size="10">0</text><line x1="60" x2="380" y1="82.0" y2="82.0" stroke="currentColor" stroke-opacity="0.15"/><text x="56" y="86.0" text-anchor="end" font-size="10">0.5</text><line x1="60" x2="380" y1="22" y2="22" stroke="currentColor" stroke-opacity="0.15"/><text x="56" y="26" text-anchor="end" font-size="10">1</text><line x1="60" x2="60" y1="22" y2="142" stroke="currentColor" stroke-opacity="0.5"/><text x="14" y="82.0" text-anchor="middle" font-size="10" transform="rotate(-90 14 82.0)">weight in $\bar{z}_5$</text><g data-group="w1"><rect x="80" y="141.892" width="40" height="0.10800000000000007" fill="var(--hl-nf)" fill-opacity="0.7"/><text x="100.0" y="137.892" text-anchor="middle" font-size="10">0.001</text><text x="100.0" y="158" text-anchor="middle" font-size="11">$\hat{z}_1$</text></g><g data-group="w1"><text x="100.0" y="174" text-anchor="middle" font-size="10">$P_1 = 1$</text></g><g data-group="w2"><rect x="142" y="141.028" width="40" height="0.972000000000001" fill="var(--hl-nf)" fill-opacity="0.7"/><text x="162.0" y="137.028" text-anchor="middle" font-size="10">0.008</text><text x="162.0" y="158" text-anchor="middle" font-size="11">$\hat{z}_2$</text></g><g data-group="w1 w2"><text x="162.0" y="174" text-anchor="middle" font-size="10">$P_2 = 0.9$</text></g><g data-group="w3"><rect x="204" y="140.68" width="40" height="1.3200000000000014" fill="var(--hl-nf)" fill-opacity="0.7"/><text x="224.0" y="136.68" text-anchor="middle" font-size="10">0.011</text><text x="224.0" y="158" text-anchor="middle" font-size="11">$\hat{z}_3$</text></g><g data-group="w1 w2 w3"><text x="224.0" y="174" text-anchor="middle" font-size="10">$P_3 = 0.55$</text></g><g data-group="w4"><rect x="266" y="96.4" width="40" height="45.6" fill="var(--hl-nf)" fill-opacity="0.7"/><text x="286.0" y="92.4" text-anchor="middle" font-size="10">0.380</text><text x="286.0" y="158" text-anchor="middle" font-size="11">$\hat{z}_4$</text></g><g data-group="w1 w2 w3 w4"><text x="286.0" y="174" text-anchor="middle" font-size="10">$P_4 = 0.95$</text></g><g data-group="w5"><rect x="328" y="70.0" width="40" height="72.0" fill="var(--hl-nf)" fill-opacity="0.7"/><text x="348.0" y="66.0" text-anchor="middle" font-size="10">0.600</text><text x="348.0" y="158" text-anchor="middle" font-size="11">$\hat{z}_5$</text></g><g data-group="w1 w2 w3 w4 w5"><text x="348.0" y="174" text-anchor="middle" font-size="10">$P_5 = 0.6$</text></g><text x="220" y="192" text-anchor="middle" font-size="10">chunk $i$ and its boundary probability</text></svg>
+<!-- /figure:smoothing -->
+    <figcaption>The weights $w_{5,i}$ of five chunks in $\bar{z}_5$, computed by this layer with the
+      probabilities $P_i$ under the bars. Chunk 5 is not certain ($P_5 = 0.6$). Thus $\bar{z}_5$ takes
+      0.38 of its weight from chunk 4, which is certain ($P_4 = 0.95$). The earlier chunks have
+      almost no weight. Click a bar to light up the probabilities in its weight, $P_i$ and every later
+      $P_k$. Click a probability to light up the weights that it changes.</figcaption>
+  </figure>
+  <h4>The gradient that trains the boundary</h4>
+  <p>The derivative of the smoothed vector with respect to its probability is</p>
+  $$\frac{\partial \bar{z}_j}{\partial P_j} = \hat{z}_j - \bar{z}_{j-1}$$
+  <p>This is the difference between the two choices: start a new chunk with $\hat{z}_j$, or keep the
+     average $\bar{z}_{j-1}$ of the earlier chunks. If the loss is lower with more of $\hat{z}_j$,
+     gradient descent makes $P_j$ larger, and the boundary becomes more certain. If the loss is lower
+     with more of the earlier chunks, $P_j$ becomes smaller. When it goes below $0.5$, the position
+     stops being a boundary. Without the smoothing, the output would not depend on $P_j$, and this
+     signal would not exist.</p>
+  <details class="note"><summary>Authors' code: the smoothing as a Mamba-2 scan</summary>
+     <p>The recursion is a linear scan $h_j = a_j h_{j-1} + u_j$, with $a_j = 1 - P_j$
+     and $u_j = P_j \hat{z}_j$. The authors' code runs it with the scan kernel of Mamba-2, with the step
+     size</p>
+     $$\Delta_j = \log \frac{1}{1 - P_j}$$
+     <p>so that $e^{-\Delta_j} = 1 - P_j$. That needs
+     $P_j \lt 1$, so the code clamps $P_j$ to $[10^{-4}, 1 - 10^{-4}]$. We use a loop over the chunks.
+     It is slower, but it needs no clamp.</p></details>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">52</span>    <span class="nd">@</span><span class="nd">staticmethod</span>
+<span class="lineno">53</span>    <span class="k">def</span> <span class="nf">smooth</span><span class="p">(</span><span class="n">z_hat</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">P</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span></pre></div></div>
+</div>
+<div class="section" id="s25">
+<div class="docs"><a class="anchor" href="#s25">#</a>
+
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">54</span>        <span class="n">P</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s26">
+<div class="docs"><a class="anchor" href="#s26">#</a>
+<p>$\bar{z}_0 = 0$. Its value has no effect, because $P_1 = 1$.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">55</span>        <span class="n">previous</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">z_hat</span><span class="p">[</span><span class="p">:</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s27">
+<div class="docs"><a class="anchor" href="#s27">#</a>
+$$\bar{z}_j = P_j \hat{z}_j + (1 - P_j) \bar{z}_{j-1}$$
+  <p>One chunk at a time.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">56</span>        <span class="n">z_bar</span> <span class="o">=</span> <span class="p">[</span><span class="p">]</span>
+<span class="lineno">57</span>        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">z_hat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="p">)</span><span class="p">:</span>
+<span class="lineno">58</span>            <span class="n">previous</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="p">:</span><span class="p">,</span> <span class="n">t</span><span class="p">]</span> <span class="o">*</span> <span class="n">z_hat</span><span class="p">[</span><span class="p">:</span><span class="p">,</span> <span class="n">t</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">P</span><span class="p">[</span><span class="p">:</span><span class="p">,</span> <span class="n">t</span><span class="p">]</span><span class="p">)</span> <span class="o">*</span> <span class="n">previous</span>
+<span class="lineno">59</span>            <span class="n">z_bar</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">previous</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s28">
+<div class="docs"><a class="anchor" href="#s28">#</a>
+
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">60</span>        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">z_bar</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s29">
+<div class="docs doc-strings"><a class="anchor" href="#s29">#</a>
+<h3>Upsampling</h3>
+  <p>Each position $t$ gets the smoothed output of the chunk that it is in. That chunk is the last one
+     that started at or before $t$:</p>
+  $$j(t) = \sum_{k=1}^{t} b_k, \qquad \tilde{z}_t = \bar{z}_{j(t)}$$
+  <p>The upsampler then multiplies $\tilde{z}_t$ by the confidence $c_t$ of the routing module in its
+     decision at $t$ <span class="paper-ref">(Eqs. 6, 8 and 9 in the paper)</span>:</p>
+  \begin{align*}
+  c_t &= p_t^{b_t} (1 - p_t)^{1 - b_t} \\
+  u_t &= \operatorname{STE}(c_t) \, \tilde{z}_t
+  \end{align*}
+  <p>So $c_t = p_t$ at a boundary and $c_t = 1 - p_t$ elsewhere. The value of
+     $\operatorname{STE}(c_t)$ is 1, so the output is $u_t = \tilde{z}_t$. Only the gradient changes.</p>
+  <h4>The gradient of the confidence</h4>
+  <p>Let $\ell$ be the loss. The STE has a gradient of 1, and $\partial c_t / \partial p_t$ is $+1$
+     at a boundary and $-1$ elsewhere. Thus</p>
+  $$\frac{\partial \ell}{\partial p_t} = \pm \left\langle \frac{\partial \ell}{\partial u_t}, \tilde{z}_t \right\rangle$$
+  <p>with $+$ at a boundary and $-$ elsewhere. The inner product is negative if a larger $u_t$ along
+     $\tilde{z}_t$ makes the loss lower. Then gradient descent makes $c_t$ larger in both cases:</p>
+  <ul>
+    <li>at a boundary, $p_t$ becomes larger;</li>
+    <li>at another position, $p_t$ becomes smaller.</li>
+  </ul>
+  <p>So the routing module becomes more certain of a decision when the chunk output helps the
+     prediction at that position. Each position $t$ gives this signal, not only the boundaries.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">62</span>    <span class="nd">@</span><span class="nd">staticmethod</span>
+<span class="lineno">63</span>    <span class="k">def</span> <span class="nf">upsample</span><span class="p">(</span><span class="n">z_bar</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">routing</span><span class="p">:</span> <span class="n">Routing</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span></pre></div></div>
+</div>
+<div class="section" id="s30">
+<div class="docs"><a class="anchor" href="#s30">#</a>
+<p>$c_t = p_t^{b_t} (1 - p_t)^{1 - b_t}$</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">64</span>        <span class="n">c</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">routing</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="n">routing</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">routing</span><span class="o">.</span><span class="n">p</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s31">
+<div class="docs"><a class="anchor" href="#s31">#</a>
+<p>$j(t) = \sum_{k \le t} b_k$, minus 1 for indices that start at 0. In a padded position, $b_t$ is
+     false, so the position repeats the last chunk. Its value is not used.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">65</span>        <span class="n">chunk_index</span> <span class="o">=</span> <span class="n">routing</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span></pre></div></div>
+</div>
+<div class="section" id="s32">
+<div class="docs"><a class="anchor" href="#s32">#</a>
+<p>$\tilde{z}_t = \bar{z}_{j(t)}$</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">66</span>        <span class="n">z_tilde</span> <span class="o">=</span> <span class="n">z_bar</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">chunk_index</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">z_bar</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="p">)</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s33">
+<div class="docs"><a class="anchor" href="#s33">#</a>
+<p>$u_t = \operatorname{STE}(c_t) \, \tilde{z}_t$</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">67</span>        <span class="k">return</span> <span class="n">ste</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">z_tilde</span></pre></div></div>
+</div>
+<div class="section" id="s34">
+<div class="docs doc-strings"><a class="anchor" href="#s34">#</a>
+<h2>Ratio loss</h2>
+  <p>The next-byte loss alone does not fix the number of chunks. The model could keep every position,
+     and then the main network gets no shorter input. It could also keep almost none, and then the
+     main network gets too little information. The ratio loss pulls the model to a target of $N$
+     positions for each chunk <span class="paper-ref">(Eq. 10 in the paper)</span>:</p>
+  <div id="eq-ratio">
+  $$\mathcal{L}_{\text{ratio}} = \tfrac{N}{N - 1} \big( (N - 1) F G + (1 - F)(1 - G) \big)$$
+  </div>
+  <p>where $F = \frac{1}{L} \sum_t b_t$ is the fraction of positions that start a chunk, and
+     $G = \frac{1}{L} \sum_t p_t$ is the mean boundary probability. $F$ has no gradient, because $b_t$
+     is a threshold. $G$ has a gradient, and the loss acts through it. The form comes from the
+     load-balance loss of mixture-of-experts models, with two "experts": boundary and no boundary.</p>
+  <h4>A simpler form</h4>
+  <p>Multiply out the bracket and subtract 1:</p>
+  \begin{align*}
+  &(N - 1)(\mathcal{L}_{\text{ratio}} - 1) \\
+  &= N(N - 1) F G + N (1 - F)(1 - G) \\
+  &\quad - (N - 1) \\
+  &= N^2 F G - N F - N G + 1 \\
+  &= (N F - 1)(N G - 1)
+  \end{align*}
+  <p>Thus</p>
+  <div id="eq-ratio-product">
+  $$\mathcal{L}_{\text{ratio}} = 1 + \frac{(N F - 1)(N G - 1)}{N - 1}$$
+  </div>
+  <p>The loss is 1 if $F = 1/N$ or $G = 1/N$. It is less than 1 when $F$ and $G$ are on different
+     sides of $1/N$, and more than 1 when they are on the same side.</p>
+  <h4>The minimum when F = G</h4>
+  <p>If $F = G$, the product is $(N F - 1)^2 \ge 0$. The minimum is $\mathcal{L}_{\text{ratio}} = 1$,
+     at $F = G = 1/N$: one chunk for each $N$ positions. This is the case that the paper describes.
+     The paper also says that the loss can be less than 1 when $F \ne G$. The simpler form shows how
+     far it can go.</p>
+  <h4>The minimum over all values</h4>
+  <p>At $F = 1$ and $G = 0$, the product is $-(N - 1)$, so $\mathcal{L}_{\text{ratio}} = 0$. That is
+     the minimum, but the routing module cannot get there. $F = 1$ needs $p_t \ge 0.5$ at every
+     position, so $G \ge 0.5$.</p>
+  <h4>The minimum that the routing module can get</h4>
+  <p>Each boundary has $p_t \in [0.5, 1]$, and each other position has $p_t \in [0, 0.5)$. Add over the
+     positions and divide by $L$:</p>
+  $$\frac{F}{2} \le G \lt \frac{1 + F}{2}$$
+  <p>The loss is less than 1 on two sides: $F \gt 1/N$ with $G \lt 1/N$, and $F \lt 1/N$ with
+     $G \gt 1/N$. On the first side, the band gives a loss of at least $1 - 1/(8(N - 1))$, which is
+     0.958 for $N = 4$, at $F = 3/(2N)$ and $G = F/2$. On the second side, the loss is smallest at the
+     largest $G$, which is $(1 + F)/2$. If $N \ge 3$, the product is then smallest at $F = 0$, $G \to \frac{1}{2}$:</p>
+  $$\mathcal{L}_{\text{ratio}} \to 1 - \frac{N/2 - 1}{N - 1} = \frac{N}{2(N - 1)}$$
+  <p>For $N = 4$ this is $2/3$. At $F = 0$ there are no boundaries, except the first position. Each
+     other $p_t$ is just below $0.5$. Thus, of all the values that the routing module can get, the ratio
+     loss is smallest for a model that makes no chunks, not at the target.</p>
+  <figure id="fig-ratio-region">
+<!-- figure:ratio-region -->
+<svg viewBox="0 0 400 258" width="100%" fill="currentColor" role="img" aria-label="The ratio loss over fraction of boundaries F and mean probability G, for N = 4"><polygon points="150,214 350,114.0 350,14 150,114.0" fill="var(--hl-nb)" fill-opacity="0.18" stroke="var(--hl-nb)" stroke-width="1"/><rect x="150" y="14" width="200" height="200" fill="none" stroke="currentColor" stroke-opacity="0.5"/><line x1="200.0" x2="200.0" y1="14" y2="214" stroke="currentColor" stroke-dasharray="4 3" stroke-opacity="0.7"/><line x1="150" x2="350" y1="164.0" y2="164.0" stroke="currentColor" stroke-dasharray="4 3" stroke-opacity="0.7"/><text x="150" y="228" text-anchor="middle" font-size="10">0</text><text x="200.0" y="228" text-anchor="middle" font-size="10">$1/N$</text><text x="350" y="228" text-anchor="middle" font-size="10">1</text><text x="146" y="218" text-anchor="end" font-size="10">0</text><text x="146" y="168.0" text-anchor="end" font-size="10">$1/N$</text><text x="146" y="118.0" text-anchor="end" font-size="10">$1/2$</text><text x="146" y="18" text-anchor="end" font-size="10">1</text><text x="250.0" y="242" text-anchor="middle" font-size="10">fraction of boundaries $F$</text><text x="110" y="114.0" text-anchor="middle" font-size="10" transform="rotate(-90 110 114.0)">mean probability $G$</text><text x="320.0" y="147.0" text-anchor="middle" font-size="10" transform="rotate(-26.57 320.0 147.0)">$G = F/2$</text><text x="250.0" y="58.0" text-anchor="middle" font-size="10" transform="rotate(-26.57 250.0 58.0)">$G = (1 + F)/2$</text><circle cx="200.0" cy="164.0" r="4" fill="var(--hl-k)"/><text x="208.0" y="178.0" text-anchor="start" font-size="11">$\mathcal{L}_{\text{ratio}} = 1$</text><circle cx="350.0" cy="214.0" r="4" fill="var(--hl-nf)"/><text x="342.0" y="206.0" text-anchor="end" font-size="11">$\mathcal{L}_{\text{ratio}} = 0$</text><circle cx="150.0" cy="114.0" r="4" fill="var(--hl-nb)"/><text x="158.0" y="106.0" text-anchor="start" font-size="11">$\mathcal{L}_{\text{ratio}} \to 2/3$</text></svg>
+<!-- /figure:ratio-region -->
+    <figcaption>The ratio loss for $N = 4$ over the fraction of boundaries $F$ and the mean probability
+      $G$. The dashed lines are $F = 1/N$ and $G = 1/N$, where the loss is 1. The routing module can
+      only get the values in the shaded band, $F/2 \le G \lt (1 + F)/2$. The lower edge is all
+      boundaries at $p_t = 0.5$ and the others at 0. The upper edge is all boundaries at $p_t = 1$ and
+      the others just below $0.5$. The minimum of the formula
+      (orange, 0) is outside the band. In the band, the smallest value is $2/3$ (cyan), with no
+      boundaries. The target (pink) has the value 1.</figcaption>
+  </figure>
+  <details class="note"><summary>Why training does not go to zero chunks</summary>
+     <p>A test builds the case with no chunks from a routing output and gets a loss of 0.667. Training
+     does not go there in practice. If $F \lt 1/N$, the gradient through $G$ makes each $p_t$ larger.
+     When $p_t$ passes $0.5$, a new boundary makes $F$ larger. Our experiment ended at a compression of
+     2.87 positions for each chunk: below the target of 4, but far from zero chunks. The weight
+     $\alpha = 0.03$ of the ratio loss is also small compared with the next-byte loss.</p></details>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">70</span><span class="k">class</span> <span class="nc">RatioLoss</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">)</span><span class="p">:</span></pre></div></div>
+</div>
+<div class="section" id="s35">
+<div class="docs"><a class="anchor" href="#s35">#</a>
+<p>$N$, the target number of positions for each chunk.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">71</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_ratio</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span><span class="p">:</span>
+<span class="lineno">72</span>        <span class="nb">super</span><span class="p">(</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="p">)</span>
+<span class="lineno">73</span>        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">target_ratio</span></pre></div></div>
+</div>
+<div class="section" id="s36">
+<div class="docs"><a class="anchor" href="#s36">#</a>
+
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">75</span>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">routing</span><span class="p">:</span> <span class="n">Routing</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span></pre></div></div>
+</div>
+<div class="section" id="s37">
+<div class="docs"><a class="anchor" href="#s37">#</a>
+<p>$F = \frac{1}{L} \sum_t b_t$, over the positions with data.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">76</span>        <span class="n">f</span> <span class="o">=</span> <span class="n">routing</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">routing</span><span class="o">.</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">float</span><span class="p">(</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s38">
+<div class="docs"><a class="anchor" href="#s38">#</a>
+<p>$G = \frac{1}{L} \sum_t p_t$, over the positions with data.</p>
+  <details class="note"><summary>Authors' code: mean over padding too</summary>
+     <p>The authors' code takes the mean over all positions of the batch. With padding,
+     that would count the padded positions in $F$ and $G$. We use the mask, so that padding does not
+     change the loss.</p></details>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">77</span>        <span class="n">g</span> <span class="o">=</span> <span class="n">routing</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="n">routing</span><span class="o">.</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s39">
+<div class="docs"><a class="anchor" href="#s39">#</a>
+
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">78</span>        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span></pre></div></div>
+</div>
+<div class="section" id="s40">
+<div class="docs"><a class="anchor" href="#s40">#</a>
+$$\mathcal{L}_{\text{ratio}} = \tfrac{N}{N - 1} \big( (N - 1) F G + (1 - F)(1 - G) \big)$$
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">79</span>        <span class="k">return</span> <span class="n">n</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">f</span> <span class="o">*</span> <span class="n">g</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">f</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">g</span><span class="p">)</span><span class="p">)</span></pre></div></div>
+</div>
+</main>
+</body>
+</html>

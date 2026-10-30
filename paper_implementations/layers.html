@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>H-Net - Layers</title>
+    <meta name="description" content="The Transformer blocks that this H-Net uses for its encoder, main network and decoder."/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"/>
+    <link rel="stylesheet" href="assets/style.css"/>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script defer src="assets/annotate.js"></script>
+</head>
+<body>
+<main class="page">
+<div class="section header"><div class="docs"><nav class="breadcrumbs"><a class="parent" href="index.html">H-Net</a>
+<a class="parent" href="layers.html">Layers</a></nav></div><div class="code"></div></div>
+<div class="section" id="s0">
+<div class="docs doc-strings"><a class="anchor" href="#s0">#</a>
+<h1>Layers</h1>
+  <p>These are the sequence layers of the networks in <a href="hnet.html">H-Net</a>: the encoder, the
+     main network and the decoder. They are standard pre-norm Transformer blocks. Dynamic chunking does
+     not depend on the type of layer. It only needs layers that are causal: the output at a position
+     must not depend on later positions.</p>
+  <aside class="note">The paper uses Mamba-2 layers in the encoder and the decoder, and Transformer
+     layers in the main network. Mamba-2 needs custom GPU kernels, so we use Transformer blocks in all
+     three networks. This changes the result: the paper found that encoders and decoders with state space
+     layers make better chunks than encoders with Transformer layers. The authors give the reason as a
+     stronger bias of state space layers for compression. Our encoder also sees the positions through
+     rotary embeddings, which a Mamba-2 layer does not need.</aside>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">1</span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="lineno">2</span><span class="kn">import</span> <span class="nn">torch</span><span class="nn">.</span><span class="nn">nn</span><span class="nn">.</span><span class="nn">functional</span> <span class="k">as</span> <span class="nn">F</span>
+<span class="lineno">3</span><span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span></pre></div></div>
+</div>
+<div class="section" id="s1">
+<div class="docs doc-strings"><a class="anchor" href="#s1">#</a>
+<h2>RMS normalization</h2>
+  $$\operatorname{RMSNorm}(x) = \frac{x}{\sqrt{\frac{1}{d} \sum_i x_i^2 + \epsilon}} \odot w$$
+  <p>where $d$
+     is the width and $w$ is a learned scale. It divides each vector by its root mean square, without
+     the subtraction of the mean that layer normalization does.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">6</span><span class="k">class</span> <span class="nc">RMSNorm</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">)</span><span class="p">:</span></pre></div></div>
+</div>
+<div class="section" id="s2">
+<div class="docs"><a class="anchor" href="#s2">#</a>
+
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">7</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d_model</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-5</span><span class="p">)</span><span class="p">:</span>
+<span class="lineno">8</span>        <span class="nb">super</span><span class="p">(</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="p">)</span>
+<span class="lineno">9</span>        <span class="bp">self</span><span class="o">.</span><span class="n">eps</span> <span class="o">=</span> <span class="n">eps</span>
+<span class="lineno">10</span>        <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">d_model</span><span class="p">)</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s3">
+<div class="docs"><a class="anchor" href="#s3">#</a>
+
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">12</span>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="lineno">13</span>        <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">rsqrt</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span></pre></div></div>
+</div>
+<div class="section" id="s4">
+<div class="docs doc-strings"><a class="anchor" href="#s4">#</a>
+<h2>Rotary position embedding</h2>
+  <p>Attention by itself does not know the order of its inputs. Rotary embeddings rotate each pair of
+     dimensions of the queries and keys by an angle $m \theta_i$, where $m$ is the position and
+     $\theta_i = 10000^{-2i/d_h}$. Then the dot product of a query at position $m$ and a key at position
+     $n$ depends on the offset $m - n$. In the main network, the positions are the chunks, not the
+     bytes.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">16</span><span class="k">class</span> <span class="nc">RotaryEmbedding</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">)</span><span class="p">:</span></pre></div></div>
+</div>
+<div class="section" id="s5">
+<div class="docs"><a class="anchor" href="#s5">#</a>
+<p>$\theta_i = 10000^{-2i/d_h}$ for each pair $i$ of dimensions, where $d_h$ is the width of a head.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">17</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d_head</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">base</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">10_000.0</span><span class="p">)</span><span class="p">:</span>
+<span class="lineno">18</span>        <span class="nb">super</span><span class="p">(</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="p">)</span>
+<span class="lineno">19</span>        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s1">'inv_freq'</span><span class="p">,</span> <span class="n">base</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">d_head</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">(</span><span class="p">)</span> <span class="o">/</span> <span class="n">d_head</span><span class="p">)</span><span class="p">,</span> <span class="n">persistent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s6">
+<div class="docs"><a class="anchor" href="#s6">#</a>
+
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">21</span>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span></pre></div></div>
+</div>
+<div class="section" id="s7">
+<div class="docs"><a class="anchor" href="#s7">#</a>
+<p>The angle $m \theta_i$ for each position $m$ and each pair $i$.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">22</span>        <span class="n">positions</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="lineno">23</span>        <span class="n">angles</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">positions</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">inv_freq</span><span class="p">)</span>
+<span class="lineno">24</span>        <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span> <span class="o">=</span> <span class="n">angles</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span><span class="p">,</span> <span class="n">angles</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s8">
+<div class="docs"><a class="anchor" href="#s8">#</a>
+<p>Rotate each pair $(x_1, x_2)$ by its angle $m \theta_i$:</p>
+  \begin{align*}
+  x_1' &= x_1 \cos m \theta_i - x_2 \sin m \theta_i \\
+  x_2' &= x_1 \sin m \theta_i + x_2 \cos m \theta_i
+  \end{align*}
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">25</span>        <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+<span class="lineno">26</span>        <span class="n">rotated</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="p">(</span><span class="n">x1</span> <span class="o">*</span> <span class="n">cos</span> <span class="o">-</span> <span class="n">x2</span> <span class="o">*</span> <span class="n">sin</span><span class="p">,</span> <span class="n">x1</span> <span class="o">*</span> <span class="n">sin</span> <span class="o">+</span> <span class="n">x2</span> <span class="o">*</span> <span class="n">cos</span><span class="p">)</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="lineno">27</span>        <span class="k">return</span> <span class="n">rotated</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s9">
+<div class="docs doc-strings"><a class="anchor" href="#s9">#</a>
+<h2>Transformer block</h2>
+  <p>A pre-norm block: causal self-attention, then a multilayer perceptron (MLP). Each one reads a
+     normalized copy of $x$ and adds its output to $x$.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">30</span><span class="k">class</span> <span class="nc">TransformerBlock</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">)</span><span class="p">:</span></pre></div></div>
+</div>
+<div class="section" id="s10">
+<div class="docs"><a class="anchor" href="#s10">#</a>
+
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">31</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d_model</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_heads</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">mlp_ratio</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">)</span><span class="p">:</span>
+<span class="lineno">32</span>        <span class="nb">super</span><span class="p">(</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="p">)</span>
+<span class="lineno">33</span>        <span class="bp">self</span><span class="o">.</span><span class="n">n_heads</span> <span class="o">=</span> <span class="n">n_heads</span>
+<span class="lineno">34</span>        <span class="bp">self</span><span class="o">.</span><span class="n">attention_norm</span> <span class="o">=</span> <span class="n">RMSNorm</span><span class="p">(</span><span class="n">d_model</span><span class="p">)</span>
+<span class="lineno">35</span>        <span class="bp">self</span><span class="o">.</span><span class="n">qkv</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">d_model</span><span class="p">,</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">d_model</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="lineno">36</span>        <span class="bp">self</span><span class="o">.</span><span class="n">out</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">d_model</span><span class="p">,</span> <span class="n">d_model</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="lineno">37</span>        <span class="bp">self</span><span class="o">.</span><span class="n">rotary</span> <span class="o">=</span> <span class="n">RotaryEmbedding</span><span class="p">(</span><span class="n">d_model</span> <span class="o">//</span> <span class="n">n_heads</span><span class="p">)</span>
+<span class="lineno">38</span>        <span class="bp">self</span><span class="o">.</span><span class="n">mlp_norm</span> <span class="o">=</span> <span class="n">RMSNorm</span><span class="p">(</span><span class="n">d_model</span><span class="p">)</span>
+<span class="lineno">39</span>        <span class="bp">self</span><span class="o">.</span><span class="n">mlp</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+<span class="lineno">40</span>            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">d_model</span><span class="p">,</span> <span class="n">mlp_ratio</span> <span class="o">*</span> <span class="n">d_model</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="p">,</span>
+<span class="lineno">41</span>            <span class="n">nn</span><span class="o">.</span><span class="n">GELU</span><span class="p">(</span><span class="p">)</span><span class="p">,</span>
+<span class="lineno">42</span>            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">mlp_ratio</span> <span class="o">*</span> <span class="n">d_model</span><span class="p">,</span> <span class="n">d_model</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="p">,</span>
+<span class="lineno">43</span>        <span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s11">
+<div class="docs"><a class="anchor" href="#s11">#</a>
+
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">45</span>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span></pre></div></div>
+</div>
+<div class="section" id="s12">
+<div class="docs"><a class="anchor" href="#s12">#</a>
+<p>The queries, keys and values of all heads, from one projection.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">46</span>        <span class="n">batch</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">d_model</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
+<span class="lineno">47</span>        <span class="n">qkv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qkv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attention_norm</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_heads</span><span class="p">,</span> <span class="n">d_model</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_heads</span><span class="p">)</span>
+<span class="lineno">48</span>        <span class="n">q</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">qkv</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s13">
+<div class="docs"><a class="anchor" href="#s13">#</a>
+<p><code>is_causal=True</code> masks the later positions. This is what makes the whole H-Net
+     causal, together with the routing module, which looks only at the previous position. It is also
+     why padding at the end of a row never changes a position with data.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">49</span>        <span class="n">attention</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">scaled_dot_product_attention</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rotary</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotary</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">is_causal</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s14">
+<div class="docs"><a class="anchor" href="#s14">#</a>
+
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">50</span>        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="p">(</span><span class="n">attention</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">d_model</span><span class="p">)</span><span class="p">)</span>
+<span class="lineno">51</span>        <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mlp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mlp_norm</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s15">
+<div class="docs doc-strings"><a class="anchor" href="#s15">#</a>
+<h2>Stack</h2>
+  <p>One network of the H-Net: a number of blocks, then an RMS normalization at the end. The paper
+     calls the last normalization <em>network normalization</em> and puts one at the end of each
+     encoder, decoder and main network.</p>
+  <p>The reason is the residual connections between the networks. In a pre-norm stack, the norm of the
+     vectors grows with each block. Without a final normalization, the output of the deep main network
+     would be much larger than the encoder output that the residual adds to it. Then the detail of each
+     byte would be lost. The normalization makes the two terms of the same size.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">54</span><span class="k">class</span> <span class="nc">Stack</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">)</span><span class="p">:</span></pre></div></div>
+</div>
+<div class="section" id="s16">
+<div class="docs"><a class="anchor" href="#s16">#</a>
+
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">55</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d_model</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_layers</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_heads</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span><span class="p">:</span>
+<span class="lineno">56</span>        <span class="nb">super</span><span class="p">(</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="p">)</span>
+<span class="lineno">57</span>        <span class="bp">self</span><span class="o">.</span><span class="n">blocks</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span><span class="p">[</span><span class="n">TransformerBlock</span><span class="p">(</span><span class="n">d_model</span><span class="p">,</span> <span class="n">n_heads</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_layers</span><span class="p">)</span><span class="p">]</span><span class="p">)</span>
+<span class="lineno">58</span>        <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="o">=</span> <span class="n">RMSNorm</span><span class="p">(</span><span class="n">d_model</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s17">
+<div class="docs"><a class="anchor" href="#s17">#</a>
+
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">60</span>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="lineno">61</span>        <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">blocks</span><span class="p">:</span>
+<span class="lineno">62</span>            <span class="n">x</span> <span class="o">=</span> <span class="n">block</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="lineno">63</span>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></pre></div></div>
+</div>
+</main>
+</body>
+</html>

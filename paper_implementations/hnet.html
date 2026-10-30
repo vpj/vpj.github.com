@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>H-Net - The Hierarchical Model</title>
+    <meta name="description" content="The recursive H-Net model that puts the encoder, dynamic chunking, the main network and the decoder together, and the byte-level language model around it."/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"/>
+    <link rel="stylesheet" href="assets/style.css"/>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script defer src="assets/annotate.js"></script>
+</head>
+<body>
+<main class="page">
+<div class="section header"><div class="docs"><nav class="breadcrumbs"><a class="parent" href="index.html">H-Net</a>
+<a class="parent" href="hnet.html">H-Net model</a></nav></div><div class="code"></div></div>
+<div class="section" id="s0">
+<div class="docs doc-strings"><a class="anchor" href="#s0">#</a>
+<h1>The Hierarchical Model</h1>
+  <p>This file puts the parts of
+     <a href="https://arxiv.org/abs/2507.07955">Dynamic Chunking for End-to-End Hierarchical Sequence
+     Modeling</a> together into one model.</p>
+  <p>An H-Net with $S$ stages has an encoder $\mathcal{E}^s$ and a decoder $\mathcal{D}^s$ for each
+     stage $s = 0, \dots, S - 1$, and one main network $\mathcal{M}$ at the center. The input of stage 0
+     is the sequence of byte embeddings $x^0$. Each stage does these steps
+     <span class="paper-ref">(Eqs. 1-3 in the paper)</span>:</p>
+  <div id="eq-stage">
+  \begin{align*}
+  \hat{x}^s &= \mathcal{E}^s(x^s) \\
+  (x^{s+1}, p^s) &= \operatorname{Chunk}(\hat{x}^s) \\
+  \hat{z}^{s+1} &= \text{the next stage, on } x^{s+1} \\
+  z^s &= \operatorname{Dechunk}(\hat{z}^{s+1}, p^s) + \operatorname{Linear}(\hat{x}^s) \\
+  \hat{z}^s &= \mathcal{D}^s(z^s)
+  \end{align*}
+  </div>
+  <p>The next stage of the last outer stage is the main network:
+     $\hat{z}^S = \mathcal{M}(x^S)$. $\operatorname{Chunk}$ and $\operatorname{Dechunk}$ are the layers
+     in <a href="dynamic_chunking.html">dynamic chunking</a>, and $p^s$ are the boundary probabilities of
+     stage $s$. Thus the main network of a 1-stage H-Net is itself replaced by a 1-stage H-Net to give 2
+     stages.</p>
+  <figure id="fig-stages">
+<!-- figure:stages -->
+<svg viewBox="0 0 400 206" width="100%" fill="currentColor" role="img" aria-label="A 2-stage H-Net: the main network of stage 0 is a 1-stage H-Net"><defs><marker id="arrow-stages" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="currentColor"/></marker></defs><rect x="8" y="8" width="384" height="190" rx="6" fill="none" stroke="currentColor" stroke-opacity="0.4"/><text x="16" y="24" text-anchor="start" font-size="10">stage 0: $L^0$ bytes, width $D^0$</text><rect x="92" y="76" width="226" height="114" rx="6" fill="none" stroke="currentColor" stroke-opacity="0.4"/><text x="100" y="92" text-anchor="start" font-size="10">stage 1: about $L^0 / N^0$ chunks, width $D^1$</text><g data-group="stage0"><rect x="20.0" y="38.0" width="80" height="24" rx="4" fill="none" stroke="var(--hl-nb)" stroke-width="1.5"/><text x="60" y="54" text-anchor="middle" font-size="11">encoder $\mathcal{E}^0$</text><rect x="300.0" y="38.0" width="80" height="24" rx="4" fill="none" stroke="var(--hl-nb)" stroke-width="1.5"/><text x="340" y="54" text-anchor="middle" font-size="11">decoder $\mathcal{D}^0$</text><path d="M100 50 H299" fill="none" stroke="var(--hl-bp)" stroke-width="1.2" marker-end="url(#arrow-stages)"/><text x="200" y="44" text-anchor="middle" font-size="10">residual</text></g><g data-group="stage1"><rect x="105.0" y="108.0" width="70" height="24" rx="4" fill="none" stroke="var(--hl-nb)" stroke-width="1.5"/><text x="140" y="124" text-anchor="middle" font-size="11">$\mathcal{E}^1$</text><rect x="225.0" y="108.0" width="70" height="24" rx="4" fill="none" stroke="var(--hl-nb)" stroke-width="1.5"/><text x="260" y="124" text-anchor="middle" font-size="11">$\mathcal{D}^1$</text><path d="M175 120 H224" fill="none" stroke="var(--hl-bp)" stroke-width="1.2" marker-end="url(#arrow-stages)"/></g><g data-group="stage0 stage1"><path d="M60 62 V120 H104" fill="none" stroke="var(--hl-k)" stroke-width="1.2" marker-end="url(#arrow-stages)"/><text x="54" y="104" text-anchor="end" font-size="10">chunk</text></g><g data-group="stage0 stage1"><path d="M295 120 H340 V63" fill="none" stroke="var(--hl-k)" stroke-width="1.2" marker-end="url(#arrow-stages)"/><text x="346" y="104" text-anchor="start" font-size="10">dechunk</text></g><g data-group="main"><rect x="145.0" y="156.0" width="110" height="24" rx="4" fill="none" stroke="var(--hl-nf)" stroke-width="1.5"/><text x="200" y="172" text-anchor="middle" font-size="11">main $\mathcal{M}$</text></g><g data-group="stage1 main"><path d="M140 132 V168 H144" fill="none" stroke="var(--hl-k)" stroke-width="1.2" marker-end="url(#arrow-stages)"/><text x="134" y="156" text-anchor="end" font-size="10">chunk</text></g><g data-group="stage1 main"><path d="M255 168 H260 V133" fill="none" stroke="var(--hl-k)" stroke-width="1.2" marker-end="url(#arrow-stages)"/><text x="266" y="156" text-anchor="start" font-size="10">dechunk</text></g></svg>
+<!-- /figure:stages -->
+    <figcaption>A 2-stage H-Net. Each stage has an encoder and a decoder (cyan) on its own sequence
+      length and width. The chunk layer of stage 0 makes the input of stage 1, and the dechunk layer of
+      stage 0 changes the output of stage 1 back to bytes. The residual (green) of each stage connects its
+      encoder to its decoder. With target ratios $N^0$ and $N^1$, the main network (orange) reads about
+      $L^0 / (N^0 N^1)$ positions. Click an encoder, a decoder or the main network to light up its stage
+      and the layers that connect it to the next stage.</figcaption>
+  </figure>
+  <p>The sequence gets shorter at each stage, so the inner networks can be wider for the same
+     computation. The paper uses widths with $D^0 \le D^1 \le \dots \le D^S$, and puts most of the
+     parameters in the main network.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">1</span><span class="kn">import</span> <span class="nn">math</span>
+<span class="lineno">2</span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="lineno">3</span>
+<span class="lineno">4</span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="lineno">5</span><span class="kn">import</span> <span class="nn">torch</span><span class="nn">.</span><span class="nn">nn</span><span class="nn">.</span><span class="nn">functional</span> <span class="k">as</span> <span class="nn">F</span>
+<span class="lineno">6</span><span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+<span class="lineno">7</span>
+<span class="lineno">8</span><span class="kn">from</span> <span class="nn">hnet</span><span class="nn">.</span><span class="nn">dynamic_chunking</span> <span class="kn">import</span> <span class="n">ChunkLayer</span><span class="p">,</span> <span class="n">DechunkLayer</span><span class="p">,</span> <span class="n">RatioLoss</span><span class="p">,</span> <span class="n">Routing</span><span class="p">,</span> <span class="n">RoutingModule</span>
+<span class="lineno">9</span><span class="kn">from</span> <span class="nn">hnet</span><span class="nn">.</span><span class="nn">layers</span> <span class="kn">import</span> <span class="n">Stack</span></pre></div></div>
+</div>
+<div class="section" id="s1">
+<div class="docs doc-strings"><a class="anchor" href="#s1">#</a>
+<h2>Configuration</h2>
+  <ul>
+    <li><code>d_model</code>: the widths $D^0, \dots, D^S$, one for each stage and one for the main
+        network.</li>
+    <li><code>target_ratio</code>: the target ratios $N^0, \dots, N^{S-1}$ of the
+        <a href="dynamic_chunking.html#eq-ratio">ratio loss</a>, one for each stage. Its length sets the
+        number of stages $S$.</li>
+    <li><code>outer_layers</code> and <code>main_layers</code>: the number of blocks in each encoder and
+        decoder, and in the main network.</li>
+    <li><code>alpha</code>: $\alpha$, the weight of the ratio loss. The paper uses
+        $\alpha = 0.03$ in all experiments.</li>
+  </ul>
+  <details class="note"><summary>Paper: four layers in each encoder and decoder</summary>
+     <p>The paper always uses four Mamba-2 layers in each encoder and decoder. The toy experiment uses
+     two Transformer blocks; <a href="layers.html">layers</a> says why there is no Mamba-2.</p></details>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">12</span><span class="nd">@</span><span class="nd">dataclass</span>
+<span class="lineno">13</span><span class="k">class</span> <span class="nc">HNetConfig</span><span class="p">:</span>
+<span class="lineno">14</span>    <span class="n">d_model</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+<span class="lineno">15</span>    <span class="n">target_ratio</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+<span class="lineno">16</span>    <span class="n">outer_layers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="lineno">17</span>    <span class="n">main_layers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="lineno">18</span>    <span class="n">n_heads</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="lineno">19</span>    <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.03</span></pre></div></div>
+</div>
+<div class="section" id="s2">
+<div class="docs"><a class="anchor" href="#s2">#</a>
+
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">21</span>    <span class="nd">@</span><span class="nd">property</span>
+<span class="lineno">22</span>    <span class="k">def</span> <span class="nf">n_stages</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="lineno">23</span>        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_ratio</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s3">
+<div class="docs doc-strings"><a class="anchor" href="#s3">#</a>
+<h2>One stage</h2>
+  <p>An <code>HNet</code> is one stage $s$. Its main network is either the next stage, another
+     <code>HNet</code>, or, at $s = S$, the main network $\mathcal{M}$ itself.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">26</span><span class="k">class</span> <span class="nc">HNet</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">)</span><span class="p">:</span></pre></div></div>
+</div>
+<div class="section" id="s4">
+<div class="docs"><a class="anchor" href="#s4">#</a>
+
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">27</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">HNetConfig</span><span class="p">,</span> <span class="n">stage</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span><span class="p">:</span>
+<span class="lineno">28</span>        <span class="nb">super</span><span class="p">(</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="p">)</span>
+<span class="lineno">29</span>        <span class="bp">self</span><span class="o">.</span><span class="n">stage</span> <span class="o">=</span> <span class="n">stage</span>
+<span class="lineno">30</span>        <span class="bp">self</span><span class="o">.</span><span class="n">d_model</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">d_model</span><span class="p">[</span><span class="n">stage</span><span class="p">]</span></pre></div></div>
+</div>
+<div class="section" id="s5">
+<div class="docs"><a class="anchor" href="#s5">#</a>
+<p>At $s = S$ this object is the main network $\mathcal{M}$, a stack of blocks at width $D^S$.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">31</span>        <span class="bp">self</span><span class="o">.</span><span class="n">is_main</span> <span class="o">=</span> <span class="n">stage</span> <span class="o">==</span> <span class="n">config</span><span class="o">.</span><span class="n">n_stages</span>
+<span class="lineno">32</span>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_main</span><span class="p">:</span>
+<span class="lineno">33</span>            <span class="bp">self</span><span class="o">.</span><span class="n">main</span> <span class="o">=</span> <span class="n">Stack</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d_model</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">main_layers</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">n_heads</span><span class="p">)</span>
+<span class="lineno">34</span>            <span class="k">return</span></pre></div></div>
+</div>
+<div class="section" id="s6">
+<div class="docs"><a class="anchor" href="#s6">#</a>
+<p>The encoder $\mathcal{E}^s$, the routing module and the chunk layer of this stage.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">36</span>        <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="n">Stack</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d_model</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">outer_layers</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">n_heads</span><span class="p">)</span>
+<span class="lineno">37</span>        <span class="bp">self</span><span class="o">.</span><span class="n">routing</span> <span class="o">=</span> <span class="n">RoutingModule</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d_model</span><span class="p">)</span>
+<span class="lineno">38</span>        <span class="bp">self</span><span class="o">.</span><span class="n">chunk</span> <span class="o">=</span> <span class="n">ChunkLayer</span><span class="p">(</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s7">
+<div class="docs"><a class="anchor" href="#s7">#</a>
+<p>The next stage is wider, $D^{s+1} \ge D^s$. To make a chunk vector wider, the model appends a
+     learned vector of $D^{s+1} - D^s$ dimensions, the same for each chunk. On the way back, it keeps
+     the first $D^s$ dimensions. This needs no extra linear layer. The paper takes the method from
+     SpaceByte.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">39</span>        <span class="bp">self</span><span class="o">.</span><span class="n">extra_dims</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">d_model</span><span class="p">[</span><span class="n">stage</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">d_model</span><span class="p">)</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s8">
+<div class="docs"><a class="anchor" href="#s8">#</a>
+<p>The next stage. This is the recursion.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">40</span>        <span class="bp">self</span><span class="o">.</span><span class="n">main</span> <span class="o">=</span> <span class="n">HNet</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">stage</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s9">
+<div class="docs"><a class="anchor" href="#s9">#</a>
+
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">41</span>        <span class="bp">self</span><span class="o">.</span><span class="n">dechunk</span> <span class="o">=</span> <span class="n">DechunkLayer</span><span class="p">(</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s10">
+<div class="docs"><a class="anchor" href="#s10">#</a>
+<p>The residual projection $\operatorname{Linear}(\hat{x}^s)$ starts at zero. Then, at the start of
+     training, the decoder gets only the output of the next stage, and the model must use the main
+     network. The residual grows when the decoder needs the detail of each byte.</p>
+  <details class="note"><summary>Residual starts at exactly zero</summary>
+     <p>The paper says the residual starts "close to 0". The authors' code sets it to
+     exactly zero, and so do we.</p></details>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">42</span>        <span class="bp">self</span><span class="o">.</span><span class="n">residual</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d_model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">d_model</span><span class="p">)</span>
+<span class="lineno">43</span>        <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">zeros_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">residual</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span>
+<span class="lineno">44</span>        <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">zeros_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">residual</span><span class="o">.</span><span class="n">bias</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s11">
+<div class="docs"><a class="anchor" href="#s11">#</a>
+<p>The decoder $\mathcal{D}^s$.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">45</span>        <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span> <span class="o">=</span> <span class="n">Stack</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d_model</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">outer_layers</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">n_heads</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s12">
+<div class="docs doc-strings"><a class="anchor" href="#s12">#</a>
+<h3>Forward</h3>
+  <p><code>x</code> is $x^s$, shape <code>[batch, L, d_model]</code>, and <code>mask</code> marks the
+     positions with data. The method returns $\hat{z}^s$ and the routing output of this stage and every
+     inner stage, for the ratio losses.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">47</span>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">mask</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">Routing</span><span class="p">]</span><span class="p">]</span><span class="p">:</span></pre></div></div>
+</div>
+<div class="section" id="s13">
+<div class="docs"><a class="anchor" href="#s13">#</a>
+<p>$\hat{z}^S = \mathcal{M}(x^S)$. The main network makes no chunks.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">48</span>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_main</span><span class="p">:</span>
+<span class="lineno">49</span>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="p">,</span> <span class="p">[</span><span class="p">]</span></pre></div></div>
+</div>
+<div class="section" id="s14">
+<div class="docs"><a class="anchor" href="#s14">#</a>
+<p>$\hat{x}^s = \mathcal{E}^s(x^s)$</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">51</span>        <span class="n">x_hat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s15">
+<div class="docs"><a class="anchor" href="#s15">#</a>
+<p>The boundary probabilities $p^s$ and the boundaries.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">52</span>        <span class="n">routing</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routing</span><span class="p">(</span><span class="n">x_hat</span><span class="p">,</span> <span class="n">mask</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s16">
+<div class="docs"><a class="anchor" href="#s16">#</a>
+<p>$x^{s+1}$: the chunks, with their mask.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">53</span>        <span class="n">x_next</span><span class="p">,</span> <span class="n">mask_next</span><span class="p">,</span> <span class="n">order</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">chunk</span><span class="p">(</span><span class="n">x_hat</span><span class="p">,</span> <span class="n">routing</span><span class="o">.</span><span class="n">b</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s17">
+<div class="docs"><a class="anchor" href="#s17">#</a>
+<p>Widen the chunks from $D^s$ to $D^{s+1}$.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">54</span>        <span class="n">x_next</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="p">[</span><span class="n">x_next</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra_dims</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="o">*</span><span class="n">x_next</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="p">]</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s18">
+<div class="docs"><a class="anchor" href="#s18">#</a>
+<p>$\hat{z}^{s+1}$ from the next stage.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">55</span>        <span class="n">z_hat_next</span><span class="p">,</span> <span class="n">inner_routings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">x_next</span><span class="p">,</span> <span class="n">mask_next</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s19">
+<div class="docs"><a class="anchor" href="#s19">#</a>
+$$z^s = \operatorname{Dechunk}(\hat{z}^{s+1}, p^s) + \operatorname{Linear}(\hat{x}^s)$$
+  <p>after the model keeps the first $D^s$ dimensions of $\hat{z}^{s+1}$.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">56</span>        <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dechunk</span><span class="p">(</span><span class="n">z_hat_next</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">d_model</span><span class="p">]</span><span class="p">,</span> <span class="n">routing</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">residual</span><span class="p">(</span><span class="n">x_hat</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s20">
+<div class="docs"><a class="anchor" href="#s20">#</a>
+<p>$\hat{z}^s = \mathcal{D}^s(z^s)$</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">57</span>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="p">(</span><span class="n">z</span><span class="p">)</span><span class="p">,</span> <span class="p">[</span><span class="n">routing</span><span class="p">]</span> <span class="o">+</span> <span class="n">inner_routings</span></pre></div></div>
+</div>
+<div class="section" id="s21">
+<div class="docs doc-strings"><a class="anchor" href="#s21">#</a>
+<h2>Learning rate for each stage</h2>
+  <p>The stages see sequences of very different lengths and have different widths. One learning rate
+     for all of them trains them badly. The paper multiplies the base learning rate by a factor
+     $\lambda^s$ for each stage, from two scaling rules:</p>
+  <ul>
+    <li>the learning rate grows with the square root of the batch size, here the number of positions
+        that the stage sees;</li>
+    <li>the learning rate falls with the square root of the width.</li>
+  </ul>
+  <p>The base learning rate is for a tokenized Transformer of width $D^S$, with $N_{\text{GPT}}$ bytes
+     for each token. For $L^0$ bytes it sees $L^0 / N_{\text{GPT}}$ positions. Stage $s$ sees
+     $L^0 / \prod_{i \lt s} N^i$ positions. The two rules give
+     <span class="paper-ref">(Eq. 11 in the paper)</span>:</p>
+  <div id="eq-lr">
+  \begin{align*}
+  \lambda^s &= \sqrt{\frac{N_{\text{GPT}}}{\prod_{i \lt s} N^i} \cdot \frac{D^S}{D^s}} \\
+  &= \sqrt{N_{\text{GPT}} \frac{\prod_{i=s}^{S} N^i}{\prod_{i=0}^{S} N^i} \cdot \frac{D^S}{D^s}}
+  \end{align*}
+  </div>
+  <p>with $N^S = 1$. The second line is the form of the paper.</p>
+  <aside class="note">The paper does not define $N_{\text{GPT}}$. We set it to $\prod_{i \lt S} N^i$, the
+     target number of bytes for each position of the main network. Then the main network has
+     $\lambda^S = 1$: it uses the base learning rate. In the toy experiment ($N^0 = 4$, $D^0 = 128$,
+     $D^1 = 192$) this gives the outer stage</p>
+     $$\lambda^0 = \sqrt{4 \cdot 192 / 128} = 2.45$$
+     <p>The paper reports that values such as $2.0$, $1.5$ and $1.0$ for three stages work well in general. The paper
+     also finds that the larger learning rate of the outer stages makes the boundaries learn faster.</aside>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">60</span><span class="k">def</span> <span class="nf">lr_multipliers</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="n">HNetConfig</span><span class="p">,</span> <span class="n">n_gpt</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span><span class="p">:</span>
+<span class="lineno">61</span>    <span class="n">n</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">target_ratio</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">]</span>
+<span class="lineno">62</span>    <span class="n">d</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">d_model</span>
+<span class="lineno">63</span>    <span class="k">return</span> <span class="p">[</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n_gpt</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="n">s</span><span class="p">:</span><span class="p">]</span><span class="p">)</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="n">d</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">d</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="p">)</span><span class="p">]</span></pre></div></div>
+</div>
+<div class="section" id="s22">
+<div class="docs doc-strings"><a class="anchor" href="#s22">#</a>
+<h2>Loss</h2>
+  <p>The total loss, its two parts, and the routing outputs, which the experiment uses to measure the
+     compression.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">66</span><span class="nd">@</span><span class="nd">dataclass</span>
+<span class="lineno">67</span><span class="k">class</span> <span class="nc">LMLoss</span><span class="p">:</span>
+<span class="lineno">68</span>    <span class="n">total</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span>
+<span class="lineno">69</span>    <span class="n">autoregressive</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span>
+<span class="lineno">70</span>    <span class="n">ratio</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span>
+<span class="lineno">71</span>    <span class="n">routings</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Routing</span><span class="p">]</span></pre></div></div>
+</div>
+<div class="section" id="s23">
+<div class="docs doc-strings"><a class="anchor" href="#s23">#</a>
+<h2>Byte-level language model</h2>
+  <p>The H-Net reads bytes, so the vocabulary has 256 entries. The embedding table and the output head
+     are small: $2 \times 256 \times D^0$ parameters. A tokenized model with a vocabulary of 50,000 tokens
+     needs about 200 times as many.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">74</span><span class="k">class</span> <span class="nc">HNetLM</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">)</span><span class="p">:</span></pre></div></div>
+</div>
+<div class="section" id="s24">
+<div class="docs"><a class="anchor" href="#s24">#</a>
+
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">75</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">HNetConfig</span><span class="p">)</span><span class="p">:</span>
+<span class="lineno">76</span>        <span class="nb">super</span><span class="p">(</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="p">)</span>
+<span class="lineno">77</span>        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span>
+<span class="lineno">78</span>        <span class="bp">self</span><span class="o">.</span><span class="n">embedding</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">d_model</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="p">)</span>
+<span class="lineno">79</span>        <span class="bp">self</span><span class="o">.</span><span class="n">hnet</span> <span class="o">=</span> <span class="n">HNet</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+<span class="lineno">80</span>        <span class="bp">self</span><span class="o">.</span><span class="n">head</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">d_model</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="lineno">81</span>        <span class="bp">self</span><span class="o">.</span><span class="n">ratio_losses</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span><span class="p">[</span><span class="n">RatioLoss</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">target_ratio</span><span class="p">]</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s25">
+<div class="docs"><a class="anchor" href="#s25">#</a>
+<p>The logits of the next byte at each position, and the routing outputs of all stages.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">83</span>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokens</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">mask</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">Routing</span><span class="p">]</span><span class="p">]</span><span class="p">:</span>
+<span class="lineno">84</span>        <span class="n">y</span><span class="p">,</span> <span class="n">routings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hnet</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">embedding</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span><span class="p">,</span> <span class="n">mask</span><span class="p">)</span>
+<span class="lineno">85</span>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="p">,</span> <span class="n">routings</span></pre></div></div>
+</div>
+<div class="section" id="s26">
+<div class="docs doc-strings"><a class="anchor" href="#s26">#</a>
+<h3>Training loss</h3>
+  <p>The next-byte loss plus the ratio loss of each stage
+     <span class="paper-ref">(Section 2.2.3 in the paper)</span>:</p>
+  $$\mathcal{L} = \mathcal{L}_{\text{AR}} + \alpha \sum_{s=0}^{S-1} \mathcal{L}_{\text{ratio}}^s$$
+  <p>where $\mathcal{L}_{\text{AR}}$ is the mean cross-entropy of the next byte, in nats.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">87</span>    <span class="k">def</span> <span class="nf">loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokens</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">mask</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LMLoss</span><span class="p">:</span></pre></div></div>
+</div>
+<div class="section" id="s27">
+<div class="docs"><a class="anchor" href="#s27">#</a>
+<p>The model reads bytes $1, \dots, L - 1$ and predicts bytes $2, \dots, L$.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">88</span>        <span class="n">logits</span><span class="p">,</span> <span class="n">routings</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="p">:</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="p">,</span> <span class="n">mask</span><span class="p">[</span><span class="p">:</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s28">
+<div class="docs"><a class="anchor" href="#s28">#</a>
+$$\mathcal{L}_{\text{AR}} = -\frac{1}{T} \sum_{t} \log \pi_t(y_{t+1})$$
+  <p>where $y_t$ is byte $t$, $\pi_t$ is the softmax of the logits at position $t$, and the sum is over the
+     $T$ targets that are not padding.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">89</span>        <span class="n">targets</span> <span class="o">=</span> <span class="n">mask</span><span class="p">[</span><span class="p">:</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="p">]</span>
+<span class="lineno">90</span>        <span class="n">autoregressive</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">cross_entropy</span><span class="p">(</span><span class="n">logits</span><span class="p">[</span><span class="n">targets</span><span class="p">]</span><span class="p">,</span> <span class="n">tokens</span><span class="p">[</span><span class="p">:</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="p">]</span><span class="p">[</span><span class="n">targets</span><span class="p">]</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s29">
+<div class="docs"><a class="anchor" href="#s29">#</a>
+<p>$\mathcal{L}_{\text{ratio}}^s$ for each stage, with its own target $N^s$.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">91</span>        <span class="n">ratio</span> <span class="o">=</span> <span class="p">[</span><span class="n">loss</span><span class="p">(</span><span class="n">routing</span><span class="p">)</span> <span class="k">for</span> <span class="n">loss</span><span class="p">,</span> <span class="n">routing</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ratio_losses</span><span class="p">,</span> <span class="n">routings</span><span class="p">)</span><span class="p">]</span></pre></div></div>
+</div>
+<div class="section" id="s30">
+<div class="docs"><a class="anchor" href="#s30">#</a>
+$$\mathcal{L} = \mathcal{L}_{\text{AR}} + \alpha \sum_s \mathcal{L}_{\text{ratio}}^s$$
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">92</span>        <span class="n">total</span> <span class="o">=</span> <span class="n">autoregressive</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">alpha</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ratio</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s31">
+<div class="docs"><a class="anchor" href="#s31">#</a>
+
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">93</span>        <span class="k">return</span> <span class="n">LMLoss</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="n">total</span><span class="p">,</span> <span class="n">autoregressive</span><span class="o">=</span><span class="n">autoregressive</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="n">ratio</span><span class="p">,</span> <span class="n">routings</span><span class="o">=</span><span class="n">routings</span><span class="p">)</span></pre></div></div>
+</div>
+<div class="section" id="s32">
+<div class="docs doc-strings"><a class="anchor" href="#s32">#</a>
+<h3>Parameter groups</h3>
+  <p>One optimizer group for each stage, with the learning rate $\lambda^s$ times the base rate. A stage
+     object contains its inner stages, so the method starts at the main network and goes outward. Each
+     stage gets only the parameters that an inner stage did not take. The byte embedding and the output
+     head work on bytes, so they belong to stage 0.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">95</span>    <span class="k">def</span> <span class="nf">param_groups</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lr</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">n_gpt</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span><span class="p">:</span>
+<span class="lineno">96</span>        <span class="n">multipliers</span> <span class="o">=</span> <span class="n">lr_multipliers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="n">n_gpt</span><span class="p">)</span>
+<span class="lineno">97</span>        <span class="n">groups</span> <span class="o">=</span> <span class="p">[</span><span class="p">[</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">multipliers</span><span class="p">]</span>
+<span class="lineno">98</span>        <span class="n">inner_ids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="p">)</span>
+<span class="lineno">99</span>        <span class="k">for</span> <span class="n">stage</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">multipliers</span><span class="p">)</span><span class="p">)</span><span class="p">)</span><span class="p">:</span>
+<span class="lineno">100</span>            <span class="n">module</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stage_module</span><span class="p">(</span><span class="n">stage</span><span class="p">)</span>
+<span class="lineno">101</span>            <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="n">param</span> <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">module</span><span class="o">.</span><span class="n">parameters</span><span class="p">(</span><span class="p">)</span> <span class="k">if</span> <span class="nb">id</span><span class="p">(</span><span class="n">param</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">inner_ids</span><span class="p">]</span>
+<span class="lineno">102</span>            <span class="n">groups</span><span class="p">[</span><span class="n">stage</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<span class="lineno">103</span>            <span class="n">inner_ids</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="n">param</span><span class="p">)</span> <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">params</span><span class="p">)</span>
+<span class="lineno">104</span>        <span class="n">groups</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="p">[</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">parameters</span><span class="p">(</span><span class="p">)</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">head</span><span class="o">.</span><span class="n">parameters</span><span class="p">(</span><span class="p">)</span><span class="p">]</span><span class="p">)</span>
+<span class="lineno">105</span>        <span class="k">return</span> <span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="n">lr</span> <span class="o">*</span> <span class="n">m</span><span class="p">)</span> <span class="k">for</span> <span class="n">params</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">groups</span><span class="p">,</span> <span class="n">multipliers</span><span class="p">)</span><span class="p">]</span></pre></div></div>
+</div>
+<div class="section" id="s33">
+<div class="docs"><a class="anchor" href="#s33">#</a>
+<p>The <code>HNet</code> object of stage $s$, found through the chain of main networks.</p>
+</div>
+<div class="code"><div class="highlight"><pre><span class="lineno">107</span>    <span class="k">def</span> <span class="nf">stage_module</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stage</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HNet</span><span class="p">:</span>
+<span class="lineno">108</span>        <span class="n">module</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hnet</span>
+<span class="lineno">109</span>        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">stage</span><span class="p">)</span><span class="p">:</span>
+<span class="lineno">110</span>            <span class="n">module</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">main</span>
+<span class="lineno">111</span>        <span class="k">return</span> <span class="n">module</span></pre></div></div>
+</div>
+</main>
+</body>
+</html>
